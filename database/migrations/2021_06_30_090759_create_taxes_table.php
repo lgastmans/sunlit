@@ -18,6 +18,7 @@ class CreateTaxesTable extends Migration
             $table->string('description')->unique();
             $table->integer('amount');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

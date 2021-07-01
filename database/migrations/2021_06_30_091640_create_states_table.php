@@ -18,6 +18,7 @@ class CreateStatesTable extends Migration
             $table->string('state')->unique();
             $table->integer('code')->unique();
             $table->string('abbreviation');
+            $table->softDeletes();
         });
     }
 
