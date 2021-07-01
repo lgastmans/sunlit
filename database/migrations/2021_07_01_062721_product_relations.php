@@ -35,5 +35,14 @@ class ProductRelations extends Migration
     public function down()
     {
         //
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropForeign('products_category_id_foreign');
+            $table->dropForeign('products_supplier_id_foreign');
+            $table->dropForeign('products_tax_id_foreign');
+        });
+
+        Schema::table('suppliers', function (Blueprint $table) {
+            $table->dropForeign('suppliers_state_id_foreign');
+        });
     }
 }
