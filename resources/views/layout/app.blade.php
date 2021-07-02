@@ -1,3 +1,4 @@
+@section('title', 'Sunlit | Inventory')
 
 @include('layout/header')
 
