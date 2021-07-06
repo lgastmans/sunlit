@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 
 class SupplierController extends Controller
@@ -13,7 +14,7 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        //
+        return view('suppliers.index');
     }
 
     /**
@@ -23,7 +24,8 @@ class SupplierController extends Controller
      */
     public function create()
     {
-        //
+        $supplier = new Supplier();
+        return view('suppliers.form', ['supplier' => $supplier]);
     }
 
     /**
@@ -34,7 +36,7 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request);
     }
 
     /**
@@ -56,7 +58,11 @@ class SupplierController extends Controller
      */
     public function edit($id)
     {
-        //
+        $supplier = Supplier::with('state')->find($id);
+        if ($supplier){
+            return view('suppliers.form', ['supplier' => $supplier]);
+        }
+        return view('suppliers.index');
     }
 
     /**
