@@ -37,7 +37,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="state">State</label>
-                            <input type="text" class="form-control" name="state" id="state" placeholder="" value="{{ old('state', $supplier->state->state) }}" required>
+                            <input type="text" class="form-control" name="state" id="state" placeholder="" @if ($supplier->state) value="{{ old('state', $supplier->state->state) }}" @endif required>
                             <div class="invalid-feedback">
                                 Please provide a valid state.
                             </div>
