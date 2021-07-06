@@ -15,6 +15,8 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
 
-        StateSeeder::class;
+        $this->call([
+            StateSeeder::class,
+        ]);
     }
 }
