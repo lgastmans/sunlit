@@ -11,4 +11,9 @@ class Supplier extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+    public function state()
+    {
+        return $this->belongsTo(State::class);
+    }
 }

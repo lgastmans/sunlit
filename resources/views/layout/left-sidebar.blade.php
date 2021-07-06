@@ -59,8 +59,8 @@
                 </a>
             </li>
 
-            <li class="side-nav-item">
-                <a href="#" class="side-nav-link">
+            <li class="side-nav-item {{ (Request::is('suppliers*') ? ' menuitem-active' : '') }}">
+                <a href="{{ route('suppliers')}}" class="side-nav-link {{ (Request::is('suppliers*') ? ' active' : '') }}">
                     <i class="uil-truck-loading"></i>
                     <span> Suppliers </span>
                 </a>

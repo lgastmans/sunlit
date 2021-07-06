@@ -12,7 +12,11 @@
 
     <title> @yield('title')</title>
 
-        
+    <!-- third party css -->
+    <link href="{{ asset("assets/css/vendor/dataTables.bootstrap4.css") }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset("assets/css/vendor/responsive.bootstrap4.css") }}" rel="stylesheet" type="text/css" />
+    <!-- third party css end -->
+
     <!-- App css -->
     <link href="{{ asset('assets/css/icons.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/app.css') }}" rel="stylesheet" type="text/css" id="light-style" />
@@ -21,6 +25,7 @@
     <!-- main style.css -->
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
   
+    @yield('page-styles')
 
     <!-- Scripts -->
     <script>
