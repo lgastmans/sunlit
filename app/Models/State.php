@@ -14,4 +14,9 @@ class State extends Model
 
     public $timestamps = false;
 
+    public function state()
+    {
+        return $this->hasMany(Supplier::class);
+    }
+
 }
