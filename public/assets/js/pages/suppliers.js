@@ -2,6 +2,9 @@
  $(document).ready(function () {
     "use strict";
 
+
+
+
     var data = [{
         "id": 1,
         "company_title": "Gabtype",
@@ -180,6 +183,45 @@
             
         },
     });
+
+
+
+    // Autocomplete for states
+    // Needs to be re-work to fetch from db instead of hardcoded array
+    // Return id + name 
+    var substringMatcher = function(strs) {
+      return function findMatches(q, cb) {
+        var matches, substrRegex;
+  
+        matches = [];
+  
+        // regex used to determine if a string contains the substring `q`
+        substrRegex = new RegExp(q, 'i');
+  
+        // iterate through the pool of strings and for any string that
+        // contains the substring `q`, add it to the `matches` array
+        $.each(strs, function(i, str) {
+          if (substrRegex.test(str)) {
+            matches.push(str);
+          }
+        });
+  
+        cb(matches);
+      };
+    };
+  
+    var states = ['Pondicherry', 'Tamil Nadu'];
+  
+    $('#state').typeahead({
+      hint: true,
+      highlight: true,
+      minLength: 1
+    },
+    {
+      name: 'states',
+      source: substringMatcher(states)
+    });
+  
 });
 
 
