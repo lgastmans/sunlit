@@ -30,7 +30,9 @@
                             </div>
 
                             <div class="mb-0 text-center">
-                                <button class="btn btn-primary" type="submit">Reset Password</button>
+                                <x-button class="ml-4">
+                                    {{ __('Reset Password') }}
+                                </x-button>
                             </div>
                         </form>
                     </div> <!-- end card-body-->
@@ -39,7 +41,7 @@
 
                 <div class="row mt-3">
                     <div class="col-12 text-center">
-                        <p class="text-muted">Back to <a href="{{ route('login') }}" class="text-muted ms-1"><b>Log In</b></a></p>
+                        <p class="text-muted">Back to <a href="{{ route('login') }}" class="text-muted ms-1"><b>{{ __('Log in') }}</b></a></p>
                     </div> <!-- end col -->
                 </div>
                 <!-- end row -->

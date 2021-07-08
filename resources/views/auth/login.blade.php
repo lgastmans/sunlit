@@ -32,7 +32,7 @@
 
                                 <div class="mb-3">
                                     @if (Route::has('password.request'))
-                                        <a href="{{ route('password.request') }}" class="text-muted float-end"><small>Forgot your password?</small></a>
+                                        <a href="{{ route('password.request') }}" class="text-muted float-end"><small>{{ __('Forgot your password?') }}</small></a>
                                     @endif
                                     <label for="password" class="form-label">Password</label>
                                     <input id="password" class="form-control" type="password" name="password" required autocomplete="current-password" />
@@ -42,12 +42,14 @@
                                 <div class="mb-3 mb-3">
                                     <div class="form-check">
                                         <input type="checkbox" class="form-check-input" id="remember_me" name="remember" checked>
-                                        <label class="form-check-label" for="remember_me">Remember me</label>
+                                        <label class="form-check-label" for="remember_me">{{ __('Remember me') }}</label>
                                     </div>
                                 </div>
 
                                 <div class="mb-3 mb-0 text-center">
-                                    <button class="btn btn-primary" type="submit"> Log In </button>
+                                    <x-button class="ml-4">
+                                        {{ __('Log in') }}
+                                    </x-button>
                                 </div>
 
                             </form>
@@ -57,7 +59,7 @@
 
                     <div class="row mt-3">
                         <div class="col-12 text-center">
-                            <p class="text-muted">Don't have an account? <a href="{{ route('register') }}" class="text-muted ms-1"><b>Sign Up</b></a></p>
+                            <p class="text-muted">Don't have an account? <a href="{{ route('register') }}" class="text-muted ms-1"><b>{{ __('Sign up') }}</b></a></p>
                         </div> <!-- end col -->
                     </div>
                     <!-- end row -->

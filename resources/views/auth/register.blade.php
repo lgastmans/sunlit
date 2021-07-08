@@ -41,7 +41,9 @@
 
 
                             <div class="mb-3 text-center">
-                                <button class="btn btn-primary" type="submit"> Sign Up </button>
+                                <x-button class="ml-4">
+                                    {{ __('Register') }}
+                                </x-button>
                             </div>
 
                         </form>
@@ -51,7 +53,7 @@
 
                 <div class="row mt-3">
                     <div class="col-12 text-center">
-                        <p class="text-muted">Already have account? <a href="{{ route('login') }}" class="text-muted ms-1"><b>Log In</b></a></p>
+                        <p class="text-muted">Already have account? <a href="{{ route('login') }}" class="text-muted ms-1"><b>{{ __('Log in') }}</b></a></p>
                     </div> <!-- end col-->
                 </div>
                 <!-- end row -->
