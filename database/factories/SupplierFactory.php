@@ -24,7 +24,7 @@ class SupplierFactory extends Factory
         return [
             //
             //"id" => $record->id,
-            //"state_id" =>$this->faker->randomDigit(),
+            "state_id" =>$this->faker->numberBetween($min = 1, $max = 37),
             "company" =>$this->faker->name(),
             "address" =>$this->faker->name(),
             "address2" =>$this->faker->name(),
