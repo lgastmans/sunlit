@@ -14,58 +14,34 @@
                     <form action="{{ route('suppliers.store') }}" method="POST" class="needs-validation" novalidate>
                         @csrf()
                         <div class="mb-3">
-                            <label class="form-label" for="company_title">Company</label>
-                            <input type="text" class="form-control" name="company_title" id="company_title" placeholder="" value="{{ old('company_title', $supplier->company_title) }}" required>
-                            <div class="invalid-feedback">
-                                Please provide the company name
-                            </div>
+                            <x-forms.input label="Company" name="company_title" value="{{ old('company_title', $supplier->company_title) }}" message="Please provide the company name" required="true"/>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="contact_person">Contact person</label>
-                            <input type="text" class="form-control" name="contact_person" id="contact_person" placeholder="" value="{{ old('contact_person', $supplier->contact_person) }}" required>
-                            <div class="invalid-feedback">
-                                Please provide the full name of the contact person
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label" for="city">City</label>
-                            <input type="text" class="form-control" name="city" id="city" placeholder="" value="{{ old('city', $supplier->city) }}" required>
-                            <div class="invalid-feedback">
-                                Please provide a valid city.
-                            </div>
+                            <x-forms.input label="Contact person" name="contact_person" value="{{ old('contact_person', $supplier->contact_person) }}" message="Please provide the full name of the contact person" required="true"/>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="state">State</label>
-                            <input type="text" class="form-control" name="state" id="state" placeholder="" @if ($supplier->state) value="{{ old('state', $supplier->state->state) }}" @endif required>
-                            <div class="invalid-feedback">
-                                Please provide a valid state.
-                            </div>
+                            <x-forms.input label="Address" name="address" value="{{ old('address', $supplier->address) }}" message="Please provide the full address" required="true"/>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="zip_code">Zip code</label>
-                            <input type="text" class="form-control" name="zip_code" id="zip_code" placeholder="" value="{{ old('zip_code', $supplier->zip) }}" required>
-                            <div class="invalid-feedback">
-                                Please provide a valid zip code.
-                            </div>
+                            <x-forms.input label="City" name="city" value="{{ old('city', $supplier->city) }}" message="Please provide a valid city" required="true"/>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="phone">Phone</label>
-                            <input type="text" class="form-control" name="phone" id="phone" placeholder="" value="{{ old('phone', $supplier->phone) }}" required>
-                            <div class="invalid-feedback">
-                                Please provide a valid phone number.
-                            </div>
+                            <x-forms.input label="State" name="state" value="" message="Please provide a valid state." required="true"/>
+                        </div>
+                        <div class="mb-3">
+                            <x-forms.input label="Zip code" name="zip_code" value="{{ old('zip_code', $supplier->zip_code) }}" message="Please provide a valid zip code." required="true"/>
+                        </div>
+                        <div class="mb-3">
+                            <x-forms.input label="District" name="district" value="{{ old('district', $supplier->district) }}" message="Please provide a valid district." required="true"/>
+                        </div>
+                        <div class="mb-3">
+                            <x-forms.input label="Phone" name="phone" value="{{ old('phone', $supplier->phone) }}" message="Please provide a valid phone number." required="true"/>
+                        </div>
+                        <div class="mb-3">
+                            <x-forms.input label="Phone 2" name="phone2" value="{{ old('phone2', $supplier->phone2) }}" message="Please provide a second valid phone number." required="true"/>
                         </div>
                        <div class="mb-3">
-                            <label class="form-label" for="email">Email Address</label>
-                            <div class="input-group">
-                                <span class="input-group-text" id="inputGroupPrepend">@</span>
-                                <input type="text" class="form-control" name="email" id="email" placeholder="" value="{{ old('email', $supplier->email) }}"
-                                    aria-describedby="inputGroupPrepend" required>
-                                <div class="invalid-feedback">
-                                    Please provide a valid email address.
-                                </div>
-                            </div>
+                            <x-forms.inputgroup label="Email address" name="email" value="{{ old('email', $supplier->email) }}" message="Please provide a valid email address." required="true" position="before" symbol="@"/>
                         </div>
                        
                         <button class="btn btn-primary" type="submit">Create supplier</button>
@@ -81,5 +57,6 @@
 @endsection
 
 @section('page-scripts')
-    <script src="{{ asset("assets/js/pages/suppliers.js") }}"></script>    
+    <script src="{{ mix("js/pages/suppliers.js") }}"></script>      
+    
 @endsection

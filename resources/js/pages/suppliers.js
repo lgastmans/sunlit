@@ -2,6 +2,9 @@
  $(document).ready(function () {
     "use strict";
 
+
+
+
     var data = [{
         "id": 1,
         "company_title": "Gabtype",
@@ -145,7 +148,7 @@
             { 
                 'data': 'contact_person',
                 'render': function(data){
-                    var displayName = '<img width="48" src="/assets/images/users/avatar-'+(Math.floor(Math.random() * 9)+1)+'.jpg" alt="table-user" class="me-2 rounded-circle">';
+                    var displayName = '<img width="48" src="/images/users/avatar-'+(Math.floor(Math.random() * 9)+1)+'.jpg" alt="table-user" class="me-2 rounded-circle">';
                     displayName += '<a href="javascript:void(0);" class="text-body fw-semibold">' + data + '</a>'
                     return displayName;
                 },
@@ -180,6 +183,7 @@
             
         },
     });
+  
 });
 
 

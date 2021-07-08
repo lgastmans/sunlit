@@ -83,5 +83,5 @@
 @endsection
 
 @section('page-scripts')
-    <script src="{{ asset("assets/js/pages/suppliers.js") }}"></script>    
+    <script src="{{ mix("js/pages/suppliers.js") }}"></script>    
 @endsection

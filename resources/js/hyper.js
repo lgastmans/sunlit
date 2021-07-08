@@ -11,7 +11,7 @@
  */
 
 
-!function ($) {
+ !function ($) {
     'use strict';
 
     var LeftSidebar = function () {
