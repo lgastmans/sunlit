@@ -73,6 +73,13 @@
                 </a>
             </li>
 
+            <li class="side-nav-item {{ (Request::is('taxes*') ? ' menuitem-active' : '') }}">
+                <a href="{{ route('taxes')}}" class="side-nav-link {{ (Request::is('taxes*') ? ' active' : '') }}">
+                    <i class=" uil-money-bill"></i>
+                    <span> Taxes </span>
+                </a>
+            </li>
+
         </ul>
 
         <!-- End Sidebar -->
