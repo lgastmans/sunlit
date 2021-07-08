@@ -38,11 +38,13 @@ class UpdateSuppliersTable extends Migration
     public function down()
     {
         //
-        $table->string('district');
+        Schema::table('suppliers', function (Blueprint $table) {
+            $table->string('district');
 
-        $table->renameColumn('company', 'company_title');
-        $table->renameColumn('zip_code', 'zip');
+            $table->renameColumn('company', 'company_title');
+            $table->renameColumn('zip_code', 'zip');
 
-        $table->dropColumn('address2');
+            $table->dropColumn('address2');
+        });
     }
 }
