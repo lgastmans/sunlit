@@ -14,19 +14,7 @@
                     </div>
 
                     <div class="card-body p-4">
-                        @if ($errors->any())
-                            <div class="alert alert-danger" role="alert">
-                                <div >
-                                    <i class="dripicons-wrong me-2"></i><strong>{{ __('Whoops! Something went wrong.') }}</strong>
-                                </div>
-
-                                <ul class="mt-3 list-disc list-inside text-sm text-red-600">
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
+                        <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
                         <form method="POST" action="{{ route('register') }}">
                             @csrf
@@ -37,7 +25,7 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="emailaddress" class="form-label">Email address</label>
+                                <label for="email" class="form-label">Email address</label>
                                 <input id="email" class="form-control" type="email" name="email" value="{{ old('email') }}" placeholder="Enter your email" required autofocus >
                             </div>
 

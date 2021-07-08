@@ -15,6 +15,7 @@
                         </div>
 
                         <div class="card-body p-4">
+                            <x-auth-validation-errors class="mb-4" :errors="$errors" />
                             
                             <div class="text-center w-75 m-auto">
                                 <h4 class="text-dark-50 text-center pb-0 fw-bold">Sign In</h4>
