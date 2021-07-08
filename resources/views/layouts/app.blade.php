@@ -1,15 +1,15 @@
 @section('title', 'Sunlit | Inventory')
 
-@include('layout/header')
+@include('layouts/header')
 
 <div class="content-container">
     <div class="wrapper">
-        @include('layout/left-sidebar')
+        @include('layouts/left-sidebar')
 
         <div class="content-page">
             <div class="content">
                 
-                @include('layout/top-bar')
+                @include('layouts/top-bar')
                 <div class="container-fluid">
                     
                     <!-- start page title -->
@@ -43,8 +43,8 @@
     </div>
     
     <!-- Right Sidebar -->
-    @include('layout/right-sidebar')
+    @include('layouts/right-sidebar')
     <div class="rightbar-overlay"></div>
 </div>
 
-@include('layout/footer')
+@include('layouts/footer')

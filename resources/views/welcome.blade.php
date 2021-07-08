@@ -1,6 +1,6 @@
-@extends('layout.app')
+@extends('layouts.app')
 
-@section('page-title', 'Home page')
+@section('page-title', 'Dashboard page')
 
 @section('content')
 Welcome my dudes!
