@@ -26,12 +26,10 @@
             </div>
 
             <!-- Footer Start -->
-            <footer class="footer">
+            <footer class="footer" style="left:0; right: 0;">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-md-6">
-                            <script>document.write(new Date().getFullYear())</script> © Sunlit
-                        </div>
+                        <script>document.write(new Date().getFullYear())</script> © Sunlit
                     </div>
                 </div>
             </footer>
