@@ -25,7 +25,7 @@
             <a class="nav-link dropdown-toggle nav-user arrow-none me-0" data-bs-toggle="dropdown" href="#"
                 role="button" aria-haspopup="false" aria-expanded="false">
                 <span class="account-user-avatar">
-                    <img src="/assets/images/users/avatar-1.jpg" alt="user-image" class="rounded-circle">
+                    <img src="/images/users/avatar-1.jpg" alt="user-image" class="rounded-circle">
                 </span>
                 <span>
                     <span class="account-user-name">Quentin</span>
@@ -99,7 +99,7 @@
                 <!-- item-->
                 <a href="javascript:void(0);" class="dropdown-item notify-item">
                     <div class="d-flex">
-                        <img class="d-flex me-2 rounded-circle" src="assets/images/users/avatar-2.jpg"
+                        <img class="d-flex me-2 rounded-circle" src="/images/users/avatar-2.jpg"
                             alt="Generic placeholder image" height="32">
                         <div class="w-100">
                             <h5 class="m-0 font-14">PO #1</h5>
@@ -111,7 +111,7 @@
                 <!-- item-->
                 <a href="javascript:void(0);" class="dropdown-item notify-item">
                     <div class="d-flex">
-                        <img class="d-flex me-2 rounded-circle" src="assets/images/users/avatar-5.jpg"
+                        <img class="d-flex me-2 rounded-circle" src="/images/users/avatar-5.jpg"
                             alt="Generic placeholder image" height="32">
                         <div class="w-100">
                             <h5 class="m-0 font-14">PO #2</h5>
@@ -130,7 +130,7 @@
                 <!-- item-->
                 <a href="javascript:void(0);" class="dropdown-item notify-item">
                     <div class="d-flex">
-                        <img class="d-flex me-2 rounded-circle" src="assets/images/users/avatar-2.jpg"
+                        <img class="d-flex me-2 rounded-circle" src="/images/users/avatar-2.jpg"
                             alt="Generic placeholder image" height="32">
                         <div class="w-100">
                             <h5 class="m-0 font-14">Client 1</h5>
@@ -142,7 +142,7 @@
                 <!-- item-->
                 <a href="javascript:void(0);" class="dropdown-item notify-item">
                     <div class="d-flex">
-                        <img class="d-flex me-2 rounded-circle" src="assets/images/users/avatar-5.jpg"
+                        <img class="d-flex me-2 rounded-circle" src="/images/users/avatar-5.jpg"
                             alt="Generic placeholder image" height="32">
                         <div class="w-100">
                             <h5 class="m-0 font-14">Client 2</h5>

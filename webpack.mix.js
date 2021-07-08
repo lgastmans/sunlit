@@ -11,7 +11,22 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-    .postCss('resources/css/app.css', 'public/css', [
-        //
-    ]);
+// mix.copy('resources/fonts/*', 'public/fonts/');
+
+mix.postCss('resources/css/app.css', 'public/css').options({processCssUrls: false});
+mix.postCss('resources/css/hyper-app.css', 'public/css').options({processCssUrls: false});
+mix.postCss('resources/css/icons.css', 'public/css').options({processCssUrls: false});
+mix.postCss('resources/css/vendor/dataTables.bootstrap4.css', 'public/css/vendor').options({processCssUrls: false});
+mix.postCss('resources/css/vendor/responsive.bootstrap4.css', 'public/css/vendor').options({processCssUrls: false});
+
+
+mix.js('resources/js/app.js', 'public/js/');
+mix.js('resources/js/pages/*', 'public/js/pages/');
+mix.js('resources/js/hyper.js', 'public/js/');
+
+// mix.copy('resources/js/vendor.js', 'public/js/');
+// mix.copy('resources/js/vendor/jquery.dataTables.min.js', 'public/js/vendor/');
+// mix.copy('resources/js/vendor/dataTables.bootstrap4.js', 'public/js/vendor/');
+// mix.copy('resources/js/vendor/dataTables.responsive.min.js', 'public/js/vendor/');
+// mix.copy('resources/js/vendor/responsive.bootstrap4.min.js', 'public/js/vendor/');
+// mix.copy('resources/js/vendor/dataTables.checkboxes.min.js', 'public/js/vendor/');

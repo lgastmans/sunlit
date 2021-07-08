@@ -1,0 +1,10 @@
+{
+    "/js/app.js": "/js/app.js",
+    "/js/pages/suppliers.js": "/js/pages/suppliers.js",
+    "/js/hyper.js": "/js/hyper.js",
+    "/css/vendor/responsive.bootstrap4.css": "/css/vendor/responsive.bootstrap4.css",
+    "/css/vendor/dataTables.bootstrap4.css": "/css/vendor/dataTables.bootstrap4.css",
+    "/css/icons.css": "/css/icons.css",
+    "/css/hyper-app.css": "/css/hyper-app.css",
+    "/css/app.css": "/css/app.css"
+}
