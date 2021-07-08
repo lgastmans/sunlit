@@ -6,5 +6,11 @@
     "/css/vendor/dataTables.bootstrap4.css": "/css/vendor/dataTables.bootstrap4.css",
     "/css/icons.css": "/css/icons.css",
     "/css/hyper-app.css": "/css/hyper-app.css",
-    "/css/app.css": "/css/app.css"
+    "/css/app.css": "/css/app.css",
+    "/js/vendor.js": "/js/vendor.js",
+    "/js/vendor/jquery.dataTables.min.js": "/js/vendor/jquery.dataTables.min.js",
+    "/js/vendor/dataTables.bootstrap4.js": "/js/vendor/dataTables.bootstrap4.js",
+    "/js/vendor/dataTables.responsive.min.js": "/js/vendor/dataTables.responsive.min.js",
+    "/js/vendor/responsive.bootstrap4.min.js": "/js/vendor/responsive.bootstrap4.min.js",
+    "/js/vendor/dataTables.checkboxes.min.js": "/js/vendor/dataTables.checkboxes.min.js"
 }

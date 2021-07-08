@@ -7,7 +7,8 @@
   \*****************************/
 /***/ (() => {
 
-// nothing yet
+// require('./bootstrap');
+// require('alpinejs');
 
 /***/ }),
 
