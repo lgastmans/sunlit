@@ -10,7 +10,7 @@
                         <!-- Logo -->
                         <div class="card-header pt-4 pb-4 text-center bg-primary">
                             <a href="index.html">
-                                <span><img src="/assets/images/logo.png" alt="" height="18"></span>
+                                <span><img src="/images/logo.png" alt="" height="18"></span>
                             </a>
                         </div>
 
@@ -22,6 +22,7 @@
                             </div>
 
                             <form method="POST" action="{{ route('login') }}">
+                                @csrf
 
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email address</label>
@@ -30,7 +31,7 @@
 
                                 <div class="mb-3">
                                     @if (Route::has('password.request'))
-                                    <a href="{{ route('password.request') }}" class="text-muted float-end"><small>Forgot your password?</small></a>
+                                        <a href="{{ route('password.request') }}" class="text-muted float-end"><small>Forgot your password?</small></a>
                                     @endif
                                     <label for="password" class="form-label">Password</label>
                                     <input id="password" class="form-control" type="password" name="password" required autocomplete="current-password" />
