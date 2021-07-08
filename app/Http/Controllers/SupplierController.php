@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SupplierController extends Controller
 {
@@ -16,6 +17,90 @@ class SupplierController extends Controller
     {
         return view('suppliers.index');
     }
+
+
+    public function getSuppliers(Request $request)
+    {
+        $draw = 1;
+        if ($request->has('draw'))
+            $draw = $request->get('draw');
+
+        $start = 0;
+        if ($request->has('start'))
+            $start = $request->get("start");
+
+        $length = 50;
+        if ($request->has('length'))
+            $length = $request->get("length");
+
+        $order_column = 'company';
+        $order_dir = 'ASC';
+        $order_arr = array();
+        if ($request->has('order')) {
+            $order_arr = $request->get('order');
+            $column_arr = $request->get('columns');
+            $column_index = $order_arr[0]['column'];
+            $order_column = $column_arr[$column_index]['data'];
+            $order_dir = $order_arr[0]['dir'];
+        }
+
+        $search = '';
+        if ($request->has('search')) {
+            $search_arr = $request->get('search');
+            $search = $search_arr['value'];
+        }
+
+
+        // Total records
+        $totalRecords = DB::table('suppliers')->get()->count();
+        $totalRecordswithFilter = DB::table('suppliers')->where('company', 'like', '%'.$search.'%')->get()->count();
+        
+
+        // Fetch records
+        $records = DB::table('suppliers')
+            ->where('company', 'like', '%'.$search.'%')
+            ->orderBy($order_column, $order_dir)
+            //->paginate($length)
+            ->get();
+
+ //dd($order_column.":".$order_dir);die();
+
+        $arr = array();
+
+        foreach($records as $record)
+        {
+            $arr[] = array(
+                "id" => $record->id,
+                "state_id" =>$record->state_id,
+                "company" =>$record->company,
+                "address" =>$record->address,
+                "address2" =>$record->address2,
+                "city" =>$record->city,
+                "zip_code" =>$record->zip_code,
+                "gstin" =>$record->gstin,
+                "contact_person" =>$record->contact_person,
+                "phone" =>$record->phone,
+                "phone2" =>$record->phone2,
+                "email" =>$record->email
+
+            );
+        }
+
+        $response = array(
+            "draw" => $draw,
+            "recordsTotal" => $totalRecords,
+            "recordsFiltered" => $totalRecordswithFilter,
+            "data" => $arr,
+            'error' => null
+        );
+
+        
+        // return $arr->toJson();
+        echo json_encode($response);
+
+        exit;
+    }
+
 
     /**
      * Show the form for creating a new resource.
