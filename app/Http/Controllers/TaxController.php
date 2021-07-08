@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Tax;
 
 class TaxController extends Controller
 {
@@ -13,7 +14,7 @@ class TaxController extends Controller
      */
     public function index()
     {
-        //
+        return view('taxes.index');
     }
 
     /**
@@ -23,7 +24,8 @@ class TaxController extends Controller
      */
     public function create()
     {
-        //
+        $tax = new Tax();
+        return view('taxes.form', ['tax' => $tax]);
     }
 
     /**
@@ -34,7 +36,7 @@ class TaxController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request);
     }
 
     /**
@@ -56,7 +58,11 @@ class TaxController extends Controller
      */
     public function edit($id)
     {
-        //
+        $tax = Tax::find($id);
+        if ($tax){
+            return view('taxes.form', ['tax' => $tax]);
+        }
+        return view('taxes.index');
     }
 
     /**
