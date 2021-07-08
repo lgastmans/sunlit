@@ -30,6 +30,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/suppliers/{id}/edit', [SupplierController::class, 'edit'])->name('suppliers.edit');
     Route::get('/suppliers/create', [SupplierController::class, 'create'])->name('suppliers.create');
     Route::post('/suppliers', [SupplierController::class, 'store'])->name('suppliers.store');
+    Route::get('/suppliers', [SupplierController::class, 'getSuppliers'])->name('suppliers.list');
 
     Route::get('/taxes', [TaxController::class, 'index'])->name('taxes');
     Route::get('/taxes/{id}/edit', [TaxController::class, 'edit'])->name('taxes.edit');
