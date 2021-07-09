@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Models\Supplier;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,7 +17,11 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
 
         $this->call([
-            StateSeeder::class,
+            //StateSeeder::class,
         ]);
+
+        Supplier::factory()
+            ->count(50)
+            ->create();        
     }
 }
