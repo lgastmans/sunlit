@@ -73,11 +73,27 @@
                 </a>
             </li>
 
-            <li class="side-nav-item {{ (Request::is('taxes*') ? ' menuitem-active' : '') }}">
-                <a href="{{ route('taxes')}}" class="side-nav-link {{ (Request::is('taxes*') ? ' active' : '') }}">
-                    <i class=" uil-money-bill"></i>
-                    <span> Taxes </span>
+
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#sidebarSettings" aria-expanded="false" aria-controls="sidebarSettings" class="side-nav-link">
+                    <i class="uil-server"></i>
+                    <span> Settings </span>
+                    <span class="menu-arrow"></span>
                 </a>
+                <div class="collapse" id="sidebarSettings">
+                    <ul class="side-nav-second-level">
+                        <li>
+                            <a href="{{ route('taxes')}}" {{ (Request::is('taxes*') ? 'class=" active"' : '') }}>
+                                <span> Taxes </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('categories')}}" {{ (Request::is('categories*') ? 'class=" active"' : '') }}>
+                                <span> Categories </span>
+                            </a>
+                        </li>    
+                    </ul>
+                </div>
             </li>
 
         </ul>
