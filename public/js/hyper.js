@@ -1142,14 +1142,12 @@ function ($) {
     var toastList = toastElList.map(function (toastEl) {
       return new bootstrap.Toast(toastEl);
     }); //  RTL support js
-
-    if (document.getElementById('light-style').href.includes('rtl.min.css')) {
-      document.getElementsByTagName('html')[0].dir = "rtl";
-    }
-
-    if (document.getElementById('dark-style').href.includes('rtl.min.css')) {
-      document.getElementsByTagName('html')[0].dir = "rtl";
-    }
+    // if(document.getElementById('light-style').href.includes('rtl.min.css')){
+    //     document.getElementsByTagName('html')[0].dir="rtl";
+    // }
+    // if(document.getElementById('dark-style').href.includes('rtl.min.css')){
+    //     document.getElementsByTagName('html')[0].dir="rtl";
+    // }
   }, $.App = new App(), $.App.Constructor = App;
 }(window.jQuery), //initializing main application module
 function ($) {
