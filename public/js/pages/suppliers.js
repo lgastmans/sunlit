@@ -113,8 +113,16 @@ $(document).ready(function () {
     "phone": "8827000251"
   }]; // Default Datatable
 
+  var url = "{{ route('suppliers.list') }}";
+  console.log(url);
   var table = $('#suppliers-datatable').DataTable({
-    "data": data,
+    //"data": data,
+    processing: true,
+    serverSide: true,
+    //type : "POST",
+    //contentType: "json",
+    //processData: false,
+    ajax: url,
     "language": {
       "paginate": {
         "previous": "<i class='mdi mdi-chevron-left'>",

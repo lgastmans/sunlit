@@ -14,6 +14,9 @@ class ProductController extends Controller
     public function index()
     {
         //
+        $products = Products::all();
+
+        return view('products.index', compact('products'));
     }
 
     /**
@@ -24,6 +27,7 @@ class ProductController extends Controller
     public function create()
     {
         //
+        return view('products.create');
     }
 
     /**
@@ -35,6 +39,16 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+        ]);
+
+        Product::create($request->all());
+
+        return redirect()
+            ->route('products.index')
+            ->with('success','Product created successfully.');
     }
 
     /**
@@ -46,6 +60,7 @@ class ProductController extends Controller
     public function show($id)
     {
         //
+        return view('products.show',compact('product'));
     }
 
     /**
@@ -57,6 +72,7 @@ class ProductController extends Controller
     public function edit($id)
     {
         //
+        return view('products.edit',compact('product'));
     }
 
     /**
@@ -69,6 +85,16 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+        ]);
+
+        $product->update($request->all());
+
+        return redirect()
+            ->route('products.index')
+            ->with('success','Product updated successfully');        
     }
 
     /**
@@ -80,5 +106,9 @@ class ProductController extends Controller
     public function destroy($id)
     {
         //
+        $product->delete();
+
+        return redirect()->route('products.index')
+            ->with('success','Product deleted successfully');
     }
 }
