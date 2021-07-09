@@ -73,7 +73,11 @@
 
     // Default Datatable
     var table = $('#taxes-datatable').DataTable({
-        "data": data,
+        //"data": data,
+        processing: true,
+        serverSide: true,
+        ajax: "{{ route('taxes.list') }}",
+
         "language": {
             "paginate": {
                 "previous": "<i class='mdi mdi-chevron-left'>",
