@@ -12,5 +12,12 @@ class Category extends Model
     use HasFactory;
     use SoftDeletes;
 
+    /**
+     * Get the products associated with the category.
+     */
+    public function products()
+    {
+        return $this->HasMany(Product::class);
+    }
     
 }

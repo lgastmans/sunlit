@@ -35,4 +35,13 @@ class Tax extends Model
         $this->attributes['amount'] = $value * 100;
     }
 
+
+    /**
+     * Get the products associated with the tax.
+     */
+    public function products()
+    {
+        return $this->HasMany(Product::class);
+    }
+
 }

@@ -14,6 +14,9 @@ class State extends Model
 
     public $timestamps = false;
 
+    /**
+     * Get the suppliers associated with the state.
+     */
     public function state()
     {
         return $this->hasMany(Supplier::class);
