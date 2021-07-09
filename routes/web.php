@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TaxController;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,4 +37,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/taxes/{id}/edit', [TaxController::class, 'edit'])->name('taxes.edit');
     Route::get('/taxes/create', [TaxController::class, 'create'])->name('taxes.create');
     Route::post('/taxes', [TaxController::class, 'store'])->name('taxes.store');
+
+    Route::get('/products', [ProductController::class, 'index'])->name('products');
+    Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('products.edit');
+    Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+    Route::post('/products', [ProductController::class, 'store'])->name('products.store');
 });

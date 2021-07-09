@@ -52,8 +52,8 @@
 
             <li class="side-nav-title side-nav-item">Components</li>
 
-            <li class="side-nav-item">
-                <a href="#" class="side-nav-link">
+            <li class="side-nav-item {{ (Request::is('products*') ? ' menuitem-active' : '') }}">
+                <a href="{{ route('products')}}" class="side-nav-link {{ (Request::is('products*') ? ' active' : '') }}">
                     <i class="uil-shop"></i>
                     <span> Products </span>
                 </a>

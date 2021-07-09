@@ -14,7 +14,7 @@
                     <form action="{{ route('taxes.store') }}" method="POST" class="needs-validation" novalidate>
                         @csrf()
                         <div class="mb-3">
-                            <x-forms.input label="Description" name="description" value="{{ old('description', $tax->description) }}" message="Please provide a name" required="true"/>
+                            <x-forms.input label="name" name="name" value="{{ old('name', $tax->name) }}" message="Please provide a name" required="true"/>
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="display_amount">Amount</label>

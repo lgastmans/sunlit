@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('page-title', 'Taxes')
+@section('page-title', 'Products')
 
 @section('content')
 
@@ -10,7 +10,7 @@
             <div class="card-body">
                 <div class="row mb-2">
                     <div class="col-sm-4">
-                        <a href="{{ route('taxes.create') }}" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> Add taxes</a>
+                        <a href="{{ route('products.create') }}" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> Add Products</a>
                     </div>
                     <div class="col-sm-8">
                         <div class="text-sm-end">
@@ -22,7 +22,7 @@
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="taxes-datatable">
+                    <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="products-datatable">
                         <thead class="table-light">
                             <tr>
                                 <th style="width: 20px;">
@@ -31,8 +31,16 @@
                                         <label class="form-check-label" for="customCheck1">&nbsp;</label>
                                     </div>
                                 </th>
-                                <th>Name</th>
-                                <th>Amount</th> 
+                                <th>Category</th>
+                                <th>Supplier</th> 
+                                <th>Tax</th>
+                                <th>Code</th> 
+                                <th>Name</th> 
+                                <th>Model</th> 
+                                <th>Cable length</th> 
+                                <th>KW rating</th> 
+                                <th>Part number</th> 
+                                <th>Notes</th> 
                             </tr>
                         </thead>
                         <tbody>
@@ -58,33 +66,47 @@
 
     var data = [{
         "id": 1,
-        "name": "Gabtype",
-        "amount": "1200",
-        "display_amount": "12.00"
+        "category": "Inverter",
+        "supplier": "Studer",
+        "tax": "12.00",
+        "code": 'CD02',
+        "name": "Inverter 4KW",
+        "model": 'A1Z2',
+        "cable_length": "5m",
+        "kw_rating": "4",
+        "part_number": "AQSZED",
+        "notes": "this is a note"
       }, {
         "id": 2,
-        "name": "Skippad",
-        "amount": "500",
-        "display_amount": "5.00"
+        "category": "Solar Panel",
+        "supplier": "Wairee",
+        "tax": "5.00",
+        "code": "CD01",
+        "name": "Solar Panel",
+        "model": 'SP390',
+        "cable_length": "0",
+        "kw_rating": "390",
+        "part_number": "11SPWA",
+        "notes": "this is a note"
       }
     ];    
 
 
 
     // Default Datatable
-    var table = $('#taxes-datatable').DataTable({
+    var table = $('#products-datatable').DataTable({
         "data": data,
         "language": {
             "paginate": {
                 "previous": "<i class='mdi mdi-chevron-left'>",
                 "next": "<i class='mdi mdi-chevron-right'>"
             },
-            "info": "Showing taxes _START_ to _END_ of _TOTAL_",
+            "info": "Showing Products _START_ to _END_ of _TOTAL_",
             "lengthMenu": "Display <select class='form-select form-select-sm ms-1 me-1'>" +
                 '<option value="10">10</option>' +
                 '<option value="20">20</option>' +
                 '<option value="-1">All</option>' +
-                '</select> taxes',
+                '</select> Products',
         },
         "pageLength": 10,
         "columns": [
@@ -103,11 +125,43 @@
                 }
             },
             { 
+                'data': 'category',
+                'orderable': true 
+            },
+            { 
+                'data': 'supplier',
+                'orderable': true 
+            },
+            { 
+                'data': 'tax',
+                'orderable': true 
+            },
+            { 
+                'data': 'code',
+                'orderable': true 
+            },
+            { 
                 'data': 'name',
                 'orderable': true 
             },
             { 
-                'data': 'display_amount',
+                'data': 'model',
+                'orderable': true 
+            },
+            { 
+                'data': 'cable_length',
+                'orderable': true 
+            },
+            { 
+                'data': 'kw_rating',
+                'orderable': true 
+            },
+            { 
+                'data': 'part_number',
+                'orderable': true 
+            },
+            { 
+                'data': 'notes',
                 'orderable': true 
             }
             
@@ -118,7 +172,7 @@
         "order": [[1, "desc"]],
         "drawCallback": function () {
             $('.dataTables_paginate > .pagination').addClass('pagination-rounded');
-            $('#taxes-datatable_length label').addClass('form-label');
+            $('#products-datatable_length label').addClass('form-label');
             
         },
     });
