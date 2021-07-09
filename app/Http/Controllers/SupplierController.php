@@ -29,9 +29,10 @@ class SupplierController extends Controller
         if ($request->has('start'))
             $start = $request->get("start");
 
-        $length = 50;
-        if ($request->has('length'))
+        $length = 10;
+        if ($request->has('length')) {
             $length = $request->get("length");
+        }
 
         $order_column = 'company';
         $order_dir = 'ASC';
@@ -50,20 +51,34 @@ class SupplierController extends Controller
             $search = $search_arr['value'];
         }
 
-
         // Total records
         $totalRecords = DB::table('suppliers')->get()->count();
-        $totalRecordswithFilter = DB::table('suppliers')->where('company', 'like', '%'.$search.'%')->get()->count();
+        $totalRecordswithFilter = DB::table('suppliers')
+            ->where('contact_person', 'like', '%'.$search.'%')
+            ->orWhere('company', 'like', '%'.$search.'%')
+            ->orWhere('address', 'like', '%'.$search.'%')
+            ->get()
+            ->count();
         
 
         // Fetch records
-        $records = DB::table('suppliers')
-            ->where('company', 'like', '%'.$search.'%')
-            ->orderBy($order_column, $order_dir)
-            //->paginate($length)
-            ->get();
+        if ($length < 0)
+            $records = DB::table('suppliers')
+                ->where('contact_person', 'like', '%'.$search.'%')
+                ->orWhere('company', 'like', '%'.$search.'%')
+                ->orWhere('address', 'like', '%'.$search.'%')
+                ->orderBy($order_column, $order_dir)
+                ->get();
+        else
+            $records = DB::table('suppliers')
+                ->where('contact_person', 'like', '%'.$search.'%')
+                ->orWhere('company', 'like', '%'.$search.'%')
+                ->orWhere('address', 'like', '%'.$search.'%')
+                ->orderBy($order_column, $order_dir)
+                ->skip($start)
+                ->take($length)
+                ->get();
 
- //dd($order_column.":".$order_dir);die();
 
         $arr = array();
 
@@ -71,17 +86,17 @@ class SupplierController extends Controller
         {
             $arr[] = array(
                 "id" => $record->id,
-                "state_id" =>$record->state_id,
-                "company" =>$record->company,
-                "address" =>$record->address,
-                "address2" =>$record->address2,
-                "city" =>$record->city,
-                "zip_code" =>$record->zip_code,
-                "gstin" =>$record->gstin,
-                "contact_person" =>$record->contact_person,
-                "phone" =>$record->phone,
-                "phone2" =>$record->phone2,
-                "email" =>$record->email
+                "state_id" => $record->state_id,
+                "company" => $record->company,
+                "address" => $record->address,
+                "address2" => $record->address2,
+                "city" => $record->city,
+                "zip_code" => $record->zip_code,
+                "gstin" => $record->gstin,
+                "contact_person" => $record->contact_person,
+                "phone" => $record->phone,
+                "phone2" => $record->phone2,
+                "email" => $order_column //$record->email
 
             );
         }
@@ -95,7 +110,6 @@ class SupplierController extends Controller
         );
 
         
-        // return $arr->toJson();
         echo json_encode($response);
 
         exit;
