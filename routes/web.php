@@ -38,14 +38,17 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/taxes/{id}/edit', [TaxController::class, 'edit'])->name('taxes.edit');
     Route::get('/taxes/create', [TaxController::class, 'create'])->name('taxes.create');
     Route::post('/taxes', [TaxController::class, 'store'])->name('taxes.store');
+    Route::get('/taxes/list', [TaxController::class, 'getTaxes'])->name('taxes.list');
 
     Route::get('/products', [ProductController::class, 'index'])->name('products');
     Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('products.edit');
     Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
     Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+    Route::get('/products/list', [ProductController::class, 'getProducts'])->name('products.list');
 
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
     Route::get('/categories/{id}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
     Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
     Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
+    Route::get('/categories/list', [CategoryController::class, 'getCategories'])->name('categories.list');
 });
