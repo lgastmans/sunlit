@@ -96,7 +96,7 @@ class SupplierController extends Controller
                 "contact_person" => $record->contact_person,
                 "phone" => $record->phone,
                 "phone2" => $record->phone2,
-                "email" => $order_column //$record->email
+                "email" => $record->email
 
             );
         }
