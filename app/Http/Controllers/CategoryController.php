@@ -61,13 +61,11 @@ class CategoryController extends Controller
 
         // Fetch records
         if ($length < 0)
-            $records = DB::table('categories')
-                ->where('name', 'like', '%'.$search.'%')
+            $categories = Category::where('name', 'like', '%'.$search.'%')
                 ->orderBy($order_column, $order_dir)
                 ->get();
         else
-            $records = DB::table('categories')
-                ->where('name', 'like', '%'.$search.'%')
+            $categories = Category::where('name', 'like', '%'.$search.'%')
                 ->orderBy($order_column, $order_dir)
                 ->skip($start)
                 ->take($length)
@@ -76,7 +74,7 @@ class CategoryController extends Controller
 
         $arr = array();
 
-        foreach($records as $record)
+        foreach($categories as $record)
         {
             $arr[] = array(
                 "id" => $record->id,

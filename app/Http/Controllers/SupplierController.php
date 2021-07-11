@@ -63,15 +63,13 @@ class SupplierController extends Controller
 
         // Fetch records
         if ($length < 0)
-            $records = DB::table('suppliers')
-                ->where('contact_person', 'like', '%'.$search.'%')
+            $suppliers = Supplier::where('contact_person', 'like', '%'.$search.'%')
                 ->orWhere('company', 'like', '%'.$search.'%')
                 ->orWhere('address', 'like', '%'.$search.'%')
                 ->orderBy($order_column, $order_dir)
                 ->get();
         else
-            $records = DB::table('suppliers')
-                ->where('contact_person', 'like', '%'.$search.'%')
+            $suppliers = Supplier::where('contact_person', 'like', '%'.$search.'%')
                 ->orWhere('company', 'like', '%'.$search.'%')
                 ->orWhere('address', 'like', '%'.$search.'%')
                 ->orderBy($order_column, $order_dir)
@@ -82,7 +80,7 @@ class SupplierController extends Controller
 
         $arr = array();
 
-        foreach($records as $record)
+        foreach($suppliers as $record)
         {
             $arr[] = array(
                 "id" => $record->id,

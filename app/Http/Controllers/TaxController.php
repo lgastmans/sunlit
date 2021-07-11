@@ -61,30 +61,27 @@ class TaxController extends Controller
 
         // Fetch records
         if ($length < 0)
-            $records = DB::table('taxes')
-                ->where('name', 'like', '%'.$search.'%')
+            $taxes = Tax::where('name', 'like', '%'.$search.'%')
                 ->orWhere('amount', 'like', '%'.$search.'%')
                 ->orderBy($order_column, $order_dir)
                 ->get();
         else
-            $records = DB::table('taxes')
-                ->where('name', 'like', '%'.$search.'%')
+            $taxes = Tax::where('name', 'like', '%'.$search.'%')
                 ->orWhere('amount', 'like', '%'.$search.'%')
                 ->orderBy($order_column, $order_dir)
                 ->skip($start)
                 ->take($length)
                 ->get();
 
-
         $arr = array();
 
-        foreach($records as $record)
+        foreach($taxes as $record)
         {
             $arr[] = array(
                 "id" => $record->id,
                 "name" => $record->name,
                 "amount" => $record->amount,
-                "display_amount" => ($record->amount/100)
+                "display_amount" => $record->display_amount
             );
         }
 
@@ -102,15 +99,6 @@ class TaxController extends Controller
         exit;
     }
 
-    public function getAmountAttribute($value)
-    {
-        return ($value/100);
-    }
-
-    public function setAmountAttribute($value)
-    {
-        return ($value*100);
-    }
 
     /**
      * Show the form for creating a new resource.
