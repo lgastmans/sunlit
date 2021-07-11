@@ -71,7 +71,6 @@ class CategoryController extends Controller
                 ->take($length)
                 ->get();
 
-
         $arr = array();
 
         foreach($categories as $record)
