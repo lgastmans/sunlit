@@ -19,10 +19,11 @@ class CategoryController extends Controller
     public function index()
     {   
         $user = Auth::user();
+
         if ($user->can('list categories'))
             return view('categories.index');
     
-        return abort(403, "Unauthorized");
+        return abort(403, "THIS ACTION IS UNAUTHORIZED");
 
     }
 
@@ -184,6 +185,6 @@ class CategoryController extends Controller
             Category::destroy($id);
             return redirect(route('categories'))->with('success', 'Category deleted!');
         }
-        return abort(403, "Unauthorized");
+        return abort(403, "THIS ACTION IS UNAUTHORIZED");
     }
 }
