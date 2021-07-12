@@ -28,7 +28,7 @@
                     <img src="/images/users/avatar-1.jpg" alt="user-image" class="rounded-circle">
                 </span>
                 <span>
-                    <span class="account-user-name">Quentin</span>
+                    <span class="account-user-name">{{ Str::ucfirst(Auth::user()->name) }}</span>
                     <span class="account-position">Dev.</span>
                 </span>
             </a>
