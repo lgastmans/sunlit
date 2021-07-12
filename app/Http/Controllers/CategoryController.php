@@ -79,7 +79,7 @@ class CategoryController extends Controller
         $response = array(
             "draw" => $draw,
             "recordsTotal" => $totalRecords,
-            "recordsFiltered" => $$categories->count(),
+            "recordsFiltered" => $categories->count(),
             "data" => $categories,
             'error' => null
         );
