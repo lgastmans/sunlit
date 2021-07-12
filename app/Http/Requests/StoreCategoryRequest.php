@@ -10,7 +10,7 @@ class StoreCategoryRequest extends FormRequest
 
     protected function failedAuthorization()
     {
-        throw new AuthorizationException('What are you doing my dude?');
+        throw new AuthorizationException(trans('app.unauthorized'));
     }
 
 

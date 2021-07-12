@@ -9,7 +9,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="row mb-2">
-                    <p>@if ($category->id) Edit category: <span class="text-primary">{{ $category->name }}</span> @else Create a new category @endif </p>
+                    <p>@if ($category->id) {{ __('app.edit_title', ['field' => 'category']) }}: <span class="text-primary">{{ $category->name }}</span> @else {{ __('app.add_title', ['field' => 'category']) }} @endif </p>
                 </div>
                 <x-auth-validation-errors class="mb-4" :errors="$errors" />
                     <form action="@if ($category->id) {{ route('categories.update', $category->id) }} @else {{ route('categories.store') }} @endif" method="POST" class="needs-validation" novalidate>
@@ -27,7 +27,7 @@
                         </div>
                         
                        
-                        <button class="btn btn-primary" type="submit">@if ($category->id) Edit @else Create @endif category</button>
+                        <button class="btn btn-primary" type="submit">@if ($category->id) {{ __('app.edit_title', ['field' => 'category']) }} @else {{ __('app.add_title', ['field' => 'category']) }} @endif</button>
 
                     </form>
                 </div>

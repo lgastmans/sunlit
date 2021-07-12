@@ -11,7 +11,7 @@
                 <div class="row mb-2">
                     <div class="col-sm-4">
                         @if (Auth::user()->can('edit categories'))
-                            <a href="{{ route('categories.create') }}" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> Add category</a>
+                            <a href="{{ route('categories.create') }}" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> {{ __('app.add_title', ['field' => 'category']) }}</a>
                         @else
                             &nbsp;
                         @endif
@@ -19,7 +19,7 @@
                     <div class="col-sm-8">
                         <div class="text-sm-end">
                             <button type="button" class="btn btn-success mb-2 me-1"><i class="mdi mdi-cog"></i></button>
-                            <button type="button" class="btn btn-light mb-2">Export</button>
+                            <button type="button" class="btn btn-light mb-2">{{ __('app.export') }}</button>
                         </div>
                     </div><!-- end col-->
                 </div>
@@ -37,7 +37,7 @@
                                 <th>Name</th>
                                 <th>
                                     @if (Auth::user()->can('edit categories'))
-                                        Actions
+                                    {{ __('app.dt_actions') }}
                                     @else
                                         &nbsp;
                                     @endif
@@ -61,17 +61,17 @@
                 @method("DELETE")
                 @csrf()
                 <div class="modal-header modal-colored-header bg-danger">
-                    <h4 class="modal-title" id="delete-categoryLabel">Delete category</h4>
+                    <h4 class="modal-title" id="delete-categoryLabel">{{ __('app.delete_title', ['field' => 'category']) }}</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to delete this category?
+                    {{ __('app.delete_confirm', ['field' => 'category']) }}
                     
                     
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-danger" onclick="event.preventDefault(); document.getElementById('delete-form').submit();">Delete</button>
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('app.modal_close') }}</button>
+                    <button type="button" class="btn btn-danger" onclick="event.preventDefault(); document.getElementById('delete-form').submit();">{{ __('app.modal_delete') }}</button>
                 </div>
             </form>
         </div><!-- /.modal-content -->

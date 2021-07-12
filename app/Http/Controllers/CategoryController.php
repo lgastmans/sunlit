@@ -23,7 +23,7 @@ class CategoryController extends Controller
         if ($user->can('list categories'))
             return view('categories.index');
     
-        return abort(403, "What are you doing my dude?");
+        return abort(403, trans('error.unauthorized'));
 
     }
 
@@ -124,9 +124,9 @@ class CategoryController extends Controller
         $validatedData = $request->validated();
         $category = Category::create($validatedData);
         if ($category){
-            return redirect(route('categories'))->with('success', 'Category added');
+            return redirect(route('categories'))->with('success', trans('app.record_added', ['field' => 'category']));
         }
-        return back()->with('error', 'The category couldn\'t be added')->withInputs($request->input());
+        return back()->withInputs($request->input())->with('error', trans('error.record_edited', ['field' => 'category']));
     }
 
     /**
@@ -152,7 +152,7 @@ class CategoryController extends Controller
         if ($category){
             return view('categories.form', ['category' => $category]);
         }
-        return view('categories.index')->with('success', 'Category added');
+        return view('categories.index');
     }
 
     /**
@@ -165,11 +165,11 @@ class CategoryController extends Controller
     public function update(StoreCategoryRequest $request, $id)
     {
         $validatedData = $request->validated();
-        $category = Category::whereId($id)->update($validatedData);
+        $category = Category::whereId(100)->update($validatedData);
         if ($category){
-            return redirect(route('categories'))->with('success', 'Category updated');
+            return redirect(route('categories'))->with('success', trans('app.record_edited', ['field' => 'category']));
         }
-        return back()->with('error', 'Something went wrong')->withInputs($request->input());
+        return back()->withInputs($request->input())->with('error', trans('error.record_edited', ['field' => 'category']));
     }
 
     /**
@@ -183,8 +183,8 @@ class CategoryController extends Controller
         $user = Auth::user();
         if ($user->can('delete categories')){
             Category::destroy($id);
-            return redirect(route('categories'))->with('success', 'Category deleted!');
+            return redirect(route('categories'))->with('success', trans('app.record_deleted', ['field' => 'category']));
         }
-        return abort(403, "What are you doing my dude?");
+        return abort(403, trans('error.unauthorized'));
     }
 }
