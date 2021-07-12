@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use \App\Http\Requests\StoreCategoryRequest;
+use Illuminate\Support\Facades\Auth;
+
 
 
 class CategoryController extends Controller
@@ -15,8 +17,13 @@ class CategoryController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        return view('categories.index');
+    {   
+        $user = Auth::user();
+        if ($user->can('list categories'))
+            return view('categories.index');
+    
+        return abort(403, "Unauthorized");
+
     }
 
     public function getCategories(Request $request)
@@ -172,7 +179,11 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        Category::destroy($id);
-        return redirect(route('categories'))->with('success', 'Category deleted!');
+        $user = Auth::user();
+        if ($user->can('delete categories')){
+            Category::destroy($id);
+            return redirect(route('categories'))->with('success', 'Category deleted!');
+        }
+        return abort(403, "Unauthorized");
     }
 }

@@ -87,11 +87,13 @@
                                 <span> Taxes </span>
                             </a>
                         </li>
+                        @can('list categories')
                         <li>
                             <a href="{{ route('categories')}}" {{ (Request::is('categories*') ? 'class=" active"' : '') }}>
                                 <span> Categories </span>
                             </a>
-                        </li>    
+                        </li>
+                        @endcan 
                     </ul>
                 </div>
             </li>
