@@ -78,20 +78,7 @@
  $(document).ready(function () {
     "use strict";
 
-    var data = [{
-        "id": 1,
-        "name": "Inverter",
-      }, {
-        "id": 2,
-        "name": "Solar Panel",
-      }
-    ];    
-
-
-
-    // Default Datatable
     var table = $('#categories-datatable').DataTable({
-        //"data": data,
         processing: true,
         serverSide: true,
         ajax: "{{ route('categories.list') }}",
@@ -169,6 +156,11 @@
         }
         
     });
+
+
+    @if(Session::has('success'))
+        $.NotificationApp.send("Success","{{ session('success') }}","top-right","","success")
+    @endif
 
 });
 
