@@ -61,44 +61,30 @@ class CategoryController extends Controller
 
         // Total records
         $totalRecords = Category::get()->count();
-        $totalRecordswithFilter = Category::where('name', 'like', '%'.$search.'%')
-            ->get()
-            ->count();
-        
 
+    
         // Fetch records
         if ($length < 0)
             $categories = Category::where('name', 'like', '%'.$search.'%')
                 ->orderBy($order_column, $order_dir)
-                ->get();
+                ->get(['id','name']);
         else
             $categories = Category::where('name', 'like', '%'.$search.'%')
                 ->orderBy($order_column, $order_dir)
                 ->skip($start)
                 ->take($length)
-                ->get();
-
-        $arr = array();
-
-        foreach($categories as $record)
-        {
-            $arr[] = array(
-                "id" => $record->id,
-                "name" => $record->name,
-            );
-        }
+                ->get(['id','name']);
+               
 
         $response = array(
             "draw" => $draw,
             "recordsTotal" => $totalRecords,
-            "recordsFiltered" => $totalRecordswithFilter,
-            "data" => $arr,
+            "recordsFiltered" => $$categories->count(),
+            "data" => $categories,
             'error' => null
         );
 
-        
         echo json_encode($response);
-
         exit;
     }
 
