@@ -10,12 +10,15 @@
             <div class="card-body">
                 <div class="row mb-2">
                     <div class="col-sm-4">
-                        <a href="{{ route('categories.create') }}" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> Add category</a>
+                        @if (Auth::user()->can('edit categories'))
+                            <a href="{{ route('categories.create') }}" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> Add category</a>
+                        @else
+                            &nbsp;
+                        @endif
                     </div>
                     <div class="col-sm-8">
                         <div class="text-sm-end">
                             <button type="button" class="btn btn-success mb-2 me-1"><i class="mdi mdi-cog"></i></button>
-                            <button type="button" class="btn btn-light mb-2 me-1">Import</button>
                             <button type="button" class="btn btn-light mb-2">Export</button>
                         </div>
                     </div><!-- end col-->
@@ -32,7 +35,13 @@
                                     </div>
                                 </th>
                                 <th>Name</th>
-                                <th>Actions</th>
+                                <th>
+                                    @if (Auth::user()->can('edit categories'))
+                                        Actions
+                                    @else
+                                        &nbsp;
+                                    @endif
+                                    </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -119,15 +128,19 @@
                 'data': 'id',
                 'render' : function(data, type, row, meta){
                     if (type === 'display'){
-                        var edit_route = '{{ route("categories.edit", ":id") }}';
-                        edit_route = edit_route.replace(':id', data);
-                        var edit_btn = '<a href="' + edit_route + '" class="action-icon"> <i class="mdi mdi-pencil"></i></a>'
 
-                        
-                        // var delete_route = '{{ route("categories.delete", ":id") }}';
-                        // delete_route = delete_route.replace(':id', data);
+                        var edit_btn = '';
+                        var delete_btn = '';
 
-                        var delete_btn = '<a href="" class="action-icon" id="' + data + '" data-bs-toggle="modal" data-bs-target="#delete-category"> <i class="mdi mdi-delete"></i></a>'
+                        @if (Auth::user()->can('edit categories'))
+                            var edit_route = '{{ route("categories.edit", ":id") }}';
+                            edit_route = edit_route.replace(':id', data);
+                            edit_btn = '<a href="' + edit_route + '" class="action-icon"> <i class="mdi mdi-pencil"></i></a>'                       
+                        @endif
+                        @if (Auth::user()->can('delete categories'))
+                            delete_btn = '<a href="" class="action-icon" id="' + data + '" data-bs-toggle="modal" data-bs-target="#delete-category"> <i class="mdi mdi-delete"></i></a>'
+                        @endif
+
                         data = edit_btn +  delete_btn
                     }
                     return data;
