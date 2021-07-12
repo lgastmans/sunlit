@@ -19,7 +19,6 @@ class CategoryController extends Controller
     public function index()
     {   
         $user = Auth::user();
-
         if ($user->can('list categories'))
             return view('categories.index');
     

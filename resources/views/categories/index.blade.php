@@ -35,7 +35,7 @@
                                     </div>
                                 </th>
                                 <th>Name</th>
-                                <th>
+                                <th style="width:10%">
                                     @if (Auth::user()->can('edit categories'))
                                     {{ __('app.dt_actions') }}
                                     @else
