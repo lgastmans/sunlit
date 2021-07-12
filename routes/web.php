@@ -17,17 +17,15 @@ use App\Http\Controllers\CategoryController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
 
 require __DIR__.'/auth.php';
 
 Route::group(['middleware' => ['auth']], function () { 
+
+    Route::get('/', function () {
+        return view('welcome');
+    });
+    
     Route::get('/suppliers', [SupplierController::class, 'index'])->name('suppliers');
     Route::get('/suppliers/{id}/edit', [SupplierController::class, 'edit'])->name('suppliers.edit');
     Route::get('/suppliers/create', [SupplierController::class, 'create'])->name('suppliers.create');
