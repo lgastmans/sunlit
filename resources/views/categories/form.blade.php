@@ -11,10 +11,19 @@
                 <div class="row mb-2">
                     <h4>Add a category</h4>
                 </div>
-                    <form action="{{ route('categories.store') }}" method="POST" class="needs-validation" novalidate>
+                <x-auth-validation-errors class="mb-4" :errors="$errors" />
+                    <form action="@if ($category->id) {{ route('categories.update', $category->id) }} @else {{ route('categories.store') }} @endif" method="POST" class="needs-validation" novalidate>
                         @csrf()
+                        @if ($category->id)
+                            @method('PUT')
+                        @endif
+                        @if ($category->id)
+                            <div class="mb-3">
+                                <input type="hidden" name="id" value="{{ old('id', $category->id) }}" />
+                            </div>
+                        @endif
                         <div class="mb-3">
-                            <x-forms.input label="name" name="name" value="{{ old('name', $category->name) }}" message="Please provide a name" required="true"/>
+                            <x-forms.input label="Name" name="name" value="{{ old('name', $category->name) }}" message="Please provide a name" required="true"/>
                         </div>
                         
                        

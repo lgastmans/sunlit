@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
-use Illuminate\Support\Facades\DB;
+use \App\Http\Requests\StoreCategoryRequest;
 
 
 class CategoryController extends Controller
@@ -52,9 +52,8 @@ class CategoryController extends Controller
         }
 
         // Total records
-        $totalRecords = DB::table('categories')->get()->count();
-        $totalRecordswithFilter = DB::table('categories')
-            ->where('name', 'like', '%'.$search.'%')
+        $totalRecords = Category::get()->count();
+        $totalRecordswithFilter = Category::where('name', 'like', '%'.$search.'%')
             ->get()
             ->count();
         
@@ -109,12 +108,17 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\StoreCategoryRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreCategoryRequest $request)
     {
-        dd($request);
+        $validatedData = $request->validated();
+        $category = Category::create($validatedData);
+        if ($category){
+            return redirect(route('categories'))->with('success', 'Category added');
+        }
+        return back()->with('error', 'The category couldn\'t be added')->withInputs($request->input());
     }
 
     /**
@@ -140,19 +144,24 @@ class CategoryController extends Controller
         if ($category){
             return view('categories.form', ['category' => $category]);
         }
-        return view('categories.index');
+        return view('categories.index')->with('success', 'Category added');
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\StoreCategoryRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreCategoryRequest $request, $id)
     {
-        //
+        $validatedData = $request->validated();
+        $category = Category::whereId($id)->update($validatedData);
+        if ($category){
+            return redirect(route('categories'))->with('success', 'Category updated');
+        }
+        return back()->with('error', 'Something went wrong')->withInputs($request->input());
     }
 
     /**

@@ -12,6 +12,8 @@ class Category extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = ['name'];
+
     /**
      * Get the products associated with the category.
      */
