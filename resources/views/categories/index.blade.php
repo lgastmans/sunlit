@@ -32,12 +32,11 @@
                                     </div>
                                 </th>
                                 <th>Name</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
 
-                            
-                            
                         </tbody>
                     </table>
                 </div>
@@ -45,6 +44,30 @@
         </div> <!-- end card-->
     </div> <!-- end col -->
 </div>
+
+<div id="delete-category" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="delete-categoryLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="delete-form" action="" method="POST">
+                @method("DELETE")
+                @csrf()
+                <div class="modal-header modal-colored-header bg-danger">
+                    <h4 class="modal-title" id="delete-categoryLabel">Delete category</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this category?
+                    
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" onclick="event.preventDefault(); document.getElementById('delete-form').submit();">Delete</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 
 @endsection
@@ -105,6 +128,24 @@
                 'data': 'name',
                 'orderable': true 
             },
+            {
+                'data': 'id',
+                'render' : function(data, type, row, meta){
+                    if (type === 'display'){
+                        var edit_route = '{{ route("categories.edit", ":id") }}';
+                        edit_route = edit_route.replace(':id', data);
+                        var edit_btn = '<a href="' + edit_route + '" class="action-icon"> <i class="mdi mdi-pencil"></i></a>'
+
+                        
+                        // var delete_route = '{{ route("categories.delete", ":id") }}';
+                        // delete_route = delete_route.replace(':id', data);
+
+                        var delete_btn = '<a href="" class="action-icon" id="' + data + '" data-bs-toggle="modal" data-bs-target="#delete-category"> <i class="mdi mdi-delete"></i></a>'
+                        data = edit_btn +  delete_btn
+                    }
+                    return data;
+                }
+            }
             
         ],
         "select": {
@@ -117,10 +158,19 @@
             
         },
     });
-  
+
+    $('#delete-category').on('show.bs.modal', function (e) {
+        var route = '{{ route("categories.delete", ":id") }}';
+        var button = e.relatedTarget;
+        if (button != null){
+            route = route.replace(':id', button.id);
+            console.log(route);
+            $('#delete-form').attr('action', route);
+        }
+        
+    });
+
 });
 
-
-    
     </script>    
 @endsection

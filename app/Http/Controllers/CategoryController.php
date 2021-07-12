@@ -174,6 +174,5 @@ class CategoryController extends Controller
     {
         Category::destroy($id);
         return redirect(route('categories'))->with('success', 'Category deleted!');
-
     }
 }
