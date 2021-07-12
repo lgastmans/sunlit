@@ -3,9 +3,17 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class StoreCategoryRequest extends FormRequest
 {
+
+    protected function failedAuthorization()
+    {
+        throw new AuthorizationException('What are you doing my dude?');
+    }
+
+
     /**
      * Determine if the user is authorized to make this request.
      *
