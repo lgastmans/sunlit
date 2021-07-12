@@ -112,7 +112,7 @@ class CategoryController extends Controller
         if ($category){
             return redirect(route('categories'))->with('success', trans('app.record_added', ['field' => 'category']));
         }
-        return back()->withInputs($request->input())->with('error', trans('error.record_edited', ['field' => 'category']));
+        return back()->withInputs($request->input())->with('error', trans('error.record_added', ['field' => 'category']));
     }
 
     /**

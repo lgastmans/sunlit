@@ -174,6 +174,9 @@
     @if(Session::has('success'))
         $.NotificationApp.send("Success","{{ session('success') }}","top-right","","success")
     @endif
+    @if(Session::has('error'))
+        $.NotificationApp.send("Error","{{ session('error') }}","top-right","","error")
+    @endif
 
 });
 
