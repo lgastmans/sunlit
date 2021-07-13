@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Tax;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Arr;
 use \App\Http\Requests\StoreTaxRequest;
-
+use Illuminate\Support\Facades\Auth;
 
 
 class TaxController extends Controller
@@ -126,6 +126,7 @@ class TaxController extends Controller
     public function store(StoreTaxRequest $request)
     {
         $validatedData = $request->validated();
+        $validatedData = Arr::except($validatedData, array('display_amount'));
         $tax = Tax::create($validatedData);
         if ($tax){
             return redirect(route('taxes'))->with('success', trans('app.record_added', ['field' => 'tax']));
@@ -169,7 +170,8 @@ class TaxController extends Controller
     public function update(StoreTaxRequest $request, $id)
     {
         $validatedData = $request->validated();
-        $tax = Taxes::whereId($id)->update($validatedData);
+        $validatedData = Arr::except($validatedData, array('display_amount'));
+        $tax = Tax::whereId($id)->update($validatedData);
         if ($tax){
             return redirect(route('taxes'))->with('success', trans('app.record_edited', ['field' => 'tax']));
         }

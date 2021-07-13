@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Requests;
+use Illuminate\Support\Arr;
+
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -22,6 +24,13 @@ class StoreTaxRequest extends FormRequest
         return $this->user()->can('edit taxes');
     }
 
+    protected function prepareForValidation()
+{
+    $this->merge([
+        'amount' => $this->display_amount * 100,
+    ]);
+}
+
 
     /**
      * Get the validation rules that apply to the request.
@@ -30,9 +39,11 @@ class StoreTaxRequest extends FormRequest
      */
     public function rules()
     {
+
         return [
             'name' => 'required|max:255'.$this->taxes,
             'display_amount' => 'required',
+            'amount' => 'max:255'.$this->taxes
         ];
     }
 }
