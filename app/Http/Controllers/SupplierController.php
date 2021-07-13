@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+
 
 class SupplierController extends Controller
 {
@@ -182,6 +184,11 @@ class SupplierController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = Auth::user();
+        if ($user->can('delete suppliers')){
+            Supplier::destroy($id);
+            return redirect(route('suppliers'))->with('success', trans('app.record_deleted', ['field' => 'supplier']));
+        }
+        return abort(403, trans('error.unauthorized'));
     }
 }

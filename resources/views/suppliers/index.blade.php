@@ -36,40 +36,10 @@
                                 <th>Location</th>
                                 <th>Email address</th>
                                 <th>Phone</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            {{-- <tr>
-                                <td>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="customCheck2">
-                                        <label class="form-check-label" for="customCheck2">&nbsp;</label>
-                                    </div>
-                                </td>
-                                <td class="table-user">
-                                    <img src="assets/images/users/avatar-4.jpg" alt="table-user" class="me-2 rounded-circle">
-                                    <a href="javascript:void(0);" class="text-body fw-semibold">Paul J. Friend</a>
-                                </td>
-                                <td>
-                                    Homovee
-                                </td>
-                                <td>
-                                    <span class="fw-semibold">128</span>
-                                </td>
-                                <td>
-                                    bob@sunlite.com
-                                </td>
-                                <td>
-                                    07/07/2018
-                                </td>
-                                
-
-                                <td>
-                                    <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
-                                    <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
-                                </td>
-                            </tr> --}}
-                            
+                        <tbody>                            
                             
                         </tbody>
                     </table>
@@ -79,11 +49,11 @@
     </div> <!-- end col -->
 </div>
 
+<x-modal-confirm type="danger" target="supplier"></x-modal-confirm>
 
 @endsection
 
 @section('page-scripts')
-    <!-- <script src='{{ mix("js/pages/suppliers.js") }}'></script>     -->
     <script>
 
 
@@ -151,6 +121,28 @@
                 'data': 'phone',
                 'orderable': true 
             },
+            {
+                'data': 'id',
+                'render' : function(data, type, row, meta){
+                    if (type === 'display'){
+
+                        var edit_btn = '';
+                        var delete_btn = '';
+
+                        @if (Auth::user()->can('edit suppliers'))
+                            var edit_route = '{{ route("suppliers.edit", ":id") }}';
+                            edit_route = edit_route.replace(':id', data);
+                            edit_btn = '<a href="' + edit_route + '" class="action-icon"> <i class="mdi mdi-pencil"></i></a>'                       
+                        @endif
+                        @if (Auth::user()->can('delete suppliers'))
+                            delete_btn = '<a href="" class="action-icon" id="' + data + '" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>'
+                        @endif
+
+                        data = edit_btn +  delete_btn
+                    }
+                    return data;
+                }
+            }
 
             
         ],
@@ -164,6 +156,25 @@
             
         },
     });
+
+    $('#delete-modal').on('show.bs.modal', function (e) {
+        var route = '{{ route("suppliers.delete", ":id") }}';
+        var button = e.relatedTarget;
+        if (button != null){
+            route = route.replace(':id', button.id);
+            console.log(route);
+            $('#delete-form').attr('action', route);
+        }
+        
+    });
+
+
+    @if(Session::has('success'))
+        $.NotificationApp.send("Success","{{ session('success') }}","top-right","","success")
+    @endif
+    @if(Session::has('error'))
+        $.NotificationApp.send("Error","{{ session('error') }}","top-right","","error")
+    @endif
   
 });
 
