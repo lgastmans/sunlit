@@ -26,7 +26,7 @@ class CategoryController extends Controller
 
     }
 
-    public function getCategories(Request $request)
+    public function getListForDatatables(Request $request)
     {
         $draw = 1;
         if ($request->has('draw'))

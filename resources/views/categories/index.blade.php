@@ -90,7 +90,7 @@
     var table = $('#categories-datatable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('categories.list') }}",
+        ajax: "{{ route('categories.datatables') }}",
         
         "language": {
             "paginate": {
