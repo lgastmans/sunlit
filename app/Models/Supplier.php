@@ -12,6 +12,8 @@ class Supplier extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = ['name'];
+
     /**
      * Get the state associated with the supplier.
      */

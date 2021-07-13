@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Tax;
 use Illuminate\Support\Facades\Auth;
+use \App\Http\Requests\StoreTaxRequest;
+
 
 
 class TaxController extends Controller
@@ -16,7 +18,11 @@ class TaxController extends Controller
      */
     public function index()
     {
-        return view('taxes.index');
+        $user = Auth::user();
+        if ($user->can('list taxes'))
+            return view('taxes.index');
+    
+        return abort(403, trans('error.unauthorized'));
     }
 
     public function getListForDatatables(Request $request)
@@ -114,12 +120,17 @@ class TaxController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\StoreTaxRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreTaxRequest $request)
     {
-        dd($request);
+        $validatedData = $request->validated();
+        $tax = Tax::create($validatedData);
+        if ($tax){
+            return redirect(route('taxes'))->with('success', trans('app.record_added', ['field' => 'tax']));
+        }
+        return back()->withInputs($request->input())->with('error', trans('error.record_added', ['field' => 'tax']));
     }
 
     /**
@@ -151,13 +162,18 @@ class TaxController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\StoreTaxRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreTaxRequest $request, $id)
     {
-        //
+        $validatedData = $request->validated();
+        $tax = Taxes::whereId($id)->update($validatedData);
+        if ($tax){
+            return redirect(route('taxes'))->with('success', trans('app.record_edited', ['field' => 'tax']));
+        }
+        return back()->withInputs($request->input())->with('error', trans('error.record_edited', ['field' => 'tax']));
     }
 
     /**

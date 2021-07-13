@@ -13,6 +13,7 @@ class Tax extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = ['name', 'amount'];
 
     /**
      * Get the tax amount in decimal.
@@ -30,7 +31,7 @@ class Tax extends Model
      * @param  string  $value
      * @return void
      */
-    public function setDisplayAmountAttribute($value)
+    public function setAmountAttribute($value)
     {
         $this->attributes['amount'] = $value * 100;
     }
