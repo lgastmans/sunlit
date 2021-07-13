@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Tax;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+
 
 class TaxController extends Controller
 {
@@ -168,6 +170,11 @@ class TaxController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = Auth::user();
+        if ($user->can('delete taxes')){
+            Tax::destroy($id);
+            return redirect(route('taxes'))->with('success', trans('app.record_deleted', ['field' => 'tax']));
+        }
+        return abort(403, trans('error.unauthorized'));
     }
 }

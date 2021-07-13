@@ -38,6 +38,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/taxes/{id}/edit', [TaxController::class, 'edit'])->name('taxes.edit');
     Route::get('/taxes/create', [TaxController::class, 'create'])->name('taxes.create');
     Route::post('/taxes', [TaxController::class, 'store'])->name('taxes.store');
+    Route::delete('/taxes/{id}', [TaxController::class, 'destroy'])->name('taxes.delete');
     Route::get('/taxes/list', [TaxController::class, 'getListForDatatables'])->name('taxes.datatables');
 
     Route::get('/products', [ProductController::class, 'index'])->name('products');
