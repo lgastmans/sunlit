@@ -44,6 +44,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('products.edit');
     Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
     Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+    Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.delete');
     Route::get('/products/list', [ProductController::class, 'getListForDatatables'])->name('products.datatables');
 
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories');

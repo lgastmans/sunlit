@@ -41,6 +41,7 @@
                                 <th>KW rating</th> 
                                 <th>Part number</th> 
                                 <th>Notes</th> 
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -56,6 +57,9 @@
 </div>
 
 
+<x-modal-confirm type="danger" target="product"></x-modal-confirm>
+
+
 @endsection
 
 @section('page-scripts')
@@ -64,38 +68,9 @@
  $(document).ready(function () {
     "use strict";
 
-    var data = [{
-        "id": 1,
-        "category": "Inverter",
-        "supplier": "Studer",
-        "tax": "12.00",
-        "code": 'CD02',
-        "name": "Inverter 4KW",
-        "model": 'A1Z2',
-        "cable_length": "5m",
-        "kw_rating": "4",
-        "part_number": "AQSZED",
-        "notes": "this is a note"
-      }, {
-        "id": 2,
-        "category": "Solar Panel",
-        "supplier": "Wairee",
-        "tax": "5.00",
-        "code": "CD01",
-        "name": "Solar Panel",
-        "model": 'SP390',
-        "cable_length": "0",
-        "kw_rating": "390",
-        "part_number": "11SPWA",
-        "notes": "this is a note"
-      }
-    ];    
-
-
 
     // Default Datatable
     var table = $('#products-datatable').DataTable({
-//        "data": data,
         processing: true,
         serverSide: true,
         ajax: "{{ route('products.datatables') }}",
@@ -168,6 +143,28 @@
             { 
                 'data': 'notes',
                 'orderable': true 
+            },
+            {
+                'data': 'id',
+                'render' : function(data, type, row, meta){
+                    if (type === 'display'){
+
+                        var edit_btn = '';
+                        var delete_btn = '';
+
+                        @if (Auth::user()->can('edit products'))
+                            var edit_route = '{{ route("products.edit", ":id") }}';
+                            edit_route = edit_route.replace(':id', data);
+                            edit_btn = '<a href="' + edit_route + '" class="action-icon"> <i class="mdi mdi-pencil"></i></a>'                       
+                        @endif
+                        @if (Auth::user()->can('delete products'))
+                            delete_btn = '<a href="" class="action-icon" id="' + data + '" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>'
+                        @endif
+
+                        data = edit_btn +  delete_btn
+                    }
+                    return data;
+                }
             }
             
         ],
@@ -181,6 +178,25 @@
             
         },
     });
+
+    $('#delete-modal').on('show.bs.modal', function (e) {
+        var route = '{{ route("products.delete", ":id") }}';
+        var button = e.relatedTarget;
+        if (button != null){
+            route = route.replace(':id', button.id);
+            console.log(route);
+            $('#delete-form').attr('action', route);
+        }
+        
+    });
+
+
+    @if(Session::has('success'))
+        $.NotificationApp.send("Success","{{ session('success') }}","top-right","","success")
+    @endif
+    @if(Session::has('error'))
+        $.NotificationApp.send("Error","{{ session('error') }}","top-right","","error")
+    @endif
   
 });
 

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
+
 
 class ProductController extends Controller
 {
@@ -205,10 +207,11 @@ dd($product);
      */
     public function destroy($id)
     {
-        //
-        // $product->delete();
-
-        // return redirect()->route('products.index')
-        //     ->with('success','Product deleted successfully');
+        $user = Auth::user();
+        if ($user->can('delete products')){
+            Product::destroy($id);
+            return redirect(route('products'))->with('success', trans('app.record_deleted', ['field' => 'product']));
+        }
+        return abort(403, trans('error.unauthorized'));
     }
 }
