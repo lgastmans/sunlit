@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
+use \App\Http\Requests\StoreProductRequest;
+
 
 
 class ProductController extends Controller
@@ -145,18 +147,18 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\StoreProductRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(\App\Http\Requests\StoreProductRequest $request)
     {
-        //
-        // $validatedData = $request->validated();
-        // $product = Product::create($validatedData);
-        // if ($product){
-        //     return redirect(route('products'))->with('success', trans('app.record_added', ['field' => 'product']));
-        // }
-        // return back()->withInputs($request->input())->with('error', trans('error.record_added', ['field' => 'product']));
+        
+        $validatedData = $request->validated();
+        $product = Product::create($validatedData);
+        if ($product){
+            return redirect(route('products'))->with('success', trans('app.record_added', ['field' => 'product']));
+        }
+        return back()->withInputs($request->input())->with('error', trans('error.record_added', ['field' => 'product']));
     }
 
     /**
@@ -188,18 +190,18 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\StoreProductRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(\App\Http\Requests\StoreProductRequest $request, $id)
     {
-        // $validatedData = $request->validated();
-        // $product = Category::whereId($id)->update($validatedData);
-        // if ($product){
-        //     return redirect(route('products'))->with('success', trans('app.record_edited', ['field' => 'product']));
-        // }
-        // return back()->withInputs($request->input())->with('error', trans('error.record_edited', ['field' => 'product']));
+        $validatedData = $request->validated();
+        $product = Category::whereId($id)->update($validatedData);
+        if ($product){
+            return redirect(route('products'))->with('success', trans('app.record_edited', ['field' => 'product']));
+        }
+        return back()->withInputs($request->input())->with('error', trans('error.record_edited', ['field' => 'product']));
   
     }
 
