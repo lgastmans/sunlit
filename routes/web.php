@@ -5,6 +5,8 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TaxController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\UserController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -50,5 +52,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
     Route::put('/categories/{id}', [CategoryController::class, 'update'])->name('categories.update');
     Route::delete('/categories/{id}', [CategoryController::class, 'destroy'])->name('categories.delete');
-    Route::get('/categories/list', [CategoryController::class, 'getCategories'])->name('categories.list');
+    Route::get('/categories/list', [CategoryController::class, 'getListForDatatables'])->name('categories.datatables');
+
+
+    Route::get('/users', [UserController::class, 'index'])->name('users');
+    Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');
+    Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+    Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.delete');
+    Route::get('/users/list', [UserController::class, 'getListForDatatables'])->name('users.datatables');
 });

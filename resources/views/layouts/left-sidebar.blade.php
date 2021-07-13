@@ -93,6 +93,13 @@
                                 <span> Categories </span>
                             </a>
                         </li>
+                        @endcan
+                        @can('list users')
+                        <li>
+                            <a href="{{ route('users')}}" {{ (Request::is('users*') ? 'class=" active"' : '') }}>
+                                <span> Users </span>
+                            </a>
+                        </li>
                         @endcan 
                     </ul>
                 </div>
