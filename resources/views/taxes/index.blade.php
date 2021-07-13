@@ -76,7 +76,7 @@
         //"data": data,
         processing: true,
         serverSide: true,
-        ajax: "{{ route('taxes.list') }}",
+        ajax: "{{ route('taxes.datatables') }}",
 
         "language": {
             "paginate": {

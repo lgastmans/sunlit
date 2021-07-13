@@ -18,7 +18,7 @@ class TaxController extends Controller
         return view('taxes.index');
     }
 
-    public function getTaxes(Request $request)
+    public function getListForDatatables(Request $request)
     {
         $draw = 1;
         if ($request->has('draw'))

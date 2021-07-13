@@ -18,7 +18,7 @@ class ProductController extends Controller
     }
 
 
-    public function getProducts(Request $request)
+    public function getListForDatatables(Request $request)
     {
         $draw = 1;
         if ($request->has('draw'))

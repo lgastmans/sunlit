@@ -98,7 +98,7 @@
 //        "data": data,
         processing: true,
         serverSide: true,
-        ajax: "{{ route('products.list') }}",
+        ajax: "{{ route('products.datatables') }}",
 
 
         "language": {

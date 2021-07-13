@@ -91,13 +91,12 @@
 
     "use strict";
 
-    var url = "{{ route('suppliers.list') }}"
 
     var table = $('#suppliers-datatable').DataTable({
         
         processing: true,
         serverSide: true,
-        ajax: "{{ route('suppliers.list') }}",
+        ajax: "{{ route('suppliers.datatables') }}",
         
         "language": {
             "paginate": {

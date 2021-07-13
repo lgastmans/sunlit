@@ -19,7 +19,7 @@ class SupplierController extends Controller
     }
 
 
-    public function getSuppliers(Request $request)
+    public function getListForDatatables(Request $request)
     {
         $draw = 1;
         if ($request->has('draw'))

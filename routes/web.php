@@ -32,19 +32,19 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/suppliers/{id}/edit', [SupplierController::class, 'edit'])->name('suppliers.edit');
     Route::get('/suppliers/create', [SupplierController::class, 'create'])->name('suppliers.create');
     Route::post('/suppliers', [SupplierController::class, 'store'])->name('suppliers.store');
-    Route::get('/suppliers/list', [SupplierController::class, 'getSuppliers'])->name('suppliers.list');
+    Route::get('/suppliers/list', [SupplierController::class, 'getListForDatatables'])->name('suppliers.datatables');
 
     Route::get('/taxes', [TaxController::class, 'index'])->name('taxes');
     Route::get('/taxes/{id}/edit', [TaxController::class, 'edit'])->name('taxes.edit');
     Route::get('/taxes/create', [TaxController::class, 'create'])->name('taxes.create');
     Route::post('/taxes', [TaxController::class, 'store'])->name('taxes.store');
-    Route::get('/taxes/list', [TaxController::class, 'getTaxes'])->name('taxes.list');
+    Route::get('/taxes/list', [TaxController::class, 'getListForDatatables'])->name('taxes.datatables');
 
     Route::get('/products', [ProductController::class, 'index'])->name('products');
     Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('products.edit');
     Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
     Route::post('/products', [ProductController::class, 'store'])->name('products.store');
-    Route::get('/products/list', [ProductController::class, 'getProducts'])->name('products.list');
+    Route::get('/products/list', [ProductController::class, 'getListForDatatables'])->name('products.datatables');
 
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
     Route::get('/categories/{id}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
