@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Tax;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -53,9 +52,8 @@ class TaxController extends Controller
         }
 
         // Total records
-        $totalRecords = DB::table('taxes')->get()->count();
-        $totalRecordswithFilter = DB::table('taxes')
-            ->where('name', 'like', '%'.$search.'%')
+        $totalRecords = Tax::get()->count();
+        $totalRecordswithFilter = Tax::where('name', 'like', '%'.$search.'%')
             ->orWhere('amount', 'like', '%'.$search.'%')
             ->get()
             ->count();
