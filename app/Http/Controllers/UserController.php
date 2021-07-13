@@ -18,7 +18,6 @@ class UserController extends Controller
     public function index()
     {   
         $user = Auth::user();
-        $user->assignRole('admin');
         if ($user->can('list users'))
             return view('users.index');
     
