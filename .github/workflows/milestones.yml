@@ -8,6 +8,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: quentindecosne/sunlit@v1.0
+    - uses: quentindecosne/sunlit@1.0
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
