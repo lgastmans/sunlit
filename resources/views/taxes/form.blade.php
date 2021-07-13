@@ -11,10 +11,11 @@
                 <div class="row mb-2">
                     <h4>Add a tax</h4>
                 </div>
+                    <x-forms.errors class="mb-4" :errors="$errors" />
                     <form action="{{ route('taxes.store') }}" method="POST" class="needs-validation" novalidate>
                         @csrf()
                         <div class="mb-3">
-                            <x-forms.input label="name" name="name" value="{{ old('name', $tax->name) }}" message="Please provide a name" required="true"/>
+                            <x-forms.input label="Name" name="name" value="{{ old('name', $tax->name) }}" message="Please provide a name" required="true"/>
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="display_amount">Amount</label>

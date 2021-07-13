@@ -11,6 +11,7 @@
                 <div class="row mb-2">
                     <h4>Add a product</h4>
                 </div>
+                <x-forms.errors class="mb-4" :errors="$errors" />
                     <form action="{{ route('products.store') }}" method="POST" class="needs-validation" novalidate>
                         @csrf()
                         <div class="mb-3">

@@ -11,7 +11,7 @@
                 <div class="row mb-2">
                     <p>@if ($user->id) {{ __('app.edit_title', ['field' => 'user']) }}: <span class="text-primary">{{ $user->name }}</span> @else {{ __('app.add_title', ['field' => 'user']) }} @endif </p>
                 </div>
-                <x-auth-validation-errors class="mb-4" :errors="$errors" />
+                    <x-forms.errors class="mb-4" :errors="$errors" />
                     <form action="@if ($user->id) {{ route('users.update', $user->id) }} @else {{ route('users.store') }} @endif" method="POST" class="needs-validation" novalidate>
                         @csrf()
                         @if ($user->id)
