@@ -11,7 +11,7 @@
                 <div class="row mb-2">
                     <p>@if ($category->id) {{ __('app.edit_title', ['field' => 'category']) }}: <span class="text-primary">{{ $category->name }}</span> @else {{ __('app.add_title', ['field' => 'category']) }} @endif </p>
                 </div>
-                <x-auth-validation-errors class="mb-4" :errors="$errors" />
+                <x-forms.errors class="mb-4" :errors="$errors" />
                     <form action="@if ($category->id) {{ route('categories.update', $category->id) }} @else {{ route('categories.store') }} @endif" method="POST" class="needs-validation" novalidate>
                         @csrf()
                         @if ($category->id)

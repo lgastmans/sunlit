@@ -150,7 +150,7 @@ class CategoryController extends Controller
     public function update(StoreCategoryRequest $request, $id)
     {
         $validatedData = $request->validated();
-        $category = Category::whereId(100)->update($validatedData);
+        $category = Category::whereId($id)->update($validatedData);
         if ($category){
             return redirect(route('categories'))->with('success', trans('app.record_edited', ['field' => 'category']));
         }
