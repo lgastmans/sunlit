@@ -1,0 +1,2 @@
+- name: Auto Milestone Binder
+  uses: Code-Hex/auto-milestone-binder@v1.0.2
