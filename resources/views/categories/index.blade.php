@@ -54,29 +54,7 @@
     </div> <!-- end col -->
 </div>
 
-<div id="delete-category" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="delete-categoryLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form id="delete-form" action="" method="POST">
-                @method("DELETE")
-                @csrf()
-                <div class="modal-header modal-colored-header bg-danger">
-                    <h4 class="modal-title" id="delete-categoryLabel">{{ __('app.delete_title', ['field' => 'category']) }}</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                </div>
-                <div class="modal-body">
-                    {{ __('app.delete_confirm', ['field' => 'category']) }}
-                    
-                    
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('app.modal_close') }}</button>
-                    <button type="button" class="btn btn-danger" onclick="event.preventDefault(); document.getElementById('delete-form').submit();">{{ __('app.modal_delete') }}</button>
-                </div>
-            </form>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+<x-modal-confirm type="danger" target="category"></x-modal-confirm>
 
 
 @endsection
@@ -138,7 +116,7 @@
                             edit_btn = '<a href="' + edit_route + '" class="action-icon"> <i class="mdi mdi-pencil"></i></a>'                       
                         @endif
                         @if (Auth::user()->can('delete categories'))
-                            delete_btn = '<a href="" class="action-icon" id="' + data + '" data-bs-toggle="modal" data-bs-target="#delete-category"> <i class="mdi mdi-delete"></i></a>'
+                            delete_btn = '<a href="" class="action-icon" id="' + data + '" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>'
                         @endif
 
                         data = edit_btn +  delete_btn
@@ -159,7 +137,7 @@
         },
     });
 
-    $('#delete-category').on('show.bs.modal', function (e) {
+    $('#delete-modal').on('show.bs.modal', function (e) {
         var route = '{{ route("categories.delete", ":id") }}';
         var button = e.relatedTarget;
         if (button != null){
