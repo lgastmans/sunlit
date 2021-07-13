@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Supplier;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -54,9 +53,8 @@ class SupplierController extends Controller
         }
 
         // Total records
-        $totalRecords = DB::table('suppliers')->get()->count();
-        $totalRecordswithFilter = DB::table('suppliers')
-            ->where('contact_person', 'like', '%'.$search.'%')
+        $totalRecords = Supplier::get()->count();
+        $totalRecordswithFilter = Supplier::where('contact_person', 'like', '%'.$search.'%')
             ->orWhere('company', 'like', '%'.$search.'%')
             ->orWhere('address', 'like', '%'.$search.'%')
             ->get()
@@ -80,32 +78,11 @@ class SupplierController extends Controller
                 ->get();
 
 
-        $arr = array();
-
-        foreach($suppliers as $record)
-        {
-            $arr[] = array(
-                "id" => $record->id,
-                "state_id" => $record->state_id,
-                "company" => $record->company,
-                "address" => $record->address,
-                "address2" => $record->address2,
-                "city" => $record->city,
-                "zip_code" => $record->zip_code,
-                "gstin" => $record->gstin,
-                "contact_person" => $record->contact_person,
-                "phone" => $record->phone,
-                "phone2" => $record->phone2,
-                "email" => $record->email
-
-            );
-        }
-
         $response = array(
             "draw" => $draw,
             "recordsTotal" => $totalRecords,
             "recordsFiltered" => $totalRecordswithFilter,
-            "data" => $arr,
+            "data" => $suppliers,
             'error' => null
         );
 
