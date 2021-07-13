@@ -60,6 +60,9 @@ class CategoryController extends Controller
 
         // Total records
         $totalRecords = Category::get()->count();
+        $totalRecordswithFilter = Category::where('name', 'like', '%'.$search.'%')
+            ->get()
+            ->count();
 
     
         // Fetch records
@@ -78,7 +81,7 @@ class CategoryController extends Controller
         $response = array(
             "draw" => $draw,
             "recordsTotal" => $totalRecords,
-            "recordsFiltered" => $categories->count(),
+            "recordsFiltered" => $totalRecordswithFilter,
             "data" => $categories,
             'error' => null
         );

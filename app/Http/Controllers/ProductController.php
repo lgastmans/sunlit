@@ -16,7 +16,11 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return view('products.index');
+        $user = Auth::user();
+        if ($user->can('list products'))
+            return view('products.index');
+    
+        return abort(403, trans('error.unauthorized'));
     }
 
 
@@ -63,6 +67,7 @@ class ProductController extends Controller
 
         // Total records
         $totalRecords = Product::all()->count();
+        
         $totalRecordswithFilter = Product::where('products.code', 'like', '%'.$search.'%')
             ->orWhere('products.name', 'like', '%'.$search.'%')
             ->get()
@@ -145,7 +150,13 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
+        //
+        // $validatedData = $request->validated();
+        // $product = Product::create($validatedData);
+        // if ($product){
+        //     return redirect(route('products'))->with('success', trans('app.record_added', ['field' => 'product']));
+        // }
+        // return back()->withInputs($request->input())->with('error', trans('error.record_added', ['field' => 'product']));
     }
 
     /**
@@ -157,7 +168,6 @@ class ProductController extends Controller
     public function show($id)
     {
         //
-        //return view('products.show',compact('product'));
     }
 
     /**
@@ -169,12 +179,10 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::find($id);
-dd($product);
-
-        // if ($product){
-        //     return view('products.form', ['product' => $product]);
-        // }
-        // return view('products.index');
+        if ($product){
+            return view('products.form', ['product' => $product]);
+        }
+        return view('products.index');
     }
 
     /**
@@ -186,17 +194,13 @@ dd($product);
      */
     public function update(Request $request, $id)
     {
-        //
-        // $request->validate([
-        //     'title' => 'required',
-        //     'description' => 'required',
-        // ]);
-
-        // $product->update($request->all());
-
-        // return redirect()
-        //     ->route('products.index')
-        //     ->with('success','Product updated successfully');        
+        // $validatedData = $request->validated();
+        // $product = Category::whereId($id)->update($validatedData);
+        // if ($product){
+        //     return redirect(route('products'))->with('success', trans('app.record_edited', ['field' => 'product']));
+        // }
+        // return back()->withInputs($request->input())->with('error', trans('error.record_edited', ['field' => 'product']));
+  
     }
 
     /**
