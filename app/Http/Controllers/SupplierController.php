@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use \App\Http\Requests\StoreSupplierRequest;
+
 
 
 class SupplierController extends Controller
@@ -16,7 +18,12 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        return view('suppliers.index');
+        $user = Auth::user();
+        if ($user->can('list suppliers'))
+            return view('suppliers.index');
+    
+        return abort(403, trans('error.unauthorized'));
+
     }
 
 
@@ -107,12 +114,17 @@ class SupplierController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\StoreSupplierRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreSupplierRequest $request)
     {
-        dd($request);
+        $validatedData = $request->validated();
+        $supplier = Supplier::create($validatedData);
+        if ($supplier){
+            return redirect(route('suppliers'))->with('success', trans('app.record_added', ['field' => 'supplier']));
+        }
+        return back()->withInputs($request->input())->with('error', trans('error.record_added', ['field' => 'supplier']));
     }
 
     /**
@@ -144,13 +156,18 @@ class SupplierController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\StoreCategoryRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreSupplierRequest $request, $id)
     {
-        //
+        $validatedData = $request->validated();
+        $supplier = Supplier::whereId($id)->update($validatedData);
+        if ($supplier){
+            return redirect(route('suppliers'))->with('success', trans('app.record_edited', ['field' => 'supplier']));
+        }
+        return back()->withInputs($request->input())->with('error', trans('error.record_edited', ['field' => 'supplier']));
     }
 
     /**
