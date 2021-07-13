@@ -32,6 +32,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/suppliers/{id}/edit', [SupplierController::class, 'edit'])->name('suppliers.edit');
     Route::get('/suppliers/create', [SupplierController::class, 'create'])->name('suppliers.create');
     Route::post('/suppliers', [SupplierController::class, 'store'])->name('suppliers.store');
+    Route::put('/suppliers/{id}', [SupplierController::class, 'update'])->name('suppliers.update');
     Route::delete('/suppliers/{id}', [SupplierController::class, 'destroy'])->name('suppliers.delete');
     Route::get('/suppliers/list', [SupplierController::class, 'getListForDatatables'])->name('suppliers.datatables');
 
@@ -39,6 +40,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/taxes/{id}/edit', [TaxController::class, 'edit'])->name('taxes.edit');
     Route::get('/taxes/create', [TaxController::class, 'create'])->name('taxes.create');
     Route::post('/taxes', [TaxController::class, 'store'])->name('taxes.store');
+    Route::put('/taxes/{id}', [TaxController::class, 'update'])->name('taxes.update');
     Route::delete('/taxes/{id}', [TaxController::class, 'destroy'])->name('taxes.delete');
     Route::get('/taxes/list', [TaxController::class, 'getListForDatatables'])->name('taxes.datatables');
 
@@ -46,6 +48,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('products.edit');
     Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
     Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+    Route::put('/products/{id}', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.delete');
     Route::get('/products/list', [ProductController::class, 'getListForDatatables'])->name('products.datatables');
 

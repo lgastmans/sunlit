@@ -9,19 +9,27 @@
         <div class="card">
             <div class="card-body">
                 <div class="row mb-2">
-                    <h4>Add a product</h4>
+                    <p>@if ($product->id) {{ __('app.edit_title', ['field' => 'product']) }}: <span class="text-primary">{{ $product->name }}</span> @else {{ __('app.add_title', ['field' => 'product']) }} @endif </p>
                 </div>
                 <x-forms.errors class="mb-4" :errors="$errors" />
-                    <form action="{{ route('products.store') }}" method="POST" class="needs-validation" novalidate>
+                    <form action="@if ($product->id) {{ route('categories.update', $product->id) }} @else {{ route('categories.store') }} @endif" method="POST" class="needs-validation" novalidate>
                         @csrf()
+                        @if ($product->id)
+                            @method('PUT')
+                        @endif
+                        @if ($product->id)
+                            <div class="mb-3">
+                                <input type="hidden" name="id" value="{{ old('id', $product->id) }}" />
+                            </div>
+                        @endif
                         <div class="mb-3">
-                            <label class="form-label" for="category">Category</label>
-                            <select class="form-control select2" data-toggle="select2" name="category" data-placeholder="Select a category" required>
+                            <label class="form-label" for="product">product</label>
+                            <select class="form-control select2" data-toggle="select2" name="product" data-placeholder="Select a product" required>
                                 <option value="10">Inverter</option>
                                 <option value="20">Solar Panel</option>
                             </select>
                             <div class="invalid-feedback">
-                                Please select a category
+                                Please select a product
                             </div>
                         </div>
                         <div class="mb-3">
@@ -67,7 +75,7 @@
                             <textarea class="form-control" name="notes" rows="5" required></textarea>
                         </div>
                        
-                        <button class="btn btn-primary" type="submit">Create tax</button>
+                        <button class="btn btn-primary" type="submit">@if ($product->id) {{ __('app.edit_title', ['field' => 'product']) }} @else {{ __('app.add_title', ['field' => 'product']) }} @endif</button>
 
                     </form>
                 </div>

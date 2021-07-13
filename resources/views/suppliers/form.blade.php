@@ -5,15 +5,23 @@
 @section('content')
 
 <div class="row">
-    <div class="col-12">
+    <div class="col-6">
         <div class="card">
             <div class="card-body">
                 <div class="row mb-2">
-                    <h4>Add a supplier</h4>
+                    <p>@if ($supplier->id) {{ __('app.edit_title', ['field' => 'supplier']) }}: <span class="text-primary">{{ $supplier->name }}</span> @else {{ __('app.add_title', ['field' => 'supplier']) }} @endif </p>
                 </div>
-                    <x-forms.errors class="mb-4" :errors="$errors" />
-                    <form action="{{ route('suppliers.store') }}" method="POST" class="needs-validation" novalidate>
+                <x-forms.errors class="mb-4" :errors="$errors" />
+                    <form action="@if ($supplier->id) {{ route('suppliers.update', $supplier->id) }} @else {{ route('suppliers.store') }} @endif" method="POST" class="needs-validation" novalidate>
                         @csrf()
+                        @if ($supplier->id)
+                            @method('PUT')
+                        @endif
+                        @if ($supplier->id)
+                            <div class="mb-3">
+                                <input type="hidden" name="id" value="{{ old('id', $supplier->id) }}" />
+                            </div>
+                        @endif
                         <div class="mb-3">
                             <x-forms.input label="Company" name="company_title" value="{{ old('company_title', $supplier->company_title) }}" message="Please provide the company name" required="true"/>
                         </div>
@@ -45,7 +53,7 @@
                             <x-forms.inputgroup label="Email address" name="email" value="{{ old('email', $supplier->email) }}" message="Please provide a valid email address." required="true" position="before" symbol="@"/>
                         </div>
                        
-                        <button class="btn btn-primary" type="submit">Create supplier</button>
+                        <button class="btn btn-primary" type="submit">@if ($supplier->id) {{ __('app.edit_title', ['field' => 'supplier']) }} @else {{ __('app.add_title', ['field' => 'supplier']) }} @endif</button>
 
                     </form>
                 </div>
@@ -53,11 +61,4 @@
         </div> <!-- end card-->
     </div> <!-- end col -->
 </div>
-
-
-@endsection
-
-@section('page-scripts')
-    <script src="{{ mix("js/pages/suppliers.js") }}"></script>      
-    
 @endsection
