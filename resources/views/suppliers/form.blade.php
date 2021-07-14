@@ -16,11 +16,7 @@
                         @csrf()
                         @if ($supplier->id)
                             @method('PUT')
-                        @endif
-                        @if ($supplier->id)
-                            <div class="mb-3">
                                 <input type="hidden" name="id" value="{{ old('id', $supplier->id) }}" />
-                            </div>
                         @endif
                         <div class="mb-3">
                             <x-forms.input label="Company" name="company" value="{{ old('company', $supplier->company) }}" message="Please provide the company name" required="true"/>
@@ -42,7 +38,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="state-select">State</label>
-                            <select class="state-select form-control" name="state">
+                            <select class="state-select form-control" name="state_id">
                                 @if ($supplier->state)
                                     <option value="{{$supplier->state->id}}" selected="selected">{{$supplier->state->name}}</option>
                                 @endif
