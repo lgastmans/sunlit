@@ -41,9 +41,9 @@ class StoreTaxRequest extends FormRequest
     {
 
         return [
-            'name' => 'required|max:255'.$this->taxes,
+            'name' => 'required|max:255|unique:taxes,name,'.$this->id,
             'display_amount' => 'required',
-            'amount' => 'max:255'.$this->taxes
+            'amount' => 'max:255'
         ];
     }
 }
