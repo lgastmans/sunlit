@@ -7,6 +7,8 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\StateController;
+use App\Http\Controllers\RoleController;
+
 
 
 
@@ -74,5 +76,6 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::prefix('ajax')->group(function () {
         Route::get('/states', [StateController::class, 'getListForSelect2'])->name('ajax.states');
+        Route::get('/roles', [RoleController::class, 'getListForSelect2'])->name('ajax.roles');
     });
 });

@@ -73,15 +73,24 @@ class UserController extends Controller
                 ->take($length)
                 ->get(['id','name', 'email', 'created_at']);
                
+        $arr = array();
+
+        foreach($users as $user){
+            $arr[] = array(
+                "id" => $user->id,
+                "name" => $user->name,
+                "email" => $user->email,
+                "role" => $user->getRoleNames()[0]
+            );
+        }
 
         $response = array(
             "draw" => $draw,
             "recordsTotal" => $totalRecords,
             "recordsFiltered" => $users->count(),
-            "data" => $users,
+            "data" => $arr,
             'error' => null
         );
-
         echo json_encode($response);
         exit;
     }

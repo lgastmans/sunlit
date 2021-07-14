@@ -36,6 +36,7 @@
                                 </th>
                                 <th>Name</th>
                                 <th>Email</th>
+                                <th>Role</th>
                                 <th style="width:10%">
                                     @if (Auth::user()->can('edit users'))
                                     {{ __('app.dt_actions') }}
@@ -127,6 +128,10 @@
             },
             { 
                 'data': 'email',
+                'orderable': true 
+            },
+            { 
+                'data': 'role',
                 'orderable': true 
             },
             {
