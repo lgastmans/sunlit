@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\State;
 
 use Illuminate\Http\Request;
 
@@ -80,5 +81,22 @@ class StateController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Display a listing of the resource for select2
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return json
+     */
+    public function getListForSelect2(Request $request)
+    {
+        if ($request->has('q')){
+            $states = State::where('name', 'like', $request->get('q').'%')->get(['id', 'name as text']);
+        }
+        else{
+            $states = State::get(['id', 'name as text']);
+        }
+        return ['results' => $states];
     }
 }

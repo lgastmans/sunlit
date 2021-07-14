@@ -6,6 +6,8 @@ use App\Http\Controllers\TaxController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\StateController;
+
 
 
 /*
@@ -68,4 +70,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.delete');
     Route::get('/users/list', [UserController::class, 'getListForDatatables'])->name('users.datatables');
+
+
+    Route::prefix('ajax')->group(function () {
+        Route::get('/states', [StateController::class, 'getListForSelect2'])->name('ajax.states');
+    });
 });

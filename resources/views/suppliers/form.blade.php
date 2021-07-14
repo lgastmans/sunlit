@@ -23,7 +23,10 @@
                             </div>
                         @endif
                         <div class="mb-3">
-                            <x-forms.input label="Company" name="company_title" value="{{ old('company_title', $supplier->company_title) }}" message="Please provide the company name" required="true"/>
+                            <x-forms.input label="Company" name="company" value="{{ old('company', $supplier->company) }}" message="Please provide the company name" required="true"/>
+                        </div>
+                        <div class="mb-3">
+                            <x-forms.input label="GSTIN" name="gstin" value="{{ old('gstin', $supplier->gstin) }}" message="Please provide the gstin" required="true"/>
                         </div>
                         <div class="mb-3">
                             <x-forms.input label="Contact person" name="contact_person" value="{{ old('contact_person', $supplier->contact_person) }}" message="Please provide the full name of the contact person" required="true"/>
@@ -32,16 +35,24 @@
                             <x-forms.input label="Address" name="address" value="{{ old('address', $supplier->address) }}" message="Please provide the full address" required="true"/>
                         </div>
                         <div class="mb-3">
+                            <x-forms.input label="Address 2" name="address2" value="{{ old('address2', $supplier->address2) }}" message="Please provide the full address" required="false"/>
+                        </div>
+                        <div class="mb-3">
                             <x-forms.input label="City" name="city" value="{{ old('city', $supplier->city) }}" message="Please provide a valid city" required="true"/>
                         </div>
                         <div class="mb-3">
-                            <x-forms.input label="State" name="state" value="" message="Please provide a valid state." required="true"/>
+                            <label class="form-label" for="state-select">State</label>
+                            <select class="state-select form-control" name="state">
+                                @if ($supplier->state)
+                                    <option value="{{$supplier->state->id}}" selected="selected">{{$supplier->state->name}}</option>
+                                @endif
+                            </select>
+                            <div class="invalid-feedback">
+                                Please provide a valid state.
+                            </div>
                         </div>
                         <div class="mb-3">
                             <x-forms.input label="Zip code" name="zip_code" value="{{ old('zip_code', $supplier->zip_code) }}" message="Please provide a valid zip code." required="true"/>
-                        </div>
-                        <div class="mb-3">
-                            <x-forms.input label="District" name="district" value="{{ old('district', $supplier->district) }}" message="Please provide a valid district." required="true"/>
                         </div>
                         <div class="mb-3">
                             <x-forms.input label="Phone" name="phone" value="{{ old('phone', $supplier->phone) }}" message="Please provide a valid phone number." required="true"/>
@@ -61,4 +72,16 @@
         </div> <!-- end card-->
     </div> <!-- end col -->
 </div>
+@endsection
+
+@section('page-scripts')
+    <script>
+        var stateSelect = $(".state-select").select2();
+        stateSelect.select2({
+            ajax: {
+                url: '{{route('ajax.states')}}',
+                dataType: 'json'
+            }
+        });
+    </script>
 @endsection
