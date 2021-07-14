@@ -30,8 +30,8 @@ class StoreUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:255|unique:users,id,'.$this->user,
-            'email' => 'required|email|max:255|unique:users,email,'.$this->user,
+            'name' => 'required|max:255|unique:users,name,'.$this->id,
+            'email' => 'required|email:rfc,dns|max:255|unique:users,email,'.$this->id,
         ];
     }
 }
