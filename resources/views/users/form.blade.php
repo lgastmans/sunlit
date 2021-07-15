@@ -36,18 +36,16 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="role-select">Role</label>
-                            <select class="role-select form-control" name="role-select">
-                                @if ($user->role)
-                                    <option value="{{$user->role->id}}" selected="selected">{{$user->role->name}}</option>
+                            <label class="form-label" for="role">Role</label>
+                            <select class="role form-control" name="role">
+                                @if ($user->roles)
+                                    <option value="{{$user->roles->first()->id}}" selected="selected">{{ucfirst($user->roles->first()->name)}}</option>
                                 @endif
                             </select>
                             <div class="invalid-feedback">
                                 Please provide a valid role.
                             </div>
                         </div>
-
-                        
                        
                         <button class="btn btn-primary" type="submit">@if ($user->id) {{ __('app.edit_title', ['field' => 'user']) }} @else {{ __('app.add_title', ['field' => 'user']) }} @endif</button>
 
@@ -61,7 +59,7 @@
 
 @section('page-scripts')
     <script>
-        var roleSelect = $(".role-select").select2();
+        var roleSelect = $(".role").select2();
         roleSelect.select2({
             minimumResultsForSearch: Infinity,
             ajax: {
@@ -69,5 +67,6 @@
                 dataType: 'json'
             }
         });
+
     </script>
 @endsection

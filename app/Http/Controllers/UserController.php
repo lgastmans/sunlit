@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
-use \App\Http\Requests\StoreUserRequest;
+use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
+use \App\Http\Requests\StoreUserRequest;
 
 
 class UserController extends Controller
@@ -80,7 +81,7 @@ class UserController extends Controller
                 "id" => $user->id,
                 "name" => $user->name,
                 "email" => $user->email,
-                "role" => $user->getRoleNames()[0]
+                "role" => $user->role
             );
         }
 
@@ -157,9 +158,16 @@ class UserController extends Controller
      */
     public function update(StoreUserRequest $request, $id)
     {
+        $role = Role::findById($request->get('role'));
+        $request->merge(['role_name'=>$role->name]);
         $validatedData = $request->validated();
-        $user = User::whereId(1)->update($validatedData);
+        $user = User::find($id);
         if ($user){
+            $user->update($validatedData);
+            
+            $user->removeRole($user->role);
+            $user->assignRole($role);
+
             return redirect(route('users'))->with('success', trans('app.record_edited', ['field' => 'user']));
         }
         return back()->withInputs($request->input())->with('error', trans('error.record_edited', ['field' => 'user']));
