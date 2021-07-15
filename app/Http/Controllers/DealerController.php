@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Dealer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use \App\Http\Requests\StoreSupplierRequest;
+use \App\Http\Requests\StoreDealerRequest;
 
 
 
@@ -114,10 +114,10 @@ class DealerController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\StoreSupplierRequest  $request
+     * @param  \Illuminate\Http\StoreDealerRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreSupplierRequest $request)
+    public function store(StoreDealerRequest $request)
     {
         $validatedData = $request->validated();
         $dealer = Dealer::create($validatedData);
@@ -156,11 +156,11 @@ class DealerController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\StoreSupplierRequest $request
+     * @param  \Illuminate\Http\StoreDealerRequest $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreSupplierRequest $request, $id)
+    public function update(StoreDealerRequest $request, $id)
     {
         $validatedData = $request->validated();
         $dealer = Dealer::whereId($id)->update($validatedData);
