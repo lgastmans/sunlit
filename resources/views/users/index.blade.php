@@ -56,29 +56,8 @@
     </div> <!-- end col -->
 </div>
 
-<div id="delete-user" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="delete-userLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form id="delete-form" action="" method="POST">
-                @method("DELETE")
-                @csrf()
-                <div class="modal-header modal-colored-header bg-danger">
-                    <h4 class="modal-title" id="delete-userLabel">{{ __('app.delete_title', ['field' => 'user']) }}</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                </div>
-                <div class="modal-body">
-                    {{ __('app.delete_confirm', ['field' => 'user']) }}
-                    
-                    
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('app.modal_close') }}</button>
-                    <button type="button" class="btn btn-danger" onclick="event.preventDefault(); document.getElementById('delete-form').submit();">{{ __('app.modal_delete') }}</button>
-                </div>
-            </form>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+<x-modal-confirm type="danger" target="user"></x-modal-confirm>
+
 
 
 @endsection
@@ -179,7 +158,6 @@
         }
         
     });
-
 
     @if(Session::has('success'))
         $.NotificationApp.send("Success","{{ session('success') }}","top-right","","success")
