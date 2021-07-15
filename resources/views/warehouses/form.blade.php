@@ -52,7 +52,7 @@
                             <x-forms.input label="Phone 2" name="phone2" value="{{ old('phone2', $warehouse->phone2) }}" message="Please provide a second valid phone number." required="true"/>
                         </div>
                        <div class="mb-3">
-                            <x-forms.inputgroup label="Email address" name="email" value="{{ old('email', $warehouse->email) }}" message="Please provide a valid email address." required="true" position="before" symbol="@"/>
+                            <x-forms.inputGroup label="Email address" name="email" value="{{ old('email', $warehouse->email) }}" message="Please provide a valid email address." required="true" position="before" symbol="@"/>
                         </div>
                        
                         <button class="btn btn-primary" type="submit">@if ($warehouse->id) {{ __('app.edit_title', ['field' => 'warehouse']) }} @else {{ __('app.add_title', ['field' => 'warehouse']) }} @endif</button>
