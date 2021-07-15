@@ -72,6 +72,14 @@ class RolesAndPermissionsSeeder extends Seeder
         $role_staff->givePermissionTo(['list products', 'view products', 'edit products', ]);
         $role_admin->givePermissionTo(['list products', 'view products', 'edit products', 'delete products']);
 
+        $role_users->givePermissionTo(['list dealers', 'view dealers']);
+        $role_staff->givePermissionTo(['list dealers', 'view dealers', 'edit dealers', ]);
+        $role_admin->givePermissionTo(['list dealers', 'view dealers', 'edit dealers', 'delete dealers']);
+
+        $role_users->givePermissionTo(['list warehouses', 'view warehouses']);
+        $role_staff->givePermissionTo(['list warehouses', 'view warehouses', 'edit warehouses', ]);
+        $role_admin->givePermissionTo(['list warehouses', 'view warehouses', 'edit warehouses', 'delete warehouses']);
+
         $role_users->givePermissionTo(['list users', 'view users']);
         $role_staff->givePermissionTo(['list users', 'view users', 'edit users', ]);
         $role_admin->givePermissionTo(['list users', 'view users', 'edit users', 'delete users']);
