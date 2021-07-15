@@ -66,10 +66,16 @@
                 </a>
             </li>
 
-            <li class="side-nav-item">
-                <a href="#" class="side-nav-link">
+            <li class="side-nav-item {{ (Request::is('dealers*') ? ' menuitem-active' : '') }}">
+                <a href="{{ route('dealers')}}" class="side-nav-link {{ (Request::is('dealers*') ? ' active' : '') }}">
                     <i class="uil-users-alt"></i>
                     <span> Dealers </span>
+                </a>
+            </li>
+            <li class="side-nav-item {{ (Request::is('warehouses*') ? ' menuitem-active' : '') }}">
+                <a href="{{ route('warehouses')}}" class="side-nav-link {{ (Request::is('warehouses*') ? ' active' : '') }}">
+                    <i class="mdi mdi-store"></i>
+                    <span> Warehouse </span>
                 </a>
             </li>
 
@@ -82,11 +88,13 @@
                 </a>
                 <div class="collapse" id="sidebarSettings">
                     <ul class="side-nav-second-level">
+                        @can('list taxes')
                         <li>
                             <a href="{{ route('taxes')}}" {{ (Request::is('taxes*') ? 'class=" active"' : '') }}>
                                 <span> Taxes </span>
                             </a>
                         </li>
+                        @endcan
                         @can('list categories')
                         <li>
                             <a href="{{ route('categories')}}" {{ (Request::is('categories*') ? 'class=" active"' : '') }}>

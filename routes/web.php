@@ -7,10 +7,9 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\StateController;
+use App\Http\Controllers\DealerController;
+use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\RoleController;
-
-
-
 
 /*
 |--------------------------------------------------------------------------
@@ -63,6 +62,22 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('/categories/{id}', [CategoryController::class, 'update'])->name('categories.update');
     Route::delete('/categories/{id}', [CategoryController::class, 'destroy'])->name('categories.delete');
     Route::get('/categories/list', [CategoryController::class, 'getListForDatatables'])->name('categories.datatables');
+
+    Route::get('/dealers', [DealerController::class, 'index'])->name('dealers');
+    Route::get('/dealers/{id}/edit', [DealerController::class, 'edit'])->name('dealers.edit');
+    Route::get('/dealers/create', [DealerController::class, 'create'])->name('dealers.create');
+    Route::post('/dealers', [DealerController::class, 'store'])->name('dealers.store');
+    Route::put('/dealers/{id}', [DealerController::class, 'update'])->name('dealers.update');
+    Route::delete('/dealers/{id}', [DealerController::class, 'destroy'])->name('dealers.delete');
+    Route::get('/dealers/list', [DealerController::class, 'getListForDatatables'])->name('dealers.datatables');
+
+    Route::get('/warehouses', [WarehouseController::class, 'index'])->name('warehouses');
+    Route::get('/warehouses/{id}/edit', [WarehouseController::class, 'edit'])->name('warehouses.edit');
+    Route::get('/warehouses/create', [WarehouseController::class, 'create'])->name('warehouses.create');
+    Route::post('/warehouses', [WarehouseController::class, 'store'])->name('warehouses.store');
+    Route::put('/warehouses/{id}', [WarehouseController::class, 'update'])->name('warehouses.update');
+    Route::delete('/warehouses/{id}', [WarehouseController::class, 'destroy'])->name('warehouses.delete');
+    Route::get('/warehouses/list', [WarehouseController::class, 'getListForDatatables'])->name('warehouses.datatables');
 
 
     Route::get('/users', [UserController::class, 'index'])->name('users');
