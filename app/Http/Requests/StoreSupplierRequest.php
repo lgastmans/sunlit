@@ -31,13 +31,14 @@ class StoreSupplierRequest extends FormRequest
     public function rules()
     {
         return [
-            'company' => 'required|string|max:255',
+            'company' => 'required_without:name|string|max:255',
+            'name' => 'required_without:company|string|max:255',
             'state_id' => 'required|integer',
             'address' => 'required',
             'address2' => 'max:255',
             'city' => 'required|required',
             'zip_code' => 'required|numeric',
-            'gstin' => 'required|string',
+            'gstin' => 'required_without:name|string',
             'contact_person' => 'required|string',
             'phone' => 'required|string',
             'phone2' => 'required|string',

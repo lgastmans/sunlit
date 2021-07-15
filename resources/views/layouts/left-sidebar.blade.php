@@ -75,7 +75,7 @@
             <li class="side-nav-item {{ (Request::is('warehouses*') ? ' menuitem-active' : '') }}">
                 <a href="{{ route('warehouses')}}" class="side-nav-link {{ (Request::is('warehouses*') ? ' active' : '') }}">
                     <i class="mdi mdi-store"></i>
-                    <span> Warehouse </span>
+                    <span> Warehouses </span>
                 </a>
             </li>
 
