@@ -40,7 +40,7 @@ class StoreDealerRequest extends FormRequest
             'contact_person' => 'required|string',
             'phone' => 'required|string',
             'phone2' => 'required|string',
-            'email' => 'required|email|unique:suppliers,email,'.$this->id
+            'email' => 'required|email|unique:dealers,email,'.$this->id
         ];
     }
 }
