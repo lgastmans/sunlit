@@ -32,7 +32,8 @@ class StoreCategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:255|unique:categories,name,'.$this->id,
+            'name' => 'required|max:255|unique:categories,name,NULL,id,deleted_at,NULL'.$this->id,
+            
         ];
     }
 }
