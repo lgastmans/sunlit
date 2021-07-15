@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Warehouse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use \App\Http\Requests\StoreSupplierRequest;
+use \App\Http\Requests\StoreWarehouseRequest;
 
 
 
@@ -114,10 +114,10 @@ class WarehouseController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\StoreSupplierRequest  $request
+     * @param  \Illuminate\Http\StoreWarehouseRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreSupplierRequest $request)
+    public function store(StoreWarehouseRequest $request)
     {
         $validatedData = $request->validated();
         $warehouse = Warehouse::create($validatedData);
@@ -156,11 +156,11 @@ class WarehouseController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\StoreSupplierRequest  $request
+     * @param  \Illuminate\Http\StoreWarehouseRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreSupplierRequest $request, $id)
+    public function update(StoreWarehouseRequest $request, $id)
     {
         $validatedData = $request->validated();
         $warehouse = Warehouse::whereId($id)->update($validatedData);
