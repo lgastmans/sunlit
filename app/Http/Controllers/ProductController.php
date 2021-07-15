@@ -150,7 +150,7 @@ class ProductController extends Controller
      * @param  \App\Http\Requests\StoreProductRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(\App\Http\Requests\StoreProductRequest $request)
+    public function store(StoreProductRequest $request)
     {
         
         $validatedData = $request->validated();
@@ -194,7 +194,7 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(\App\Http\Requests\StoreProductRequest $request, $id)
+    public function update(StoreProductRequest $request, $id)
     {
         $validatedData = $request->validated();
         $product = Category::whereId($id)->update($validatedData);
