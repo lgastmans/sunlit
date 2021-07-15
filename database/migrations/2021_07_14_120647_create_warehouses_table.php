@@ -41,7 +41,7 @@ class CreateWarehousesTable extends Migration
     public function down()
     {
         Schema::table('warehouses', function (Blueprint $table) {
-            $table->dropForeign('wharehouses_state_id_foreign');
+            $table->dropForeign('warehouses_state_id_foreign');
         });
 
         Schema::dropIfExists('warehouses');
