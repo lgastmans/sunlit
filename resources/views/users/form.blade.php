@@ -36,9 +36,9 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="role">Role</label>
-                            <select class="role form-control" name="role">
-                                @if ($user->roles)
+                            <label class="form-label" for="role-select">Role</label>
+                            <select class="role-select form-control" name="role-select" required>
+                                @if ($user->id)
                                     <option value="{{$user->roles->first()->id}}" selected="selected">{{ucfirst($user->roles->first()->name)}}</option>
                                 @endif
                             </select>
@@ -59,7 +59,7 @@
 
 @section('page-scripts')
     <script>
-        var roleSelect = $(".role").select2();
+        var roleSelect = $(".role-select").select2();
         roleSelect.select2({
             minimumResultsForSearch: Infinity,
             ajax: {
@@ -67,6 +67,5 @@
                 dataType: 'json'
             }
         });
-
     </script>
 @endsection

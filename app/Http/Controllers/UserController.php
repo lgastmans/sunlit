@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use \App\Http\Requests\StoreUserRequest;
 
 
@@ -115,12 +115,15 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
+        $user = new User();
         $validatedData = $request->validated();
-        $user = User::create($validatedData);
-        if ($user){
-            return redirect(route('users'))->with('success', trans('app.record_added', ['field' => 'user']));
-        }
-        return back()->withInputs($request->input())->with('error', trans('error.record_added', ['field' => 'user']));
+        $user->name = $validatedData['name'];
+        $user->email = $validatedData['email'];
+        $user->password = Hash::make($request->email.$request->name.\Carbon\Carbon::now()->timestamp);
+        $user->save();
+        $user->syncRoles($validatedData['role']);
+         
+        return redirect(route('users'))->with('success', trans('app.record_added', ['field' => 'user']));
     }
 
     /**
@@ -158,16 +161,11 @@ class UserController extends Controller
      */
     public function update(StoreUserRequest $request, $id)
     {
-        $role = Role::findById($request->get('role'));
-        $request->merge(['role_name'=>$role->name]);
         $validatedData = $request->validated();
         $user = User::find($id);
         if ($user){
             $user->update($validatedData);
-            
-            $user->removeRole($user->role);
-            $user->assignRole($role);
-
+            $user->syncRoles($validatedData['role']);
             return redirect(route('users'))->with('success', trans('app.record_edited', ['field' => 'user']));
         }
         return back()->withInputs($request->input())->with('error', trans('error.record_edited', ['field' => 'user']));

@@ -127,7 +127,7 @@
                             edit_btn = '<a href="' + edit_route + '" class="action-icon"> <i class="mdi mdi-pencil"></i></a>'                       
                         @endif
                         @if (Auth::user()->can('delete users'))
-                            delete_btn = '<a href="" class="action-icon" id="' + data + '" data-bs-toggle="modal" data-bs-target="#delete-user"> <i class="mdi mdi-delete"></i></a>'
+                            delete_btn = '<a href="" class="action-icon" id="' + data + '" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>'
                         @endif
 
                         data = edit_btn +  delete_btn
@@ -148,7 +148,7 @@
         },
     });
 
-    $('#delete-user').on('show.bs.modal', function (e) {
+    $('#delete-modal').on('show.bs.modal', function (e) {
         var route = '{{ route("users.delete", ":id") }}';
         var button = e.relatedTarget;
         if (button != null){
