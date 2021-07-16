@@ -29,7 +29,7 @@
                 </span>
                 <span>
                     <span class="account-user-name">{{ Str::ucfirst(Auth::user()->name) }}</span>
-                    <span class="account-position">Dev.</span>
+                    <span class="account-position">{{ Auth::user()->role }}</span>
                 </span>
             </a>
             <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated topbar-dropdown-menu profile-dropdown">
