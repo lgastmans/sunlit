@@ -10,7 +10,6 @@ class InputGroup extends Component
     public $label;
     public $name;
     public $value;
-    public $message;
     public $required;
     public $position;
     public $symbol;
@@ -20,12 +19,11 @@ class InputGroup extends Component
      *
      * @return void
      */
-    public function __construct($label, $name, $value, $message, $required, $position, $symbol)
+    public function __construct($label, $name, $value, $required, $position, $symbol)
     {
         $this->label = $label;
         $this->name = $name;
         $this->value = $value;
-        $this->message = $message;
         $this->required = $required;
         $this->position = $position;
         $this->symbol = $symbol;

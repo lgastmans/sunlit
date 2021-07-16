@@ -23,7 +23,7 @@
                             </div>
                         @endif
                         <div class="mb-3">
-                            <x-forms.input label="Name" name="name" value="{{ old('name', $user->name) }}" message="Please provide a name" required="true"/>
+                            <x-forms.input label="Name" name="name" value="{{ old('name', $user->name) }}" required="true"/>
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="email">Email</label>
@@ -31,7 +31,7 @@
                                 <span class="input-group-text" id="inputGroupPrepend">@</span>
                                 <input class="form-control" type="email" id="email" name="email" value="{{ old('email', $user->email) }}" required="true" />
                                 <div class="invalid-feedback">
-                                    Please provide a valid email address
+                                    {{ __('error.form_invalid_field', ['field' => 'email']) }}
                                 </div>
                             </div>
                         </div>
@@ -43,7 +43,7 @@
                                 @endif
                             </select>
                             <div class="invalid-feedback">
-                                Please provide a valid role.
+                                {{ __('error.form_invalid_field', ['field' => 'role']) }}
                             </div>
                         </div>
                        

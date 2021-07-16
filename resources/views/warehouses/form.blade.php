@@ -19,17 +19,17 @@
                                 <input type="hidden" name="id" value="{{ old('id', $warehouse->id) }}" />
                         @endif
                         <div class="mb-3">
-                            <x-forms.input label="Name" name="name" value="{{ old('name', $warehouse->name) }}" message="Please provide the name name" required="true"/>
+                            <x-forms.input label="name" name="name" value="{{ old('name', $warehouse->name) }}" required="true"/>
                         </div>
                         <div class="mb-3">
-                            <x-forms.input label="Contact person" name="contact_person" value="{{ old('contact_person', $warehouse->contact_person) }}" message="Please provide the full name of the contact person" required="true"/>
+                            <x-forms.input label="contact person" name="contact_person" value="{{ old('contact_person', $warehouse->contact_person) }}"  required="true"/>
                         </div>
                         <div class="mb-3">
-                            <x-forms.input label="Address" name="address" value="{{ old('address', $warehouse->address) }}" message="Please provide the full address" required="true"/>
+                            <x-forms.input label="address" name="address" value="{{ old('address', $warehouse->address) }}" required="true"/>
                         </div>
 
                         <div class="mb-3">
-                            <x-forms.input label="City" name="city" value="{{ old('city', $warehouse->city) }}" message="Please provide a valid city" required="true"/>
+                            <x-forms.input label="city" name="city" value="{{ old('city', $warehouse->city) }}" required="true"/>
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="state-select">State</label>
@@ -39,20 +39,20 @@
                                 @endif
                             </select>
                             <div class="invalid-feedback">
-                                Please provide a valid state.
+                                {{ __('error.form_invalid_field', ['field' => 'state' ]) }}
                             </div>
                         </div>
                         <div class="mb-3">
-                            <x-forms.input label="Zip code" name="zip_code" value="{{ old('zip_code', $warehouse->zip_code) }}" message="Please provide a valid zip code." required="true"/>
+                            <x-forms.input label="zip code" name="zip_code" value="{{ old('zip_code', $warehouse->zip_code) }}"  required="true"/>
                         </div>
                         <div class="mb-3">
-                            <x-forms.input label="Phone" name="phone" value="{{ old('phone', $warehouse->phone) }}" message="Please provide a valid phone number." required="true"/>
+                            <x-forms.input label="phone" name="phone" value="{{ old('phone', $warehouse->phone) }}"  required="true"/>
                         </div>
                         <div class="mb-3">
-                            <x-forms.input label="Phone 2" name="phone2" value="{{ old('phone2', $warehouse->phone2) }}" message="Please provide a second valid phone number." required="true"/>
+                            <x-forms.input label="phone 2" name="phone2" value="{{ old('phone2', $warehouse->phone2) }}" required="true"/>
                         </div>
                        <div class="mb-3">
-                            <x-forms.inputGroup label="Email address" name="email" value="{{ old('email', $warehouse->email) }}" message="Please provide a valid email address." required="true" position="before" symbol="@"/>
+                            <x-forms.inputGroup label="email address" name="email" value="{{ old('email', $warehouse->email) }}"  required="true" position="before" symbol="@"/>
                         </div>
                        
                         <button class="btn btn-primary" type="submit">@if ($warehouse->id) {{ __('app.edit_title', ['field' => 'warehouse']) }} @else {{ __('app.add_title', ['field' => 'warehouse']) }} @endif</button>

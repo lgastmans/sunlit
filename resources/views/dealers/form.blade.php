@@ -19,22 +19,22 @@
                                 <input type="hidden" name="id" value="{{ old('id', $dealer->id) }}" />
                         @endif
                         <div class="mb-3">
-                            <x-forms.input label="Company" name="company" value="{{ old('company', $dealer->company) }}" message="Please provide the company name" required="true"/>
+                            <x-forms.input label="Company" name="company" value="{{ old('company', $dealer->company) }}" required="true"/>
                         </div>
                         <div class="mb-3">
-                            <x-forms.input label="GSTIN" name="gstin" value="{{ old('gstin', $dealer->gstin) }}" message="Please provide the gstin" required="true"/>
+                            <x-forms.input label="GSTIN" name="gstin" value="{{ old('gstin', $dealer->gstin) }}" required="true"/>
                         </div>
                         <div class="mb-3">
-                            <x-forms.input label="Contact person" name="contact_person" value="{{ old('contact_person', $dealer->contact_person) }}" message="Please provide the full name of the contact person" required="true"/>
+                            <x-forms.input label="Contact person" name="contact_person" value="{{ old('contact_person', $dealer->contact_person) }}" required="true"/>
                         </div>
                         <div class="mb-3">
-                            <x-forms.input label="Address" name="address" value="{{ old('address', $dealer->address) }}" message="Please provide the full address" required="true"/>
+                            <x-forms.input label="Address" name="address" value="{{ old('address', $dealer->address) }}" required="true"/>
                         </div>
                         <div class="mb-3">
-                            <x-forms.input label="Address 2" name="address2" value="{{ old('address2', $dealer->address2) }}" message="Please provide the full address" required="false"/>
+                            <x-forms.input label="Address 2" name="address2" value="{{ old('address2', $dealer->address2) }}" required="false"/>
                         </div>
                         <div class="mb-3">
-                            <x-forms.input label="City" name="city" value="{{ old('city', $dealer->city) }}" message="Please provide a valid city" required="true"/>
+                            <x-forms.input label="City" name="city" value="{{ old('city', $dealer->city) }}"  required="true"/>
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="state-select">State</label>
@@ -44,20 +44,20 @@
                                 @endif
                             </select>
                             <div class="invalid-feedback">
-                                Please provide a valid state.
+                                {{ __('error.form_invalid_field', ['field' => 'state' ]) }}
                             </div>
                         </div>
                         <div class="mb-3">
-                            <x-forms.input label="Zip code" name="zip_code" value="{{ old('zip_code', $dealer->zip_code) }}" message="Please provide a valid zip code." required="true"/>
+                            <x-forms.input label="Zip code" name="zip_code" value="{{ old('zip_code', $dealer->zip_code) }}" required="true"/>
                         </div>
                         <div class="mb-3">
-                            <x-forms.input label="Phone" name="phone" value="{{ old('phone', $dealer->phone) }}" message="Please provide a valid phone number." required="true"/>
+                            <x-forms.input label="Phone" name="phone" value="{{ old('phone', $dealer->phone) }}" required="true"/>
                         </div>
                         <div class="mb-3">
-                            <x-forms.input label="Phone 2" name="phone2" value="{{ old('phone2', $dealer->phone2) }}" message="Please provide a second valid phone number." required="true"/>
+                            <x-forms.input label="Phone 2" name="phone2" value="{{ old('phone2', $dealer->phone2) }}" required="true"/>
                         </div>
                        <div class="mb-3">
-                            <x-forms.inputGroup label="Email address" name="email" value="{{ old('email', $dealer->email) }}" message="Please provide a valid email address." required="true" position="before" symbol="@"/>
+                            <x-forms.inputGroup label="Email address" name="email" value="{{ old('email', $dealer->email) }}" required="true" position="before" symbol="@"/>
                         </div>
                        
                         <button class="btn btn-primary" type="submit">@if ($dealer->id) {{ __('app.edit_title', ['field' => 'dealer']) }} @else {{ __('app.add_title', ['field' => 'dealer']) }} @endif</button>

@@ -1,5 +1,5 @@
 <div>
-    <label class="form-label" for="{{ $name }}">{{ $label }}</label>
+    <label class="form-label" for="{{ $name }}">{{ ucfirst($label) }}</label>
     <div class="input-group">
         @if ($position=="before")
             <span class="input-group-text" id="inputGroupPrepend">{{ $symbol }}</span>
@@ -12,7 +12,7 @@
             <span class="input-group-text" id="inputGroupPrepend">{{ $symbol }}</span>
         @endif
         <div class="invalid-feedback">
-            {{ $message }}
+            {{ __('error.form_invalid_field', ['field' => $label ]) }}
         </div>
     
     </div>
