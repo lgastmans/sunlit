@@ -2,8 +2,9 @@
 
 namespace App\Http\Requests;
 use Illuminate\Validation\Rule;
-
 use Illuminate\Foundation\Http\FormRequest;
+
+use Illuminate\Auth\Access\AuthorizationException;
 
 class StoreSupplierRequest extends FormRequest
 {
