@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('page-title', 'Users')
+@section('page-title', ucfirst(Request::segment(1)) )
 
 @section('content')
 

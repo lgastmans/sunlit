@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('page-title', 'Categories')
+@section('page-title', ucfirst(Request::segment(1)) )
 
 @section('content')
 
@@ -23,7 +23,7 @@
                             </div>
                         @endif
                         <div class="mb-3">
-                            <x-forms.input label="Name" name="name" value="{{ old('name', $category->name) }}" message="Please provide a name" required="true"/>
+                            <x-forms.input label="Name" name="name" value="{{ old('name', $category->name) }}"required="true"/>
                         </div>
                         
                        
