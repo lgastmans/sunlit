@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Mail\UserInvited;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use \App\Http\Requests\StoreUserRequest;
 
 
@@ -120,8 +123,12 @@ class UserController extends Controller
         $user->name = $validatedData['name'];
         $user->email = $validatedData['email'];
         $user->password = Hash::make($request->email.$request->name.\Carbon\Carbon::now()->timestamp);
+        $user->invite_token = Str::random(40);
         $user->save();
         $user->syncRoles($validatedData['role']);
+
+        // Send the email 
+        Mail::to($user->email)->send(new UserInvited($user));
          
         return redirect(route('users'))->with('success', trans('app.record_added', ['field' => 'user']));
     }
@@ -185,6 +192,36 @@ class UserController extends Controller
             return redirect(route('users'))->with('success', trans('app.record_deleted', ['field' => 'user']));
         }
         return abort(403, trans('error.unauthorized'));
+    }
+
+
+        /**
+     * Update the password of the specified resource
+     * 
+     * @param  string $email
+     * @param  string $invite_token
+     * @return \Illuminate\Http\Response
+     */
+    public function registration($email, $invite_token)
+    {
+        return view('auth.update-password-registration', compact('email','invite_token'));
+    }
+
+    /**
+     * Update the password of the specified resource
+     * 
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function registrationPassword(Request $request)
+    {
+        $user = User::where('email', 'like', $request->email)->where('invite_token', 'like', $request->invite_token)->first();
+        if ($user){
+            $user->password = Hash::make($request->password);
+            $user->save();
+            $user->markEmailAsVerified();
+        }
+        return redirect()->route('login');
     }
 }
 
