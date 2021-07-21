@@ -27,8 +27,15 @@ class StoreUserRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-        $role = Role::findById($this->get('role-select'));
-        $this->merge(['role'=>$role->name]);
+
+        if ($this->get('role-select')){
+            $roleInfo = Role::findById($this->get('role-select'));
+            $role = $roleInfo->name;
+        }
+        else{
+            $role = $this->get('role');
+        }
+        $this->merge(['role'=>$role]);
     }
 
     /**

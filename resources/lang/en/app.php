@@ -16,4 +16,5 @@ return [
     'delete_confirm' => 'Are you sure you want to delete this :field?',
     'modal_close' => 'Close',
     'modal_delete' => 'Delete',
+    'save_profile' => 'Save',
 ];

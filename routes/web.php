@@ -40,6 +40,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/dashboard', function () {
         return view('welcome');
     });
+
     
     Route::get('/suppliers', [SupplierController::class, 'index'])->name('suppliers');
     Route::get('/suppliers/{id}/edit', [SupplierController::class, 'edit'])->name('suppliers.edit');
@@ -97,6 +98,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.delete');
     Route::get('/users/list', [UserController::class, 'getListForDatatables'])->name('users.datatables');
+
+    Route::get('/profile', [UserController::class, 'show'])->name('profile');
+    Route::get('/profile/edit', [UserController::class, 'editProfile'])->name('profile-edit');
 
 
     Route::prefix('ajax')->group(function () {

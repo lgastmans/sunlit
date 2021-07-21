@@ -136,12 +136,12 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-        //
+        $user = User::find(Auth::user()->id);
+        return view('users.show', ['user' => $user]);
     }
 
     /**
@@ -159,6 +159,13 @@ class UserController extends Controller
         return view('users.index');
     }
 
+    public function editProfile(){
+        $user = User::find(Auth::user()->id);
+        if ($user){
+            return view('users.profile-edit', ['user' => $user]);
+        }
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -173,7 +180,10 @@ class UserController extends Controller
         if ($user){
             $user->update($validatedData);
             $user->syncRoles($validatedData['role']);
-            return redirect(route('users'))->with('success', trans('app.record_edited', ['field' => 'user']));
+            if ($id != Auth::user()->id){
+                return redirect(route('users'))->with('success', trans('app.record_edited', ['field' => 'user']));
+            }
+            return redirect(route('profile'))->with('success', trans('app.record_edited', ['field' => 'user']));
         }
         return back()->withInputs($request->input())->with('error', trans('error.record_edited', ['field' => 'user']));
     }
