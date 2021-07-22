@@ -27,7 +27,7 @@ require __DIR__.'/auth.php';
 
 
 Route::get('/invite/{email}/{token}', [UserController::class, 'registration'])->name('registration.store');
-Route::post('/invite/', [UserController::class, 'registrationPassword'])->name('registration.password');
+Route::post('/invite', [UserController::class, 'registrationPassword'])->name('registration.password');
 
 
 
@@ -38,8 +38,8 @@ Route::group(['middleware' => ['auth']], function () {
     })->name('home');
 
     Route::get('/dashboard', function () {
-        return view('welcome');
-    });
+        return view('dashboard');
+    })->name('dashboard');
 
     
     Route::get('/suppliers', [SupplierController::class, 'index'])->name('suppliers');
