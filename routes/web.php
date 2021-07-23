@@ -34,7 +34,7 @@ Route::post('/invite', [UserController::class, 'registrationPassword'])->name('r
 Route::group(['middleware' => ['auth']], function () { 
 
     Route::get('/', function () {
-        return view('welcome');
+        return view('dashboard');
     })->name('home');
 
     Route::get('/dashboard', function () {
