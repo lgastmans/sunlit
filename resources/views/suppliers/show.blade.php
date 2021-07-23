@@ -188,7 +188,7 @@
                         <tr>
                             <td>Half Sleeve Shirt</td>
                             <td>$39.99</td>
-                            <td><span class="badge bg-warning">6 Pcs/span></td>
+                            <td><span class="badge bg-warning">6 Pcs</span></td>
                             <td>$2,559.36</td>
                         </tr>
                         <tr>
