@@ -12,5 +12,6 @@
     "/js/vendor/dataTables.bootstrap4.js": "/js/vendor/dataTables.bootstrap4.js",
     "/js/vendor/dataTables.responsive.min.js": "/js/vendor/dataTables.responsive.min.js",
     "/js/vendor/responsive.bootstrap4.min.js": "/js/vendor/responsive.bootstrap4.min.js",
-    "/js/vendor/dataTables.checkboxes.min.js": "/js/vendor/dataTables.checkboxes.min.js"
+    "/js/vendor/dataTables.checkboxes.min.js": "/js/vendor/dataTables.checkboxes.min.js",
+    "/js/vendor/Chart.bundle.min.js": "/js/vendor/Chart.bundle.min.js"
 }

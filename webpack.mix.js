@@ -30,4 +30,5 @@ mix.copy('resources/js/vendor/dataTables.bootstrap4.js', 'public/js/vendor/');
 mix.copy('resources/js/vendor/dataTables.responsive.min.js', 'public/js/vendor/');
 mix.copy('resources/js/vendor/responsive.bootstrap4.min.js', 'public/js/vendor/');
 mix.copy('resources/js/vendor/dataTables.checkboxes.min.js', 'public/js/vendor/');
+mix.copy('resources/js/vendor/Chart.bundle.min.js', 'public/js/vendor/');
 

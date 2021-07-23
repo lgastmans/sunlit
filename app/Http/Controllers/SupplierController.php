@@ -92,8 +92,6 @@ class SupplierController extends Controller
             "data" => $suppliers,
             'error' => null
         );
-
-        
         echo json_encode($response);
 
         exit;
@@ -135,7 +133,8 @@ class SupplierController extends Controller
      */
     public function show($id)
     {
-        //
+        $supplier = Supplier::with('state')->find($id);
+        return view('suppliers.show', ['supplier' => $supplier]);
     }
 
     /**
