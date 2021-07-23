@@ -110,6 +110,12 @@
             },
             { 
                 'data': 'supplier',
+                'render': function(data, type, row, meta){
+                    var route = '{{ route("suppliers.show", ":id") }}';
+                    route = route.replace(':id', row.id);
+                    var supplier = '<a href="'+ route +'" class="text-body fw-semibold">' + data + '</a>'
+                    return supplier;
+                },
                 'orderable': true 
             },
             { 
@@ -118,6 +124,12 @@
             },
             { 
                 'data': 'code',
+                'render': function(data, type, row, meta){
+                    var route = '{{ route("products.show", ":id") }}';
+                    route = route.replace(':id', row.id);
+                    var supplier = '<a href="'+ route +'" class="text-body fw-semibold">' + data + '</a>'
+                    return supplier;
+                },
                 'orderable': true 
             },
             { 

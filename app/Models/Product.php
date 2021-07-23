@@ -12,6 +12,8 @@ class Product extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $dates= ['created_at'];
+
 
     /**
      * Get the category associated with the product.

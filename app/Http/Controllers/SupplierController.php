@@ -134,7 +134,9 @@ class SupplierController extends Controller
     public function show($id)
     {
         $supplier = Supplier::with('state')->find($id);
-        return view('suppliers.show', ['supplier' => $supplier]);
+        if ($supplier)
+            return view('suppliers.show', ['supplier' => $supplier]);
+        return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'supplier']));
     }
 
     /**

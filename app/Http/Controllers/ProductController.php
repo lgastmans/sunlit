@@ -169,7 +169,11 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        //
+        $product = Product::find($id);
+        if ($product)
+            return view('products.show', ['product'=>$product]);
+
+            return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'product']));
     }
 
     /**

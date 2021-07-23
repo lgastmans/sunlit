@@ -99,7 +99,6 @@
             { 
                 'data': 'contact_person',
                 'render': function(data, type, row, meta){
-                    console.log(row);
                     var route = '{{ route("suppliers.show", ":id") }}';
                     route = route.replace(':id', row.id);
                     var displayName = '<img width="48" src="/images/users/avatar-'+(Math.floor(Math.random() * 9)+1)+'.jpg" alt="table-user" class="me-2 rounded-circle">';
