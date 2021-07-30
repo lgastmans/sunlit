@@ -96,13 +96,7 @@
             },
             { 
                 'data': 'contact_person',
-                'render': function(data, type, row, meta){
-                    var route = '{{ route("suppliers.show", ":id") }}';
-                    route = route.replace(':id', row.id);
-                    var displayName = '<img width="48" src="/images/users/avatar-'+(Math.floor(Math.random() * 9)+1)+'.jpg" alt="table-user" class="me-2 rounded-circle">';
-                    displayName += '<a href="'+ route +'" class="text-body fw-semibold">' + data + '</a>'
-                    return displayName;
-                },
+
                 'orderable': true 
             },
             { 
