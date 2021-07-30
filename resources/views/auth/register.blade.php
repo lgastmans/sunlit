@@ -7,9 +7,9 @@
             <div class="col-xxl-4 col-lg-5">
                 <div class="card">
                     <!-- Logo-->
-                    <div class="card-header pt-4 pb-4 text-center bg-primary">
+                    <div class="card-header pt-4 pb-4 text-center  bg-sunlit">
                         <a href="index.html">
-                            <span><img src="/images/logo.png" alt="" height="18"></span>
+                            <span><img src="/images/logo.png" alt="" ></span>
                         </a>
                     </div>
 
