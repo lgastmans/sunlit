@@ -15,14 +15,19 @@
 
         <!--- Sidemenu -->
         <ul class="side-nav">
-
-            <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#sidebarDashboards" aria-expanded="false" aria-controls="sidebarDashboards" class="side-nav-link">
-                    <i class="uil-home-alt"></i>
-                    {{-- <span class="badge bg-success float-end">4</span> --}}
+            <li class="side-nav-item {{ (Request::is('dashboard*') ? ' menuitem-active' : '') }}">
+                <a href="{{ route('dashboard')}}" class="side-nav-link {{ (Request::is('dashboard*') ? ' active' : '') }}">
+                    <i class="uil-shop"></i>
                     <span> Dashboard </span>
                 </a>
-                {{-- <div class="collapse" id="sidebarDashboards">
+            </li>
+            {{-- <li class="side-nav-item">
+               <a data-bs-toggle="collapse" href="#sidebarDashboards" aria-expanded="false" aria-controls="sidebarDashboards" class="side-nav-link">
+                    <i class="uil-home-alt"></i>
+                    <span class="badge bg-success float-end">4</span>
+                    <span> Dashboard </span>
+                </a>
+                <div class="collapse" id="sidebarDashboards">
                     <ul class="side-nav-second-level">
                         <li>
                             <a href="dashboard-analytics.html">Analytics</a>
@@ -37,8 +42,8 @@
                             <a href="dashboard-projects.html">Projects</a>
                         </li>
                     </ul>
-                </div> --}}
-            </li>
+                </div> 
+            </li> --}}
 
             <li class="side-nav-title side-nav-item">Components</li>
 
