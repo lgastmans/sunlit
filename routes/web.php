@@ -82,6 +82,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/dealers', [DealerController::class, 'index'])->name('dealers');
     Route::get('/dealers/create', [DealerController::class, 'create'])->name('dealers.create');
     Route::get('/dealers/list', [DealerController::class, 'getListForDatatables'])->name('dealers.datatables');
+    Route::get('/dealers/{id}', [DealerController::class, 'show'])->name('dealers.show');
     Route::get('/dealers/{id}/edit', [DealerController::class, 'edit'])->name('dealers.edit');
     Route::post('/dealers', [DealerController::class, 'store'])->name('dealers.store');
     Route::put('/dealers/{id}', [DealerController::class, 'update'])->name('dealers.update');
