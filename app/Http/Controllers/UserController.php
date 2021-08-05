@@ -67,24 +67,24 @@ class UserController extends Controller
     
         // Fetch records
         if ($length < 0)
-            $users = User::where('name', 'like', '%'.$search.'%')
+            $users = User::withTrashed()->where('name', 'like', '%'.$search.'%')
                 ->orderBy($order_column, $order_dir)
                 ->get(['id','name']);
         else
-            $users = User::where('name', 'like', '%'.$search.'%')
+            $users = User::withTrashed()->where('name', 'like', '%'.$search.'%')
                 ->orderBy($order_column, $order_dir)
                 ->skip($start)
                 ->take($length)
-                ->get(['id','name', 'email', 'created_at']);
+                ->get(['id','name', 'email', 'created_at', 'deleted_at']);
                
         $arr = array();
-
         foreach($users as $user){
             $arr[] = array(
                 "id" => $user->id,
                 "name" => $user->name,
                 "email" => $user->email,
-                "role" => $user->role
+                "role" => $user->role,
+                "status" => ($user->deleted_at) ? 'disabled' : 'enabled'
             );
         }
 

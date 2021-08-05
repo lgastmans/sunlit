@@ -36,6 +36,7 @@
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Role</th>
+                                <th>Status</th>
                                 <th style="width:10%">
                                     @if (Auth::user()->can('edit users'))
                                     {{ __('app.dt_actions') }}
@@ -111,6 +112,21 @@
             { 
                 'data': 'role',
                 'orderable': true 
+            },
+            {
+                'data': 'status',
+                'render' : function(data, type, row, meta){
+                    if (type === 'display'){
+                        if (data == 'disabled'){
+                            data = '<span class="badge bg-danger">Disabled</span>';
+                        }
+                        else{
+                            data = '<span class="badge bg-success">Enabled</span>';
+                        }
+                    }
+                    return data;
+                },
+                'orderable': true,
             },
             {
                 'data': 'id',
