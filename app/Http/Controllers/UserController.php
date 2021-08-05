@@ -178,7 +178,12 @@ class UserController extends Controller
         $validatedData = $request->validated();
         $user = User::find($id);
         if ($user){
-            $user->update($validatedData);
+            $user->name = $request->name;
+            $user->email = $request->email;
+            if ($request->password)
+                $user->password = Hash::make($request->password);
+    
+            $user->update();
             $user->syncRoles($validatedData['role']);
             if ($id != Auth::user()->id){
                 return redirect(route('users'))->with('success', trans('app.record_edited', ['field' => 'user']));

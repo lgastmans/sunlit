@@ -32,6 +32,17 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="email">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text" id="inputGroupPrepend"><i class="mdi mdi-key"></i></span>
+                                <input class="form-control" type="password" id="password" name="password" value="" placeholder="****" />
+                                <div class="invalid-feedback">
+                                    {{ __('error.form_invalid_field', ['field' => 'password']) }}
+                                </div>
+                            </div>
+                            <div class="text-muted">Enter a password if you want to update it.</div>
+                        </div>
                        
                        
                         <button class="btn btn-primary" type="submit">{{ __('app.save_profile') }}</button>

@@ -27,7 +27,7 @@
 
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email address</label>
-                                    <input id="email" class="form-control" type="email" name="email" value="{{ old('email') }}" placeholder="Enter your email" required autofocus >
+                                    <input tabindex="1" id="email" class="form-control" type="email" name="email" value="{{ old('email') }}" placeholder="Enter your email" required autofocus >
                                 </div>
 
                                 <div class="mb-3">
@@ -35,7 +35,7 @@
                                         <a href="{{ route('password.request') }}" class="text-muted float-end"><small>{{ __('Forgot your password?') }}</small></a>
                                     @endif
                                     <label for="password" class="form-label">Password</label>
-                                    <input id="password" class="form-control" type="password" name="password" required autocomplete="current-password" />
+                                    <input tabindex="2" id="password" class="form-control" type="password" name="password" required autocomplete="current-password" />
     
                                 </div>
 

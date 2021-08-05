@@ -3,6 +3,9 @@
 namespace App\Http\Requests;
 use Spatie\Permission\Models\Role;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Password;
+
+
 use Illuminate\Auth\Access\AuthorizationException;
 
 
@@ -49,6 +52,7 @@ class StoreUserRequest extends FormRequest
             'name' => 'required|max:255|unique:users,name,'.$this->id,
             'email' => 'required|email:rfc,dns|max:255|unique:users,email,'.$this->id,
             'role' => 'required',
+            'password' => 'sometimes'
         ];
     }
 }
