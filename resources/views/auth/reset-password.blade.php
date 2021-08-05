@@ -1,48 +1,66 @@
-<x-guest-layout>
-    <x-auth-card>
-        <x-slot name="logo">
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </x-slot>
+@extends('layouts.guest')
 
-        <!-- Validation Errors -->
-        <x-auth-validation-errors class="mb-4" :errors="$errors" />
+@section("content")
+<div class="account-pages pt-2 pt-sm-5 pb-4 pb-sm-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xxl-4 col-lg-5">
+                <div class="card">
+                    <!-- Logo-->
+                    <div class="card-header pt-4 pb-4 text-center  bg-sunlit">
+                        <a href="index.html">
+                            <span><img src="/images/logo.png" alt="" ></span>
+                        </a>
+                    </div>
 
-        <form method="POST" action="{{ route('password.update') }}">
-            @csrf
+                    <div class="card-body p-4">
+                        <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
-            <!-- Password Reset Token -->
-            <input type="hidden" name="token" value="{{ $request->route('token') }}">
+                        <form method="POST" action="{{ route('password.update') }}">
+                            @csrf
+                            <input type="hidden" name="token" value="{{ $request->route('token') }}">
 
-            <!-- Email Address -->
-            <div>
-                <x-label for="email" :value="__('Email')" />
 
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $request->email)" required autofocus />
-            </div>
+                          
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email address</label>
+                                <input id="email" class="form-control" type="email" name="email" value="{{ old('email', $request->email) }}" placeholder="Enter your email" required autofocus >
+                            </div>
 
-            <!-- Password -->
-            <div class="mt-4">
-                <x-label for="password" :value="__('Password')" />
+                            <div class="mb-3">
+                                <label for="password" class="form-label">{{ __('Password')}}</label>
+                                <input id="password" class="form-control" type="password" name="password" required autocomplete="current-password" placeholder="Enter your password"/>
+                            </div>
 
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required />
-            </div>
+                            <div class="mb-3">
+                                <label for="password_confirmation" class="form-label">{{__('Confirm Password')}}</label>
+                                <input id="password_confirmation" class="form-control" type="password" name="password_confirmation" required autocomplete="current-password" placeholder="Confirm your password"/>
+                            </div>
 
-            <!-- Confirm Password -->
-            <div class="mt-4">
-                <x-label for="password_confirmation" :value="__('Confirm Password')" />
 
-                <x-input id="password_confirmation" class="block mt-1 w-full"
-                                    type="password"
-                                    name="password_confirmation" required />
-            </div>
+                            <div class="mb-3 text-center">
+                                <x-button class="ml-4">
+                                    {{ __('Reset Password') }}
+                                </x-button>
+                            </div>
 
-            <div class="flex items-center justify-end mt-4">
-                <x-button>
-                    {{ __('Reset Password') }}
-                </x-button>
-            </div>
-        </form>
-    </x-auth-card>
-</x-guest-layout>
+                        </form>
+                    </div> <!-- end card-body -->
+                </div>
+                <!-- end card -->
+
+                <div class="row mt-3">
+                    <div class="col-12 text-center">
+                        <p class="text-muted">Already have account? <a href="{{ route('login') }}" class="text-muted ms-1"><b>{{ __('Log in') }}</b></a></p>
+                    </div> <!-- end col-->
+                </div>
+                <!-- end row -->
+
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- end container -->
+</div>
+
+@endsection
