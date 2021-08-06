@@ -36,7 +36,7 @@ class StoreProductRequest extends FormRequest
             'category_id' => 'required|integer',
             'supplier_id' => 'required|integer',
             'tax_id' => 'required|integer',
-            'code' => 'required_without:code|string|max:255',
+            'code' => 'required|max:255|unique:products,code,NULL,id,deleted_at,NULL'.$this->id,
             'name' => 'required_without:name|string|max:255',
             'model' => 'max:255',
             'cable_length' => 'max:255',
