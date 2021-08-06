@@ -23,7 +23,7 @@
                             </div>
                         @endif
                         <div class="mb-3">
-                            <x-forms.input label="Name" name="name" value="{{ old('name', $category->name) }}"required="true"/>
+                            <x-forms.input label="Name" name="name" value="{{ old('name', $category->name) }}" required="true"/>
                         </div>
                         
                        
