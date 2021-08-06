@@ -152,7 +152,7 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::find($id);
+        $user = User::withTrashed()->find($id);
         if ($user){
             return view('users.form', ['user' => $user]);
         }
@@ -205,6 +205,25 @@ class UserController extends Controller
         if ($user->can('delete users')){
             User::destroy($id);
             return redirect(route('users'))->with('success', trans('app.record_deleted', ['field' => 'user']));
+        }
+        return abort(403, trans('error.unauthorized'));
+    }
+
+    /**
+     * Enable the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function enable($id)
+    {
+        $user = Auth::user();
+        if ($user->can('delete users')){
+            $u = User::withTrashed()->find($id);
+            if ($u){
+                $u->restore();
+                return redirect(route('users'))->with('success', trans('app.record_enabled', ['field' => 'user']));
+            }   
         }
         return abort(403, trans('error.unauthorized'));
     }
