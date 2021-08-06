@@ -66,7 +66,7 @@
                             <x-forms.input label="Name" name="name" value="{{ old('name', $product->name) }}" message="Please provide a name" required="true"/>
                         </div>
                         <div class="mb-3">
-                            <x-forms.input label="Model" name="name" value="{{ old('name', $product->name) }}" message="Please provide a name" required="false"/>
+                            <x-forms.input label="Model" name="model" value="{{ old('model', $product->model) }}" message="Please provide a model" required="false"/>
                         </div>
                         <div class="mb-3">
                             <x-forms.input label="Cable length" name="cable_length" value="{{ old('cable_length', $product->cable_length) }}" message="Please provide a cable length" required="false"/>
