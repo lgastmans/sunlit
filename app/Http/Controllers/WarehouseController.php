@@ -148,7 +148,7 @@ class WarehouseController extends Controller
     {
         $warehouse = Warehouse::with('state')->find($id);
         if ($warehouse){
-            return view('warehouses.form', ['dealer' => $warehouse]);
+            return view('warehouses.form', ['warehouse' => $warehouse]);
         }
         return view('warehouses.index');
     }

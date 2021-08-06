@@ -134,18 +134,28 @@
                     if (type === 'display'){
 
                         var edit_btn = '';
-                        var delete_btn = '';
+                        var status_btn = '';
 
                         @if (Auth::user()->can('edit users'))
                             var edit_route = '{{ route("users.edit", ":id") }}';
                             edit_route = edit_route.replace(':id', data);
                             edit_btn = '<a href="' + edit_route + '" class="action-icon"> <i class="mdi mdi-pencil"></i></a>'                       
                         @endif
+
+                        // Enable/disable button
                         @if (Auth::user()->can('delete users'))
-                            delete_btn = '<a href="" class="action-icon" id="' + data + '" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>'
+                            if (row.status == "enabled"){
+                                status_btn = '<a href="" class="action-icon" id="' + data + '" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="mdi mdi-lock"></i></a>'
+                            }
+                            if (row.status == "disabled"){
+                                var status_route = '{{ route("users.enable", ":id") }}';
+                                status_route = status_route.replace(':id', data);
+                                status_btn = '<a href="' + status_route + '" class="action-icon"><i class="mdi mdi-lock-open-variant-outline"></i></a>'
+                            }
                         @endif
 
-                        data = edit_btn +  delete_btn
+                        data = edit_btn +  status_btn
+
                     }
                     return data;
                 }
