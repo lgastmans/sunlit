@@ -57,8 +57,8 @@
     </div>
     
     <!-- Right Sidebar -->
-    @include('layouts/right-sidebar')
-    <div class="rightbar-overlay"></div>
+    {{-- @include('layouts/right-sidebar')
+    <div class="rightbar-overlay"></div> --}}
 </div>
 
 @include('layouts/footer')
