@@ -12,7 +12,7 @@
                     <p>@if ($product->id) {{ __('app.edit_title', ['field' => 'product']) }}: <span class="text-primary">{{ $product->name }}</span> @else {{ __('app.add_title', ['field' => 'product']) }} @endif </p>
                 </div>
                 <x-forms.errors class="mb-4" :errors="$errors" />
-                    <form action="@if ($product->id) {{ route('categories.update', $product->id) }} @else {{ route('categories.store') }} @endif" method="POST" class="needs-validation" novalidate>
+                    <form action="@if ($product->id) {{ route('products.update', $product->id) }} @else {{ route('products.store') }} @endif" method="POST" class="needs-validation" novalidate>
                         @csrf()
                         @if ($product->id)
                             @method('PUT')
@@ -22,36 +22,43 @@
                                 <input type="hidden" name="id" value="{{ old('id', $product->id) }}" />
                             </div>
                         @endif
+
                         <div class="mb-3">
-                            <label class="form-label" for="product">product</label>
-                            <select class="form-control select2" data-toggle="select2" name="product" data-placeholder="Select a product" required>
-                                <option value="10">Inverter</option>
-                                <option value="20">Solar Panel</option>
+                            <label class="form-label" for="category-select">Category</label>
+                            <select class="category-select form-control" name="category_id">
+                                @if ($product->category)
+                                    <option value="{{$product->category->id}}" selected="selected">{{$product->category->name}}</option>
+                                @endif
                             </select>
                             <div class="invalid-feedback">
-                                Please select a product
+                                {{ __('error.form_invalid_field', ['field' => 'category' ]) }}
                             </div>
                         </div>
+
                         <div class="mb-3">
-                            <label class="form-label" for="supplier">Supplier</label>
-                            <select class="form-control select2" data-toggle="select2" name="supplier" data-placeholder="Select a supplier" required>
-                                <option value="100">Wairee</option>
-                                <option value="101">Studer</option>
+                            <label class="form-label" for="supplier-select">Supplier</label>
+                            <select class="supplier-select form-control" name="supplier_id">
+                                @if ($product->supplier)
+                                    <option value="{{$product->supplier->id}}" selected="selected">{{$product->supplier->company}}</option>
+                                @endif
                             </select>
                             <div class="invalid-feedback">
-                                Please select a supplier
+                                {{ __('error.form_invalid_field', ['field' => 'supplier' ]) }}
                             </div>
                         </div>
+
                         <div class="mb-3">
-                            <label class="form-label" for="tax">Tax</label>
-                            <select class="form-control select2" data-toggle="select2" name="tax" data-placeholder="Select a tax" required>
-                                <option value="5">5.00 %</option>
-                                <option value="10">10.00 %</option>
+                            <label class="form-label" for="tax-select">Tax</label>
+                            <select class="tax-select form-control" name="tax_id">
+                                @if ($product->tax)
+                                    <option value="{{$product->tax->id}}" selected="selected">{{$product->tax->name}}</option>
+                                @endif
                             </select>
                             <div class="invalid-feedback">
-                                Please select a tax
+                                {{ __('error.form_invalid_field', ['field' => 'tax' ]) }}
                             </div>
                         </div>
+
                         <div class="mb-3">
                             <x-forms.input label="Code" name="code" value="{{ old('code', $product->code) }}" message="Please provide a code" required="true"/>
                         </div>
@@ -83,6 +90,37 @@
         </div> <!-- end card-->
     </div> <!-- end col -->
 </div>
+@endsection
 
+
+@section('page-scripts')
+
+    <script>
+
+        var categorySelect = $(".category-select").select2();
+        categorySelect.select2({
+            ajax: {
+                url: '{{route('ajax.categories')}}',
+                dataType: 'json'
+            }
+        });
+
+        var supplierSelect = $(".supplier-select").select2();
+        supplierSelect.select2({
+            ajax: {
+                url: '{{route('ajax.suppliers')}}',
+                dataType: 'json'
+            }
+        });
+
+        var taxSelect = $(".tax-select").select2();
+        taxSelect.select2({
+            ajax: {
+                url: '{{route('ajax.taxes')}}',
+                dataType: 'json'
+            }
+        });
+
+    </script>
 
 @endsection
