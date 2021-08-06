@@ -57,10 +57,6 @@ class ProductController extends Controller
             $order_dir = $order_arr[0]['dir'];
         }
 
-//dd($order_column);
-
-
-
         $search = '';
         if ($request->has('search')) {
             $search_arr = $request->get('search');
@@ -201,7 +197,7 @@ class ProductController extends Controller
     public function update(StoreProductRequest $request, $id)
     {
         $validatedData = $request->validated();
-        $product = Category::whereId($id)->update($validatedData);
+        $product = Product::whereId($id)->update($validatedData);
         if ($product){
             return redirect(route('products'))->with('success', trans('app.record_edited', ['field' => 'product']));
         }

@@ -41,7 +41,8 @@ class StoreProductRequest extends FormRequest
             'model' => 'max:255',
             'cable_length' => 'max:255',
             'kw_rating' => 'max:255',
-            'part_number' => 'max:255'
+            'part_number' => 'max:255',
+            'notes' => 'nullable'
         ];
     }
 }

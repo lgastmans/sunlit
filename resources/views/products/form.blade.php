@@ -66,20 +66,20 @@
                             <x-forms.input label="Name" name="name" value="{{ old('name', $product->name) }}" message="Please provide a name" required="true"/>
                         </div>
                         <div class="mb-3">
-                            <x-forms.input label="Model" name="name" value="{{ old('name', $product->name) }}" message="Please provide a name" required="true"/>
+                            <x-forms.input label="Model" name="name" value="{{ old('name', $product->name) }}" message="Please provide a name" required="false"/>
                         </div>
                         <div class="mb-3">
-                            <x-forms.input label="Cable length" name="cable_length" value="{{ old('cable_length', $product->cable_length) }}" message="Please provide a cable length" required="true"/>
+                            <x-forms.input label="Cable length" name="cable_length" value="{{ old('cable_length', $product->cable_length) }}" message="Please provide a cable length" required="false"/>
                         </div>
                         <div class="mb-3">
-                            <x-forms.input label="KW rating" name="kw_rating" value="{{ old('kw_rating', $product->kw_rating) }}" message="Please provide a KW rating" required="true"/>
+                            <x-forms.input label="KW rating" name="kw_rating" value="{{ old('kw_rating', $product->kw_rating) }}" message="Please provide a KW rating" required="false"/>
                         </div>
                         <div class="mb-3">
-                            <x-forms.input label="Part number" name="part_number" value="{{ old('part_number', $product->part_number) }}" message="Please provide a part number" required="true"/>
+                            <x-forms.input label="Part number" name="part_number" value="{{ old('part_number', $product->part_number) }}" message="Please provide a part number" required="false"/>
                         </div>
                         <div class="mb-3">
                             <label for="notes" class="form-label">Notes</label>
-                            <textarea class="form-control" name="notes" rows="5" required></textarea>
+                            <textarea class="form-control" name="notes" rows="5">{{ old('notes', $product->notes) }}</textarea>
                         </div>
                        
                         <button class="btn btn-primary" type="submit">@if ($product->id) {{ __('app.edit_title', ['field' => 'product']) }} @else {{ __('app.add_title', ['field' => 'product']) }} @endif</button>
