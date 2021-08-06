@@ -186,4 +186,21 @@ class SupplierController extends Controller
         }
         return abort(403, trans('error.unauthorized'));
     }
+
+    /**
+     * Display a listing of the resource for select2
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return json
+     */
+    public function getListForSelect2(Request $request)
+    {
+        if ($request->has('q')){
+            $suppliers = Supplier::where('company', 'like', $request->get('q').'%')->get(['id', 'company as text']);
+        }
+        else{
+            $suppliers = Supplier::get(['id', 'company as text']);
+        }
+        return ['results' => $suppliers];
+    }        
 }
