@@ -66,7 +66,10 @@ class ProductController extends Controller
         // Total records
         $totalRecords = Product::all()->count();
         
-        $totalRecordswithFilter = Product::where('products.code', 'like', '%'.$search.'%')
+        $totalRecordswithFilter = Product::join('categories', 'categories.id', '=', 'products.category_id')
+            ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
+            ->join('taxes', 'taxes.id', '=', 'products.tax_id')
+            ->where('products.code', 'like', '%'.$search.'%')
             ->orWhere('products.name', 'like', '%'.$search.'%')
             ->get()
             ->count();
@@ -78,6 +81,8 @@ class ProductController extends Controller
                 ->join('taxes', 'taxes.id', '=', 'products.tax_id')
                 ->where('products.code', 'like', '%'.$search.'%')
                 ->orWhere('products.name', 'like', '%'.$search.'%')
+                ->orWhere('categories.name', 'like', '%'.$search.'%')
+                ->orWhere('suppliers.company', 'like', '%'.$search.'%')
                 ->orderBy($order_column, $order_dir)
                 ->get(['products.*', 'categories.name as category_name', 'taxes.name as tax_name']);
         else
@@ -86,6 +91,8 @@ class ProductController extends Controller
                 ->join('taxes', 'taxes.id', '=', 'products.tax_id')
                 ->where('products.code', 'like', '%'.$search.'%')
                 ->orWhere('products.name', 'like', '%'.$search.'%')
+                ->orWhere('categories.name', 'like', '%'.$search.'%')
+                ->orWhere('suppliers.company', 'like', '%'.$search.'%')
                 ->orderBy($order_column, $order_dir)
                 ->skip($start)
                 ->take($length)
