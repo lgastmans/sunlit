@@ -38,7 +38,7 @@
                                 <th>Cable length</th> 
                                 <th>KW rating</th> 
                                 <th>Part number</th> 
-                                <th>Notes</th> 
+                                {{-- <th>Notes</th>  --}}
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -108,12 +108,6 @@
             },
             { 
                 'data': 'supplier',
-                'render': function(data, type, row, meta){
-                    var route = '{{ route("suppliers.show", ":id") }}';
-                    route = route.replace(':id', row.id);
-                    var supplier = '<a href="'+ route +'" class="text-body fw-semibold">' + data + '</a>'
-                    return supplier;
-                },
                 'orderable': true 
             },
             { 
@@ -122,12 +116,6 @@
             },
             { 
                 'data': 'code',
-                'render': function(data, type, row, meta){
-                    var route = '{{ route("products.show", ":id") }}';
-                    route = route.replace(':id', row.id);
-                    var supplier = '<a href="'+ route +'" class="text-body fw-semibold">' + data + '</a>'
-                    return supplier;
-                },
                 'orderable': true 
             },
             { 
@@ -150,10 +138,10 @@
                 'data': 'part_number',
                 'orderable': true 
             },
-            { 
-                'data': 'notes',
-                'orderable': true 
-            },
+            // { 
+            //     'data': 'notes',
+            //     'orderable': true 
+            // },
             {
                 'data': 'id',
                 'render' : function(data, type, row, meta){
@@ -189,12 +177,18 @@
         },
     });
 
+    $('#products-datatable').on('dblclick', 'tr', function () {
+        var route = '{{  route("products.show", ":id") }}';
+        route = route.replace(':id', table.row( this ).data().id);
+        window.location.href = route;
+    });
+
+
     $('#delete-modal').on('show.bs.modal', function (e) {
         var route = '{{ route("products.delete", ":id") }}';
         var button = e.relatedTarget;
         if (button != null){
             route = route.replace(':id', button.id);
-            console.log(route);
             $('#delete-form').attr('action', route);
         }
         
