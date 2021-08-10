@@ -119,4 +119,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/taxes', [TaxController::class, 'getListForSelect2'])->name('ajax.taxes');
         Route::get('/roles', [RoleController::class, 'getListForSelect2'])->name('ajax.roles');
     });
+
+    Route::prefix('export')->group(function () {
+        Route::get('/products', [ProductController::class, 'getExportList'])->name('export.products');
+    });
+    
 });
