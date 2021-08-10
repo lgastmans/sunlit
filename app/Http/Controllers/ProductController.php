@@ -7,6 +7,9 @@ use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use \App\Http\Requests\StoreProductRequest;
 
+use App\Exports\ProductsExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 
 class ProductController extends Controller
@@ -134,6 +137,11 @@ class ProductController extends Controller
     }
 
 
+    public function getExportList()
+    {
+        return Excel::download(new ProductsExport, 'products.xlsx');
+        //return Excel::download(Product::all(), 'products.xlsx');
+    }
 
 
     /**

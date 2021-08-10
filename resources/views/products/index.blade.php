@@ -14,7 +14,7 @@
                     </div>
                     <div class="col-sm-8">
                         <div class="text-sm-end">
-                            <button type="button" class="btn btn-light mb-2">{{ __('app.export') }}</button>
+                            <a class="btn btn-warning" href="{{ route('export.products') }}"><button type="button" class="btn btn-light mb-2">{{ __('app.export') }}</button></a>
                         </div>
                     </div><!-- end col-->
                 </div>
