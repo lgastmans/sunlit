@@ -2,9 +2,9 @@
 <div class="leftside-menu">
     
     <!-- LOGO -->
-    <a href="{{ route('home') }}" class="logo text-center bg-sunlit">
+    <a href="{{ route('home') }}" class="logo text-center bg-sunlit w-80">
         <span class="logo-lg bg-sunlit">
-            <img src="/images/logo.png" alt="" height="">
+            <img src="/images/logo.png" alt="" height="48">
         </span>
         <span class="logo-sm">
             <img src="/images/logo_sm.png" alt="" height="16">
