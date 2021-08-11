@@ -4,6 +4,16 @@ namespace App\Exports;
 
 use App\Models\Product;
 
+
+/*
+    useful links for reference
+
+    https://makitweb.com/export-data-in-excel-and-csv-format-with-laravel-excel/
+    https://laraveldaily.com/laravel-excel-export-formatting-and-styling-cells/
+    https://docs.laravel-excel.com/2.1/reference-guide/formatting.html
+*/
+
+
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -13,12 +23,6 @@ use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
-/*
-    https://makitweb.com/export-data-in-excel-and-csv-format-with-laravel-excel/
-    https://laraveldaily.com/laravel-excel-export-formatting-and-styling-cells/
-    https://docs.laravel-excel.com/2.1/reference-guide/formatting.html
-*/
-
 class ProductsExport implements FromCollection, WithHeadings, ShouldAutoSize, WithColumnFormatting, WithMapping
 {
     /**
@@ -26,16 +30,12 @@ class ProductsExport implements FromCollection, WithHeadings, ShouldAutoSize, Wi
     */
     public function collection()
     {
-        //return collect(Product::all());
-
         return collect(Product::join('categories', 'categories.id', '=', 'products.category_id')
                 ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
                 ->join('taxes', 'taxes.id', '=', 'products.tax_id')
                 ->orderBy('products.code', 'ASC')
                 ->get(['categories.name as category_name', 'suppliers.company', 'taxes.amount as tax_name', 'products.code', 'products.name', 'products.model', 'products.cable_length', 'products.kw_rating', 'products.part_number']
             ));
-
-        //getProducts()
     }
 
     public function headings(): array {
@@ -46,10 +46,6 @@ class ProductsExport implements FromCollection, WithHeadings, ShouldAutoSize, Wi
 
     public function columnFormats(): array
     {
-        // return [
-        //     'G' => NumberFormat::FORMAT_CURRENCY_EUR_SIMPLE,
-        // ];
-
         return [
             'C' => NumberFormat::FORMAT_PERCENTAGE_00,
         ];
