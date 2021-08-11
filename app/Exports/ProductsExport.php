@@ -6,12 +6,14 @@ use App\Models\Product;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
 /*
     https://makitweb.com/export-data-in-excel-and-csv-format-with-laravel-excel/
+    https://laraveldaily.com/laravel-excel-export-formatting-and-styling-cells/
 */
 
-class ProductsExport implements FromCollection, WithHeadings
+class ProductsExport implements FromCollection, WithHeadings, ShouldAutoSize
 {
     /**
     * @return \Illuminate\Support\Collection
