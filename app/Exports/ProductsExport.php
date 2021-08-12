@@ -34,7 +34,7 @@ class ProductsExport implements FromCollection, WithHeadings, ShouldAutoSize, Wi
                 ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
                 ->join('taxes', 'taxes.id', '=', 'products.tax_id')
                 ->orderBy('products.code', 'ASC')
-                ->get(['categories.name as category_name', 'suppliers.company', 'taxes.amount as tax_name', 'products.code', 'products.name', 'products.model', 'products.cable_length', 'products.kw_rating', 'products.part_number']
+                ->get(['categories.name as category_name', 'suppliers.company', 'taxes.amount as tax_amount', 'products.code', 'products.name', 'products.model', 'products.cable_length', 'products.kw_rating', 'products.part_number']
             ));
     }
 
@@ -56,7 +56,7 @@ class ProductsExport implements FromCollection, WithHeadings, ShouldAutoSize, Wi
         return [
             $product->category_name,
             $product->company,
-            ($product->tax_name/10000),
+            ($product->tax_amount/10000),
             $product->code,
             $product->name,
             $product->model,
