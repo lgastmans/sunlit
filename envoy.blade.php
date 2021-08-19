@@ -7,8 +7,8 @@ $pathOnServer = "./";
 
 @story('deploy')
     app:down
-    app:backup
-    git:pull
+    {{-- app:backup --}}
+    {{-- git:pull --}}
     composer:install
     cache:clear
     db:migrate
@@ -39,7 +39,7 @@ $pathOnServer = "./";
 @task('composer:install')
     cd {{ $pathOnServer }}
     echo "Running composer install"
-    composer install
+    composer update
     composer dump-autoload -o
 @endtask
 
