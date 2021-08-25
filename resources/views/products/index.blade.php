@@ -35,10 +35,11 @@
                                 <th>Code</th> 
                                 <th>Name</th> 
                                 <th>Model</th> 
-                                <th>Cable length</th> 
+                                <th>Price</th>
+<!--                                 <th>Cable length</th> 
                                 <th>KW rating</th> 
                                 <th>Part number</th> 
-                                {{-- <th>Notes</th>  --}}
+ -->                                {{-- <th>Notes</th>  --}}
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -126,18 +127,22 @@
                 'data': 'model',
                 'orderable': true 
             },
-            { 
-                'data': 'cable_length',
-                'orderable': true 
+            {
+                'data': 'purchase_price',
+                'orderable': true
             },
-            { 
-                'data': 'kw_rating',
-                'orderable': true 
-            },
-            { 
-                'data': 'part_number',
-                'orderable': true 
-            },
+            // { 
+            //     'data': 'cable_length',
+            //     'orderable': true 
+            // },
+            // { 
+            //     'data': 'kw_rating',
+            //     'orderable': true 
+            // },
+            // { 
+            //     'data': 'part_number',
+            //     'orderable': true 
+            // },
             // { 
             //     'data': 'notes',
             //     'orderable': true 

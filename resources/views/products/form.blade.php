@@ -72,7 +72,7 @@
                         <div class="mb-3">
                             <label class="form-label" for="display_purchase_price">Amount</label>
                             <div class="input-group">
-                                <input class="form-control" id="display_purchase_price" name="display_purchase_price" value="{{ old('display_purchase_price', $product->display_purchase_price) }}" required="true" data-toggle="input-mask" data-mask-format="000000.00"/>
+                                <input class="form-control" id="display_purchase_price" name="display_purchase_price" value="{{ old('display_purchase_price', $product->display_purchase_price) }}" required="true" data-toggle="input-mask" />
                                 <span class="input-group-text" id="inputGroupPrepend">&#8377;</span>
                                 <div class="invalid-feedback">
                                     {{ __('error.form_invalid_field', ['field' => 'percentage']) }}
