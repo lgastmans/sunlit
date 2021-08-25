@@ -144,6 +144,7 @@
             // },
             {
                 'data': 'id',
+                'orderable': false,
                 'render' : function(data, type, row, meta){
                     if (type === 'display'){
 
