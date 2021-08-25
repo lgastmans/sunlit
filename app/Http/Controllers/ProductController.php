@@ -55,6 +55,8 @@ class ProductController extends Controller
                 $order_column = "categories.name";
             elseif ($column_index==2)
                 $order_column = "suppliers.company";
+            elseif ($column_index==3)
+                $order_column = "taxes.name";
             else
                 $order_column = $column_arr[$column_index]['data'];
             $order_dir = $order_arr[0]['dir'];
