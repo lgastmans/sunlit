@@ -116,6 +116,8 @@ class ProductController extends Controller
                 "code" => $record->code,
                 "name" => $record->name,
                 "model" => $record->model,
+                "purchase_price" => $record->purchase_price,
+                "minimum_quantity" => $record->minimum_quantity,
                 "cable_length" => $record->cable_length,
                 "kw_rating" => $record->kw_rating,
                 "part_number" => $record->part_number,
