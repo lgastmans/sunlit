@@ -165,7 +165,7 @@ class WarehouseController extends Controller
         $validatedData = $request->validated();
         $warehouse = Warehouse::whereId($id)->update($validatedData);
         if ($warehouse){
-            return redirect(route('warehouse'))->with('success', trans('app.record_edited', ['field' => 'warehouse']));
+            return redirect(route('warehouses'))->with('success', trans('app.record_edited', ['field' => 'warehouse']));
         }
         return back()->withInputs($request->input())->with('error', trans('error.record_edited', ['field' => 'warehouse']));
     }
