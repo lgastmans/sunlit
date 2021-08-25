@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use \App\Http\Requests\StoreProductRequest;
 
@@ -167,8 +168,8 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        
         $validatedData = $request->validated();
+        $validatedData = Arr::except($validatedData, array('display_purchase_price'));
         $product = Product::create($validatedData);
         if ($product){
             return redirect(route('products'))->with('success', trans('app.record_added', ['field' => 'product']));
@@ -216,6 +217,7 @@ class ProductController extends Controller
     public function update(StoreProductRequest $request, $id)
     {
         $validatedData = $request->validated();
+        $validatedData = Arr::except($validatedData, array('display_purchase_price'));
         $product = Product::whereId($id)->update($validatedData);
         if ($product){
             return redirect(route('products'))->with('success', trans('app.record_edited', ['field' => 'product']));

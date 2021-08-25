@@ -39,4 +39,25 @@ class Product extends Model
     {
         return $this->belongsTo(Tax::class);
     }
+
+    /**
+     * Get the purchase price amount in decimal.
+     *
+     * @return string
+     */
+    public function getDisplayPurchasePriceAttribute()
+    {
+       return sprintf('%01.2f', $this->purchase_price / 100);
+    }
+
+    /**
+     * Set the purchase price amount as integer.
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setPurchasePriceAttribute($value)
+    {
+        $this->attributes['purchase_price'] = $value * 100;
+    }    
 }

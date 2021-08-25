@@ -68,6 +68,24 @@
                         <div class="mb-3">
                             <x-forms.input label="Model" name="model" value="{{ old('model', $product->model) }}" message="Please provide a model" required="false"/>
                         </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="display_purchase_price">Amount</label>
+                            <div class="input-group">
+                                <input class="form-control" id="display_purchase_price" name="display_purchase_price" value="{{ old('display_purchase_price', $product->display_purchase_price) }}" required="true" data-toggle="input-mask" data-mask-format="000000.00"/>
+                                <span class="input-group-text" id="inputGroupPrepend">&#8377;</span>
+                                <div class="invalid-feedback">
+                                    {{ __('error.form_invalid_field', ['field' => 'percentage']) }}
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="mb-3">
+                            <x-forms.input label="Minimum Quantity" name="minimum_quantity" value="{{ old('minimum_quantity', $product->minimum_quantity) }}" message="Please provide a minimum quantity" required="false"/>
+                        </div>
                         <div class="mb-3">
                             <x-forms.input label="Cable length" name="cable_length" value="{{ old('cable_length', $product->cable_length) }}" message="Please provide a cable length" required="false"/>
                         </div>

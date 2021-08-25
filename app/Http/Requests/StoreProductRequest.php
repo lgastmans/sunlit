@@ -25,6 +25,17 @@ class StoreProductRequest extends FormRequest
         return $this->user()->can('edit products');
     }
 
+
+    protected function prepareForValidation()
+    {
+        $b = str_replace( ',', '', $this->display_purchase_price );
+
+        $this->merge([
+            'purchase_price' => $b * 100,
+        ]);
+    }
+
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -39,6 +50,9 @@ class StoreProductRequest extends FormRequest
             'code' => 'required|max:255|unique:products,code,NULL,id,deleted_at,NULL'.$this->id,
             'name' => 'required_without:name|string|max:255',
             'model' => 'max:255',
+            'display_purchase_price'=>'integer',
+            'purchase_price' => 'max:255',
+            'minimum_quantity' => 'integer',
             'cable_length' => 'max:255',
             'kw_rating' => 'max:255',
             'part_number' => 'max:255',

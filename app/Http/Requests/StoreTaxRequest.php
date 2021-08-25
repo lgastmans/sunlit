@@ -25,11 +25,11 @@ class StoreTaxRequest extends FormRequest
     }
 
     protected function prepareForValidation()
-{
-    $this->merge([
-        'amount' => $this->display_amount * 100,
-    ]);
-}
+    {
+        $this->merge([
+            'amount' => $this->display_amount * 100,
+        ]);
+    }
 
 
     /**
