@@ -9,21 +9,6 @@
     <div class="col-xl-5 col-lg-6">
 
         <div class="row">
-            <div class="col-lg-6">
-                <div class="card widget-flat">
-                    <div class="card-body">
-                        <div class="float-end">
-                            <i class="mdi mdi-account-multiple widget-icon"></i>
-                        </div>
-                        <h5 class="text-muted fw-normal mt-0" title="Number of Customers">Customers</h5>
-                        <h3 class="mt-3 mb-3">36,254</h3>
-                        <p class="mb-0 text-muted">
-                            <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 5.27%</span>
-                            <span class="text-nowrap">Since last month</span>  
-                        </p>
-                    </div> <!-- end card-body-->
-                </div> <!-- end card-->
-            </div> <!-- end col-->
 
             <div class="col-lg-6">
                 <div class="card widget-flat">
@@ -31,12 +16,29 @@
                         <div class="float-end">
                             <i class="mdi mdi-cart-plus widget-icon"></i>
                         </div>
-                        <h5 class="text-muted fw-normal mt-0" title="Number of Orders">Orders</h5>
-                        <h3 class="mt-3 mb-3">5,543</h3>
-                        <p class="mb-0 text-muted">
+                        <h5 class="text-muted fw-normal mt-0" title="Number of Orders">Due Pending Orders</h5>
+                        <h3 class="mt-3 mb-3 text-success">8</h3>
+                        {{-- <p class="mb-0 text-muted">
                             <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 1.08%</span>
                             <span class="text-nowrap">Since last month</span>
-                        </p>
+                        </p> --}}
+                    </div> <!-- end card-body-->
+                </div> <!-- end card-->
+            </div> <!-- end col-->
+
+
+            <div class="col-lg-6">
+                <div class="card widget-flat">
+                    <div class="card-body">
+                        <div class="float-end">
+                            <i class="mdi mdi-cart-plus widget-icon"></i>
+                        </div>
+                        <h5 class="text-muted fw-normal mt-0" title="Number of Orders">Overdue Pending Orders</h5>
+                        <h3 class="mt-3 mb-3 text-danger">25</h3>
+                        {{-- <p class="mb-0 text-muted">
+                            <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 1.08%</span>
+                            <span class="text-nowrap">Since last month</span>
+                        </p> --}}
                     </div> <!-- end card-body-->
                 </div> <!-- end card-->
             </div> <!-- end col-->
@@ -47,14 +49,14 @@
                 <div class="card widget-flat">
                     <div class="card-body">
                         <div class="float-end">
-                            <i class="mdi mdi-currency-usd widget-icon"></i>
+                            <i class="mdi mdi-pulse widget-icon"></i>
                         </div>
-                        <h5 class="text-muted fw-normal mt-0" title="Average Revenue">Revenue</h5>
-                        <h3 class="mt-3 mb-3">$6,254</h3>
-                        <p class="mb-0 text-muted">
-                            <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 7.00%</span>
-                            <span class="text-nowrap">Since last month</span>
-                        </p>
+                        <h5 class="text-muted fw-normal mt-0" title="Average Revenue">Stock below minimum</h5>
+                        <h3 class="mt-3 mb-3 text-danger">150</h3>
+                        {{-- <p class="mb-0 text-muted">
+                            <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i>&nbsp;</span>
+                            <span class="text-nowrap">products with stock below minimum</span>
+                        </p> --}}
                     </div> <!-- end card-body-->
                 </div> <!-- end card-->
             </div> <!-- end col-->
@@ -63,14 +65,14 @@
                 <div class="card widget-flat">
                     <div class="card-body">
                         <div class="float-end">
-                            <i class="mdi mdi-pulse widget-icon"></i>
+                            <i class="mdi mdi-currency-usd widget-icon"></i>
                         </div>
-                        <h5 class="text-muted fw-normal mt-0" title="Growth">Growth</h5>
-                        <h3 class="mt-3 mb-3">+ 30.56%</h3>
-                        <p class="mb-0 text-muted">
+                        <h5 class="text-muted fw-normal mt-0" title="Growth">Current exchange rate</h5>
+                        <h3 class="mt-3 mb-3 text-warning">Rs. 74.17</h3>
+                        {{-- <p class="mb-0 text-muted">
                             <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 4.87%</span>
                             <span class="text-nowrap">Since last month</span>
-                        </p>
+                        </p> --}}
                     </div> <!-- end card-body-->
                 </div> <!-- end card-->
             </div> <!-- end col-->
@@ -109,7 +111,7 @@
 </div>
 <!-- end row -->
 
-<div class="row">
+{{-- <div class="row">
     <div class="col-lg-8">
         <div class="card">
             <div class="card-body">
@@ -162,9 +164,9 @@
                 </div>
             </div> <!-- end card-body-->
         </div> <!-- end card-->
-    </div> <!-- end col-->
-
-    <div class="col-lg-4">
+    </div> <!-- end col--> --}}
+<div class="row">
+    <div class="col-lg-5">
         <div class="card">
             <div class="card-body">
                 <div class="dropdown float-end">
@@ -173,21 +175,21 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-end">
                         <!-- item-->
-                        <a href="javascript:void(0);" class="dropdown-item">Sales Report</a>
+                        {{-- <a href="javascript:void(0);" class="dropdown-item">Sales Report</a> --}}
                         <!-- item-->
                         <a href="javascript:void(0);" class="dropdown-item">Export Report</a>
                         <!-- item-->
-                        <a href="javascript:void(0);" class="dropdown-item">Profit</a>
+                        {{-- <a href="javascript:void(0);" class="dropdown-item">Profit</a> --}}
                         <!-- item-->
-                        <a href="javascript:void(0);" class="dropdown-item">Action</a>
+                        {{-- <a href="javascript:void(0);" class="dropdown-item">Action</a> --}}
                     </div>
                 </div>
-                <h4 class="header-title">Revenue By Location</h4>
+                <h4 class="header-title">Monthly Sales by warehouses</h4>
                 <div class="mb-4 mt-4">
-                    <div id="world-map-markers" style="height: 224px"></div>
+                    {{-- <div id="world-map-markers" style="height: 224px"></div> --}}
                 </div>
 
-                <h5 class="mb-1 mt-0 fw-normal">New York</h5>
+                <h5 class="mb-1 mt-0 fw-normal">Auroville</h5>
                 <div class="progress-w-percent">
                     <span class="progress-value fw-bold">72k </span>
                     <div class="progress progress-sm">
@@ -195,7 +197,7 @@
                     </div>
                 </div>
 
-                <h5 class="mb-1 mt-0 fw-normal">San Francisco</h5>
+                <h5 class="mb-1 mt-0 fw-normal">Chennai</h5>
                 <div class="progress-w-percent">
                     <span class="progress-value fw-bold">39k </span>
                     <div class="progress progress-sm">
@@ -203,7 +205,7 @@
                     </div>
                 </div>
 
-                <h5 class="mb-1 mt-0 fw-normal">Sydney</h5>
+                <h5 class="mb-1 mt-0 fw-normal">Bangalore</h5>
                 <div class="progress-w-percent">
                     <span class="progress-value fw-bold">25k </span>
                     <div class="progress progress-sm">
@@ -211,7 +213,7 @@
                     </div>
                 </div>
 
-                <h5 class="mb-1 mt-0 fw-normal">Singapore</h5>
+                <h5 class="mb-1 mt-0 fw-normal">Mumbai</h5>
                 <div class="progress-w-percent mb-0">
                     <span class="progress-value fw-bold">61k </span>
                     <div class="progress progress-sm">
@@ -221,12 +223,12 @@
             </div> <!-- end card-body-->
         </div> <!-- end card-->
     </div> <!-- end col-->
-</div>
+{{-- </div> --}}
 <!-- end row -->
 
 
-<div class="row">
-    <div class="col-xl-6 col-lg-12 order-lg-2 order-xl-1">
+{{-- <div class="row"> --}}
+    <div class="col-xl-7 col-lg-12 order-xl-1">
         <div class="card">
             <div class="card-body">
                 <a href="" class="btn btn-sm btn-link float-end">Export
@@ -239,11 +241,11 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <h5 class="font-14 my-1 fw-normal">ASOS Ridley High Waist</h5>
-                                    <span class="text-muted font-13">07 April 2018</span>
+                                    <h5 class="font-14 my-1 fw-normal">Studer 4kW Inverter</h5>
+                                    <span class="text-muted font-13">&nbsp;</span>
                                 </td>
                                 <td>
-                                    <h5 class="font-14 my-1 fw-normal">$79.49</h5>
+                                    <h5 class="font-14 my-1 fw-normal">Rs.100,000</h5>
                                     <span class="text-muted font-13">Price</span>
                                 </td>
                                 <td>
@@ -251,35 +253,35 @@
                                     <span class="text-muted font-13">Quantity</span>
                                 </td>
                                 <td>
-                                    <h5 class="font-14 my-1 fw-normal">$6,518.18</h5>
+                                    <h5 class="font-14 my-1 fw-normal">Rs.8,000,000</h5>
                                     <span class="text-muted font-13">Amount</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <h5 class="font-14 my-1 fw-normal">Marco Lightweight Shirt</h5>
-                                    <span class="text-muted font-13">25 March 2018</span>
+                                    <h5 class="font-14 my-1 fw-normal">Battery 28kWh</h5>
+                                    <span class="text-muted font-13">&nbsp;</span>
                                 </td>
                                 <td>
-                                    <h5 class="font-14 my-1 fw-normal">$128.50</h5>
+                                    <h5 class="font-14 my-1 fw-normal">Rs.250,000</h5>
                                     <span class="text-muted font-13">Price</span>
                                 </td>
                                 <td>
-                                    <h5 class="font-14 my-1 fw-normal">37</h5>
+                                    <h5 class="font-14 my-1 fw-normal">70</h5>
                                     <span class="text-muted font-13">Quantity</span>
                                 </td>
                                 <td>
-                                    <h5 class="font-14 my-1 fw-normal">$4,754.50</h5>
+                                    <h5 class="font-14 my-1 fw-normal">Rs.17,500,000</h5>
                                     <span class="text-muted font-13">Amount</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <h5 class="font-14 my-1 fw-normal">Half Sleeve Shirt</h5>
-                                    <span class="text-muted font-13">17 March 2018</span>
+                                    <h5 class="font-14 my-1 fw-normal">Studer XCOM-LAN</h5>
+                                    <span class="text-muted font-13">&nbsp;</span>
                                 </td>
                                 <td>
-                                    <h5 class="font-14 my-1 fw-normal">$39.99</h5>
+                                    <h5 class="font-14 my-1 fw-normal">Rs.20,000</h5>
                                     <span class="text-muted font-13">Price</span>
                                 </td>
                                 <td>
@@ -287,46 +289,47 @@
                                     <span class="text-muted font-13">Quantity</span>
                                 </td>
                                 <td>
-                                    <h5 class="font-14 my-1 fw-normal">$2,559.36</h5>
+                                    <h5 class="font-14 my-1 fw-normal">Rs.1,280,000</h5>
                                     <span class="text-muted font-13">Amount</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <h5 class="font-14 my-1 fw-normal">Lightweight Jacket</h5>
-                                    <span class="text-muted font-13">12 March 2018</span>
+                                    <h5 class="font-14 my-1 fw-normal">Wairee Panel</h5>
+                                    <span class="text-muted font-13">&nbsp;</span>
                                 </td>
                                 <td>
-                                    <h5 class="font-14 my-1 fw-normal">$20.00</h5>
+                                    <h5 class="font-14 my-1 fw-normal">Rs.10,000</h5>
                                     <span class="text-muted font-13">Price</span>
                                 </td>
                                 <td>
-                                    <h5 class="font-14 my-1 fw-normal">184</h5>
+                                    <h5 class="font-14 my-1 fw-normal">50</h5>
                                     <span class="text-muted font-13">Quantity</span>
                                 </td>
                                 <td>
-                                    <h5 class="font-14 my-1 fw-normal">$3,680.00</h5>
+                                    <h5 class="font-14 my-1 fw-normal">Rs.50,000</h5>
                                     <span class="text-muted font-13">Amount</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <h5 class="font-14 my-1 fw-normal">Marco Shoes</h5>
-                                    <span class="text-muted font-13">05 March 2018</span>
+                                    <h5 class="font-14 my-1 fw-normal">Studer Charge Controller</h5>
+                                    <span class="text-muted font-13">&nbsp;</span>
                                 </td>
                                 <td>
-                                    <h5 class="font-14 my-1 fw-normal">$28.49</h5>
+                                    <h5 class="font-14 my-1 fw-normal">Rs.25,000</h5>
                                     <span class="text-muted font-13">Price</span>
                                 </td>
                                 <td>
-                                    <h5 class="font-14 my-1 fw-normal">69</h5>
+                                    <h5 class="font-14 my-1 fw-normal">20</h5>
                                     <span class="text-muted font-13">Quantity</span>
                                 </td>
                                 <td>
-                                    <h5 class="font-14 my-1 fw-normal">$1,965.81</h5>
+                                    <h5 class="font-14 my-1 fw-normal">Rs.500,000</h5>
                                     <span class="text-muted font-13">Amount</span>
                                 </td>
                             </tr>
+
 
                         </tbody>
                     </table>
