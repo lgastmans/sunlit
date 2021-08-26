@@ -98,11 +98,76 @@
                         <a href="javascript:void(0);" class="dropdown-item">Action</a>
                     </div>
                 </div>
-                <h4 class="header-title mb-3">Projections Vs Actuals</h4>
+                <h4 class="header-title mb-3">Pending purchase orders</h4>
 
-                <div dir="ltr">
-                    <div id="high-performing-product" class="apex-charts" data-colors="#727cf5,#e3eaef"></div>
-                </div>
+                <div class="table-responsive mt-4">
+                    <table class="table table-bordered table-centered mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Warehouse</th>
+                                <th>Supplier</th>
+                                <th>Date ordered</th>
+                                <th>Due date</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Auroville</td>
+                                <td>SolarEdge</td>
+                                <td>04/07/2021 (53d ago)</td>
+                                <td class="d-flex justify-content-between"> 
+                                    <span>01/08/2021</span>
+                                    <div>
+                                        <span class="badge badge-danger-lighten">overdue</span>
+                                    </div>
+                                </td>
+                                <td>$1,89,547</td>
+                                <td><span class="badge badge-success-lighten">Cleared</span></td>
+                            </tr>
+                            <tr>
+                                <td>Chennai</td>
+                                <td>SolarEdge</td>
+                                <td>12/07/2021 (45d ago)</td>
+                                <td class="d-flex justify-content-between"> 
+                                    <span>26/08/2021</span>
+                                    <div>
+                                        <span class="badge badge-warning-lighten">due soon</span>
+                                    </div>
+                                </td>
+                                <td>$87,245</td>
+                                <td><span class="badge badge-warning-lighten">Customs</span></td>
+                            </tr>
+                            <tr>
+                                <td>Mumbai</td>
+                                <td>Wairee</td>
+                                <td>21/07/2021 (36d ago)</td>
+                                <td class="d-flex justify-content-between"> 
+                                    <span>28/08/2021</span>
+                                    {{-- <div>
+                                        <span class="badge badge-danger-lighten">overdue</span>
+                                    </div> --}}
+                                </td>
+                                <td>$5,87,478</td>
+                                <td><span class="badge badge-info-lighten">Confirmed</span></td>
+                            </tr>
+                            <tr>
+                                <td>Auroville</td>
+                                <td>Studer</td>
+                                <td>12/08/2021 (14d ago)</td>
+                                <td class="d-flex justify-content-between"> 
+                                    <span>31/08/2021</span>
+                                    {{-- <div>
+                                        <span class="badge badge-danger-lighten">overdue</span>
+                                    </div> --}}
+                                </td>
+                                <td>$55,781</td>
+                                <td><span class="badge badge-primary-lighten">Ordered</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div> <!-- end table-responsive-->
                     
             </div> <!-- end card-body-->
         </div> <!-- end card-->
