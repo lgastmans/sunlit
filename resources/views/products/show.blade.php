@@ -28,8 +28,8 @@
 
                             <!-- Product description -->
                             <div class="mt-4">
-                                <h6 class="font-14">Retail Price:</h6>
-                                <h3> $139.58</h3>
+                                <h6 class="font-14">{{ $product->supplier->company }} Purchase Price:</h6>
+                                <h3>{{ $product->display_purchase_price }}</h3>
                             </div>
                 
                             <!-- Product description -->

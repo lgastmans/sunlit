@@ -35,7 +35,7 @@
                                 <th>Code</th> 
                                 <th>Name</th> 
                                 <th>Model</th> 
-                                <th>Price</th>
+                                <th>Purchase Price</th>
 <!--                                 <th>Cable length</th> 
                                 <th>KW rating</th> 
                                 <th>Part number</th> 

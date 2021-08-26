@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use \NumberFormatter;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -47,7 +49,9 @@ class Product extends Model
      */
     public function getDisplayPurchasePriceAttribute()
     {
-       return sprintf('%01.2f', $this->purchase_price / 100);
+        $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
+        
+        return $fmt->format($this->purchase_price/100); //sprintf('%01.2f', $this->purchase_price / 100);
     }
 
     /**
