@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+
+use \NumberFormatter;
+
 use Illuminate\Http\Request;
 use App\Models\Product;
 use Illuminate\Support\Arr;
@@ -106,7 +109,7 @@ class ProductController extends Controller
 
         $arr = array();
 
-        //$fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
+        $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
 
         foreach($products as $record)
         {
@@ -119,7 +122,7 @@ class ProductController extends Controller
                 "code" => $record->code,
                 "name" => $record->name,
                 "model" => $record->model,
-                "purchase_price" => sprintf('%01.2f',($record->purchase_price/100)), //$fmt->format($record->purchase_price/100),
+                "purchase_price" => $fmt->format($record->purchase_price/100), //sprintf('%01.2f',($record->purchase_price/100)),
                 "minimum_quantity" => $record->minimum_quantity,
                 "cable_length" => $record->cable_length,
                 "kw_rating" => $record->kw_rating,
