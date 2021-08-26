@@ -51,7 +51,14 @@ class UserController extends Controller
             $order_arr = $request->get('order');
             $column_arr = $request->get('columns');
             $column_index = $order_arr[0]['column'];
-            $order_column = $column_arr[$column_index]['data'];
+            switch($column_index){
+                case "4":
+                    $order_column = "users.deleted_at";
+                    break;
+                default:
+                    $order_column = $column_arr[$column_index]['data'];
+            }
+            
             $order_dir = $order_arr[0]['dir'];
         }
 

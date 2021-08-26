@@ -111,7 +111,7 @@
             },
             { 
                 'data': 'role',
-                'orderable': true 
+                'orderable': false 
             },
             {
                 'data': 'status',
