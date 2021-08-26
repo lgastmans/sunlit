@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Http\Requests\StoreSupplierRequest;
 
-
+use App\Models\PurchaseOrder;
 
 class SupplierController extends Controller
 {
@@ -180,10 +180,29 @@ class SupplierController extends Controller
     public function destroy($id)
     {
         $user = Auth::user();
-        if ($user->can('delete suppliers')){
+        
+        if ($user->can('delete suppliers'))
+        {
+            /*
+                check if supplier present in purchase orders
+            */
+            $po_count = PurchaseOrder::where('supplier_id', $id)->get()->count();
+
+            if ($po_count > 0)
+            {
+                return redirect(route('suppliers'))->with('error', trans('error.supplier_has_purchase_order'));
+            }
+
+
+            /*
+                related products are deleted through the Eloquent Model Event
+                (see the Supplier model)
+            */
             Supplier::destroy($id);
             return redirect(route('suppliers'))->with('success', trans('app.record_deleted', ['field' => 'supplier']));
+
         }
+
         return abort(403, trans('error.unauthorized'));
     }
 

@@ -10,4 +10,7 @@ return [
     'record_edited' => ':Field couldn\'t be  modified',
     'record_deleted' => ':Field couldn\'t be  deleted',
     'resource_doesnt_exist' => ':Field doesn\'t exist',
+
+    'supplier_has_purchase_order' => 'Cannot delete supplier because of existing purchase orders',
+    
 ];
