@@ -103,6 +103,13 @@
                                 <span> Users </span>
                             </a>
                         </li>
+                        @endcan
+                        @can('edit settings')
+                        <li>
+                            <a href="{{ route('settings')}}" {{ (Request::is('settings*') ? 'class=" active"' : '') }}>
+                                <span> Global Settings </span>
+                            </a>
+                        </li>
                         @endcan 
                     </ul>
                 </div>

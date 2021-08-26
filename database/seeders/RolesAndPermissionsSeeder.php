@@ -54,6 +54,13 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::create(['name' => 'edit users']);
         Permission::create(['name' => 'delete users']);
 
+
+        Permission::create(['name' => 'list settings']);
+        Permission::create(['name' => 'edit settings']);
+        Permission::create(['name' => 'add settings']);
+        Permission::create(['name' => 'delete settings']);
+        
+
         // assign permissions to roles
 
         $role_users->givePermissionTo(['list taxes', 'view taxes']);
@@ -84,6 +91,8 @@ class RolesAndPermissionsSeeder extends Seeder
         $role_staff->givePermissionTo(['list users', 'view users', 'edit users', ]);
         $role_admin->givePermissionTo(['list users', 'view users', 'edit users', 'delete users']);
 
+        $role_staff->givePermissionTo(['list settings']);
+        $role_admin->givePermissionTo(['list settings', 'edit settings']);
 
         $role = Role::create(['name' => 'super-admin']);
         $role->givePermissionTo(Permission::all());
