@@ -21,6 +21,12 @@
                     <span> Dashboard </span>
                 </a>
             </li>
+            <li class="side-nav-item {{ (Request::is('purchase-orders*') ? ' menuitem-active' : '') }}">
+                <a href="{{ route('purchase-orders')}}" class="side-nav-link {{ (Request::is('purchase-orders*') ? ' active' : '') }}">
+                    <i class="mdi mdi-cube-outline"></i>
+                    <span> Purchase Orders </span>
+                </a>
+            </li>
             {{-- <li class="side-nav-item">
                <a data-bs-toggle="collapse" href="#sidebarDashboards" aria-expanded="false" aria-controls="sidebarDashboards" class="side-nav-link">
                     <i class="uil-home-alt"></i>

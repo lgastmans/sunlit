@@ -11,6 +11,7 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\WarehouseController;
+use App\Http\Controllers\PurchaseOrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,26 +43,15 @@ Route::group(['middleware' => ['auth']], function () {
         return view('dashboard');
     })->name('dashboard');
 
-    Route::get('/settings', [SettingController::class, 'index'])->name('settings');
-    Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
-    
-    Route::get('/suppliers', [SupplierController::class, 'index'])->name('suppliers');
-    Route::get('/suppliers/create', [SupplierController::class, 'create'])->name('suppliers.create');
-    Route::get('/suppliers/list', [SupplierController::class, 'getListForDatatables'])->name('suppliers.datatables');
-    Route::get('/suppliers/{id}', [SupplierController::class, 'show'])->name('suppliers.show');
-    Route::get('/suppliers/{id}/edit', [SupplierController::class, 'edit'])->name('suppliers.edit');
-    Route::post('/suppliers', [SupplierController::class, 'store'])->name('suppliers.store');
-    Route::put('/suppliers/{id}', [SupplierController::class, 'update'])->name('suppliers.update');
-    Route::delete('/suppliers/{id}', [SupplierController::class, 'destroy'])->name('suppliers.delete');
+    Route::get('/purchase-orders', [PurchaseOrderController::class, 'index'])->name('purchase-orders');
+    Route::get('/purchase-orders/create', [PurchaseOrderController::class, 'create'])->name('purchase-orders.create');
+    Route::get('/purchase-orders/list', [PurchaseOrderController::class, 'getListForDatatables'])->name('purchase-orders.datatables');
+    Route::get('/purchase-orders/{id}', [PurchaseOrderController::class, 'show'])->name('purchase-orders.show');
+    Route::get('/purchase-orders/{id}/edit', [PurchaseOrderController::class, 'edit'])->name('purchase-orders.edit');
+    Route::post('/purchase-orders', [PurchaseOrderController::class, 'store'])->name('purchase-orders.store');
+    Route::put('/purchase-orders/{id}', [PurchaseOrderController::class, 'update'])->name('purchase-orders.update');
+    Route::delete('/purchase-orders/{id}', [PurchaseOrderController::class, 'destroy'])->name('purchase-orders.delete');
 
-    Route::get('/taxes', [TaxController::class, 'index'])->name('taxes');
-    Route::get('/taxes/create', [TaxController::class, 'create'])->name('taxes.create');
-    Route::get('/taxes/list', [TaxController::class, 'getListForDatatables'])->name('taxes.datatables');
-    Route::get('/taxes/{id}/edit', [TaxController::class, 'edit'])->name('taxes.edit');
-    Route::post('/taxes', [TaxController::class, 'store'])->name('taxes.store');
-    Route::put('/taxes/{id}', [TaxController::class, 'update'])->name('taxes.update');
-    Route::delete('/taxes/{id}', [TaxController::class, 'destroy'])->name('taxes.delete');
-    
 
     Route::get('/products', [ProductController::class, 'index'])->name('products');
     Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
@@ -72,15 +62,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('/products/{id}', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.delete');
     
-
-    Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
-    Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
-    Route::get('/categories/list', [CategoryController::class, 'getListForDatatables'])->name('categories.datatables');
-    Route::get('/categories/{id}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
-    Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
-    Route::put('/categories/{id}', [CategoryController::class, 'update'])->name('categories.update');
-    Route::delete('/categories/{id}', [CategoryController::class, 'destroy'])->name('categories.delete');
-    
+    Route::get('/suppliers', [SupplierController::class, 'index'])->name('suppliers');
+    Route::get('/suppliers/create', [SupplierController::class, 'create'])->name('suppliers.create');
+    Route::get('/suppliers/list', [SupplierController::class, 'getListForDatatables'])->name('suppliers.datatables');
+    Route::get('/suppliers/{id}', [SupplierController::class, 'show'])->name('suppliers.show');
+    Route::get('/suppliers/{id}/edit', [SupplierController::class, 'edit'])->name('suppliers.edit');
+    Route::post('/suppliers', [SupplierController::class, 'store'])->name('suppliers.store');
+    Route::put('/suppliers/{id}', [SupplierController::class, 'update'])->name('suppliers.update');
+    Route::delete('/suppliers/{id}', [SupplierController::class, 'destroy'])->name('suppliers.delete');
 
     Route::get('/dealers', [DealerController::class, 'index'])->name('dealers');
     Route::get('/dealers/create', [DealerController::class, 'create'])->name('dealers.create');
@@ -90,7 +79,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/dealers', [DealerController::class, 'store'])->name('dealers.store');
     Route::put('/dealers/{id}', [DealerController::class, 'update'])->name('dealers.update');
     Route::delete('/dealers/{id}', [DealerController::class, 'destroy'])->name('dealers.delete');
-    
 
     Route::get('/warehouses', [WarehouseController::class, 'index'])->name('warehouses');
     Route::get('/warehouses/create', [WarehouseController::class, 'create'])->name('warehouses.create');
@@ -99,8 +87,23 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/warehouses', [WarehouseController::class, 'store'])->name('warehouses.store');
     Route::put('/warehouses/{id}', [WarehouseController::class, 'update'])->name('warehouses.update');
     Route::delete('/warehouses/{id}', [WarehouseController::class, 'destroy'])->name('warehouses.delete');
-    
 
+    Route::get('/taxes', [TaxController::class, 'index'])->name('taxes');
+    Route::get('/taxes/create', [TaxController::class, 'create'])->name('taxes.create');
+    Route::get('/taxes/list', [TaxController::class, 'getListForDatatables'])->name('taxes.datatables');
+    Route::get('/taxes/{id}/edit', [TaxController::class, 'edit'])->name('taxes.edit');
+    Route::post('/taxes', [TaxController::class, 'store'])->name('taxes.store');
+    Route::put('/taxes/{id}', [TaxController::class, 'update'])->name('taxes.update');
+    Route::delete('/taxes/{id}', [TaxController::class, 'destroy'])->name('taxes.delete');
+
+    Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
+    Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
+    Route::get('/categories/list', [CategoryController::class, 'getListForDatatables'])->name('categories.datatables');
+    Route::get('/categories/{id}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
+    Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
+    Route::put('/categories/{id}', [CategoryController::class, 'update'])->name('categories.update');
+    Route::delete('/categories/{id}', [CategoryController::class, 'destroy'])->name('categories.delete');
+    
     Route::get('/users', [UserController::class, 'index'])->name('users');
     Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
     Route::get('/users/list', [UserController::class, 'getListForDatatables'])->name('users.datatables');
@@ -112,6 +115,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/profile', [UserController::class, 'show'])->name('profile');
     Route::get('/profile/edit', [UserController::class, 'editProfile'])->name('profile-edit');
+
+    Route::get('/settings', [SettingController::class, 'index'])->name('settings');
+    Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
 
 
     Route::prefix('ajax')->group(function () {
