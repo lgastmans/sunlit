@@ -14,6 +14,7 @@
                     </div>
                     <div class="col-sm-8">
                         <div class="text-sm-end">
+                            <a class="btn toggle-filters" href="javascript:void(0);"><button type="button" class="btn btn-light mb-2"><i class="mdi mdi-filter"></i></button></a>
                             <a class="btn" href="{{ route('export.products') }}"><button type="button" class="btn btn-light mb-2">{{ __('app.export') }}</button></a>
                         </div>
                     </div><!-- end col-->
@@ -36,18 +37,26 @@
                                 <th>Name</th> 
                                 <th>Model</th>
                                 <th>Purchase Price</th>
-                                <th>Min Quantity</th>
+                                {{-- <th>Min Quantity</th> --}}
 <!--                                 <th>Cable length</th> 
                                 <th>KW rating</th> 
                                 <th>Part number</th> 
  -->                                {{-- <th>Notes</th>  --}}
                                 <th>Actions</th>
                             </tr>
+                            <tr class="filters" style="display:none;">
+                                <th class="no-filter"></th>
+                                <th><th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                {{-- <th></th> --}}
+                                <th class="no-filter"></th>
+                            </tr>
                         </thead>
-                        <tbody>
-
-                            
-                            
+                        <tbody> 
                         </tbody>
                     </table>
                 </div>
@@ -68,11 +77,18 @@
  $(document).ready(function () {
     "use strict";
 
+    $('.toggle-filters').on('click', function(e) {
+        $( ".filters" ).slideToggle('slow');
+    });
 
     // Default Datatable
     var table = $('#products-datatable').DataTable({
         processing: true,
         serverSide: true,
+        orderCellsTop: true,
+        fixedHeader: true,
+        search: true,
+        
         ajax: "{{ route('products.datatables') }}",
 
 
@@ -132,10 +148,10 @@
                 'data': 'purchase_price',
                 'orderable': true
             },
-            {
-                'data': 'minimum_quantity',
-                'orderable': false
-            },
+            // {
+            //     'data': 'minimum_quantity',
+            //     'orderable': false
+            // },
             // { 
             //     'data': 'cable_length',
             //     'orderable': true 
@@ -188,6 +204,17 @@
         },
     });
 
+    table.columns().eq(0).each(function(colIdx) {
+        var cell = $('.filters th').eq($(table.column(colIdx).header()).index());
+        var title = $(cell).text();
+        if($(cell).hasClass('no-filter')){
+            $(cell).html('&nbsp');
+        }
+        else{
+            $(cell).html( '<input type="text"/>' );
+        }
+    });
+
     $('#products-datatable').on('dblclick', 'tr', function () {
         var route = '{{  route("products.show", ":id") }}';
         route = route.replace(':id', table.row( this ).data().id);
@@ -204,6 +231,8 @@
         }
         
     });
+
+    
 
 
     @if(Session::has('success'))
