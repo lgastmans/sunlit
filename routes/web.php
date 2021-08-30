@@ -116,6 +116,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/profile', [UserController::class, 'show'])->name('profile');
     Route::get('/profile/edit', [UserController::class, 'editProfile'])->name('profile-edit');
 
+    Route::get('/purchase_orders/test', [PurchaseOrderController::class, 'test_purchase_orders'])->name('test');
     Route::get('/settings', [SettingController::class, 'index'])->name('settings');
     Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
 
