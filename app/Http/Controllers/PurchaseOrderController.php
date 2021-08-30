@@ -88,7 +88,7 @@ class PurchaseOrderController extends Controller
     {
         //
     }
-}
+
 
     public function test_purchase_orders()    
     {
@@ -99,3 +99,5 @@ class PurchaseOrderController extends Controller
             ->count(10)
             ->create();
     }
+
+}
