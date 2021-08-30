@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('page-title', 'Products')
+@section('page-title', 'Purchase Orders')
 
 @section('content')
 
@@ -10,50 +10,32 @@
             <div class="card-body">
                 <div class="row mb-2">
                     <div class="col-sm-4">
-                        <a href="{{ route('products.create') }}" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> Add Products</a>
+                        <a href="{{ route('purchase-orders.create') }}" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> Create Purchase Order</a>
                     </div>
-                    <div class="col-sm-8">
+                    {{-- <div class="col-sm-8">
                         <div class="text-sm-end">
-                            <a class="btn toggle-filters" href="javascript:void(0);"><button type="button" class="btn btn-light mb-2"><i class="mdi mdi-filter"></i></button></a>
                             <a class="btn" href="{{ route('export.products') }}"><button type="button" class="btn btn-light mb-2">{{ __('app.export') }}</button></a>
                         </div>
-                    </div><!-- end col-->
+                    </div><!-- end col--> --}}
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="products-datatable">
+                    <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="purchase-orders-datatable">
                         <thead class="table-light">
                             <tr>
-                                <th style="width: 20px;">
+                                {{-- <th style="width: 20px;">
                                     <div class="form-check">
                                         <input type="checkbox" class="form-check-input" id="customCheck1">
                                         <label class="form-check-label" for="customCheck1">&nbsp;</label>
                                     </div>
-                                </th>
-                                <th>Category</th>
-                                <th>Supplier</th> 
-                                <th>Tax</th>
-                                <th>Code</th> 
-                                <th>Name</th> 
-                                <th>Model</th>
-                                <th>Purchase Price</th>
-                                {{-- <th>Min Quantity</th> --}}
-<!--                                 <th>Cable length</th> 
-                                <th>KW rating</th> 
-                                <th>Part number</th> 
- -->                                {{-- <th>Notes</th>  --}}
-                                <th>Actions</th>
-                            </tr>
-                            <tr class="filters" style="display:none;">
-                                <th class="no-filter"></th>
-                                <th><th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                {{-- <th></th> --}}
-                                <th class="no-filter"></th>
+                                </th> --}}
+                                <th>Order ID</th>
+                                <th>Supplier</th>
+                                <th>Date</th> 
+                                <th>Amount</th>
+                                <th>Status</th> 
+                                <th>Created By</th> 
+                                {{-- <th>Actions</th> --}}
                             </tr>
                         </thead>
                         <tbody> 
@@ -66,7 +48,7 @@
 </div>
 
 
-<x-modal-confirm type="danger" target="product"></x-modal-confirm>
+<x-modal-confirm type="danger" target="purchase-order"></x-modal-confirm>
 
 
 @endsection
@@ -77,19 +59,54 @@
  $(document).ready(function () {
     "use strict";
 
-    $('.toggle-filters').on('click', function(e) {
-        $( ".filters" ).slideToggle('slow');
-    });
+    var data = [{
+        "id": 1,
+        "order_number": "#BM9712",
+        "supplier": "Solar Edge",
+        "created_at": "August 05 2021",
+        "amount_usd": "$120,100",
+        "status": "ordered",
+        "user": "Bob",
+      }, {
+        "id": 2,
+        "order_number": "#BM9711",
+        "supplier": "Wairee",
+        "created_at": "May 01 2021",
+        "amount_usd": "$54,354",
+        "status": "confirmed",
+        "user": "Rishi",
+      }, {
+        "id": 3,
+        "order_number": "#BM9710",
+        "supplier": "Solar Edge",
+        "created_at": "March 22 2021",
+        "amount_usd": "$1,523",
+        "status": "customs",
+        "user": "Quentin",
+      }, {
+        "id": 4,
+        "order_number": "#BM9709",
+        "supplier": "Solar Edge",
+        "created_at": "Jan 31 2021",
+        "amount_usd": "$95,000",
+        "status": "cleared",
+        "user": "Luk",
+      }, {
+        "id": 5,
+        "order_number": "#BM9708",
+        "supplier": "Solar Edge",
+        "created_at": "December 24 2020",
+        "amount_usd": "$5,400",
+        "status": "received",
+        "user": "Rishi",
+      }, 
+    ];    
 
     // Default Datatable
-    var table = $('#products-datatable').DataTable({
-        processing: true,
-        serverSide: true,
+    var table = $('#purchase-orders-datatable').DataTable({
         orderCellsTop: true,
         fixedHeader: true,
-        search: true,
-        
-        ajax: "{{ route('products.datatables') }}",
+        data: data,
 
 
         "language": {
@@ -97,31 +114,17 @@
                 "previous": "<i class='mdi mdi-chevron-left'>",
                 "next": "<i class='mdi mdi-chevron-right'>"
             },
-            "info": "Showing Products _START_ to _END_ of _TOTAL_",
+            "info": "Showing Orders _START_ to _END_ of _TOTAL_",
             "lengthMenu": "Display <select class='form-select form-select-sm ms-1 me-1'>" +
                 '<option value="10">10</option>' +
                 '<option value="20">20</option>' +
                 '<option value="-1">All</option>' +
-                '</select> Products',
+                '</select> Orders',
         },
         "pageLength": 10,
         "columns": [
-            {
-                'data': 'id',
-                'orderable': false,
-                'render': function (data, type, row, meta) {
-                    if (type === 'display') {
-                        data = "<div class=\"form-check\"><input type=\"checkbox\" class=\"form-check-input dt-checkboxes\"><label class=\"form-check-label\">&nbsp;</label></div>";
-                    }
-                    return data;
-                },
-                'checkboxes': {
-                    'selectRow': true,
-                    'selectAllRender': '<div class=\"form-check\"><input type=\"checkbox\" class=\"form-check-input dt-checkboxes\"><label class=\"form-check-label\">&nbsp;</label></div>'
-                }
-            },
             { 
-                'data': 'category',
+                'data': 'order_number',
                 'orderable': true 
             },
             { 
@@ -129,67 +132,64 @@
                 'orderable': true 
             },
             { 
-                'data': 'tax',
+                'data': 'created_at',
                 'orderable': true 
             },
             { 
-                'data': 'code',
+                'data': 'amount_usd',
                 'orderable': true 
             },
             { 
-                'data': 'name',
-                'orderable': true 
-            },
-            { 
-                'data': 'model',
-                'orderable': true 
-            },
-            {
-                'data': 'purchase_price',
-                'orderable': true
-            },
-            // {
-            //     'data': 'minimum_quantity',
-            //     'orderable': false
-            // },
-            // { 
-            //     'data': 'cable_length',
-            //     'orderable': true 
-            // },
-            // { 
-            //     'data': 'kw_rating',
-            //     'orderable': true 
-            // },
-            // { 
-            //     'data': 'part_number',
-            //     'orderable': true 
-            // },
-            // { 
-            //     'data': 'notes',
-            //     'orderable': true 
-            // },
-            {
-                'data': 'id',
-                'orderable': false,
-                'render' : function(data, type, row, meta){
-                    if (type === 'display'){
-
-                        var edit_btn = '';
-                        var delete_btn = '';
-
-                        @if (Auth::user()->can('edit products'))
-                            var edit_route = '{{ route("products.edit", ":id") }}';
-                            edit_route = edit_route.replace(':id', data);
-                            edit_btn = '<a href="' + edit_route + '" class="action-icon"> <i class="mdi mdi-pencil"></i></a>'                       
-                        @endif
-                        @if (Auth::user()->can('delete products'))
-                            delete_btn = '<a href="" class="action-icon" id="' + data + '" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>'
-                        @endif
-
-                        data = edit_btn +  delete_btn
+                'data': 'status',
+                'orderable': true,
+                'render': function(data, type, row, meta){
+                    if (type === "display"){
+                        var status = "";
+                        if (data == "ordered"){
+                            status = '<span class="badge badge-secondary-lighten">Ordered</span>'
+                        }
+                        if (data == "confirmed"){
+                            status = '<span class="badge badge-info-lighten">Confirmed</span>'
+                        }
+                        if (data == "customs"){
+                            status = '<span class="badge badge-warning-lighten">Customs</span>'
+                        }
+                        if (data == "cleared"){
+                            status = '<span class="badge badge-primary-lighten">Cleared</span>'
+                        }
+                        if (data == "received"){
+                            status = '<span class="badge badge-success-lighten">Received</span>'
+                        }
                     }
-                    return data;
+                    return status
                 }
+            },
+            { 
+                'data': 'user',
+                'orderable': true 
+            // },
+            // {
+            //     'data': 'id',
+            //     'orderable': false,
+            //     'render' : function(data, type, row, meta){
+            //         if (type === 'display'){
+
+            //             var edit_btn = '';
+            //             var delete_btn = '';
+
+            //             @if (Auth::user()->can('edit purchase ordr'))
+            //                 var edit_route = '{{ route("products.edit", ":id") }}';
+            //                 edit_route = edit_route.replace(':id', data);
+            //                 edit_btn = '<a href="' + edit_route + '" class="action-icon"> <i class="mdi mdi-pencil"></i></a>'                       
+            //             @endif
+            //             @if (Auth::user()->can('delete products'))
+            //                 delete_btn = '<a href="" class="action-icon" id="' + data + '" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>'
+            //             @endif
+
+            //             data = edit_btn +  delete_btn
+            //         }
+            //         return data;
+            //     }
             }
             
         ],
