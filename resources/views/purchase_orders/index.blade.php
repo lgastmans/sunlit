@@ -63,7 +63,7 @@
         "id": 1,
         "order_number": "#BM9712",
         "supplier": "Solar Edge",
-        "created_at": "August 05 2021",
+        "ordered_at": "August 05 2021",
         "amount_usd": "$120,100",
         "status": "ordered",
         "user": "Bob",
@@ -71,7 +71,7 @@
         "id": 2,
         "order_number": "#BM9711",
         "supplier": "Wairee",
-        "created_at": "May 01 2021",
+        "ordered_at": "May 01 2021",
         "amount_usd": "$54,354",
         "status": "confirmed",
         "user": "Rishi",
@@ -79,7 +79,7 @@
         "id": 3,
         "order_number": "#BM9710",
         "supplier": "Solar Edge",
-        "created_at": "March 22 2021",
+        "ordered_at": "March 22 2021",
         "amount_usd": "$1,523",
         "status": "customs",
         "user": "Quentin",
@@ -87,7 +87,7 @@
         "id": 4,
         "order_number": "#BM9709",
         "supplier": "Solar Edge",
-        "created_at": "Jan 31 2021",
+        "ordered_at": "Jan 31 2021",
         "amount_usd": "$95,000",
         "status": "cleared",
         "user": "Luk",
@@ -95,7 +95,7 @@
         "id": 5,
         "order_number": "#BM9708",
         "supplier": "Solar Edge",
-        "created_at": "December 24 2020",
+        "ordered_at": "December 24 2020",
         "amount_usd": "$5,400",
         "status": "received",
         "user": "Rishi",
@@ -132,7 +132,7 @@
                 'orderable': true 
             },
             { 
-                'data': 'created_at',
+                'data': 'ordered_at',
                 'orderable': true 
             },
             { 
