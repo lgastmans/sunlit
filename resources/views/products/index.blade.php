@@ -215,7 +215,7 @@
         }
         else{
 
-            $(cell).html( '<input id="title" type="text"/>' );
+            $(cell).html( '<input class="filter-input" type="text"/>' );
 
             $('input', $('.filters th').eq($(table.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
                 e.stopPropagation();
@@ -246,26 +246,6 @@
         }
         
     });
-
-/*
-    table.columns().every( function () {
-
-        var that = this;
-
-        console.log( $('input'));
-
-        $( 'input', this.header() ).on( 'change', function (e) {
-
-            if ( that.search() !== this.value ) {
-                that
-                .search( this.value )
-                .draw();
-            }
-
-        });
-
-    });    
-*/
 
     @if(Session::has('success'))
         $.NotificationApp.send("Success","{{ session('success') }}","top-right","","success")

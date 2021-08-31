@@ -102,7 +102,7 @@ class ProductController extends Controller
             individual column filtering
         */
         $column_arr = $request->get('columns');
-
+        
         if (!empty($column_arr[1]['search']['value'])) 
             $query->where('categories.name', 'like', '%'.$column_arr[1]['search']['value'].'%');
        
@@ -123,34 +123,6 @@ class ProductController extends Controller
             $query->where('products.name', 'like', '%'.$column_arr[5]['search']['value'].'%');
 
 
-        if (empty($column_arr[1]['search']['value']))
-            $query->orWhere('categories.name', 'like', '%'.$search.'%');
-
-        if (empty($column_arr[2]['search']['value']))
-            $query->orWhere('suppliers.company', 'like', '%'.$search.'%');
-
-        if (empty($column_arr[4]['search']['value']))
-            $query->orWhere('products.code', 'like', '%'.$search.'%');
-
-        if (!empty($column_arr[5]['search']['value']))
-            $query->orWhere('products.name', 'like', '%'.$search.'%');
-
-/*
-        if ($length < 0)
-                $query->where('products.code', 'like', '%'.$search.'%')
-                ->orWhere('products.name', 'like', '%'.$search.'%')
-                ->orWhere('categories.name', 'like', '%'.$search.'%')
-                ->orWhere('suppliers.company', 'like', '%'.$search.'%')
-                ->orderBy($order_column, $order_dir);
-        else
-                $query->where('products.code', 'like', '%'.$search.'%')
-                ->orWhere('products.name', 'like', '%'.$search.'%')
-                ->orWhere('categories.name', 'like', '%'.$search.'%')
-                ->orWhere('suppliers.company', 'like', '%'.$search.'%')
-                ->orderBy($order_column, $order_dir)
-                ->skip($start)
-                ->take($length);
-*/
 
         $query->orderBy($order_column, $order_dir);
 
@@ -158,11 +130,7 @@ class ProductController extends Controller
             $query->skip($start)
                 ->take($length);
 
-
-
         $products = $query->get(['products.*', 'categories.name as category_name', 'taxes.name as tax_name']);
-
-
 
         $arr = array();
 
@@ -207,7 +175,6 @@ class ProductController extends Controller
     public function getExportList()
     {
         return Excel::download(new ProductsExport, 'products.xlsx');
-        //return Excel::download(Product::all(), 'products.xlsx');
     }
 
 
