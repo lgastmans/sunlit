@@ -135,7 +135,5 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Test routes to delete 
     Route::get('/purchase-orders/test', [PurchaseOrderController::class, 'test_purchase_orders'])->name('test');
-    Route::get('/purchase-orders/list', [PurchaseOrderController::class, 'getListForDatatables'])->name('purchase-orders.datatables');
-
     
 });
