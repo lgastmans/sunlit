@@ -30,7 +30,8 @@ class PurchaseOrderController extends Controller
      */
     public function create()
     {
-        //
+        $purchase_order = new PurchaseOrder();
+        return view('purchase_order.form', ['purchase_order' => $purchase_order]);
     }
 
     /**
@@ -52,7 +53,11 @@ class PurchaseOrderController extends Controller
      */
     public function show($id)
     {
-        //
+        $purchase_order = PurchaseOrder::find($id);
+        if ($purchase_order)
+            return view('purchase_order.show', ['purchase_order'=>$purchase_order]);
+
+        return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'purchase order']));
     }
 
     /**
