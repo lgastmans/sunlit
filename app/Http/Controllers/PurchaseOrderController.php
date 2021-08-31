@@ -54,6 +54,8 @@ class PurchaseOrderController extends Controller
             $order_dir = $order_arr[0]['dir'];
         }
 
+        $order_column = 'order_number';
+
         $search = '';
         if ($request->has('search')) {
             $search_arr = $request->get('search');
@@ -97,6 +99,21 @@ class PurchaseOrderController extends Controller
 
         foreach($po as $record)
         {
+            if ($record->status==1)
+                $status = '<span class="badge badge-secondary-lighten">Draft</span>';
+            elseif ($record->status==2)
+                $status = '<span class="badge badge-info-lighten">Ordered</span>';
+            elseif ($record->status==3)
+                $status = '<span class="badge badge-primary-lighten">confirmed</span>';
+            elseif ($record->status==4)
+                $status = '<span class="badge badge-dark-lighten">Shipped</span>';
+            elseif ($record->status==5)
+                $status = '<span class="badge badge-warning-lighten">Customs</span>';
+            elseif ($record->status==6)
+                $status = '<span class="badge badge-light-lighten">Cleared</span>';
+            elseif ($record->status==7)
+                $status = '<span class="badge badge-success-lighten">Received</span>';
+
             $arr[] = array(
                 "id" => $record->id,
                 "order_number" => $record->order_number,
@@ -105,7 +122,7 @@ class PurchaseOrderController extends Controller
                 "expected_at" => $record->expected_at->format('d/M/Y'),
                 "received_at" => $record->received_at->format('d/M/Y'),
                 "amount_inr" => $fmt->format($record->amount_inr/100),
-                "status" => $record->status,
+                "status" => $status,
                 "warehouse" => $record->warehouse->name,
                 "user" => $record->name
             );

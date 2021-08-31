@@ -29,9 +29,11 @@
                                         <label class="form-check-label" for="customCheck1">&nbsp;</label>
                                     </div>
                                 </th> --}}
-                                <th>Order ID</th>
+                                <th>Order</th>
                                 <th>Supplier</th>
-                                <th>Date</th> 
+                                <th>Ordered On</th> 
+                                <th>Expected On</th> 
+                                <th>Received On</th> 
                                 <th>Amount</th>
                                 <th>Status</th> 
                                 <th>Created By</th> 
@@ -58,49 +60,6 @@
         
  $(document).ready(function () {
     "use strict";
-
-    var data = [{
-        "id": 1,
-        "order_number": "#BM9712",
-        "supplier": "Solar Edge",
-        "ordered_at": "August 05 2021",
-        "amount_usd": "$120,100",
-        "status": "ordered",
-        "user": "Bob",
-      }, {
-        "id": 2,
-        "order_number": "#BM9711",
-        "supplier": "Wairee",
-        "ordered_at": "May 01 2021",
-        "amount_usd": "$54,354",
-        "status": "confirmed",
-        "user": "Rishi",
-      }, {
-        "id": 3,
-        "order_number": "#BM9710",
-        "supplier": "Solar Edge",
-        "ordered_at": "March 22 2021",
-        "amount_usd": "$1,523",
-        "status": "customs",
-        "user": "Quentin",
-      }, {
-        "id": 4,
-        "order_number": "#BM9709",
-        "supplier": "Solar Edge",
-        "ordered_at": "Jan 31 2021",
-        "amount_usd": "$95,000",
-        "status": "cleared",
-        "user": "Luk",
-      }, {
-        "id": 5,
-        "order_number": "#BM9708",
-        "supplier": "Solar Edge",
-        "ordered_at": "December 24 2020",
-        "amount_usd": "$5,400",
-        "status": "received",
-        "user": "Rishi",
-      }, 
-    ];    
 
     // Default Datatable
     var table = $('#purchase-orders-datatable').DataTable({
@@ -137,21 +96,22 @@
                 'data': 'ordered_at',
                 'orderable': true 
             },
-            // { 
-            //     'data': 'expected_at',
-            //     'orderable': true 
-            // },
-            // { 
-            //     'data': 'received_at',
-            //     'orderable': true 
-            // },
+            { 
+                'data': 'expected_at',
+                'orderable': true 
+            },
+            { 
+                'data': 'received_at',
+                'orderable': true 
+            },
             { 
                 'data': 'amount_inr',
                 'orderable': true 
             },
             { 
                 'data': 'status',
-                'orderable': true,
+                'orderable': true
+                /*
                 'render': function(data, type, row, meta){
                     if (type === "display"){
                         var status = "";
@@ -179,6 +139,7 @@
                     }
                     return status
                 }
+                */
             },
             { 
                 'data': 'user',
@@ -219,6 +180,7 @@
             
         },
     });
+
 
     table.columns().eq(0).each(function(colIdx) {
         var cell = $('.filters th').eq($(table.column(colIdx).header()).index());
