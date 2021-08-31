@@ -31,11 +31,6 @@
                                 <th>Name</th> 
                                 <th>Model</th>
                                 <th>Purchase Price</th>
-                                {{-- <th>Min Quantity</th> --}}
-<!--                                 <th>Cable length</th> 
-                                <th>KW rating</th> 
-                                <th>Part number</th> 
- -->                                {{-- <th>Notes</th>  --}}
                                 <th>Actions</th>
                             </tr>
                             <tr class="filters" style="display:none;">
@@ -46,7 +41,6 @@
                                 <th></th>
                                 <th></th>
                                 <th></th>
-                                {{-- <th></th> --}}
                                 <th class="no-filter"></th>
                             </tr>
                         </thead>
@@ -129,26 +123,6 @@
                 'data': 'purchase_price',
                 'orderable': true
             },
-            // {
-            //     'data': 'minimum_quantity',
-            //     'orderable': false
-            // },
-            // { 
-            //     'data': 'cable_length',
-            //     'orderable': true 
-            // },
-            // { 
-            //     'data': 'kw_rating',
-            //     'orderable': true 
-            // },
-            // { 
-            //     'data': 'part_number',
-            //     'orderable': true 
-            // },
-            // { 
-            //     'data': 'notes',
-            //     'orderable': true 
-            // },
             {
                 'data': 'id',
                 'orderable': false,
@@ -174,9 +148,6 @@
             }
             
         ],
-        "select": {
-            "style": "multi"
-        },
         "order": [[1, "desc"]],
         "drawCallback": function () {
             $('.dataTables_paginate > .pagination').addClass('pagination-rounded');
