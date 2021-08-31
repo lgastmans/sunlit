@@ -23,12 +23,7 @@
                     <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="taxes-datatable">
                         <thead class="table-light">
                             <tr>
-                                <th style="width: 20px;">
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="customCheck1">
-                                        <label class="form-check-label" for="customCheck1">&nbsp;</label>
-                                    </div>
-                                </th>
+                            
                                 <th>Name</th>
                                 <th>Amount</th> 
                                 <th>Actions</th>
@@ -77,20 +72,7 @@
         },
         "pageLength": 10,
         "columns": [
-            {
-                'data': 'id',
-                'orderable': false,
-                'render': function (data, type, row, meta) {
-                    if (type === 'display') {
-                        data = "<div class=\"form-check\"><input type=\"checkbox\" class=\"form-check-input dt-checkboxes\"><label class=\"form-check-label\">&nbsp;</label></div>";
-                    }
-                    return data;
-                },
-                'checkboxes': {
-                    'selectRow': true,
-                    'selectAllRender': '<div class=\"form-check\"><input type=\"checkbox\" class=\"form-check-input dt-checkboxes\"><label class=\"form-check-label\">&nbsp;</label></div>'
-                }
-            },
+           
             { 
                 'data': 'name',
                 'orderable': true 
@@ -123,9 +105,6 @@
             }
             
         ],
-        "select": {
-            "style": "multi"
-        },
         "order": [[1, "desc"]],
         "drawCallback": function () {
             $('.dataTables_paginate > .pagination').addClass('pagination-rounded');
