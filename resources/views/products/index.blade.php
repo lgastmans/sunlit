@@ -34,7 +34,6 @@
                                 <th>Actions</th>
                             </tr>
                             <tr class="filters" style="display:none;">
-                                <th class="no-filter"></th>
                                 <th><th>
                                 <th></th>
                                 <th></th>
