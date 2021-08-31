@@ -52,9 +52,11 @@ class ProductController extends Controller
         $order_dir = 'ASC';
         $order_arr = array();
         if ($request->has('order')) {
+
             $order_arr = $request->get('order');
             $column_arr = $request->get('columns');
             $column_index = $order_arr[0]['column'];
+
             if ($column_index==1)
                 $order_column = "categories.name";
             elseif ($column_index==2)
@@ -65,6 +67,7 @@ class ProductController extends Controller
                 $order_column = $column_arr[$column_index]['data'];
             $order_dir = $order_arr[0]['dir'];
         }
+
 
         $search = '';
         if ($request->has('search')) {
@@ -83,29 +86,83 @@ class ProductController extends Controller
             ->get()
             ->count();
 
-        // Fetch records
+
+
+        /*
+            build the query
+        */
+        $query = Product::query();
+
+        $query->join('categories', 'categories.id', '=', 'products.category_id')
+            ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
+            ->join('taxes', 'taxes.id', '=', 'products.tax_id');
+
+
+        /*
+            individual column filtering
+        */
+        $column_arr = $request->get('columns');
+
+        if (!empty($column_arr[1]['search']['value'])) 
+            $query->where('categories.name', 'like', '%'.$column_arr[1]['search']['value'].'%');
+       
+
+        if (!empty($column_arr[2]['search']['value']))
+            $query->where('suppliers.company', 'like', '%'.$column_arr[2]['search']['value'].'%');
+
+
+        if (!empty($column_arr[3]['search']['value']))
+            $query->where('taxes.name', 'like', '%'.$column_arr[3]['search']['value'].'%');
+
+
+        if (!empty($column_arr[4]['search']['value']))
+            $query->where('products.code', 'like', '%'.$column_arr[4]['search']['value'].'%');
+
+
+        if (!empty($column_arr[5]['search']['value']))
+            $query->where('products.name', 'like', '%'.$column_arr[5]['search']['value'].'%');
+
+
+        if (empty($column_arr[1]['search']['value']))
+            $query->orWhere('categories.name', 'like', '%'.$search.'%');
+
+        if (empty($column_arr[2]['search']['value']))
+            $query->orWhere('suppliers.company', 'like', '%'.$search.'%');
+
+        if (empty($column_arr[4]['search']['value']))
+            $query->orWhere('products.code', 'like', '%'.$search.'%');
+
+        if (!empty($column_arr[5]['search']['value']))
+            $query->orWhere('products.name', 'like', '%'.$search.'%');
+
+/*
         if ($length < 0)
-            $products = Product::join('categories', 'categories.id', '=', 'products.category_id')
-                ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
-                ->join('taxes', 'taxes.id', '=', 'products.tax_id')
-                ->where('products.code', 'like', '%'.$search.'%')
+                $query->where('products.code', 'like', '%'.$search.'%')
                 ->orWhere('products.name', 'like', '%'.$search.'%')
                 ->orWhere('categories.name', 'like', '%'.$search.'%')
                 ->orWhere('suppliers.company', 'like', '%'.$search.'%')
-                ->orderBy($order_column, $order_dir)
-                ->get(['products.*', 'categories.name as category_name', 'taxes.name as tax_name']);
+                ->orderBy($order_column, $order_dir);
         else
-            $products = Product::join('categories', 'categories.id', '=', 'products.category_id')
-                ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
-                ->join('taxes', 'taxes.id', '=', 'products.tax_id')
-                ->where('products.code', 'like', '%'.$search.'%')
+                $query->where('products.code', 'like', '%'.$search.'%')
                 ->orWhere('products.name', 'like', '%'.$search.'%')
                 ->orWhere('categories.name', 'like', '%'.$search.'%')
                 ->orWhere('suppliers.company', 'like', '%'.$search.'%')
                 ->orderBy($order_column, $order_dir)
                 ->skip($start)
-                ->take($length)
-                ->get(['products.*', 'categories.name as category_name', 'taxes.name as tax_name']);
+                ->take($length);
+*/
+
+        $query->orderBy($order_column, $order_dir);
+
+        if ($length < 0)
+            $query->skip($start)
+                ->take($length);
+
+
+
+        $products = $query->get(['products.*', 'categories.name as category_name', 'taxes.name as tax_name']);
+
+
 
         $arr = array();
 

@@ -207,11 +207,26 @@
     table.columns().eq(0).each(function(colIdx) {
         var cell = $('.filters th').eq($(table.column(colIdx).header()).index());
         var title = $(cell).text();
+
         if($(cell).hasClass('no-filter')){
+
             $(cell).html('&nbsp');
+
         }
         else{
-            $(cell).html( '<input type="text"/>' );
+
+            $(cell).html( '<input id="title" type="text"/>' );
+
+            $('input', $('.filters th').eq($(table.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
+                e.stopPropagation();
+                $(this).attr('title', $(this).val());
+                //var regexr = '({search})'; //$(this).parents('th').find('select').val();
+                table
+                    .column(colIdx)
+                    .search(this.value) //(this.value != "") ? regexr.replace('{search}', 'this.value') : "", this.value != "", this.value == "")
+                    .draw();
+                 
+            });            
         }
     });
 
@@ -232,8 +247,25 @@
         
     });
 
-    
+/*
+    table.columns().every( function () {
 
+        var that = this;
+
+        console.log( $('input'));
+
+        $( 'input', this.header() ).on( 'change', function (e) {
+
+            if ( that.search() !== this.value ) {
+                that
+                .search( this.value )
+                .draw();
+            }
+
+        });
+
+    });    
+*/
 
     @if(Session::has('success'))
         $.NotificationApp.send("Success","{{ session('success') }}","top-right","","success")
