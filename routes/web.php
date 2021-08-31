@@ -52,6 +52,16 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('/purchase-orders/{id}', [PurchaseOrderController::class, 'update'])->name('purchase-orders.update');
     Route::delete('/purchase-orders/{id}', [PurchaseOrderController::class, 'destroy'])->name('purchase-orders.delete');
 
+    Route::get('/purchase-orders-items', [PurchaseOrderItemController::class, 'index'])->name('purchase-orders-items');
+    Route::get('/purchase-orders-items/create', [PurchaseOrderItemController::class, 'create'])->name('purchase-orders-items.create');
+    Route::get('/purchase-orders-items/list', [PurchaseOrderItemController::class, 'getListForDatatables'])->name('purchase-orders-items.datatables');
+    Route::get('/purchase-orders-items/{id}', [PurchaseOrderItemController::class, 'show'])->name('purchase-orders-items.show');
+    Route::get('/purchase-orders-items/{id}/edit', [PurchaseOrderItemController::class, 'edit'])->name('purchase-orders-items.edit');
+    Route::post('/purchase-orders-items', [PurchaseOrderItemController::class, 'store'])->name('purchase-orders-items.store');
+    Route::put('/purchase-orders-items/{id}', [PurchaseOrderItemController::class, 'update'])->name('purchase-orders-items.update');
+    Route::delete('/purchase-orders-items/{id}', [PurchaseOrderItemController::class, 'destroy'])->name('purchase-orders-items.delete');
+
+
 
     Route::get('/products', [ProductController::class, 'index'])->name('products');
     Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
