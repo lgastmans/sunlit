@@ -106,8 +106,10 @@
     var table = $('#purchase-orders-datatable').DataTable({
         orderCellsTop: true,
         fixedHeader: true,
-        data: data,
 
+        processing: true,
+        serverSide: true,
+        ajax: "{{ route('purchase-orders.datatables') }}",
 
         "language": {
             "paginate": {
@@ -135,8 +137,16 @@
                 'data': 'ordered_at',
                 'orderable': true 
             },
+            // { 
+            //     'data': 'expected_at',
+            //     'orderable': true 
+            // },
+            // { 
+            //     'data': 'received_at',
+            //     'orderable': true 
+            // },
             { 
-                'data': 'amount_usd',
+                'data': 'amount_inr',
                 'orderable': true 
             },
             { 
@@ -145,19 +155,25 @@
                 'render': function(data, type, row, meta){
                     if (type === "display"){
                         var status = "";
-                        if (data == "ordered"){
-                            status = '<span class="badge badge-secondary-lighten">Ordered</span>'
+                        if (data == 1){
+                            status = '<span class="badge badge-secondary-lighten">Draft</span>'
                         }
-                        if (data == "confirmed"){
-                            status = '<span class="badge badge-info-lighten">Confirmed</span>'
+                        if (data == 2){
+                            status = '<span class="badge badge-info-lighten">Ordered</span>'
                         }
-                        if (data == "customs"){
+                        if (data == 3){
+                            status = '<span class="badge badge-primary-lighten">confirmed</span>'
+                        }
+                        if (data == 4){
+                            status = '<span class="badge badge-dark-lighten">Shipped</span>'
+                        }
+                        if (data == 5){
                             status = '<span class="badge badge-warning-lighten">Customs</span>'
                         }
-                        if (data == "cleared"){
-                            status = '<span class="badge badge-primary-lighten">Cleared</span>'
+                        if (data == 6){
+                            status = '<span class="badge badge-light-lighten">Cleared</span>'
                         }
-                        if (data == "received"){
+                        if (data == 7){
                             status = '<span class="badge badge-success-lighten">Received</span>'
                         }
                     }
