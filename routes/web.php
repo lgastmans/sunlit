@@ -12,6 +12,8 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\PurchaseOrderController;
+use App\Http\Controllers\PurchaseOrderItemController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -136,6 +138,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/suppliers', [SupplierController::class, 'getListForSelect2'])->name('ajax.suppliers');
         Route::get('/taxes', [TaxController::class, 'getListForSelect2'])->name('ajax.taxes');
         Route::get('/roles', [RoleController::class, 'getListForSelect2'])->name('ajax.roles');
+        Route::get('/products/{supplier?}', [ProductController::class, 'getListForSelect2'])->name('ajax.products');
     });
 
     Route::prefix('export')->group(function () {

@@ -270,4 +270,26 @@ class ProductController extends Controller
         }
         return abort(403, trans('error.unauthorized'));
     }
+
+
+     /**
+     * Display a listing of the resource for select2
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return json
+     */
+    public function getListForSelect2(Request $request)
+    {
+        $query = Product::query();
+
+        if ($request->has('supplier')){
+            $query->where('supplier_id', '=', $request->get('supplier'));
+        }
+        if ($request->has('q')){
+            $query->where('code', 'like', $request->get('q').'%');
+        }
+        $products = $query->get(['id', 'code as text']);
+     
+        return ['results' => $products];
+    }   
 }
