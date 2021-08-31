@@ -1,128 +1,159 @@
 @extends('layouts.app')
 
-@section('page-title', 'Products')
+@section('page-title', 'Purchase Order')
 
 @section('content')
 
 <div class="row">
-    <div class="col-6">
+    <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <div class="row mb-2">
-                    <p>@if ($product->id) {{ __('app.edit_title', ['field' => 'product']) }}: <span class="text-primary">{{ $product->name }}</span> @else {{ __('app.add_title', ['field' => 'product']) }} @endif </p>
-                </div>
-                <x-forms.errors class="mb-4" :errors="$errors" />
-                    <form action="@if ($product->id) {{ route('products.update', $product->id) }} @else {{ route('products.store') }} @endif" method="POST" class="needs-validation" novalidate>
-                        @csrf()
-                        @if ($product->id)
-                            @method('PUT')
-                        @endif
-                        @if ($product->id)
-                            <div class="mb-3">
-                                <input type="hidden" name="id" value="{{ old('id', $product->id) }}" />
-                            </div>
-                        @endif
-
-                        <div class="mb-3">
-                            <label class="form-label" for="category-select">Category</label>
-                            <select class="category-select form-control" name="category_id">
-                                @if ($product->category)
-                                    <option value="{{$product->category->id}}" selected="selected">{{$product->category->name}}</option>
-                                @endif
-                            </select>
-                            <div class="invalid-feedback">
-                                {{ __('error.form_invalid_field', ['field' => 'category' ]) }}
-                            </div>
-                        </div>
-
+                <div class="row">
+                    <div class="col-lg-3">
                         <div class="mb-3">
                             <label class="form-label" for="supplier-select">Supplier</label>
                             <select class="supplier-select form-control" name="supplier_id">
-                                @if ($product->supplier)
-                                    <option value="{{$product->supplier->id}}" selected="selected">{{$product->supplier->company}}</option>
-                                @endif
+                                {{-- <option value="{{$supplier->id}}" selected="selected">{{$product->supplier->company}}</option> --}}
                             </select>
-                            <div class="invalid-feedback">
-                                {{ __('error.form_invalid_field', ['field' => 'supplier' ]) }}
-                            </div>
                         </div>
-
+                    </div>
+                    <div class="col-lg-3">
                         <div class="mb-3">
-                            <label class="form-label" for="tax-select">Tax</label>
-                            <select class="tax-select form-control" name="tax_id">
-                                @if ($product->tax)
-                                    <option value="{{$product->tax->id}}" selected="selected">{{$product->tax->name}}</option>
-                                @endif
+                            <label class="form-label" for="product-select">Product</label>
+                            <select class="product-select form-control" name="product_id">
                             </select>
-                            <div class="invalid-feedback">
-                                {{ __('error.form_invalid_field', ['field' => 'tax' ]) }}
-                            </div>
                         </div>
-
+                    </div>
+                    <div class="col-lg-1">
                         <div class="mb-3">
-                            <x-forms.input label="Code" name="code" value="{{ old('code', $product->code) }}" message="Please provide a code" required="true"/>
+                            <label class="form-label" for="product-select">Quantity</label>
+                            <input type="quantity" class="form-control"  value="">
                         </div>
+                    </div>
+                    <div class="col-lg-1">
                         <div class="mb-3">
-                            <x-forms.input label="Name" name="name" value="{{ old('name', $product->name) }}" message="Please provide a name" required="true"/>
+                            <button type="submit" name="add-item">Add</button>
                         </div>
-                        <div class="mb-3">
-                            <x-forms.input label="Model" name="model" value="{{ old('model', $product->model) }}" message="Please provide a model" required="false"/>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label" for="display_purchase_price">Amount</label>
-                            <div class="input-group">
-                                <input class="form-control" id="display_purchase_price" name="display_purchase_price" value="{{ old('display_purchase_price', $product->display_purchase_price) }}" required="true" data-toggle="input-mask" />
-                                <span class="input-group-text" id="inputGroupPrepend">&#8377;</span>
-                                <div class="invalid-feedback">
-                                    {{ __('error.form_invalid_field', ['field' => 'percentage']) }}
-                                </div>
-                            </div>
-                        </div>
-
-
-
-
-                        <div class="mb-3">
-                            <x-forms.input label="Minimum Quantity" name="minimum_quantity" value="{{ old('minimum_quantity', $product->minimum_quantity) }}" message="Please provide a minimum quantity" required="false"/>
-                        </div>
-                        <div class="mb-3">
-                            <x-forms.input label="Cable length" name="cable_length" value="{{ old('cable_length', $product->cable_length) }}" message="Please provide a cable length" required="false"/>
-                        </div>
-                        <div class="mb-3">
-                            <x-forms.input label="KW rating" name="kw_rating" value="{{ old('kw_rating', $product->kw_rating) }}" message="Please provide a KW rating" required="false"/>
-                        </div>
-                        <div class="mb-3">
-                            <x-forms.input label="Part number" name="part_number" value="{{ old('part_number', $product->part_number) }}" message="Please provide a part number" required="false"/>
-                        </div>
-                        <div class="mb-3">
-                            <label for="notes" class="form-label">Notes</label>
-                            <textarea class="form-control" name="notes" rows="5">{{ old('notes', $product->notes) }}</textarea>
-                        </div>
-                       
-                        <button class="btn btn-primary" type="submit">@if ($product->id) {{ __('app.edit_title', ['field' => 'product']) }} @else {{ __('app.add_title', ['field' => 'product']) }} @endif</button>
-
-                    </form>
+                    </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                
+                <div class="row">
+                    <div class="col-lg-8">
+                        
+                        <div class="table-responsive">
+                            <table class="table table-borderless table-centered mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="col-7">Product</th>
+                                        <th class="col-2">Price</th>
+                                        <th class="col-1">Quantity</th>
+                                        <th class="col-2">Total</th>
+                                        <th class="col-1"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for ($i = 0; $i<=10; $i++)
+                                        <tr class="item" data-id="{{$i}}">
+                                            <td>
+                                                <p class="m-0 d-inline-block align-middle font-16">
+                                                    <a href="apps-ecommerce-products-details.html"
+                                                        class="text-body">XTM 4000-48</a>
+                                                    <br>
+                                                    <small class="me-2"><b>Code:</b> XTM 4000-48 </small>
+                                                    <small><b>Model:</b> Xtender series
+                                                    </small>
+                                                </p>
+                                            </td>
+                                            <td>
+                                                <div class="input-group flex-nowrap">
+                                                    <span class="input-group-text">$</span>
+                                                    <input id="item-price-{{ $i }}" type="text" class="editable-field form-control" data-value="199.99" data-field="price" data-item="{{ $i }}" placeholder="" value="{{ mt_rand(1, 100) }}.{{ mt_rand(50, 99) }}">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <input id="item-quantity-{{ $i }}" type="number" min="1" value="{{ mt_rand(1, 100) }}" class="editable-field form-control" data-value="10" data-field="quantity" data-item="{{ $i }}"
+                                                    placeholder="Qty" style="width: 90px;">
+                                            </td>
+                                            <td>
+                                                <span id="item-total-{{ $i }}" class="item-total">${{ mt_rand(100, 1000) }}.{{ mt_rand(50, 100) }} </span>
+                                            </td>
+                                            <td>
+                                                <a href="javascript:void(0);" class="action-icon" id="1" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>
+                                            </td>
+                                        </tr>
+                                    @endfor
+                                   
+                                </tbody>
+                            </table>
+                        </div> <!-- end table-responsive-->
+
+                        <!-- action buttons-->
+                        <div class="row mt-4 d-none">
+                            <div class="col-sm-12">
+                                <div class="text-sm-end">
+                                    <a href="apps-ecommerce-checkout.html" class="btn btn-danger">
+                                        <i class="mdi mdi-cart-plus me-1"></i> Save </a>
+                                </div>
+                            </div> <!-- end col -->
+                        </div> <!-- end row-->
+                    </div>
+                    <!-- end col -->
+
+                    <div class="col-lg-4">
+                        <div class="border p-3 mt-4 mt-lg-0 rounded">
+                            <h4 class="header-title mb-3">Order Summary</h4>
+
+                            <div class="table-responsive">
+                                <table class="table mb-0">
+                                    <tbody>
+                                        <tr>
+                                            <td>Grand Total :</td>
+                                            <td id="grand-total">$1571.19</td>
+                                        </tr>
+                                      
+                                        <tr>
+                                            <td>Shipping Charge :</td>
+                                            <td>$25</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Estimated Tax : </td>
+                                            <td>$19.22</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Total :</th>
+                                            <th>$1458.3</th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- end table-responsive -->
+                        </div>
+
+                    </div> <!-- end col -->
+
+                </div> <!-- end row -->
             </div> <!-- end card-body-->
         </div> <!-- end card-->
     </div> <!-- end col -->
 </div>
+<!-- end row -->
+
+<x-modal-confirm type="danger" target="item"></x-modal-confirm>
+
 @endsection
 
 
 @section('page-scripts')
 
     <script>
-
-        var categorySelect = $(".category-select").select2();
-        categorySelect.select2({
-            ajax: {
-                url: '{{route('ajax.categories')}}',
-                dataType: 'json'
-            }
-        });
-
         var supplierSelect = $(".supplier-select").select2();
         supplierSelect.select2({
             ajax: {
@@ -131,11 +162,64 @@
             }
         });
 
-        var taxSelect = $(".tax-select").select2();
-        taxSelect.select2({
+        var productSelect = $(".product-select").select2();
+        var product_route = '{{ route("ajax.products", ":id") }}';
+        // product_route = product_route.replace(':id', $('.supplier-select').val());
+        product_route = product_route.replace(':id', 1)
+        productSelect.select2({
             ajax: {
-                url: '{{route('ajax.taxes')}}',
+                url: product_route,
                 dataType: 'json'
+            }
+        });
+
+
+        $('.editable-field ').on('blur', function(e){        
+            if ($(this).val() != $(this).attr('data-value')){
+                // Update product total on screen
+                var item_id = $(this).parent().parent().attr('data-id');
+                var total = $('#item-price-' + item_id).val() * $('#item-quantity-' + item_id).val();
+                $('#item-total-' + item_id).html('$'+total);
+
+                // Update purchase order item
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                var route = '{{ route("purchase-orders-items", ":id") }}';
+                route = route.replace(':id', item_id);
+
+                $.ajax({
+                    type: 'POST',
+                    url: route,
+                    dataType: 'json',
+                    data: { 
+                        'value' : $(this).val() , 
+                        'field': $(this).attr('data-field'), 
+                        'item': $(this).attr('data-item')
+                    },
+                    success : function(result){
+                        $(this).attr('data-value') == $(this).val();
+                    }
+                });
+            }
+
+            // Update grand total amount
+            var grand_total = 0;
+            $('.item-total').each(function( index){
+                grand_total = grand_total + parseInt($(this).html().substr(1));
+            });
+            $('#grand-total').html('$'+grand_total);
+        });
+
+
+        $('#delete-modal').on('show.bs.modal', function (e) {
+            var route = '{{ route("purchase-orders-items", ":id") }}';
+            var button = e.relatedTarget;
+            if (button != null){
+                route = route.replace(':id', button.id);
+                $('#delete-form').attr('action', route);
             }
         });
 
