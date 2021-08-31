@@ -34,7 +34,18 @@ class PurchaseOrderItemController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $purchase_order_item = [
+            'purchase_order_id'=>mt_rand(1, 10), 
+            'purchase_order_item_id' => mt_rand(1, 10), 
+            'product_id' => mt_rand(1, 10), 
+            'code'=>'XTM 4000-48', 
+            'name'=>'XTM 4000-48', 
+            'model'=>'Xtender series', 
+            'quantity'=>mt_rand(1, 100), 
+            'price'=>mt_rand(1, 100).mt_rand(1, 100)];
+            
+        $res = ['code' => 200, 'message' => 'success', 'item'=> $purchase_order_item];
+        return json_encode($res);
     }
 
     /**
