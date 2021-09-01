@@ -159,7 +159,23 @@ class PurchaseOrderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //Save the purchase an redirect to the cart view with order_id
+        return redirect()->action(
+            [PurchaseOrderController::class, 'cart'], ['id' => 1]
+        );
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function cart($id)
+    {
+        $purchase_order = PurchaseOrder::with('items')->find($id);
+        if ($purchase_order)
+            return view('purchase_orders.cart', ['purchase_order' => $purchase_order ]);
     }
 
     /**
@@ -172,7 +188,7 @@ class PurchaseOrderController extends Controller
     {
         $purchase_order = PurchaseOrder::find($id);
         if ($purchase_order)
-            return view('purchase_orders.show', ['purchase_order'=>$purchase_order]);
+            return view('purchase_orders.show', ['purchase_order' => $purchase_order ]);
 
         return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'purchase order']));
     }

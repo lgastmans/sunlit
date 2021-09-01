@@ -185,4 +185,21 @@ class WarehouseController extends Controller
         }
         return abort(403, trans('error.unauthorized'));
     }
+
+     /**
+     * Display a listing of the resource for select2
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return json
+     */
+    public function getListForSelect2(Request $request)
+    {
+        $query = Warehouse::query();
+        if ($request->has('q')){
+            $query->where('name', 'like', $request->get('q').'%');
+        }
+        $warehouse = $query->get(['id', 'name as text']);
+     
+        return ['results' => $warehouse];
+    } 
 }

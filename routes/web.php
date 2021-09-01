@@ -49,6 +49,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/purchase-orders/create', [PurchaseOrderController::class, 'create'])->name('purchase-orders.create');
     Route::get('/purchase-orders/list', [PurchaseOrderController::class, 'getListForDatatables'])->name('purchase-orders.datatables');
     Route::get('/purchase-orders/{id}', [PurchaseOrderController::class, 'show'])->name('purchase-orders.show');
+    Route::get('/purchase-orders/{id}/cart', [PurchaseOrderController::class, 'cart'])->name('purchase-orders.cart');
     Route::get('/purchase-orders/{id}/edit', [PurchaseOrderController::class, 'edit'])->name('purchase-orders.edit');
     Route::post('/purchase-orders', [PurchaseOrderController::class, 'store'])->name('purchase-orders.store');
     Route::put('/purchase-orders/{id}', [PurchaseOrderController::class, 'update'])->name('purchase-orders.update');
@@ -136,6 +137,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/states', [StateController::class, 'getListForSelect2'])->name('ajax.states');
         Route::get('/categories', [CategoryController::class, 'getListForSelect2'])->name('ajax.categories');
         Route::get('/suppliers', [SupplierController::class, 'getListForSelect2'])->name('ajax.suppliers');
+        Route::get('/warehouses', [WarehouseController::class, 'getListForSelect2'])->name('ajax.warehouses');
         Route::get('/taxes', [TaxController::class, 'getListForSelect2'])->name('ajax.taxes');
         Route::get('/roles', [RoleController::class, 'getListForSelect2'])->name('ajax.roles');
         Route::get('/products/{supplier?}', [ProductController::class, 'getListForSelect2'])->name('ajax.products');

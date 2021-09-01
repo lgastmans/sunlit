@@ -11,6 +11,7 @@ return [
     'record_edited' => ':Field has been modified',
     'record_deleted' => ':Field has been deleted',
     'record_enabled' => ':Field has been enabled',
+    'create_title' => 'Create :field',
     'add_title' => 'Add a new :field',
     'edit_title' => 'Edit :field',
     'delete_title' => 'Delete :field',
