@@ -96,7 +96,6 @@ class PurchaseOrderController extends Controller
         $arr = array();
 
         $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
-
         foreach($po as $record)
         {
             if ($record->status==1)
@@ -104,7 +103,7 @@ class PurchaseOrderController extends Controller
             elseif ($record->status==2)
                 $status = '<span class="badge badge-info-lighten">Ordered</span>';
             elseif ($record->status==3)
-                $status = '<span class="badge badge-primary-lighten">confirmed</span>';
+                $status = '<span class="badge badge-primary-lighten">Confirmed</span>';
             elseif ($record->status==4)
                 $status = '<span class="badge badge-dark-lighten">Shipped</span>';
             elseif ($record->status==5)
@@ -124,7 +123,7 @@ class PurchaseOrderController extends Controller
                 "amount_inr" => $fmt->format($record->amount_inr/100),
                 "status" => $status,
                 "warehouse" => $record->warehouse->name,
-                "user" => $record->name
+                "user" => ucfirst($record->name)
             );
         }
 
@@ -186,7 +185,7 @@ class PurchaseOrderController extends Controller
      */
     public function show($id)
     {
-        $purchase_order = PurchaseOrder::find($id);
+        $purchase_order = PurchaseOrder::with(['supplier', 'warehouse', 'items', 'items.product'])->find($id);
         if ($purchase_order)
             return view('purchase_orders.show', ['purchase_order' => $purchase_order ]);
 

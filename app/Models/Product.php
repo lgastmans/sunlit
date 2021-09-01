@@ -43,6 +43,16 @@ class Product extends Model
     }
 
     /**
+     * Get the tax associated with the product.
+     */
+    public function purchase_order_item()
+    {
+        return $this->hasMany(PurchaseOrderItem::class);
+    }
+
+
+
+    /**
      * Get the purchase price amount in decimal.
      *
      * @return string
@@ -54,14 +64,4 @@ class Product extends Model
         return $fmt->format($this->purchase_price/100); //sprintf('%01.2f', $this->purchase_price / 100);
     }
 
-    /**
-     * Set the purchase price amount as integer.
-     *
-     * @param  string  $value
-     * @return void
-     */
-    public function setPurchasePriceAttribute($value)
-    {
-        $this->attributes['purchase_price'] = $value * 100;
-    }    
 }

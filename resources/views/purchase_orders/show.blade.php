@@ -1,134 +1,181 @@
 @extends('layouts.app')
 
-@section('page-title', ucfirst(Request::segment(1)) )
+@section('page-title', 'Purchase Order Details')
 
 @section('content')
 
 <div class="row">
     <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-lg-5">
-                        <!-- Product image -->
-                        <a href="javascript: void(0);" class="text-center d-block mb-4">
-                            <img src="/images/products/product-7.png" class="img-fluid" style="max-width: 280px;" alt="Product-img" />
-                        </a>
-                    </div> <!-- end col -->
-                    <div class="col-lg-7">
-                        <form class="ps-lg-4">
-                            <!-- Product title -->
-                            <h3 class="mt-0">{{ $product->name }} <a href="{{ route('products.edit', $product->id) }}" class="text-muted"><i class="mdi mdi-square-edit-outline ms-2"></i></a> </h3>
-                            <p class="mb-1">Added Date: {{ $product->created_at->format('jS F Y') }}</p>
+        <div class="row justify-content-center">
+            <div class="col-lg-7 col-md-10 col-sm-11">
 
-                            <!-- Product stock -->
-                            <div class="mt-3">
-                                <h4><span class="badge badge-success-lighten">In stock</span></h4>
-                            </div>
+                <div class="horizontal-steps mt-4 mb-4 pb-5" id="tooltip-container">
+                    <div class="horizontal-steps-content">
+                        <div class="step-item current">
+                            <span data-bs-container="#tooltip-container" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ $purchase_order->ordered_at }}">Ordered</span>
+                        </div>
+                        <div class="step-item">
+                            <span>Confirmed</span>
+                        </div>
+                        <div class="step-item">
+                            <span>Shipped</span>
+                        </div>
+                        <div class="step-item">
+                            <span>Customs</span>
+                        </div>
+                        <div class="step-item">
+                            <span>Cleared</span>
+                        </div>
+                        <div class="step-item">
+                            <span>Received</span>
+                        </div>
+                    </div>
+                    <div class="process-line" style="width: 10%;"></div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->    
+        
+        
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="header-title mb-3">Items from Order #{{ $purchase_order->order_number }}</h4>
 
-                            <!-- Product description -->
-                            <div class="mt-4">
-                                <h6 class="font-14">{{ $product->supplier->company }} Purchase Price:</h6>
-                                <h3>{{ $product->display_purchase_price }}</h3>
-                            </div>
-                
-                            <!-- Product description -->
-                            <div class="mt-4">
-                                <h6 class="font-14">Description:</h6>
-                                <p>{{ $product->notes }} </p>
-                            </div>
+                        <div class="table-responsive">
+                            <table class="table mb-0">
+                                <thead class="table-light">
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Total</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($purchase_order->items as $item)
+                                <tr>
+                                    <td>{{ $item->product->name }}</td>
+                                    <td>{{ $item->quantity_ordered }}</td>
+                                    <td>{{ $item->selling_price }}</td>
+                                    <td>{{ $item->quantity_ordered * $item->selling_price }}</td>
+                                </tr>
+                                @endforeach
+                                
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- end table-responsive -->
 
-                            <!-- Product information -->
-                            <div class="mt-4">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <h6 class="font-14">Available Stock:</h6>
-                                        <p class="text-sm lh-150">1784</p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <h6 class="font-14">Number of Orders:</h6>
-                                        <p class="text-sm lh-150">5,458</p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <h6 class="font-14">Revenue:</h6>
-                                        <p class="text-sm lh-150">$8,57,014</p>
-                                    </div>
-                                </div>
-                            </div>
+                    </div>
+                </div>
+            </div> <!-- end col -->
 
-                        </form>
-                    </div> <!-- end col -->
-                </div> <!-- end row-->
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="header-title mb-3">Order Summary #{{ $purchase_order->order_number }}</h4>
 
-                <div class="table-responsive mt-4">
-                    <table class="table table-bordered table-centered mb-0">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Outlets</th>
-                                <th>Price</th>
-                                <th>Stock</th>
-                                <th>Revenue</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>ASOS Ridley Outlet - NYC</td>
-                                <td>$139.58</td>
-                                <td>
-                                    <div class="progress-w-percent mb-0">
-                                        <span class="progress-value">478 </span>
-                                        <div class="progress progress-sm">
-                                            <div class="progress-bar bg-success" role="progressbar" style="width: 56%;" aria-valuenow="56" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>$1,89,547</td>
-                            </tr>
-                            <tr>
-                                <td>Marco Outlet - SRT</td>
-                                <td>$149.99</td>
-                                <td>
-                                    <div class="progress-w-percent mb-0">
-                                        <span class="progress-value">73 </span>
-                                        <div class="progress progress-sm">
-                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 16%;" aria-valuenow="16" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>$87,245</td>
-                            </tr>
-                            <tr>
-                                <td>Chairtest Outlet - HY</td>
-                                <td>$135.87</td>
-                                <td>
-                                    <div class="progress-w-percent mb-0">
-                                        <span class="progress-value">781 </span>
-                                        <div class="progress progress-sm">
-                                            <div class="progress-bar bg-success" role="progressbar" style="width: 72%;" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>$5,87,478</td>
-                            </tr>
-                            <tr>
-                                <td>Nworld Group - India</td>
-                                <td>$159.89</td>
-                                <td>
-                                    <div class="progress-w-percent mb-0">
-                                        <span class="progress-value">815 </span>
-                                        <div class="progress progress-sm">
-                                            <div class="progress-bar bg-success" role="progressbar" style="width: 89%;" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>$55,781</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div> <!-- end table-responsive-->
-                
-            </div> <!-- end card-body-->
-        </div> <!-- end card-->
+                        <div class="table-responsive">
+                            <table class="table mb-0">
+                                <thead class="table-light">
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Price</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>Grand Total :</td>
+                                    <td>${{ $purchase_order->amount_usd }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Shipping Charge :</td>
+                                    <td>$23</td>
+                                </tr>
+                                <tr>
+                                    <td>Estimated Tax : </td>
+                                    <td>$19.22</td>
+                                </tr>
+                                <tr>
+                                    <th>Total :</th>
+                                    <th>$1683.22</th>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- end table-responsive -->
+
+                    </div>
+                </div>
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
+
+
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="header-title mb-3">Supplier Information</h4>
+                        <h5>{{ $purchase_order->supplier->company }}</h5>
+                        <h6>{{ $purchase_order->supplier->contact_person }}</h6>
+                        <address class="mb-0 font-14 address-lg">
+                            <abbr title="Phone">P:</abbr> {{ $purchase_order->supplier->phone }} <br/>
+                            <abbr title="Mobile">M:</abbr> {{ $purchase_order->supplier->phone2 }} <br/>
+                            <abbr title="Mobile">@:</abbr> {{ $purchase_order->supplier->email }}
+                        </address>
+                    </div>
+                </div>
+            </div> <!-- end col -->
+        
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="header-title mb-3">Warehouse Information</h4>
+                        <h5>{{ $purchase_order->warehouse->name }}</h5>
+                        <h6>{{ $purchase_order->warehouse->contact_person }}</h6>
+                        <address class="mb-0 font-14 address-lg">
+                            <abbr title="Phone">P:</abbr> {{ $purchase_order->warehouse->phone }} <br/>
+                            <abbr title="Mobile">M:</abbr> {{ $purchase_order->warehouse->phone2 }} <br/>
+                            <abbr title="Mobile">@:</abbr> {{ $purchase_order->warehouse->email }}
+                        </address>
+                    </div>
+                </div>
+            </div> <!-- end col -->
+
+            <div class="col-lg-3 d-none">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="header-title mb-3">Warehouse Information</h4>
+                        <h5>{{ $purchase_order->warehouse->name }}</h5>
+                        <h6>{{ $purchase_order->warehouse->contact_person }}</h6>
+                        <address class="mb-0 font-14 address-lg">
+                            <abbr title="Phone">P:</abbr> {{ $purchase_order->warehouse->phone }} <br/>
+                            <abbr title="Mobile">M:</abbr> {{ $purchase_order->warehouse->phone2 }} <br/>
+                            <abbr title="Mobile">@:</abbr> {{ $purchase_order->warehouse->email }}
+                        </address>
+                    </div>
+                </div>
+            </div> <!-- end col -->
+        
+            <div class="col-lg-3 d-none">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="header-title mb-3">Delivery Info</h4>
+        
+                        <div class="text-center">
+                            <i class="mdi mdi-truck-fast h2 text-muted"></i>
+                            <h5><b>UPS Delivery</b></h5>
+                            <p class="mb-1"><b>Order ID :</b> xxxx235</p>
+                            <p class="mb-0"><b>Payment Mode :</b> COD</p>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- end col -->
+        </div>
+        <!-- end row -->
     </div> <!-- end col-->
 </div>
 @endsection
