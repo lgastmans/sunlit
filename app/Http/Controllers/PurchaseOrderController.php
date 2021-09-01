@@ -123,7 +123,7 @@ class PurchaseOrderController extends Controller
                 "amount_inr" => $fmt->format($record->amount_inr/100),
                 "status" => $status,
                 "warehouse" => $record->warehouse->name,
-                "user" => $record->name
+                "user" => ucfirst($record->name)
             );
         }
 
