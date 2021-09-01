@@ -28,14 +28,8 @@ class StoreProductRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-        //$b = str_replace(',', '', $this->display_purchase_price );
-        //$b = filter_var( str_replace(",", "", $this->display_purchase_price), FILTER_SANITIZE_NUMBER_INT, FILTER_FLAG_ALLOW_FRACTION);
-        //$b = preg_replace('/&.*?;/', '', $this->display_purchase_price);
+
         $b = preg_replace( '/[^.\d]/', '', $this->display_purchase_price);
-
-
-//        dd($b);
-
         if (!is_numeric($b) || (empty($b)))
             $b = 0;
 
