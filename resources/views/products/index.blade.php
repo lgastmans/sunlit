@@ -195,7 +195,6 @@
             route = route.replace(':id', button.id);
             $('#delete-form').attr('action', route);
         }
-        
     });
 
     @if(Session::has('success'))

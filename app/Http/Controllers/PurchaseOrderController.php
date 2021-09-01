@@ -173,7 +173,7 @@ class PurchaseOrderController extends Controller
      */
     public function cart($id)
     {
-        $purchase_order = PurchaseOrder::with('items')->find($id);
+        $purchase_order = PurchaseOrder::with(['supplier','warehouse','items'])->find($id);
         if ($purchase_order)
             return view('purchase_orders.cart', ['purchase_order' => $purchase_order ]);
     }

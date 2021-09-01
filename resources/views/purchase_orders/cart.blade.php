@@ -9,7 +9,7 @@
         <div class="card">
             <div class="card-body">
                 <form action="{{ route('purchase-orders-items.store') }}" method="POST" class="form-product row">
-                    <input type="hidden" name="purchase-order-id" id="purchase-order-id" value="1"> <!--TODO: update value with purchase_order_id-->
+                    <input type="hidden" name="purchase-order-id" id="purchase-order-id" value="{{ $purchase_order->id }}">
                     <div class="col-lg-3">
                         <div class="mb-3">
                             <label class="form-label" for="product-select">Product</label>
@@ -19,7 +19,7 @@
                     <div class="col-lg-1">
                         <div class="mb-3">
                             <label class="form-label" for="product-select">Quantity</label>
-                            <input type="quantity" class="form-control"  value="1">
+                            <input type="quantity" class="form-control" name="quantity"  value="1">
                         </div>
                     </div>
                     <div class="col-lg-1">
@@ -81,7 +81,7 @@
                                                     <span id="item-total-{{ $i }}" class="item-total">${{ mt_rand(100, 1000) }}.{{ mt_rand(50, 100) }} </span>
                                                 </td>
                                                 <td>
-                                                    <a href="javascript:void(0);" class="action-icon" id="1" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>
+                                                    <a href="javascript:void(0);" class="action-icon" id="{{ $i }}" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>
                                                 </td>
                                             </tr>
                                         @endfor
@@ -108,20 +108,19 @@
 
                     <div class="col-lg-4">
                         <div class="border p-3 mt-4 mt-lg-0 rounded">
-                            <h4 class="header-title mb-3">Order Summary <span id="#purchase-order-number">#BM6987</span></h4>
+                            <h4 class="header-title mb-3">Order Summary <span id="#purchase-order-number">#{{ $purchase_order->order_number }}</span></h4>
 
                             <div class="table-responsive">
                                 <table class="table mb-0">
                                     <tbody>
                                         <tr>
                                             <td>Grand Total :</td>
-                                            <!--TODO: update values -->
-                                            <td id="grand-total">$1571.19</td>
+                                            <td id="grand-total">${{ $purchase_order->amount_usd }}</td>
                                         </tr>
                                       
                                         <tr>
                                             <td>Shipping Charge :</td>
-                                            <td>$25</td>
+                                            <td>${{ $purchase_order->transport_charges }}</td>
                                         </tr>
                                         <tr>
                                             <td>Estimated Tax : </td>
@@ -136,17 +135,21 @@
                             </div>
                             <!-- end table-responsive -->
                         </div>
-                        <div class=" mt-4 mt-lg-0 rounded">
+                        <div class=" mt-4 mt-lg-0 rounded d-none">
                             <div class="card mt-4 border">
                                 <div class="card-body">
-                                    <!--TODO: update values -->
                                     <h4 class="header-title mb-3">Supplier Information</h4>
-                                    <h5>SolarEdge</h5>
+                                    <h5>{{ $purchase_order->supplier->company }}</h5>
+                                    <h6>{{ $purchase_order->supplier->contact_person }}</h6>
                                     <address class="mb-0 font-14 address-lg">
-                                        795 Folsom Ave, Suite 600<br>
-                                        San Francisco, CA 94107<br>
-                                        <abbr title="Phone">P:</abbr> (123) 456-7890 <br/>
-                                        <abbr title="Mobile">M:</abbr> (+01) 12345 67890
+                                        {{ $purchase_order->supplier->address }}<br>
+                                        @if ($purchase_order->supplier->address2)
+                                        {{ $purchase_order->supplier->address2 }}<br>
+                                        @endif
+                                        {{ $purchase_order->supplier->city }}, {{ $purchase_order->supplier->zip_code }}<br/>
+                                        <abbr title="Phone">P:</abbr> {{ $purchase_order->supplier->phone }} <br/>
+                                        <abbr title="Mobile">M:</abbr> {{ $purchase_order->supplier->phone2 }} <br/>
+                                        <abbr title="Mobile">@:</abbr> {{ $purchase_order->supplier->email }}
                                     </address>
         
                                 </div>
@@ -161,21 +164,25 @@
     </div> <!-- end col -->
 </div>
 <!-- end row -->
-<div class="row d-none">
+<div class="row">
     <div class="col-lg-4">
         <div class="card">
             <div class="card-body">
-                <h4 class="header-title mb-3">Shipping Information</h4>
-
-                <h5>Stanley Jones</h5>
-                
+                <h4 class="header-title mb-3">Supplier Information</h4>
+                <h5>{{ $purchase_order->supplier->company }}</h5>
+                <h6>{{ $purchase_order->supplier->contact_person }}</h6>
                 <address class="mb-0 font-14 address-lg">
-                    795 Folsom Ave, Suite 600<br>
-                    San Francisco, CA 94107<br>
-                    <abbr title="Phone">P:</abbr> (123) 456-7890 <br/>
-                    <abbr title="Mobile">M:</abbr> (+01) 12345 67890
+                    {{ $purchase_order->supplier->address }}<br>
+                    @if ($purchase_order->supplier->address2)
+                    {{ $purchase_order->supplier->address2 }}<br>
+                    @else
+                    &nbsp;<br>
+                    @endif
+                    {{ $purchase_order->supplier->city }}, {{ $purchase_order->supplier->zip_code }}<br/>
+                    <abbr title="Phone">P:</abbr> {{ $purchase_order->supplier->phone }} <br/>
+                    <abbr title="Mobile">M:</abbr> {{ $purchase_order->supplier->phone2 }} <br/>
+                    <abbr title="Mobile">@:</abbr> {{ $purchase_order->supplier->email }}
                 </address>
-
             </div>
         </div>
     </div> <!-- end col -->
@@ -183,22 +190,22 @@
     <div class="col-lg-4">
         <div class="card">
             <div class="card-body">
-                <h4 class="header-title mb-3">Billing Information</h4>
-
-                <ul class="list-unstyled mb-0">
-                    <li>
-                        <p class="mb-2"><span class="fw-bold me-2">Payment Type:</span> Credit Card</p>
-                        <p class="mb-2"><span class="fw-bold me-2">Provider:</span> Visa ending in 2851</p>
-                        <p class="mb-2"><span class="fw-bold me-2">Valid Date:</span> 02/2020</p>
-                        <p class="mb-0"><span class="fw-bold me-2">CVV:</span> xxx</p>
-                    </li>
-                </ul>
-
+                <h4 class="header-title mb-3">Warehouse Information</h4>
+                <h5>{{ $purchase_order->warehouse->name }}</h5>
+                <h6>{{ $purchase_order->warehouse->contact_person }}</h6>
+                <address class="mb-0 font-14 address-lg">
+                    {{ $purchase_order->warehouse->address }}<br>
+                    &nbsp;<br>
+                    {{ $purchase_order->warehouse->city }}, {{ $purchase_order->warehouse->zip_code }}<br/>
+                    <abbr title="Phone">P:</abbr> {{ $purchase_order->warehouse->phone }} <br/>
+                    <abbr title="Mobile">M:</abbr> {{ $purchase_order->warehouse->phone2 }} <br/>
+                    <abbr title="Mobile">@:</abbr> {{ $purchase_order->warehouse->email }}
+                </address>
             </div>
         </div>
     </div> <!-- end col -->
 
-    <div class="col-lg-4">
+    <div class="col-lg-4 d-none">
         <div class="card">
             <div class="card-body">
                 <h4 class="header-title mb-3">Delivery Info</h4>
@@ -300,21 +307,24 @@
 
 
         $('.form-product').on('submit', function(e){
+            var formData = { 
+                    product_id: $(".product-select").val(),
+                    purchase_order_id: $("purchase-order-id").val(),
+                    quantity: $(".quantity").val(),
+                };
             e.preventDefault();       
             $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
                     }
-                });     
+                });   
+                
+                // console.log(formData);
             $.ajax({
                 type: 'POST',
                 url: $(this).attr("action"),
                 dataType: 'json',
-                data: { 
-                    product_id: $(".product-select").val(),
-                    purchase_order_id: $("purchase-order-id").val(),
-                    quantity: $(".quantity").val(),
-                },
+                data: $( this ).serialize(),
                 success: function (data) {
                     console.log(data);
                     var item = '<tr class="item" data-id="'+ ['purchase_order_item_id'] +'">';
