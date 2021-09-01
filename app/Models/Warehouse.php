@@ -15,7 +15,7 @@ class Warehouse extends Model
 
 
     /**
-     * Get the state associated with the supplier.
+     * Get the state associated with the warehouse.
      */
     public function state()
     {
