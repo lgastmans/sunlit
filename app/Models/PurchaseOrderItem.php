@@ -10,4 +10,14 @@ class PurchaseOrderItem extends Model
     use HasFactory;
 
     protected $fillable = ['purchase_order_id', 'product_id', 'tax_id', 'quantity_ordered', 'quantity_received', 'selling_price'];
+
+
+
+    /**
+     * Get the order associated with the purchase order item.
+     */
+    public function order()
+    {
+        return $this->belongsTo(PurchaseOrder::class);
+    } 
 }

@@ -22,7 +22,7 @@ class PurchaseOrder extends Model
     protected $fillable = ['warehouse_id', 'supplier_id', 'order_number', 'boe_number', 'ordered_at', 'expected_at', 'received_at', 'credit_period', 'amount_usd', 'amount_inr', 'customs_ex_rate', 'se_ex_rate', 'duty_amount', 'social_surcharge', 'igst', 'bank_charges', 'clearing_charges', 'transport_charges', 'se_due_date', 'se_payment_date', 'status', 'user_id'];
 
     /**
-     * Get the warehouse associated with the product.
+     * Get the warehouse associated with the purchase order.
      */
     public function warehouse()
     {
@@ -30,7 +30,7 @@ class PurchaseOrder extends Model
     }
 
     /**
-     * Get the supplier associated with the product.
+     * Get the supplier associated with the purchase order.
      */
     public function supplier()
     {
@@ -38,10 +38,18 @@ class PurchaseOrder extends Model
     }
 
     /**
-     * Get the user associated with the product.
+     * Get the user associated with the purchase order.
      */
     public function user()
     {
         return $this->belongsTo(User::class);
-    }        
+    } 
+    
+    /**
+     * Get the items associated with the purchase order.
+     */
+    public function items()
+    {
+        return $this->hasMany(PurchaseOrderItem::class);
+    } 
 }
