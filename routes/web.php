@@ -11,6 +11,7 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\WarehouseController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\PurchaseOrderItemController;
 
@@ -146,6 +147,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::prefix('export')->group(function () {
         Route::get('/products', [ProductController::class, 'getExportList'])->name('export.products');
     });
+
+    Route::get('/permissions/add', [PermissionController::class, 'store'])->name('permissions.add');
 
 
     // Test routes to delete 
