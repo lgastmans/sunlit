@@ -275,18 +275,17 @@ class ProductController extends Controller
      /**
      * Display a listing of the resource for select2
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return json
      */
-    public function getListForSelect2(Request $request)
+    public function getListForSelect2($id, Request $request)
     {
         $query = Product::query();
 
-        if ($request->has('supplier')){
-            $query->where('supplier_id', '=', $request->get('supplier'));
+        if ($id){
+            $query->where('supplier_id', '=', $id);
         }
         if ($request->has('q')){
-            $query->where('code', 'like', $request->get('q').'%');
+            $query->where('code', 'like', '%'.$request->get('q').'%');
         }
         $products = $query->get(['id', 'code as text']);
      

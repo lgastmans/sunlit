@@ -10,6 +10,8 @@
             <div class="card-body">
                 <form action="{{ route('purchase-orders-items.store') }}" method="POST" class="form-product row">
                     <input type="hidden" name="purchase-order-id" id="purchase-order-id" value="{{ $purchase_order->id }}">
+                    <input type="hidden" name="supplier-id" id="supplier-id" value="{{ $purchase_order->supplier->id }}">
+                    <input type="hidden" name="warehouse-id" id="warehouse-id" value="{{ $purchase_order->warehouse->id }}">
                     <div class="col-lg-3">
                         <div class="mb-3">
                             <label class="form-label" for="product-select">Product</label>
@@ -249,9 +251,9 @@
         });
 
         var productSelect = $(".product-select").select2();
-        var product_route = '{{ route("ajax.products", ":id") }}';
-        // product_route = product_route.replace(':id', $('.supplier-select').val());
-        product_route = product_route.replace(':id', 1)
+        var product_route = '{{ route("ajax.products", ":supplier_id") }}';
+        product_route = product_route.replace(':supplier_id', $('#supplier-id').val());
+        console.log(product_route);
         productSelect.select2({
             ajax: {
                 url: product_route,
