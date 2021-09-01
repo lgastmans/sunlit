@@ -64,14 +64,4 @@ class Product extends Model
         return $fmt->format($this->purchase_price/100); //sprintf('%01.2f', $this->purchase_price / 100);
     }
 
-    /**
-     * Set the purchase price amount as integer.
-     *
-     * @param  string  $value
-     * @return void
-     */
-    public function setPurchasePriceAttribute($value)
-    {
-        $this->attributes['purchase_price'] = $value * 100;
-    }    
 }
