@@ -43,6 +43,16 @@ class Product extends Model
     }
 
     /**
+     * Get the tax associated with the product.
+     */
+    public function purchase_order_item()
+    {
+        return $this->hasMany(PurchaseOrderItem::class);
+    }
+
+
+
+    /**
      * Get the purchase price amount in decimal.
      *
      * @return string

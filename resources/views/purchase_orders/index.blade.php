@@ -111,35 +111,6 @@
             { 
                 'data': 'status',
                 'orderable': true
-                /*
-                'render': function(data, type, row, meta){
-                    if (type === "display"){
-                        var status = "";
-                        if (data == 1){
-                            status = '<span class="badge badge-secondary-lighten">Draft</span>'
-                        }
-                        if (data == 2){
-                            status = '<span class="badge badge-info-lighten">Ordered</span>'
-                        }
-                        if (data == 3){
-                            status = '<span class="badge badge-primary-lighten">confirmed</span>'
-                        }
-                        if (data == 4){
-                            status = '<span class="badge badge-dark-lighten">Shipped</span>'
-                        }
-                        if (data == 5){
-                            status = '<span class="badge badge-warning-lighten">Customs</span>'
-                        }
-                        if (data == 6){
-                            status = '<span class="badge badge-light-lighten">Cleared</span>'
-                        }
-                        if (data == 7){
-                            status = '<span class="badge badge-success-lighten">Received</span>'
-                        }
-                    }
-                    return status
-                }
-                */
             },
             { 
                 'data': 'user',
@@ -193,8 +164,13 @@
         }
     });
 
-    $('#products-datatable').on('dblclick', 'tr', function () {
-        var route = '{{  route("products.show", ":id") }}';
+    $('#purchase-orders-datatable').on('dblclick', 'tr', function () {
+        if (table.row(this).data().status.includes('Draft')){
+            var route = '{{  route("purchase-orders.cart", ":id") }}';
+        }
+        else{
+            var route = '{{  route("purchase-orders.show", ":id") }}';
+        }
         route = route.replace(':id', table.row( this ).data().id);
         window.location.href = route;
     });
