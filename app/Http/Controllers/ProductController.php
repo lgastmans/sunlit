@@ -99,30 +99,118 @@ class ProductController extends Controller
 
 
         /*
+
+            Could use something like mentioned here maybe
+
+            https://stackoverflow.com/questions/30942556/laravel-dynamic-where-clause-with-elouquent
+
+            to build the query
+
+        */
+
+        /*
             individual column filtering
         */
+        /*
         $column_arr = $request->get('columns');
         
-        if (!empty($column_arr[1]['search']['value'])) 
-            $query->where('categories.name', 'like', '%'.$column_arr[1]['search']['value'].'%');
+        $has_categories = false;
+        if (!empty($column_arr[1]['search']['value'])) {
+            $sql->where('categories.name', 'like', '%'.$column_arr[1]['search']['value'].'%');
+            $has_categories = true;
+        }
        
+        $has_suppliers = false;
+        if (!empty($column_arr[2]['search']['value'])) {
+            $sql->where('suppliers.company', 'like', '%'.$column_arr[2]['search']['value'].'%');
+            $has_suppliers = true;
+        }
 
-        if (!empty($column_arr[2]['search']['value']))
-            $query->where('suppliers.company', 'like', '%'.$column_arr[2]['search']['value'].'%');
+        $has_taxes = false;
+        if (!empty($column_arr[3]['search']['value'])) {
+            $sql->where('taxes.name', 'like', '%'.$column_arr[3]['search']['value'].'%');
+            $has_taxes = true;
+        }
+
+        $has_code = false;
+        if (!empty($column_arr[4]['search']['value'])) {
+            $sql->where('products.code', 'like', '%'.$column_arr[4]['search']['value'].'%');
+            $has_code = true;
+        }
+
+        $has_name = false;
+        if (!empty($column_arr[5]['search']['value'])) {
+            $sql->where('products.name', 'like', '%'.$column_arr[5]['search']['value'].'%');
+            $has_name = true;
+        }
 
 
-        if (!empty($column_arr[3]['search']['value']))
-            $query->where('taxes.name', 'like', '%'.$column_arr[3]['search']['value'].'%');
+        /*
+            global filter
+        */
+        /*
+        $sql->where(function ($query) {
+
+            $has_where=false;
+
+            if (!$has_categories) {
+
+                if ($has_where)
+                    $query->orWhere('categories.name', 'like', '%'.$search.'%');
+                else
+                    $query->where('categories.name', 'like', '%'.$search.'%');
+
+                $has_where = true;
+            }
+
+            if (!$has_suppliers) {
+
+                if ($has_where)
+                    $query->orWhere('suppliers.company', 'like', '%'.$search.'%');
+                else
+                    $query->where('suppliers.company', 'like', '%'.$search.'%');
+
+                $has_where = true;
+            }
+
+            if (!$has_taxes) {
+
+                if ($has_where)
+                    $query->orWhere('taxes.name', 'like', '%'.$search.'%');
+                else
+                    $query->where('taxes.name', 'like', '%'.$search.'%');
+
+                $has_where = true;
+            }
+
+            if (!$has_code) {
+
+                if ($has_where)
+                    $query->orWhere('products.code', 'like', '%'.$search.'%');
+                else
+                    $query->where('products.code', 'like', '%'.$search.'%');
+
+                $has_where = true;
+            }
+                     
+            if (!$has_name) {
+
+                if ($has_where)
+                    $query->orWhere('products.name', 'like', '%'.$search.'%');
+                else
+                    $query->where('products.name', 'like', '%'.$search.'%');
+            }
+        });
 
 
-        if (!empty($column_arr[4]['search']['value']))
-            $query->where('products.code', 'like', '%'.$column_arr[4]['search']['value'].'%');
+        print_r($sql->toSql());
 
-
-        if (!empty($column_arr[5]['search']['value']))
-            $query->where('products.name', 'like', '%'.$column_arr[5]['search']['value'].'%');
-
-
+        */
+        
+        $query->where('products.code', 'like', '%'.$search.'%')
+            ->orWhere('products.name', 'like', '%'.$search.'%')
+            ->orWhere('categories.name', 'like', '%'.$search.'%')
+            ->orWhere('suppliers.company', 'like', '%'.$search.'%');
 
         $query->orderBy($order_column, $order_dir);
 
