@@ -5,17 +5,16 @@
 @section('content')
 
 <div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="row mb-2">
-                    <div class="col-sm-8">
-                        <form action="{{ route('settings.update') }}" method="POST">
-                            @csrf()
-                            @method('PUT')
-                            @foreach ($settings as $group=>$gsettings)
-                            <div class="mt-4">
-                                <h4>{{ ucfirst($group) }}</h4>
+    <form action="{{ route('settings.update') }}" method="POST">
+        @csrf()
+        @method('PUT')
+        @foreach ($settings as $group=>$gsettings)
+            <div class="col-xl-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h4 class="mb-4">{{ ucfirst($group) }}</h4>
                                 @foreach($gsettings as $key =>$value)  
                                     <div class="mb-3">
                                         <div>
@@ -24,15 +23,14 @@
                                         </div>
                                     </div>
                                 @endforeach
-                                </div> 
-                            @endforeach
-                            <button class="btn btn-primary" type="submit">Save settings</button>
-                        </form>
-                    </div><!-- end col-->
-                </div>
-            </div> <!-- end card-body-->
-        </div> <!-- end card-->
-    </div> <!-- end col -->
+                            </div><!-- end col-->
+                        </div>
+                    </div> <!-- end card-body-->
+                </div> <!-- end card-->
+            </div> <!-- end col -->
+        @endforeach
+        <button class="btn btn-primary" type="submit">Save settings</button>
+    </form>
 </div>
 
 
