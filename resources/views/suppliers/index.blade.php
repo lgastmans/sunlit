@@ -10,7 +10,11 @@
             <div class="card-body">
                 <div class="row mb-2">
                     <div class="col-sm-4">
-                        <a href="{{ route('suppliers.create') }}" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> Add Supplier</a>
+                        @if (Auth::user()->can('edit suppliers'))
+                            <a href="{{ route('suppliers.create') }}" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> {{ __('app.add_title', ['field' => 'supplier']) }}</a>
+                        @else
+                            &nbsp;
+                        @endif
                     </div>
                     <div class="col-sm-8">
                         <div class="text-sm-end">
