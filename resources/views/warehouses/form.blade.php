@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('page-title', 'warehouses')
+@section('page-title', 'Warehouses')
 
 @section('content')
 
@@ -8,9 +8,6 @@
     <div class="col-6">
         <div class="card">
             <div class="card-body">
-                <div class="row mb-2">
-                    <p>@if ($warehouse->id) {{ __('app.edit_title', ['field' => 'warehouse']) }}: <span class="text-primary">{{ $warehouse->name }}</span> @else {{ __('app.add_title', ['field' => 'warehouse']) }} @endif </p>
-                </div>
                 <x-forms.errors class="mb-4" :errors="$errors" />
                     <form action="@if ($warehouse->id) {{ route('warehouses.update', $warehouse->id) }} @else {{ route('warehouses.store') }} @endif" method="POST" class="needs-validation" novalidate>
                         @csrf()

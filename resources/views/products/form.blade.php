@@ -8,9 +8,6 @@
     <div class="col-9">
         <div class="card">
             <div class="card-body">
-                <div class="row mb-2">
-                    <p>@if ($product->id) {{ __('app.edit_title', ['field' => 'product']) }}: <span class="text-primary">{{ $product->name }}</span> @else {{ __('app.add_title', ['field' => 'product']) }} @endif </p>
-                </div>
                 <x-forms.errors class="mb-4" :errors="$errors" />
                     <form action="@if ($product->id) {{ route('products.update', $product->id) }} @else {{ route('products.store') }} @endif" method="POST" class="needs-validation" novalidate>
                         @csrf()

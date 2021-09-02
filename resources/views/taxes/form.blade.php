@@ -8,9 +8,6 @@
     <div class="col-6">
         <div class="card">
             <div class="card-body">
-                <div class="row mb-2">
-                    <p>@if ($tax->id) {{ __('app.edit_title', ['field' => 'tax']) }}: <span class="text-primary">{{ $tax->name }}</span> @else {{ __('app.add_title', ['field' => 'tax']) }} @endif </p>
-                </div>
                 <x-forms.errors class="mb-4" :errors="$errors" />
                     <form action="@if ($tax->id) {{ route('taxes.update', $tax->id) }} @else {{ route('taxes.store') }} @endif" method="POST" class="needs-validation" novalidate>
                         @csrf()

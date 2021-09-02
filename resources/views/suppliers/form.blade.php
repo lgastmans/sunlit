@@ -8,9 +8,6 @@
     <div class="col-9">
         <div class="card">
             <div class="card-body">
-                <div class="row mb-2">
-                    <p>@if ($supplier->id) {{ __('app.edit_title', ['field' => 'supplier']) }}: <span class="text-primary">{{ $supplier->name }}</span> @else {{ __('app.add_title', ['field' => 'supplier']) }} @endif </p>
-                </div>
                 <x-forms.errors class="mb-4" :errors="$errors" />
                     <form action="@if ($supplier->id) {{ route('suppliers.update', $supplier->id) }} @else {{ route('suppliers.store') }} @endif" method="POST" class="needs-validation" novalidate>
                         @csrf()
@@ -25,7 +22,6 @@
                             </div>
                             <div class="col-xl-3">
                                 <x-forms.input label="GSTIN" name="gstin" value="{{ old('gstin', $supplier->gstin) }}" required="true"/>
-                                
                             </div>
                         </div>
                         <div class="mb-3 row">
