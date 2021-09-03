@@ -7,6 +7,7 @@ use \NumberFormatter;
 use Illuminate\Http\Request;
 use App\Models\PurchaseOrder;
 use Illuminate\Support\Facades\Auth;
+use \App\Http\Requests\StorePurchaseOrderRequest;
 
 
 class PurchaseOrderController extends Controller
@@ -120,9 +121,9 @@ class PurchaseOrderController extends Controller
                 "id" => $record->id,
                 "order_number" => $record->order_number,
                 "supplier" => $record->company,
-                "ordered_at" => $record->ordered_at->format('d/M/Y'),
-                "expected_at" => $record->expected_at->format('d/M/Y'),
-                "received_at" => $record->received_at->format('d/M/Y'),
+                "ordered_at" => (is_null($record->ordered_at)? '' : $record->ordered_at->format('d/M/Y')),
+                "expected_at" => (is_null($record->expected_at)? '' : $record->expected_at->format('d/M/Y')),
+                "received_at" => (is_null($record->received_at)? '' : $record->received_at->format('d/M/Y'))    ,
                 "amount_inr" => $fmt->format($record->amount_inr/100),
                 "status" => $status,
                 "warehouse" => $record->warehouse->name,
@@ -150,7 +151,7 @@ class PurchaseOrderController extends Controller
     public function create()
     {
         $purchase_order = new PurchaseOrder();
-        return view('purchase_orders.form', ['purchase_order' => $purchase_order]);
+        return view('purchase_orders.form', ['purchase_order' => $purchase_order, 'status' => PurchaseOrder::DRAFT, 'user_id' => Auth::user()->id]);
     }
 
     /**
@@ -159,12 +160,17 @@ class PurchaseOrderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StorePurchaseOrderRequest $request)
     {
-        //Save the purchase an redirect to the cart view with order_id
-        return redirect()->action(
-            [PurchaseOrderController::class, 'cart'], ['id' => 1]
-        );
+        $validatedData = $request->validated();
+        $purchase_order = PurchaseOrder::create($validatedData);
+        if ($purchase_order) {
+            //Save the purchase an redirect to the cart view with order_id
+            return redirect()->action(
+                [PurchaseOrderController::class, 'cart'], ['id' => $purchase_order->id]
+            );
+        }
+        return back()->withInputs($request->input())->with('error', trans('error.record_added', ['field' => 'purchase order']));        
     }
 
     /**
