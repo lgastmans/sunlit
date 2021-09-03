@@ -225,16 +225,4 @@ class PurchaseOrderController extends Controller
     {
         //
     }
-
-
-    public function test_purchase_orders()    
-    {
-        $purchase_order = PurchaseOrder::factory()
-            // ->has(
-            //     PurchaseOrderItem::factory()
-            // )
-            ->count(10)
-            ->create();
-    }
-
 }

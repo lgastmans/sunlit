@@ -22,9 +22,9 @@ class PurchaseOrderFactory extends Factory
     public function definition()
     {
         return [
-            'warehouse_id' => 1,
-            'supplier_id' => $this->faker->numberBetween(2,3),
-            'order_number' => $this->faker->randomNumber(5, true),
+            'warehouse_id' => $this->faker->numberBetween(1,5),
+            'supplier_id' => $this->faker->numberBetween(11,20),
+            'order_number' => $this->faker->bothify('BM#####'),
             'boe_number' => $this->faker->randomNumber(5, true),
             'ordered_at' => $this->faker->dateTimeThisMonth('+ 2 days'),
             'expected_at' => $this->faker->dateTimeThisMonth(),

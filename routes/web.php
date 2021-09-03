@@ -149,11 +149,5 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::get('/permissions/add', [PermissionController::class, 'store'])->name('permissions.add');
-
-
-    // Test routes to delete 
-    Route::prefix('test')->group(function () {
-        Route::get('/purchase-orders', [PurchaseOrderController::class, 'test_purchase_orders'])->name('test');
-    });
     
 });
