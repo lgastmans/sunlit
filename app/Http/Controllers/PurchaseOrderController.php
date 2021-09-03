@@ -74,16 +74,19 @@ class PurchaseOrderController extends Controller
         
 
         // Fetch records
-        if ($length < 0)
-            $po = PurchaseOrder::join('warehouses', 'warehouses.id', '=', 'purchase_orders.warehouse_id')
+        if ($length < 0){
+            $po = $po = PurchaseOrder::select('purchase_orders.*', 'suppliers.company', 'users.name')
+                ->join('warehouses', 'warehouses.id', '=', 'purchase_orders.warehouse_id')
                 ->join('suppliers', 'suppliers.id', '=', 'purchase_orders.supplier_id')
                 ->join('users', 'users.id', '=', 'purchase_orders.user_id')
                 ->where('order_number', 'like', '%'.$search.'%')
                 ->orWhere('suppliers.company', 'like', '%'.$search.'%')
                 ->orderBy($order_column, $order_dir)
                 ->get();
-        else
-            $po = PurchaseOrder::join('warehouses', 'warehouses.id', '=', 'purchase_orders.warehouse_id')
+        }
+        else{
+            $po = PurchaseOrder::select('purchase_orders.*', 'suppliers.company', 'users.name')
+                ->join('warehouses', 'warehouses.id', '=', 'purchase_orders.warehouse_id')
                 ->join('suppliers', 'suppliers.id', '=', 'purchase_orders.supplier_id')
                 ->join('users', 'users.id', '=', 'purchase_orders.user_id')
                 ->where('order_number', 'like', '%'.$search.'%')
@@ -93,8 +96,8 @@ class PurchaseOrderController extends Controller
                 ->take($length)
                 ->get();
 
+        }
         $arr = array();
-
         $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
         foreach($po as $record)
         {
