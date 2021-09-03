@@ -1,11 +1,11 @@
 <?php
 
 namespace Database\Seeders;
-use App\Models\Supplier;
 
+use App\Models\Warehouse;
 use Illuminate\Database\Seeder;
 
-class SupplierTableSeeder extends Seeder
+class WarehouseSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,6 +14,6 @@ class SupplierTableSeeder extends Seeder
      */
     public function run()
     {
-        Supplier::factory()->count(10)->create();
+        Warehouse::factory()->count(5)->create();
     }
 }
