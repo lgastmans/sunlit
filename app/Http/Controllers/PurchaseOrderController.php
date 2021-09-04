@@ -116,6 +116,8 @@ class PurchaseOrderController extends Controller
                 $status = '<span class="badge badge-light-lighten">Cleared</span>';
             elseif ($record->status==7)
                 $status = '<span class="badge badge-success-lighten">Received</span>';
+            else
+                $status = '<span class="badge badge-error-lighten">Unknown</span>';
 
             $arr[] = array(
                 "id" => $record->id,
@@ -151,7 +153,7 @@ class PurchaseOrderController extends Controller
     public function create()
     {
         $purchase_order = new PurchaseOrder();
-        return view('purchase_orders.form', ['purchase_order' => $purchase_order, 'status' => PurchaseOrder::DRAFT, 'user_id' => Auth::user()->id]);
+        return view('purchase_orders.form', ['purchase_order' => $purchase_order]);
     }
 
     /**

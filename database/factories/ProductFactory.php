@@ -22,8 +22,8 @@ class ProductFactory extends Factory
     public function definition()
     {
         return [
-            "category_id" => $this->faker->numberBetween($min = 1, $max = 2),
-            "supplier_id" => $this->faker->numberBetween($min = 11, $max = 20),
+            "category_id" => $this->faker->numberBetween($min = 1, $max = 3),
+            "supplier_id" => $this->faker->numberBetween($min = 15, $max = 24),
             "tax_id" => $this->faker->numberBetween($min = 1, $max = 6),
             "code" =>$this->faker->bothify('?????-#####'),
             "name" =>$this->faker->bothify('?????-#####'),

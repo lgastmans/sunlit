@@ -234,139 +234,139 @@
     <script>
 
     function recalculateGrandTotal(){
-            // Update grand total amount
-            var grand_total = 0;
-            $('.item-total').each(function( index){
-                grand_total = grand_total + parseInt($(this).html().substr(1));
-            });
-            $('#grand-total').html('$'+grand_total);
+        // Update grand total amount
+        var grand_total = 0;
+        $('.item-total').each(function( index){
+            grand_total = grand_total + parseInt($(this).html().substr(1));
+        });
+        $('#grand-total').html('$'+grand_total);
+    }
+
+    var supplierSelect = $(".supplier-select").select2();
+    supplierSelect.select2({
+        ajax: {
+            url: '{{route('ajax.suppliers')}}',
+            dataType: 'json'
         }
+    });
 
-        var supplierSelect = $(".supplier-select").select2();
-        supplierSelect.select2({
-            ajax: {
-                url: '{{route('ajax.suppliers')}}',
-                dataType: 'json'
-            }
-        });
-
-        var productSelect = $(".product-select").select2();
-        var product_route = '{{ route("ajax.products", ":supplier_id") }}';
-        product_route = product_route.replace(':supplier_id', $('#supplier-id').val());
-        console.log(product_route);
-        productSelect.select2({
-            ajax: {
-                url: product_route,
-                dataType: 'json'
-            }
-        });
+    var productSelect = $(".product-select").select2();
+    var product_route = '{{ route("ajax.products", ":supplier_id") }}';
+    product_route = product_route.replace(':supplier_id', $('#supplier-id').val());
+    console.log(product_route);
+    productSelect.select2({
+        ajax: {
+            url: product_route,
+            dataType: 'json'
+        }
+    });
 
 
-        $('.editable-field ').on('blur', function(e){        
-            if ($(this).val() != $(this).attr('data-value')){
-                // Update product total on screen
-                var item_id = $(this).parent().parent().attr('data-id');
-                var total = $('#item-price-' + item_id).val() * $('#item-quantity-' + item_id).val();
-                $('#item-total-' + item_id).html('$'+total);
+    $('.editable-field ').on('blur', function(e){        
+        if ($(this).val() != $(this).attr('data-value')){
+            // Update product total on screen
+            var item_id = $(this).parent().parent().attr('data-id');
+            var total = $('#item-price-' + item_id).val() * $('#item-quantity-' + item_id).val();
+            $('#item-total-' + item_id).html('$'+total);
 
-                // Update purchase order item
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                var route = '{{ route("purchase-orders-items", ":id") }}';
-                route = route.replace(':id', item_id);
-
-                $.ajax({
-                    type: 'POST',
-                    url: route,
-                    dataType: 'json',
-                    data: { 
-                        'value' : $(this).val() , 
-                        'field': $(this).attr('data-field'), 
-                        'item': $(this).attr('data-item')
-                    },
-                    success : function(result){
-                        $(this).attr('data-value') == $(this).val();
-                        recalculateGrandTotal()
-                    }
-                });
-            }
-        });
-
-
-        $('#delete-modal').on('show.bs.modal', function (e) {
-            var route = '{{ route("purchase-orders-items", ":id") }}';
-            var button = e.relatedTarget;
-            if (button != null){
-                route = route.replace(':id', button.id);
-                $('#delete-form').attr('action', route);
-            }
-        });
-
-
-
-
-        $('.form-product').on('submit', function(e){
-            var formData = { 
-                    product_id: $(".product-select").val(),
-                    purchase_order_id: $("purchase-order-id").val(),
-                    quantity: $(".quantity").val(),
-                };
-            e.preventDefault();       
+            // Update purchase order item
             $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-                    }
-                });   
-                
-                // console.log(formData);
+                headers: {
+                    'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            var route = '{{ route("purchase-orders-items", ":id") }}';
+            route = route.replace(':id', item_id);
+
             $.ajax({
                 type: 'POST',
-                url: $(this).attr("action"),
+                url: route,
                 dataType: 'json',
-                data: $( this ).serialize(),
-                success: function (data) {
-                    console.log(data);
-                    var item = '<tr class="item" data-id="'+ ['purchase_order_item_id'] +'">';
-                    item += '<td>';
-                        item += '<p class="m-0 d-inline-block align-middle font-16">';
-                            item += '<a href="javascript:void(0); class="text-body product-name">'+ data.item.name +'</a>';
-                                item += '<br>';
-                                item += '<small class="me-2"><b>Code:</b> <span class="product-code">'+ data.item.code +'</span> </small>';
-                                item += '<small><b>Model:</b> <span class="product-model">'+ data.item.model +'</span></small>';
-                                item += '</p>';
-                                item += '</td>';
-                                item += '<td>';
-                                    item += '<div class="input-group flex-nowrap">';
-                                        item += '<span class="input-group-text">$</span>';
-                                        item += '<input id="item-price-'+ data.item.purchase_order_items_id +'" type="text" class="editable-field form-control" data-value="'+ data.item.price +'" data-field="price" data-item="'+ data.item.purchase_order_items_id +'" placeholder="" value="'+ data.item.price +'">';
-                                        item += '</div>';
-                                        item += '</td>';
-                                        item += '<td>';
-                                            item += '<input id="item-quantity-'+ data.item.purchase_order_items_id +'" type="number" min="1" value="'+ data.item.quantity +'" class="editable-field form-control" data-value="'+ data.item.quantity +'" data-field="quantity" data-item="'+ data.item.purchase_order_items_id +'" placeholder="Qty" style="width: 90px;">';
+                data: { 
+                    'value' : $(this).val() , 
+                    'field': $(this).attr('data-field'), 
+                    'item': $(this).attr('data-item')
+                },
+                success : function(result){
+                    $(this).attr('data-value') == $(this).val();
+                    recalculateGrandTotal()
+                }
+            });
+        }
+    });
+
+
+    $('#delete-modal').on('show.bs.modal', function (e) {
+        var route = '{{ route("purchase-orders-items", ":id") }}';
+        var button = e.relatedTarget;
+        if (button != null){
+            route = route.replace(':id', button.id);
+            $('#delete-form').attr('action', route);
+        }
+    });
+
+
+
+
+    $('.form-product').on('submit', function(e){
+        var formData = { 
+                product_id: $(".product-select").val(),
+                purchase_order_id: $("purchase-order-id").val(),
+                quantity: $(".quantity").val(),
+            };
+        e.preventDefault();       
+        $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                }
+            });   
+            
+            // console.log(formData);
+        $.ajax({
+            type: 'POST',
+            url: $(this).attr("action"),
+            dataType: 'json',
+            data: $( this ).serialize(),
+            success: function (data) {
+                console.log(data);
+                var item = '<tr class="item" data-id="'+ ['purchase_order_item_id'] +'">';
+                item += '<td>';
+                    item += '<p class="m-0 d-inline-block align-middle font-16">';
+                        item += '<a href="javascript:void(0); class="text-body product-name">'+ data.item.name +'</a>';
+                            item += '<br>';
+                            item += '<small class="me-2"><b>Code:</b> <span class="product-code">'+ data.item.code +'</span> </small>';
+                            item += '<small><b>Model:</b> <span class="product-model">'+ data.item.model +'</span></small>';
+                            item += '</p>';
                             item += '</td>';
                             item += '<td>';
-                                item += '<span id="item-total-'+ data.item.purchase_order_items_id +'" class="item-total">$'+ data.item.price*data.item.quantity +'</span>';
-                                item += '</td>';
-                                item += '<td>';
-                                    item += '<a href="javascript:void(0);" class="action-icon" id="1" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>';
+                                item += '<div class="input-group flex-nowrap">';
+                                    item += '<span class="input-group-text">$</span>';
+                                    item += '<input id="item-price-'+ data.item.purchase_order_items_id +'" type="text" class="editable-field form-control" data-value="'+ data.item.price +'" data-field="price" data-item="'+ data.item.purchase_order_items_id +'" placeholder="" value="'+ data.item.price +'">';
+                                    item += '</div>';
                                     item += '</td>';
-                                    item += '</tr> ';
-                    $('#purchase-order-items-table > tbody:last-child').append(item);
-                    recalculateGrandTotal()
+                                    item += '<td>';
+                                        item += '<input id="item-quantity-'+ data.item.purchase_order_items_id +'" type="number" min="1" value="'+ data.item.quantity +'" class="editable-field form-control" data-value="'+ data.item.quantity +'" data-field="quantity" data-item="'+ data.item.purchase_order_items_id +'" placeholder="Qty" style="width: 90px;">';
+                        item += '</td>';
+                        item += '<td>';
+                            item += '<span id="item-total-'+ data.item.purchase_order_items_id +'" class="item-total">$'+ data.item.price*data.item.quantity +'</span>';
+                            item += '</td>';
+                            item += '<td>';
+                                item += '<a href="javascript:void(0);" class="action-icon" id="1" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>';
+                                item += '</td>';
+                                item += '</tr> ';
+                $('#purchase-order-items-table > tbody:last-child').append(item);
+                recalculateGrandTotal()
 
-                },
-                error:function(xhr, textStatus, thrownError, data)
-                {
-                    console.log("Error: " + thrownError);
-                    console.log("Error: " + textStatus);
+            },
+            error:function(xhr, textStatus, thrownError, data)
+            {
+                console.log("Error: " + thrownError);
+                console.log("Error: " + textStatus);
 
 
-                }
-            });     
-        });
+            }
+        });     
+    });
 
     </script>
 
