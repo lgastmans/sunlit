@@ -118,8 +118,11 @@
                                     <div class="col-xl-5">
                                         <input type="text" class="form-control col-xl-1" id="order_number" name="order_number" placeholder="" value="{{ $purchase_order->order_number }}">
                                     </div>
-                                        <div class="col-xl-2">
+                                    <div class="col-xl-2">
                                         <button class="btn btn-secondary" type="submit">Update</button>
+                                    </div>
+                                    <div class="col-xl-2">
+                                        <button class="btn btn-danger edit-order-number-cancel" type="button">Cancel</button>
                                     </div>
                                 </form>
                                 
@@ -213,8 +216,11 @@
                     <div class="col-xl-8">
                         <select class="warehouse-select form-control" name="warehouse_id"></select>
                     </div>
-                        <div class="col-xl-2">
+                    <div class="col-xl-2">
                         <button class="btn btn-secondary" type="submit">Update</button>
+                    </div>
+                    <div class="col-xl-2">
+                        <button class="btn btn-danger edit-warehouse-cancel" type="button">Cancel</button>
                     </div>
                 </form>
                 <div class="warehouse-info">
@@ -405,10 +411,22 @@
         $('#purchase-order-number').hide();
     });
 
+    $('.edit-order-number-cancel').on('click', function(e){
+        $('.edit-order-number-form').slideUp();
+        $('#purchase-order-number').show();
+        $('.edit-order-number').show();
+    });
+
     $('.edit-warehouse').on('click', function(e){
         $(this).hide();
         $('.edit-warehouse-form').slideDown();
         $('.warehouse-info').hide();
+    });
+
+    $('.edit-warehouse-cancel').on('click', function(e){
+        $('.edit-warehouse-form').slideUp();
+        $('.warehouse-info').slideDown();
+        $('.edit-warehouse').show();
     });
 
     
