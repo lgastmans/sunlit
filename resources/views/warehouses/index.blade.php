@@ -82,7 +82,7 @@
                 '<option value="-1">All</option>' +
                 '</select> warehouses',
         },
-        "pageLength": 10,
+        "pageLength": {{ Setting::get('general.grid_rows') }},
         "columns": [
             {
                 'data': 'id',

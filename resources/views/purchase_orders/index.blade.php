@@ -82,7 +82,7 @@
                 '<option value="-1">All</option>' +
                 '</select> Orders',
         },
-        "pageLength": 10,
+        "pageLength": {{ Setting::get('general.grid_rows') }},
         "columns": [
             { 
                 'data': 'order_number',

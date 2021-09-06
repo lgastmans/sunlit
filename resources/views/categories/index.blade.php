@@ -76,7 +76,7 @@
                 '<option value="-1">All</option>' +
                 '</select> categories',
         },
-        "pageLength": 10,
+        "pageLength": {{ Setting::get('general.grid_rows') }},
         "columns": [
             { 
                 'data': 'name',

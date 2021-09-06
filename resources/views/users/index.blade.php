@@ -80,7 +80,7 @@
                 '<option value="-1">All</option>' +
                 '</select> users',
         },
-        "pageLength": 10,
+        "pageLength": {{ Setting::get('general.grid_rows') }},
         "columns": [
             { 
                 'data': 'name',

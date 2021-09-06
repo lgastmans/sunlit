@@ -76,7 +76,7 @@
                 '<option value="-1">All</option>' +
                 '</select> dealers',
         },
-        "pageLength": 10,
+        "pageLength": {{ Setting::get('general.grid_rows') }},
         "columns": [
             { 
                 'data': 'contact_person',

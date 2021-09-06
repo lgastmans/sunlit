@@ -74,7 +74,7 @@
                 '<option value="-1">All</option>' +
                 '</select> taxes',
         },
-        "pageLength": 10,
+        "pageLength": {{ Setting::get('general.grid_rows') }},
         "columns": [
            
             { 
