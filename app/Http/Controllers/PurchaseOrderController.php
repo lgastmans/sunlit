@@ -6,6 +6,7 @@ use \NumberFormatter;
 
 use Illuminate\Http\Request;
 use App\Models\PurchaseOrder;
+use App\Models\Warehouse;
 use Illuminate\Support\Facades\Auth;
 use \App\Http\Requests\StorePurchaseOrderRequest;
 
@@ -227,8 +228,15 @@ class PurchaseOrderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // Checks for duplicate order number before saving
-        return json_encode(['code'=>200, 'message'=> 'OK']); 
+        if ($request->get('field') == "order_number"){
+            //check for dupes
+            return json_encode(['code'=>200, 'message'=> 'OK', 'field' => $request->get('field')]); 
+        }
+        if ($request->get('field') == "warehouse"){
+            $warehouse = Warehouse::find($request->get('warehouse_id'));
+            return json_encode(['code'=>200, 'message'=> 'OK', 'field' => $request->get('field'), 'warehouse'=> $warehouse]);
+        }
+        
     }
 
     /**

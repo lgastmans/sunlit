@@ -111,9 +111,10 @@
                     <div class="col-lg-4">
                         <div class="border p-3 mt-4 mt-lg-0 rounded">
                             <h4 class="header-title mb-3">Order Summary <span class="order-number">#{{ $purchase_order->order_number }}</span><i class="mdi mdi-square-edit-outline ms-2 edit-order-number"></i>
-                                <form name="edit-order-number-form" class="row edit-order-number-form mt-1" style="display:none" method="POST" action="{{ route('purchase-orders.update', $purchase_order->id) }}">
+                                <form class="row mt-1 edit-order-number-form" style="display:none" method="POST" action="{{ route('purchase-orders.update', $purchase_order->id) }}">
                                     @csrf()
                                     @method('PUT')
+                                    <input type="hidden" name="field" value="order_number">
                                     <div class="col-xl-5">
                                         <input type="text" class="form-control col-xl-1" id="order_number" name="order_number" placeholder="" value="{{ $purchase_order->order_number }}">
                                     </div>
@@ -205,16 +206,29 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="header-title mb-3">Warehouse Information <i class="mdi mdi-square-edit-outline ms-2 edit-warehouse"></i></h4>
-                <h5>{{ $purchase_order->warehouse->name }}</h5>
-                <h6>{{ $purchase_order->warehouse->contact_person }}</h6>
-                <address class="mb-0 font-14 address-lg">
-                    {{ $purchase_order->warehouse->address }}<br>
-                    &nbsp;<br>
-                    {{ $purchase_order->warehouse->city }}, {{ $purchase_order->warehouse->zip_code }}<br/>
-                    <abbr title="Phone">P:</abbr> {{ $purchase_order->warehouse->phone }} <br/>
-                    <abbr title="Mobile">M:</abbr> {{ $purchase_order->warehouse->phone2 }} <br/>
-                    <abbr title="Mobile">@:</abbr> {{ $purchase_order->warehouse->email }}
-                </address>
+                <form name="edit-warehouse-form" class="row mt-1 edit-warehouse-form" style="display:none" method="POST" action="{{ route('purchase-orders.update', $purchase_order->id) }}">
+                    @csrf()
+                    @method('PUT')
+                    <input type="hidden" name="field" value="warehouse">
+                    <div class="col-xl-8">
+                        <select class="warehouse-select form-control" name="warehouse_id"></select>
+                    </div>
+                        <div class="col-xl-2">
+                        <button class="btn btn-secondary" type="submit">Update</button>
+                    </div>
+                </form>
+                <div class="warehouse-info">
+                    <h5>{{ $purchase_order->warehouse->name }}</h5>
+                    <h6>{{ $purchase_order->warehouse->contact_person }}</h6>
+                    <address class="mb-0 font-14 address-lg">
+                        {{ $purchase_order->warehouse->address }}<br>
+                        &nbsp;<br>
+                        {{ $purchase_order->warehouse->city }}, {{ $purchase_order->warehouse->zip_code }}<br/>
+                        <abbr title="Phone">P:</abbr> {{ $purchase_order->warehouse->phone }} <br/>
+                        <abbr title="Mobile">M:</abbr> {{ $purchase_order->warehouse->phone2 }} <br/>
+                        <abbr title="Email">@:</abbr> {{ $purchase_order->warehouse->email }}
+                    </address>
+                </div>
             </div>
         </div>
     </div> <!-- end col -->
@@ -254,6 +268,14 @@
         $('#grand-total').html('$'+grand_total);
     }
 
+    var warehouseSelect = $(".warehouse-select").select2();
+    warehouseSelect.select2({
+        ajax: {
+            url: '{{route('ajax.warehouses')}}',
+            dataType: 'json'
+        }
+    });
+
     var supplierSelect = $(".supplier-select").select2();
     supplierSelect.select2({
         ajax: {
@@ -265,7 +287,6 @@
     var productSelect = $(".product-select").select2();
     var product_route = '{{ route("ajax.products", ":supplier_id") }}';
     product_route = product_route.replace(':supplier_id', $('#supplier-id').val());
-    console.log(product_route);
     productSelect.select2({
         ajax: {
             url: product_route,
@@ -318,8 +339,6 @@
     });
 
 
-
-
     $('.form-product').on('submit', function(e){
         var formData = { 
                 product_id: $(".product-select").val(),
@@ -340,7 +359,6 @@
             dataType: 'json',
             data: $( this ).serialize(),
             success: function (data) {
-                console.log(data);
                 var item = '<tr class="item" data-id="'+ ['purchase_order_item_id'] +'">';
                 item += '<td>';
                     item += '<p class="m-0 d-inline-block align-middle font-16">';
@@ -380,32 +398,40 @@
         });     
     });
 
+
     $('.edit-order-number').on('click', function(e){
         $(this).hide();
         $('.edit-order-number-form').slideDown();
         $('#purchase-order-number').hide();
     });
 
+    $('.edit-warehouse').on('click', function(e){
+        $(this).hide();
+        $('.edit-warehouse-form').slideDown();
+        $('.warehouse-info').hide();
+    });
+
+    
+
     $('.edit-order-number-form').on('submit', function(e){
         e.preventDefault();       
         $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-                }
-            });   
+            headers: {
+                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+            }
+        });   
         $.ajax({
             type: 'POST',
             url: $(this).attr("action"),
             dataType: 'json',
             data: $( this ).serialize(),
             success: function (data) {
-                console.log(data);
                 $('.edit-order-number-form').slideUp();
                 $('#purchase-order-number').show();
                 $('.order-number').html('#'+$('#order_number').val());
                 $('.edit-order-number').show();
                 $('#order_number').val("");
-
+        
             },
             error:function(xhr, textStatus, thrownError, data)
             {
@@ -414,6 +440,46 @@
             }
         });     
     });
+
+
+    $('.edit-warehouse-form').on('submit', function(e){
+        e.preventDefault();       
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+            }
+        });   
+        $.ajax({
+            type: 'POST',
+            url: $(this).attr("action"),
+            dataType: 'json',
+            data: $( this ).serialize(),
+            success: function (data) {
+                $('.edit-warehouse-form').slideUp();
+                $('.warehouse-info').empty();
+                var warehouse = "";
+                warehouse +="<h5>"+data['warehouse']['name']+"</h5>";
+                warehouse +="<h6>"+data['warehouse']['contact_person']+"</h6>";
+                warehouse +="<address class=\"mb-0 font-14 address-lg\">"+data['warehouse']['address']+"<br>";
+                    warehouse +="        &nbsp;<br>";
+                    warehouse +="        "+data['warehouse']['city']+", "+data['warehouse']['zipcode']+"<br/>";
+                    warehouse +="        <abbr title=\"Phone\">P:</abbr> "+data['warehouse']['phone']+" <br/>";
+                    warehouse +="        <abbr title=\"Mobile\">M:</abbr> "+data['warehouse']['phone2']+" <br/>";
+                    warehouse +="        <abbr title=\"Email\">@:</abbr> "+data['warehouse']['email'];
+                    warehouse +="    </address>";
+                $('.warehouse-info').append(warehouse).slideDown();
+                $('.edit-warehouse').show();
+            },
+            error:function(xhr, textStatus, thrownError, data)
+            {
+                
+                console.log("Error: " + thrownError);
+                console.log("Error: " + textStatus);
+            }
+        });     
+    });
+
+    
 
     </script>
 
