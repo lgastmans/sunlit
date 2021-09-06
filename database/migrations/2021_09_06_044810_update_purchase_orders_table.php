@@ -22,6 +22,7 @@ class UpdatePurchaseOrdersTable extends Migration
             $table->string('tracking_number')->nullable();
             $table->date('courier')->nullable();
             $table->date('customs_at')->nullable();
+            $table->dropColumn('credit_period');
         });
     }
 
@@ -41,6 +42,7 @@ class UpdatePurchaseOrdersTable extends Migration
             $table->dropColumn('tracking_number');
             $table->dropColumn('courier');
             $table->dropColumn('customs_at');
+            $table->integer('credit_period')->nullable();
         });
     }
 }
