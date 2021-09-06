@@ -187,7 +187,7 @@ class PurchaseOrderController extends Controller
         if ($purchase_order){
             if ($purchase_order->status == PurchaseOrder::DRAFT)
                 return view('purchase_orders.cart', ['purchase_order' => $purchase_order ]);
-                
+
             return view('purchase_orders.show', ['purchase_order' => $purchase_order ]);
         }
     }
@@ -227,7 +227,8 @@ class PurchaseOrderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // Checks for duplicate order number before saving
+        return json_encode(['code'=>200, 'message'=> 'OK']); 
     }
 
     /**

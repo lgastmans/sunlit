@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('page-title', 'Purchase Orders '.$purchase_order->order_number);
+@section('page-title', 'Purchase Order');
 
 @section('content')
 
@@ -110,7 +110,19 @@
 
                     <div class="col-lg-4">
                         <div class="border p-3 mt-4 mt-lg-0 rounded">
-                            <h4 class="header-title mb-3">Order Summary <span id="#purchase-order-number">#{{ $purchase_order->order_number }}</span></h4>
+                            <h4 class="header-title mb-3">Order Summary <span class="order-number">#{{ $purchase_order->order_number }}</span><i class="mdi mdi-square-edit-outline ms-2 edit-order-number"></i>
+                                <form name="edit-order-number-form" class="row edit-order-number-form mt-1" style="display:none" method="POST" action="{{ route('purchase-orders.update', $purchase_order->id) }}">
+                                    @csrf()
+                                    @method('PUT')
+                                    <div class="col-xl-5">
+                                        <input type="text" class="form-control col-xl-1" id="order_number" name="order_number" placeholder="" value="{{ $purchase_order->order_number }}">
+                                    </div>
+                                        <div class="col-xl-2">
+                                        <button class="btn btn-secondary" type="submit">Update</button>
+                                    </div>
+                                </form>
+                                
+                            </h4>
 
                             <div class="table-responsive">
                                 <table class="table mb-0">
@@ -192,7 +204,7 @@
     <div class="col-lg-4">
         <div class="card">
             <div class="card-body">
-                <h4 class="header-title mb-3">Warehouse Information</h4>
+                <h4 class="header-title mb-3">Warehouse Information <i class="mdi mdi-square-edit-outline ms-2 edit-warehouse"></i></h4>
                 <h5>{{ $purchase_order->warehouse->name }}</h5>
                 <h6>{{ $purchase_order->warehouse->contact_person }}</h6>
                 <address class="mb-0 font-14 address-lg">
@@ -364,6 +376,41 @@
                 console.log("Error: " + textStatus);
 
 
+            }
+        });     
+    });
+
+    $('.edit-order-number').on('click', function(e){
+        $(this).hide();
+        $('.edit-order-number-form').slideDown();
+        $('#purchase-order-number').hide();
+    });
+
+    $('.edit-order-number-form').on('submit', function(e){
+        e.preventDefault();       
+        $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                }
+            });   
+        $.ajax({
+            type: 'POST',
+            url: $(this).attr("action"),
+            dataType: 'json',
+            data: $( this ).serialize(),
+            success: function (data) {
+                console.log(data);
+                $('.edit-order-number-form').slideUp();
+                $('#purchase-order-number').show();
+                $('.order-number').html('#'+$('#order_number').val());
+                $('.edit-order-number').show();
+                $('#order_number').val("");
+
+            },
+            error:function(xhr, textStatus, thrownError, data)
+            {
+                console.log("Error: " + thrownError);
+                console.log("Error: " + textStatus);
             }
         });     
     });
