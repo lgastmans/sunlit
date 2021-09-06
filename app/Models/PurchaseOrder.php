@@ -9,13 +9,13 @@ class PurchaseOrder extends Model
 {
     use HasFactory;
 
-    const Draft = 1, 
-        Ordered = 2,
-        Confirmed = 3,
-        Shipped = 4,
-        Customs = 5,
-        Cleared = 6,
-        Received = 7;
+    const DRAFT = 1;
+    const ORDERED = 2;
+    const CONFIRMED = 3;
+    const SHIPPED = 4;
+    const CUSTOMS = 5;
+    const CLEARED = 6;
+    const RECEIVED = 7;
 
     protected $dates = ['ordered_at', 'expected_at', 'received_at', 'se_due_date', 'se_payment_date',];
 
