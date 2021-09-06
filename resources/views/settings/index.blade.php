@@ -5,31 +5,106 @@
 @section('content')
 
 <div class="row">
-    <form action="{{ route('settings.update') }}" method="POST">
+    <form action="{{ route('settings.update') }}" method="POST" class="row">
         @csrf()
         @method('PUT')
-        @foreach ($settings as $group=>$gsettings)
-            <div class="col-xl-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <h4 class="mb-4">{{ ucfirst($group) }}</h4>
-                                @foreach($gsettings as $key =>$value)  
-                                    <div class="mb-3">
-                                        <div>
-                                            <label class="form-label" for="{{ $key }}">{{ ucfirst($key)}}</label>
-                                            <input type="text" class="form-control" name="{{ $group }}__{{ $key }}" id="{{ $key }}" placeholder="" value="{{ $value }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
-                                        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h4 class="mb-4">Company</h4>
+                                <div class="mb-3 row">
+                                    <div class="col-xl-8">
+                                        <label class="form-label" for="name">Name</label>
+                                        <input type="text" class="form-control" name="company__name" id="name" placeholder="" value="{{ $settings['company']['name'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
                                     </div>
-                                @endforeach
-                            </div><!-- end col-->
-                        </div>
-                    </div> <!-- end card-body-->
-                </div> <!-- end card-->
+                                    <div class="col-xl-4">
+                                        <label class="form-label" for="gstin">GSTIN</label>
+                                        <input type="text" class="form-control" name="company__gstin" id="gstin" placeholder="" value="{{ $settings['company']['gstin'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <div class="col-xl-6">
+                                        <label class="form-label" for="city">City</label>
+                                        <input type="text" class="form-control" name="company__city" id="city" placeholder="" value="{{ $settings['company']['city'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
+                                    </div>
+                                    <div class="col-xl-3">
+                                        <label class="form-label" for="zipcode">Zip Code</label>
+                                        <input type="text" class="form-control" name="company__zipcode" id="zipcode" placeholder="" value="{{ $settings['company']['zipcode'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <div class="col-xl-6">
+                                        <label class="form-label" for="state">State</label>
+                                        <input type="text" class="form-control" name="company__state" id="state" placeholder="" value="{{ $settings['company']['state'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
+                                    </div>
+                                    <div class="col-xl-6">
+                                        <label class="form-label" for="country">Country</label>
+                                        <input type="text" class="form-control" name="company__country" id="country" placeholder="" value="{{ $settings['company']['country'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <div class="col-xl-6">
+                                        <label class="form-label" for="phone">Phone</label>
+                                        <input type="text" class="form-control" name="company__phone" id="phone" placeholder="" value="{{ $settings['company']['phone'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
+                                    </div>
+                                    <div class="col-xl-6">
+                                        <label class="form-label" for="email">Email</label>
+                                        <input type="text" class="form-control" name="company__email" id="email" placeholder="" value="{{ $settings['company']['email'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
+                                    </div>
+                                </div>
+                        </div><!-- end col-->
+                    </div>
+                </div> <!-- end card-body-->
+            </div> <!-- end card-->
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h4 class="mb-4">Purchase Order</h4>
+                                <div class="mb-3 row">
+                                    <div class="col-xl-3">
+                                        <label class="form-label" for="igst">IGST</label>
+                                        <input type="text" class="form-control" name="purchase_order__igst" id="igst" placeholder="" value="{{ $settings['purchase_order']['igst'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
+                                    </div>
+                                    <div class="col-xl-3">
+                                        <label class="form-label" for="transport">Transport</label>
+                                        <input type="text" class="form-control" name="purchase_order__transport" id="transport" placeholder="" value="{{ $settings['purchase_order']['transport'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
+                                    </div>
+                                </div>
+                        </div><!-- end col-->
+                    </div>
+                </div> <!-- end card-body-->
+            </div> <!-- end card-->
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h4 class="mb-4">UI Settings</h4>
+                                <div class="mb-3 row">
+                                    <div class="col-xl-3">
+                                        <label class="form-label" for="grid_rows">Grid rows</label>
+                                        <input type="text" class="form-control" name="general__grid_rows" id="grid_rows" placeholder="" value="{{ $settings['general']['grid_rows'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
+                                    </div>
+                                </div>
+                        </div><!-- end col-->
+                    </div>
+                </div> <!-- end card-body-->
+            </div> <!-- end card-->
+        </div>
+        {{-- @foreach ($settings as $group=>$gsettings)
+            <div class="col-xl-6">
+                
             </div> <!-- end col -->
-        @endforeach
-        <button class="btn btn-primary" type="submit">Save settings</button>
+        @endforeach --}}
+        <div class="row">
+            <div class="col-lg-1">
+                <button class="btn btn-primary" type="submit">Save settings</button>
+            </div>
+        </div>
     </form>
 </div>
 
