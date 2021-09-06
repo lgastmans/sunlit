@@ -20,13 +20,35 @@
                             <div class="col-xl-5">
                                 <x-forms.input label="company" name="company" value="{{ old('company', $supplier->company) }}" required="true"/>
                             </div>
-                            <div class="col-xl-3">
+                            <div class="col-xl-2">
                                 <x-forms.input label="GSTIN" name="gstin" value="{{ old('gstin', $supplier->gstin) }}" required="true"/>
                             </div>
                         </div>
                         <div class="mb-3 row">
                             <div class="col-xl-5">
                                 <x-forms.input label="contact person" name="contact_person" value="{{ old('contact_person', $supplier->contact_person) }}" required="true"/>
+                            </div>
+                            <div class="col-xl-2">
+                                <label class="form-label" for="currency-select">Currency</label>
+                                <select class="currency-select form-control" name="currency">
+                                    @if ($supplier->currency)
+                                        <option value="{{$supplier->currency}}" selected="selected">{{strtoupper($supplier->currency)}}</option>
+                                    @endif
+                                </select>
+                                <div class="invalid-feedback">
+                                    {{ __('error.form_invalid_field', ['field' => 'currency code' ]) }}
+                                </div>
+                            </div>
+                            <div class="col-xl-2">
+                                <label class="form-label" for="credit-select">Credit Period</label>
+                                <select class="credit-select form-control" name="credit_period">
+                                    @if ($supplier->credit_period)
+                                        <option value="{{$supplier->credit_period}}" selected="selected">{{$supplier->credit_period}} days</option>
+                                    @endif
+                                </select>
+                                <div class="invalid-feedback">
+                                    {{ __('error.form_invalid_field', ['field' => 'currency code' ]) }}
+                                </div>
                             </div>
                         </div>
                         <div class="mb-3 row">
@@ -94,5 +116,42 @@
                 dataType: 'json'
             }
         });
+
+        var currencies = [
+            {
+                id: 'inr',
+                text: 'INR'
+            },
+            {
+                id: 'usd', 
+                text:'USD'
+            }
+        ]
+
+        var credit = [
+            {
+                id: '0',
+                text: 'None'
+            },
+            {
+                id: '30',
+                text: '30 days'
+            },
+            {
+                id: '60', 
+                text:'60 days'
+            },
+            {
+                id: '90', 
+                text:'90 days'
+            }
+        ]
+
+        var currencySelect = $(".currency-select").select2();
+        currencySelect.select2({data:currencies});
+
+        var creditSelect = $(".credit-select").select2();
+        creditSelect.select2({data:credit});
+
     </script>
 @endsection

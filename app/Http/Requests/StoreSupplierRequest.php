@@ -43,6 +43,8 @@ class StoreSupplierRequest extends FormRequest
             'contact_person' => 'required|string',
             'phone' => 'required|string',
             'phone2' => 'required|string',
+            'currency' => 'required',
+            'credit_period' => 'required',
             'email' => 'required|email|unique:suppliers,email,'.$this->id
         ];
     }
