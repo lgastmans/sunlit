@@ -178,25 +178,29 @@ class PurchaseOrderController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $order_number
      * @return \Illuminate\Http\Response
      */
-    public function cart($id)
+    public function cart($order_number)
     {
-        $purchase_order = PurchaseOrder::with(['supplier','warehouse','items'])->find($id);
-        if ($purchase_order)
-            return view('purchase_orders.cart', ['purchase_order' => $purchase_order ]);
+        $purchase_order = PurchaseOrder::with(['supplier','warehouse','items'])->where('order_number', '=', $order_number)->first();
+        if ($purchase_order){
+            if ($purchase_order->status == PurchaseOrder::DRAFT)
+                return view('purchase_orders.cart', ['purchase_order' => $purchase_order ]);
+                
+            return view('purchase_orders.show', ['purchase_order' => $purchase_order ]);
+        }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $order_number
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($order_number)
     {
-        $purchase_order = PurchaseOrder::with(['supplier', 'warehouse', 'items', 'items.product'])->find($id);
+        $purchase_order = PurchaseOrder::with(['supplier', 'warehouse', 'items', 'items.product'])->where('order_number', '=', $order_number)->first();
         if ($purchase_order)
             return view('purchase_orders.show', ['purchase_order' => $purchase_order ]);
 

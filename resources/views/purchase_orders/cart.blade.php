@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('page-title', 'Purchase Order')
+@section('page-title', 'Purchase Order  {{ $purchase_order->order_number }}')
 
 @section('content')
 

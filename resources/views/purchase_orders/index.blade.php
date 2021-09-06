@@ -171,7 +171,7 @@
         else{
             var route = '{{  route("purchase-orders.show", ":id") }}';
         }
-        route = route.replace(':id', table.row( this ).data().id);
+        route = route.replace(':id', table.row( this ).data().order_number);
         window.location.href = route;
     });
 
