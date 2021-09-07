@@ -229,12 +229,25 @@ class PurchaseOrderController extends Controller
     public function update(Request $request, $id)
     {
         if ($request->get('field') == "order_number"){
-            //check for dupes
-            return json_encode(['code'=>200, 'message'=> 'OK', 'field' => $request->get('field')]); 
+            $hasOrderNumber = PurchaseOrder::where('order_number', 'LIKE', $request->get('order_number'))->count();
+            if ($hasOrderNumber){
+                return response()->json([
+                    'success' => 'false',
+                    'errors'  => "This order number is already used by another order",
+                ], 409);
+            }
+            $order = PurchaseOrder::find($id);
+            $order->order_number = $request->get('order_number');
+            $order->update();
+            return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'field' => $request->get('field')]);
         }
+
         if ($request->get('field') == "warehouse"){
+            $order = PurchaseOrder::find($id);
+            $order->warehouse_id = $request->get('warehouse_id');
+            $order->update();
             $warehouse = Warehouse::find($request->get('warehouse_id'));
-            return json_encode(['code'=>200, 'message'=> 'OK', 'field' => $request->get('field'), 'warehouse'=> $warehouse]);
+            return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'field' => $request->get('field'), 'warehouse'=> $warehouse]);
         }
         
     }

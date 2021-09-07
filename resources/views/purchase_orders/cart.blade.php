@@ -119,12 +119,16 @@
                                     <input type="hidden" name="field" value="order_number">
                                     <div class="col-xl-5">
                                         <input type="text" class="form-control col-xl-1" id="order_number" name="order_number" placeholder="" value="{{ $purchase_order->order_number }}">
+                                        
                                     </div>
                                     <div class="col-xl-2">
                                         <button class="btn btn-secondary" type="submit">Update</button>
                                     </div>
                                     <div class="col-xl-2">
                                         <button class="btn btn-danger edit-order-number-cancel" type="button">Cancel</button>
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Order number already exist
                                     </div>
                                 </form>
                                 
@@ -446,17 +450,19 @@
             dataType: 'json',
             data: $( this ).serialize(),
             success: function (data) {
+                var new_url = "{{ route('purchase-orders.cart', ':order_number') }}";
+                new_url = new_url.replace(':order_number', $('#order_number').val());
+                $('.invalid-feedback').hide();
                 $('.edit-order-number-form').slideUp();
                 $('#purchase-order-number').show();
                 $('.order-number').html('#'+$('#order_number').val());
                 $('.edit-order-number').show();
                 $('#order_number').val("");
-        
+                window.history.pushState("data","Title",new_url);
             },
             error:function(xhr, textStatus, thrownError, data)
             {
-                console.log("Error: " + thrownError);
-                console.log("Error: " + textStatus);
+                $('.invalid-feedback').show();
             }
         });     
     });
