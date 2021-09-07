@@ -11,9 +11,9 @@
         <div class="card">
             <div class="card-body">
                 <form action="{{ route('purchase-orders-items.store') }}" method="POST" class="form-product row">
-                    <input type="hidden" name="purchase-order-id" id="purchase-order-id" value="{{ $purchase_order->id }}">
-                    <input type="hidden" name="supplier-id" id="supplier-id" value="{{ $purchase_order->supplier->id }}">
-                    <input type="hidden" name="warehouse-id" id="warehouse-id" value="{{ $purchase_order->warehouse->id }}">
+                    <input type="hidden" name="purchase_order_id" id="purchase-order-id" value="{{ $purchase_order->id }}">
+                    <input type="hidden" name="supplier_id" id="supplier-id" value="{{ $purchase_order->supplier->id }}">
+                    <input type="hidden" name="warehouse_id" id="warehouse-id" value="{{ $purchase_order->warehouse->id }}">
                     <div class="col-lg-3">
                         <div class="mb-3">
                             <label class="form-label" for="product-select">Product</label>
@@ -23,7 +23,16 @@
                     <div class="col-lg-1">
                         <div class="mb-3">
                             <label class="form-label" for="product-select">Quantity</label>
-                            <input type="quantity" class="form-control" name="quantity"  value="1">
+                            <input type="quantity_ordered" class="form-control" name="quantity_ordered"  value="1">
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="mb-3">
+                            <label class="form-label" for="product-select">Price</label>
+                            <div class="input-group flex-nowrap">
+                                <span class="input-group-text">$</span>
+                                <input type="selling_price" class="form-control" name="selling_price"  id="selling_price" value="">
+                            </div>
                         </div>
                     </div>
                     <div class="col-lg-1">
@@ -55,44 +64,38 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if (1==1) <!--TODO: test length of collection -->
-                                        @for ($i = 0; $i<=3; $i++) <!--TODO: replace with loop over collection-->
-                                            <tr class="item" data-id="{{$i}}">
-                                                <td>
-                                                    <p class="m-0 d-inline-block align-middle font-16">
-                                                        <a href="javascript:void(0);"
-                                                            class="text-body product-name">XTM {{ mt_rand(5, 100) }}-{{ mt_rand(12, 48) }}</a> <!--TODO: update value with name-->
-                                                        <br>
-                                                        <small class="me-2"><b>Code:</b> <span class="product-code">XTM {{ mt_rand(5, 100) }}-{{ mt_rand(12, 48) }}</span> </small><!--TODO: update value with code-->
-                                                        <small><b>Model:</b> <span class="product-model">Xtender series</span> <!--TODO: update value with model-->
-                                                        </small>
-                                                    </p>
-                                                </td>
-                                                <td>
-                                                    <div class="input-group flex-nowrap">
-                                                        <span class="input-group-text">$</span>
-                                                        <!--TODO: update values $i = purchase_order_item_id-->
-                                                        <input id="item-price-{{ $i }}" type="text" class="editable-field form-control" data-value="199.99" data-field="price" data-item="{{ $i }}" placeholder="" value="{{ mt_rand(1, 100) }}.{{ mt_rand(50, 99) }}">
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                        <!--TODO: update values -->
-                                                    <input id="item-quantity-{{ $i }}" type="number" min="1" value="{{ mt_rand(1, 100) }}" class="editable-field form-control" data-value="10" data-field="quantity" data-item="{{ $i }}"
-                                                        placeholder="Qty" style="width: 90px;">
-                                                </td>
-                                                <td>
-                                                    <!--TODO: update value -->
-                                                    <span id="item-total-{{ $i }}" class="item-total">${{ mt_rand(100, 1000) }}.{{ mt_rand(50, 100) }} </span>
-                                                </td>
-                                                <td>
-                                                    <a href="javascript:void(0);" class="action-icon" id="{{ $i }}" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>
-                                                </td>
-                                            </tr>
-                                        @endfor
-                                    @else
-                                        <tr><td>You haven't added any product to the purchase order, yet!</td></tr>
-
-                                    @endif
+                                    @forelse($purchase_order->items as $item) 
+                                        <tr class="item" data-id="{{$item->id}}">
+                                            <td>
+                                                <p class="m-0 d-inline-block align-middle font-16">
+                                                    <a href="javascript:void(0);"
+                                                        class="text-body product-name">{{ $item->product->name }}</a>
+                                                    <br>
+                                                    <small class="me-2"><b>Code:</b> <span class="product-code">{{  $item->product->code }}</span> </small>
+                                                    <small><b>Model:</b> <span class="product-model">{{ $item->product->model }}</span>
+                                                    </small>
+                                                </p>
+                                            </td>
+                                            <td>
+                                                <div class="input-group flex-nowrap">
+                                                    <span class="input-group-text">$</span>
+                                                    <input id="item-price-{{ $item->id }}" type="text" class="editable-field form-control" data-value="{{ $item->selling_price/100 }}" data-field="price" data-item="{{ $item->id }}" placeholder="" value="{{ $item->selling_price/100 }}">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <input id="item-quantity-{{ $item->id }}" type="number" min="1" value="{{ $item->quantity_ordered }}" class="editable-field form-control" data-value="{{ $item->quantity_ordered }}" data-field="quantity" data-item="{{ $item->id }}"
+                                                    placeholder="Qty" style="width: 90px;">
+                                            </td>
+                                            <td>
+                                                <span id="item-total-{{ $item->id }}" class="item-total">${{ $item->selling_price * $item->quantity_ordered /100 }}</span>
+                                            </td>
+                                            <td>
+                                                <a href="javascript:void(0);" class="action-icon" id="{{ $item->id }}" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr class="no-items"><td>You haven't added any product to the purchase order, yet!</td></tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                             
@@ -289,11 +292,27 @@
         }
     });
 
+    productSelect.on("change", function (e) { 
+        var product_id = $(".product-select").find(':selected').val();
+        var route = '{{ route("product.json", ":id") }}';
+        route = route.replace(':id', product_id);
+        $.ajax({
+            type: 'GET',
+            url: route,
+            dataType: 'json',
+            success : function(data){
+                $('#selling_price').val(data.purchase_price/100);
+            }
+        })
+    });
 
     $('.editable-field ').on('blur', function(e){        
         if ($(this).val() != $(this).attr('data-value')){
             // Update product total on screen
             var item_id = $(this).parent().parent().attr('data-id');
+            if ($(this).attr('data-field') == "price"){
+                item_id = $(this).parent().parent().parent().attr('data-id');
+            }
             var total = $('#item-price-' + item_id).val() * $('#item-quantity-' + item_id).val();
             $('#item-total-' + item_id).html('$'+total);
 
@@ -303,9 +322,8 @@
                     'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
                 }
             });
-            var route = '{{ route("purchase-orders-items", ":id") }}';
+            var route = '{{ route("purchase-orders-items.update", ":id") }}';
             route = route.replace(':id', item_id);
-
             $.ajax({
                 type: 'POST',
                 url: route,
@@ -313,7 +331,8 @@
                 data: { 
                     'value' : $(this).val() , 
                     'field': $(this).attr('data-field'), 
-                    'item': $(this).attr('data-item')
+                    'item': $(this).attr('data-item'),
+                    '_method': 'PUT'
                 },
                 success : function(result){
                     $(this).attr('data-value') == $(this).val();
@@ -325,7 +344,7 @@
 
 
     $('#delete-modal').on('show.bs.modal', function (e) {
-        var route = '{{ route("purchase-orders-items", ":id") }}';
+        var route = '{{ route("purchase-orders-items.delete", ":id") }}';
         var button = e.relatedTarget;
         if (button != null){
             route = route.replace(':id', button.id);
@@ -333,21 +352,15 @@
         }
     });
 
+    
 
     $('.form-product').on('submit', function(e){
-        var formData = { 
-                product_id: $(".product-select").val(),
-                purchase_order_id: $("purchase-order-id").val(),
-                quantity: $(".quantity").val(),
-            };
         e.preventDefault();       
         $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
                 }
             });   
-            
-            // console.log(formData);
         $.ajax({
             type: 'POST',
             url: $(this).attr("action"),
@@ -357,23 +370,23 @@
                 var item = '<tr class="item" data-id="'+ ['purchase_order_item_id'] +'">';
                 item += '<td>';
                     item += '<p class="m-0 d-inline-block align-middle font-16">';
-                        item += '<a href="javascript:void(0); class="text-body product-name">'+ data.item.name +'</a>';
+                        item += '<a href="javascript:void(0); class="text-body product-name">'+ data.product.name +'</a>';
                             item += '<br>';
-                            item += '<small class="me-2"><b>Code:</b> <span class="product-code">'+ data.item.code +'</span> </small>';
-                            item += '<small><b>Model:</b> <span class="product-model">'+ data.item.model +'</span></small>';
+                            item += '<small class="me-2"><b>Code:</b> <span class="product-code">'+ data.product.code +'</span> </small>';
+                            item += '<small><b>Model:</b> <span class="product-model">'+ data.product.model +'</span></small>';
                             item += '</p>';
                             item += '</td>';
                             item += '<td>';
                                 item += '<div class="input-group flex-nowrap">';
                                     item += '<span class="input-group-text">$</span>';
-                                    item += '<input id="item-price-'+ data.item.purchase_order_items_id +'" type="text" class="editable-field form-control" data-value="'+ data.item.price +'" data-field="price" data-item="'+ data.item.purchase_order_items_id +'" placeholder="" value="'+ data.item.price +'">';
+                                    item += '<input id="item-price-'+ data.item.purchase_order_items_id +'" type="text" class="editable-field form-control" data-value="'+ data.item.selling_price/100 +'" data-field="price" data-item="'+ data.item.purchase_order_items_id +'" placeholder="" value="'+ data.item.selling_price /100 +'">';
                                     item += '</div>';
                                     item += '</td>';
                                     item += '<td>';
-                                        item += '<input id="item-quantity-'+ data.item.purchase_order_items_id +'" type="number" min="1" value="'+ data.item.quantity +'" class="editable-field form-control" data-value="'+ data.item.quantity +'" data-field="quantity" data-item="'+ data.item.purchase_order_items_id +'" placeholder="Qty" style="width: 90px;">';
+                                        item += '<input id="item-quantity-'+ data.item.purchase_order_items_id +'" type="number" min="1" value="'+ data.item.quantity_ordered +'" class="editable-field form-control" data-value="'+ data.item.quantity_ordered +'" data-field="quantity" data-item="'+ data.item.purchase_order_items_id +'" placeholder="Qty" style="width: 90px;">';
                         item += '</td>';
                         item += '<td>';
-                            item += '<span id="item-total-'+ data.item.purchase_order_items_id +'" class="item-total">$'+ data.item.price*data.item.quantity +'</span>';
+                            item += '<span id="item-total-'+ data.item.purchase_order_items_id +'" class="item-total">$'+ data.item.selling_price*data.item.quantity_ordered /100 +'</span>';
                             item += '</td>';
                             item += '<td>';
                                 item += '<a href="javascript:void(0);" class="action-icon" id="1" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>';

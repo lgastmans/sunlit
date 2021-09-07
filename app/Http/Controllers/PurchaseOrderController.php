@@ -168,7 +168,6 @@ class PurchaseOrderController extends Controller
         $validatedData = $request->validated();
         $purchase_order = PurchaseOrder::create($validatedData);
         if ($purchase_order) {
-            //Save the purchase an redirect to the cart view with order_id
             return redirect()->action(
                 [PurchaseOrderController::class, 'cart'], ['id' => $purchase_order->id]
             );
@@ -184,12 +183,12 @@ class PurchaseOrderController extends Controller
      */
     public function cart($order_number)
     {
-        $purchase_order = PurchaseOrder::with(['supplier','warehouse','items'])->where('order_number', '=', $order_number)->first();
-        if ($purchase_order){
-            if ($purchase_order->status == PurchaseOrder::DRAFT)
-                return view('purchase_orders.cart', ['purchase_order' => $purchase_order ]);
+        $order = PurchaseOrder::with(['supplier','warehouse','items', 'items.product'])->where('order_number', '=', $order_number)->first();
+        if ($order){
+            if ($order->status == PurchaseOrder::DRAFT)
+                return view('purchase_orders.cart', ['purchase_order' => $order ]);
 
-            return view('purchase_orders.show', ['purchase_order' => $purchase_order ]);
+            return redirect(route('purchase-orders.show', $order->order_number)); 
         }
     }
 
@@ -253,6 +252,8 @@ class PurchaseOrderController extends Controller
         if ($request->get('field') == "ordered_at"){
             $order = PurchaseOrder::find($id);
             $order->ordered_at = $request->get('ordered_at');
+            $order->status = PurchaseOrder::ORDERED;
+            $order->amount_usd = 1000; // to be calculated
             $order->update();
             return redirect(route('purchase-orders.show', $order->order_number))->with('success', 'order placed'); 
         }

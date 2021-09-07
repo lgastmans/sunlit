@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Models\PurchaseOrder;
+use App\Models\PurchaseOrderItem;
+
 
 class PurchaseOrderItemController extends Controller
 {
@@ -34,18 +38,20 @@ class PurchaseOrderItemController extends Controller
      */
     public function store(Request $request)
     {
-        $purchase_order_item = [
-            'purchase_order_id'=>$request->get('purchase-order-id'), 
-            'purchase_order_item_id' => mt_rand(1, 10), 
-            'product_id' => mt_rand(1, 10), 
-            'code'=>'XTM 4000-48', 
-            'name'=>'XTM 4000-48', 
-            'model'=>'Xtender series', 
-            'quantity'=>$request->get('quantity'), 
-            'price'=>mt_rand(1, 100).mt_rand(1, 100)];
+        $product = Product::find($request->get('product_id'));
+        if ($product){
+            $item = new PurchaseOrderItem;
+            $item->purchase_order_id = $request->purchase_order_id;
+            $item->product_id = $request->product_id;
+            $item->tax_id = $product->tax->id;
+            $item->quantity_ordered = $request->quantity_ordered;
+            $item->selling_price = $request->selling_price*100;
+            $item->save();
+            return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'item' => $item, 'product' => $product]);
+        }
+        
             
-        $res = ['code' => 200, 'message' => 'success', 'item'=> $purchase_order_item];
-        return json_encode($res);
+        
     }
 
     /**
@@ -79,7 +85,15 @@ class PurchaseOrderItemController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $item = PurchaseOrderItem::find($id);
+        if ($request->field == "quantity")
+            $item->quantity_ordered = $request->value;
+
+        if ($request->field == "price")
+            $item->selling_price = $request->value*100;
+
+        $item->update();
+        return response()->json(['success'=>'true', 'code'=>200, 'message'=>'OK']);
     }
 
     /**
@@ -90,6 +104,11 @@ class PurchaseOrderItemController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $item = PurchaseOrderItem::find($id);
+        $order = PurchaseOrder::find($item->purchase_order_id);
+        PurchaseOrderItem::destroy($id);
+
+        return redirect(route('purchase-orders.cart', $order->order_number))->with('success', trans('app.record_deleted', ['field' => 'item']));
+
     }
 }
