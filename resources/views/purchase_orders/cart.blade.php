@@ -98,15 +98,6 @@
                             
                         </div> <!-- end table-responsive-->
 
-                        <!-- action buttons-->
-                        <div class="row mt-4 d-none">
-                            <div class="col-sm-12">
-                                <div class="text-sm-end">
-                                    <a href="apps-ecommerce-checkout.html" class="btn btn-danger">
-                                        <i class="mdi mdi-cart-plus me-1"></i> Save </a>
-                                </div>
-                            </div> <!-- end col -->
-                        </div> <!-- end row-->
                     </div>
                     <!-- end col -->
 
@@ -156,27 +147,19 @@
                                         </tr>
                                     </tbody>
                                 </table>
+                                
                             </div>
                             <!-- end table-responsive -->
                         </div>
-                        <div class=" mt-4 mt-lg-0 rounded d-none">
-                            <div class="card mt-4 border">
-                                <div class="card-body">
-                                    <h4 class="header-title mb-3">Supplier Information</h4>
-                                    <h5>{{ $purchase_order->supplier->company }}</h5>
-                                    <h6>{{ $purchase_order->supplier->contact_person }}</h6>
-                                    <address class="mb-0 font-14 address-lg">
-                                        {{ $purchase_order->supplier->address }}<br>
-                                        @if ($purchase_order->supplier->address2)
-                                        {{ $purchase_order->supplier->address2 }}<br>
-                                        @endif
-                                        {{ $purchase_order->supplier->city }}, {{ $purchase_order->supplier->zip_code }}<br/>
-                                        <abbr title="Phone">P:</abbr> {{ $purchase_order->supplier->phone }} <br/>
-                                        <abbr title="Mobile">M:</abbr> {{ $purchase_order->supplier->phone2 }} <br/>
-                                        <abbr title="Mobile">@:</abbr> {{ $purchase_order->supplier->email }}
-                                    </address>
-        
-                                </div>
+                        <div class="mt-4 mt-lg-0 ">
+                            <div class="row mt-4 px-2 text-right">
+                                <form name="place-order-form" action="{{ route('purchase-orders.update', $purchase_order->id) }}" method="POST">
+                                    @csrf()
+                                    @method('PUT')
+                                    <input type="hidden" name="field" value="ordered_at">
+                                    <input type="hidden" name="ordered_at" value="{{ date('Y-m-d H:i:s') }}">
+                                    <button class="col-lg-12 text-center btn btn-danger" type="submit" name="place_order"><i class="mdi mdi-cart-plus me-1"></i> Place order</button>
+                                </form>
                             </div>
                         </div>
                     </div> <!-- end col -->
@@ -498,7 +481,6 @@
             },
             error:function(xhr, textStatus, thrownError, data)
             {
-                
                 console.log("Error: " + thrownError);
                 console.log("Error: " + textStatus);
             }

@@ -249,6 +249,13 @@ class PurchaseOrderController extends Controller
             $warehouse = Warehouse::find($request->get('warehouse_id'));
             return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'field' => $request->get('field'), 'warehouse'=> $warehouse]);
         }
+
+        if ($request->get('field') == "ordered_at"){
+            $order = PurchaseOrder::find($id);
+            $order->ordered_at = $request->get('ordered_at');
+            $order->update();
+            return redirect(route('purchase-orders.show', $order->order_number))->with('success', 'order placed'); 
+        }
         
     }
 
