@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
-@section('page-title', 'Purchase Order');
+@section('page-title')
+    Purchase Order <span class="order-number">#{{ $purchase_order->order_number }}</span>
+@endsection
 
 @section('content')
 
