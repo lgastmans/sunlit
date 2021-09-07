@@ -66,7 +66,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::delete('/purchase-orders-items/{id}', [PurchaseOrderItemController::class, 'destroy'])->name('purchase-orders-items.delete');
 
 
-
     Route::get('/products', [ProductController::class, 'index'])->name('products');
     Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
     Route::get('/products/list', [ProductController::class, 'getListForDatatables'])->name('products.datatables');
@@ -142,6 +141,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/taxes', [TaxController::class, 'getListForSelect2'])->name('ajax.taxes');
         Route::get('/roles', [RoleController::class, 'getListForSelect2'])->name('ajax.roles');
         Route::get('/products/{supplier?}', [ProductController::class, 'getListForSelect2'])->name('ajax.products');
+        Route::get('/product/{id}', [ProductController::class, 'getById'])->name('product.json');
+
     });
 
     Route::prefix('export')->group(function () {

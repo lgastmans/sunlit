@@ -226,7 +226,15 @@ class ProductController extends Controller
         if ($product)
             return view('products.show', ['product'=>$product]);
 
-            return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'product']));
+        return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'product']));
+    }
+
+    public function getById($id)
+    {
+        $product = Product::find($id);
+        if ($product)
+            return $product;
+        return false;
     }
 
     /**
