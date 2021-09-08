@@ -70,4 +70,13 @@ class PurchaseOrder extends Model
         $this->attributes['ordered_at'] = $dt->toDateTimeString();  
     }
 
+    /* * Retrieve orders with status RECEIVED
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeReceived($query)
+    {
+        return $query->where('status', PurchaseOrder::RECEIVED);
+    }    
 }
