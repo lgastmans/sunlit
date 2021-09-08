@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use \NumberFormatter;
-
+use App\Models\Warehouse;
 use Illuminate\Http\Request;
 use App\Models\PurchaseOrder;
-use App\Models\Warehouse;
+use App\Models\PurchaseOrderItem;
 use Illuminate\Support\Facades\Auth;
 use \App\Http\Requests\StorePurchaseOrderRequest;
 
@@ -249,12 +249,26 @@ class PurchaseOrderController extends Controller
             return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'field' => $request->get('field'), 'warehouse'=> $warehouse]);
         }
 
+        if ($request->get('field') == "amount"){
+            $order = PurchaseOrder::find($id);
+            $items = PurchaseOrderItem::where('purchase_order_id', "=", $id)->select('quantity_ordered','selling_price')->get();
+            $total = 0;
+            foreach($items as $item){
+                $total += $item->quantity_ordered * $item->selling_price;
+            }
+            $order->amount_usd = $total;
+            $order->update();
+
+            return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'field' => $request->get('field')]);
+        }
+
         if ($request->get('field') == "ordered_at"){
             $order = PurchaseOrder::find($id);
             $order->ordered_at = $request->get('ordered_at');
             $order->status = PurchaseOrder::ORDERED;
-            $order->amount_usd = 1000; // to be calculated
+            // $order->amount_usd = PurchaseOrderItem::where('purchase_order_id', "=", $id)->sum('selling_price');
             $order->update();
+
             return redirect(route('purchase-orders.show', $order->order_number))->with('success', 'order placed'); 
         }
         

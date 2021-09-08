@@ -133,7 +133,7 @@
                                     <tbody>
                                         <tr>
                                             <td>Grand Total :</td>
-                                            <td id="grand-total">${{ $purchase_order->amount_usd }}</td>
+                                            <td id="grand-total">${{ $purchase_order->amount_usd/100 }}</td>
                                         </tr>
                                       
                                         <tr>
@@ -146,7 +146,7 @@
                                         </tr>
                                         <tr>
                                             <th>Total :</th>
-                                            <th>$1458.3</th>
+                                            <th>${{ $purchase_order->amount_usd }}</th>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -154,17 +154,27 @@
                             </div>
                             <!-- end table-responsive -->
                         </div>
-                        <div class="mt-4 mt-lg-0 ">
-                            <div class="row mt-4 px-2 text-right">
-                                <form name="place-order-form" action="{{ route('purchase-orders.update', $purchase_order->id) }}" method="POST">
-                                    @csrf()
-                                    @method('PUT')
-                                    <input type="hidden" name="field" value="ordered_at">
-                                    <input type="hidden" name="ordered_at" value="{{ date('Y-m-d H:i:s') }}">
-                                    <button class="col-lg-12 text-center btn btn-danger" type="submit" name="place_order"><i class="mdi mdi-cart-plus me-1"></i> Place order</button>
-                                </form>
+                        <div class=" mt-4 mt-lg-0 rounded @if (count($purchase_order->items)==0) d-none @endif">
+                            <div class="card mt-4 border">
+                                <div class="card-body">
+                                    <form name="place-order-form" action="{{ route('purchase-orders.update', $purchase_order->id) }}" method="POST">
+                                        @csrf()
+                                        @method('PUT')
+                                        <input type="hidden" name="field" value="ordered_at">
+                                        <div class="mb-3 position-relative" id="ordered_at">
+                                            <label class="form-label">Ordered date</label>
+                                            <input type="text" class="form-control" name="ordered_at" value="{{ $purchase_order->display_ordered_at }}"
+                                            data-provide="datepicker" 
+                                            data-date-container="#ordered_at"
+                                            data-date-format="d-M-yyyy">
+                                        </div>
+                                        <button class="col-lg-12 text-center btn btn-danger" type="submit" name="place_order"><i class="mdi mdi-cart-plus me-1"></i> Place order</button>
+                                    </form>
+
+                                </div>
                             </div>
                         </div>
+    
                     </div> <!-- end col -->
                     
 
@@ -258,12 +268,27 @@
     <script>
 
     function recalculateGrandTotal(){
-        // Update grand total amount
         var grand_total = 0;
-        $('.item-total').each(function( index){
-            grand_total = grand_total + parseInt($(this).html().substr(1));
+        $('.item-total').each(function( index ){
+            grand_total = grand_total + parseFloat($(this).html().substr(1));
         });
         $('#grand-total').html('$'+grand_total);
+        var route = '{{ route("purchase-orders.update", ":id") }}';
+        route = route.replace(':id', $('#purchase-order-id').val());
+        $.ajax({
+                type: 'POST',
+                url: route,
+                dataType: 'json',
+                data: { 
+                    'value' : false , 
+                    'field': 'amount', 
+                    'item': false,
+                    '_method': 'PUT'
+                },
+                success : function(result){
+                    console.log('amount updated')
+                }
+            });
     }
 
     var warehouseSelect = $(".warehouse-select").select2();
@@ -308,15 +333,14 @@
 
     $('.editable-field ').on('blur', function(e){        
         if ($(this).val() != $(this).attr('data-value')){
-            // Update product total on screen
-            var item_id = $(this).parent().parent().attr('data-id');
             if ($(this).attr('data-field') == "price"){
                 item_id = $(this).parent().parent().parent().attr('data-id');
             }
+            else{
+                var item_id = $(this).parent().parent().attr('data-id');
+            }
             var total = $('#item-price-' + item_id).val() * $('#item-quantity-' + item_id).val();
             $('#item-total-' + item_id).html('$'+total);
-
-            // Update purchase order item
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
@@ -335,7 +359,8 @@
                     '_method': 'PUT'
                 },
                 success : function(result){
-                    $(this).attr('data-value') == $(this).val();
+                    $('#item-price-' + item_id).attr('data-value', $('#item-price-' + item_id).val())
+                    $('#item-quantity-' + item_id).attr('data-value', $('#item-quantity-' + item_id).val())
                     recalculateGrandTotal()
                 }
             });
@@ -393,6 +418,7 @@
                                 item += '</td>';
                                 item += '</tr> ';
                 $('#purchase-order-items-table > tbody:last-child').append(item);
+                $('.no-items').remove();
                 recalculateGrandTotal()
 
             },
@@ -430,8 +456,6 @@
         $('.warehouse-info').slideDown();
         $('.edit-warehouse').show();
     });
-
-    
 
     $('.edit-order-number-form').on('submit', function(e){
         e.preventDefault();       

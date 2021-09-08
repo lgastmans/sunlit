@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -52,4 +53,21 @@ class PurchaseOrder extends Model
     {
         return $this->hasMany(PurchaseOrderItem::class);
     } 
+
+    /**
+     * Returns the ordered_at date for display Month Day, Year
+     */
+    public function getDisplayOrderedAtAttribute()
+    {
+        $dt = Carbon::parse($this->ordered_at);
+        return $this->attributes['ordered_at'] = $dt->toFormattedDateString();  
+    }
+
+
+    public function setOrderedAtAttribute($value)
+    {
+        $dt = Carbon::parse($value);
+        $this->attributes['ordered_at'] = $dt->toDateTimeString();  
+    }
+
 }
