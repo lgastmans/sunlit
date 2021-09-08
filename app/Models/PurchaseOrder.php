@@ -52,4 +52,15 @@ class PurchaseOrder extends Model
     {
         return $this->hasMany(PurchaseOrderItem::class);
     } 
+
+    /**
+     * Retrieve orders with status RECEIVED
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeReceived($query)
+    {
+        return $query->where('status', PurchaseOrder::RECEIVED);
+    }    
 }
