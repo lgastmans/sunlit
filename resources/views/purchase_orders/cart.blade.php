@@ -136,17 +136,17 @@
                                             <td id="grand-total">${{ $purchase_order->amount_usd/100 }}</td>
                                         </tr>
                                       
-                                        <tr>
+                                        <tr class="d-none">
                                             <td>Shipping Charge :</td>
                                             <td>${{ $purchase_order->transport_charges }}</td>
                                         </tr>
-                                        <tr>
+                                        <tr class="d-none">
                                             <td>Estimated Tax : </td>
                                             <td>$19.22</td>
                                         </tr>
                                         <tr>
                                             <th>Total :</th>
-                                            <th>${{ $purchase_order->amount_usd }}</th>
+                                            <th>${{ $purchase_order->amount_usd/100 }}</th>
                                         </tr>
                                     </tbody>
                                 </table>
