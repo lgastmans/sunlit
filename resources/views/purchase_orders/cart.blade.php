@@ -93,7 +93,7 @@
                                                 <span id="item-tax-{{ $item->id }}">{{ $item->tax }}%</span>
                                             </td>
                                             <td>
-                                                <span id="item-total-{{ $item->id }}" class="item-total">${{ $item->selling_price }}</span>
+                                                <span id="item-total-{{ $item->id }}" class="item-total">${{ $item->total_price }}</span>
                                             </td>
                                             <td>
                                                 <a href="javascript:void(0);" class="action-icon" id="{{ $item->id }}" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>
@@ -346,8 +346,11 @@
             else{
                 var item_id = $(this).parent().parent().attr('data-id');
             }
-            var total = $('#item-price-' + item_id).val() * $('#item-quantity-' + item_id).val();
-            $('#item-total-' + item_id).html('$'+total);
+
+            var tax = 1 + (parseFloat($('#item-tax-' + item_id).html().replace('%','') / 100));
+            var total = $('#item-price-' + item_id).val() * tax * $('#item-quantity-' + item_id).val();
+            
+            $('#item-total-' + item_id).html('$'+total.toFixed(2));
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
@@ -421,7 +424,7 @@
                         item += '<span id="item-total-'+ data.item.tax +'" class="item-total">'+ data.item.tax +'%</span>';
                         item += '</td>';
                         item += '<td>';
-                        item += '<span id="item-total-'+ data.item.purchase_order_items_id +'" class="item-total">$'+ data.item.total_price +'</span>';
+                        item += '<span id="item-total-'+ data.item.purchase_order_items_id +'" class="item-total">$'+ (data.item.selling_price + (data.item.selling_price * data.item.tax)) * data.item.quantity_ordered +'</span>';
                         item += '</td>';
                         item += '<td>';
                         item += '<a href="javascript:void(0);" class="action-icon" id="1" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>';
