@@ -261,18 +261,42 @@ class PurchaseOrderController extends Controller
 
             return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'field' => $request->get('field')]);
         }
-
-        if ($request->get('field') == "ordered_at"){
-            $order = PurchaseOrder::find($id);
-            $order->ordered_at = $request->get('ordered_at');
-            $order->status = PurchaseOrder::ORDERED;
-            // $order->amount_usd = PurchaseOrderItem::where('purchase_order_id', "=", $id)->sum('selling_price');
-            $order->update();
-
-            return redirect(route('purchase-orders.show', $order->order_number))->with('success', 'order placed'); 
-        }
-        
     }
+
+    /**
+     * Update the ordered_at and status of an order
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function order(Request $request, $id)
+    {
+        $order = PurchaseOrder::find($id);
+        $order->ordered_at = $request->get('ordered_at');
+        $order->status = PurchaseOrder::ORDERED;
+        $order->amount_usd = PurchaseOrderItem::where('purchase_order_id', "=", $id)->sum('selling_price');
+        $order->update();
+        return redirect(route('purchase-orders.show', $order->order_number))->with('success', 'order placed'); 
+    }
+
+
+    /**
+     * Update the confirmed_at and status of an order
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function confirm(Request $request, $id)
+    {
+        $order = PurchaseOrder::find($id);
+        $order->confirmed_at = $request->get('confirmed_at');
+        $order->status = PurchaseOrder::CONFIRMED;
+        $order->update();
+        return redirect(route('purchase-orders.show', $order->order_number))->with('success', 'order confirmed'); 
+    }
+
 
     /**
      * Remove the specified resource from storage.

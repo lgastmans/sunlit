@@ -163,10 +163,9 @@
                         <div class=" mt-4 mt-lg-0 rounded @if (count($purchase_order->items)==0) d-none @endif">
                             <div class="card mt-4 border">
                                 <div class="card-body">
-                                    <form name="place-order-form" action="{{ route('purchase-orders.update', $purchase_order->id) }}" method="POST">
+                                    <form name="place-order-form" action="{{ route('purchase-orders.order', $purchase_order->id) }}" method="POST">
                                         @csrf()
                                         @method('PUT')
-                                        <input type="hidden" name="field" value="ordered_at">
                                         <div class="mb-3 position-relative" id="ordered_at">
                                             <label class="form-label">Ordered date</label>
                                             <input type="text" class="form-control" name="ordered_at" value="{{ $purchase_order->display_ordered_at }}"

@@ -18,7 +18,7 @@ class PurchaseOrder extends Model
     const CLEARED = 6;
     const RECEIVED = 7;
 
-    protected $dates = ['ordered_at', 'expected_at', 'received_at', 'se_due_date', 'se_payment_date',];
+    protected $dates = ['ordered_at', 'confirmed_at', 'received_at', 'se_due_date', 'se_payment_date',];
 
     protected $fillable = ['warehouse_id', 'supplier_id', 'order_number', 'boe_number', 'ordered_at', 'expected_at', 'received_at', 'credit_period', 'amount_usd', 'amount_inr', 'customs_ex_rate', 'se_ex_rate', 'duty_amount', 'social_surcharge', 'igst', 'bank_charges', 'clearing_charges', 'transport_charges', 'se_due_date', 'se_payment_date', 'status', 'user_id'];
 
@@ -63,11 +63,25 @@ class PurchaseOrder extends Model
         return $this->attributes['ordered_at'] = $dt->toFormattedDateString();  
     }
 
-
     public function setOrderedAtAttribute($value)
     {
         $dt = Carbon::parse($value);
         $this->attributes['ordered_at'] = $dt->toDateTimeString();  
+    }
+
+    /**
+     * Returns the confirmed_at date for display Month Day, Year
+     */
+    public function getDisplayConfirmedAtAttribute()
+    {
+        $dt = Carbon::parse($this->confirmed_at);
+        return $this->attributes['confirmed_at'] = $dt->toFormattedDateString();  
+    }
+
+    public function setConfirmedAtAttribute($value)
+    {
+        $dt = Carbon::parse($value);
+        $this->attributes['confirmed_at'] = $dt->toDateTimeString();  
     }
 
     /* * Retrieve orders with status RECEIVED
