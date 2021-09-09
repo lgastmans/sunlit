@@ -127,7 +127,7 @@ class PurchaseOrderController extends Controller
                 "ordered_at" => (is_null($record->ordered_at)? '' : $record->ordered_at->format('d/M/Y')),
                 "expected_at" => (is_null($record->expected_at)? '' : $record->expected_at->format('d/M/Y')),
                 "received_at" => (is_null($record->received_at)? '' : $record->received_at->format('d/M/Y'))    ,
-                "amount_inr" => $fmt->format($record->amount_inr/100),
+                "amount_inr" => $fmt->format($record->amount_inr),
                 "status" => $status,
                 "warehouse" => $record->warehouse->name,
                 "user" => ucfirst($record->name)
@@ -183,7 +183,7 @@ class PurchaseOrderController extends Controller
      */
     public function cart($order_number)
     {
-        $order = PurchaseOrder::with(['supplier','warehouse','items', 'items.product'])->where('order_number', '=', $order_number)->first();
+        $order = PurchaseOrder::with(['supplier','warehouse','items', 'items.product', 'items.product.tax'])->where('order_number', '=', $order_number)->first();
         if ($order){
             if ($order->status == PurchaseOrder::DRAFT)
                 return view('purchase_orders.cart', ['purchase_order' => $order ]);

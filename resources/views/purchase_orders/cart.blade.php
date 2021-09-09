@@ -14,6 +14,7 @@
                     <input type="hidden" name="purchase_order_id" id="purchase-order-id" value="{{ $purchase_order->id }}">
                     <input type="hidden" name="supplier_id" id="supplier-id" value="{{ $purchase_order->supplier->id }}">
                     <input type="hidden" name="warehouse_id" id="warehouse-id" value="{{ $purchase_order->warehouse->id }}">
+                    
                     <div class="col-lg-3">
                         <div class="mb-3">
                             <label class="form-label" for="product-select">Product</label>
@@ -32,6 +33,7 @@
                             <div class="input-group flex-nowrap">
                                 <span class="input-group-text">$</span>
                                 <input type="selling_price" class="form-control" name="selling_price"  id="selling_price" value="">
+                                <input type="hidden" name="tax" id="tax" value="">
                             </div>
                         </div>
                     </div>
@@ -56,9 +58,10 @@
                             <table class="table table-borderless table-centered mb-0" id="purchase-order-items-table">
                                 <thead class="table-light">
                                     <tr>
-                                        <th class="col-7">Product</th>
+                                        <th class="col-5">Product</th>
                                         <th class="col-2">Price</th>
                                         <th class="col-1">Quantity</th>
+                                        <th class="col-1">Tax</th>
                                         <th class="col-2">Total</th>
                                         <th class="col-1"></th>
                                     </tr>
@@ -79,7 +82,7 @@
                                             <td>
                                                 <div class="input-group flex-nowrap">
                                                     <span class="input-group-text">$</span>
-                                                    <input id="item-price-{{ $item->id }}" type="text" class="editable-field form-control" data-value="{{ $item->selling_price/100 }}" data-field="price" data-item="{{ $item->id }}" placeholder="" value="{{ $item->selling_price/100 }}">
+                                                    <input id="item-price-{{ $item->id }}" type="text" class="editable-field form-control" data-value="{{ $item->selling_price }}" data-field="price" data-item="{{ $item->id }}" placeholder="" value="{{ $item->selling_price }}">
                                                 </div>
                                             </td>
                                             <td>
@@ -87,7 +90,10 @@
                                                     placeholder="Qty" style="width: 90px;">
                                             </td>
                                             <td>
-                                                <span id="item-total-{{ $item->id }}" class="item-total">${{ $item->selling_price * $item->quantity_ordered /100 }}</span>
+                                                <span id="item-tax-{{ $item->id }}">{{ $item->tax }}%</span>
+                                            </td>
+                                            <td>
+                                                <span id="item-total-{{ $item->id }}" class="item-total">${{ $item->selling_price }}</span>
                                             </td>
                                             <td>
                                                 <a href="javascript:void(0);" class="action-icon" id="{{ $item->id }}" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>
@@ -133,7 +139,7 @@
                                     <tbody>
                                         <tr>
                                             <td>Grand Total :</td>
-                                            <td id="grand-total">${{ $purchase_order->amount_usd/100 }}</td>
+                                            <td id="grand-total">${{ $purchase_order->amount_usd }}</td>
                                         </tr>
                                       
                                         <tr class="d-none">
@@ -146,7 +152,7 @@
                                         </tr>
                                         <tr>
                                             <th>Total :</th>
-                                            <th>${{ $purchase_order->amount_usd/100 }}</th>
+                                            <th>${{ $purchase_order->amount_usd }}</th>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -326,7 +332,8 @@
             url: route,
             dataType: 'json',
             success : function(data){
-                $('#selling_price').val(data.purchase_price/100);
+                $('#selling_price').val(data.purchase_price);
+                $('#tax').val(data.tax.amount);
             }
         })
     });
@@ -404,19 +411,22 @@
                             item += '<td>';
                                 item += '<div class="input-group flex-nowrap">';
                                     item += '<span class="input-group-text">$</span>';
-                                    item += '<input id="item-price-'+ data.item.purchase_order_items_id +'" type="text" class="editable-field form-control" data-value="'+ data.item.selling_price/100 +'" data-field="price" data-item="'+ data.item.purchase_order_items_id +'" placeholder="" value="'+ data.item.selling_price /100 +'">';
+                                    item += '<input id="item-price-'+ data.item.purchase_order_items_id +'" type="text" class="editable-field form-control" data-value="'+ data.item.selling_price +'" data-field="price" data-item="'+ data.item.purchase_order_items_id +'" placeholder="" value="'+ data.item.selling_price  +'">';
                                     item += '</div>';
                                     item += '</td>';
                                     item += '<td>';
                                         item += '<input id="item-quantity-'+ data.item.purchase_order_items_id +'" type="number" min="1" value="'+ data.item.quantity_ordered +'" class="editable-field form-control" data-value="'+ data.item.quantity_ordered +'" data-field="quantity" data-item="'+ data.item.purchase_order_items_id +'" placeholder="Qty" style="width: 90px;">';
                         item += '</td>';
                         item += '<td>';
-                            item += '<span id="item-total-'+ data.item.purchase_order_items_id +'" class="item-total">$'+ data.item.selling_price*data.item.quantity_ordered /100 +'</span>';
-                            item += '</td>';
-                            item += '<td>';
-                                item += '<a href="javascript:void(0);" class="action-icon" id="1" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>';
-                                item += '</td>';
-                                item += '</tr> ';
+                        item += '<span id="item-total-'+ data.item.tax +'" class="item-total">'+ data.item.tax +'%</span>';
+                        item += '</td>';
+                        item += '<td>';
+                        item += '<span id="item-total-'+ data.item.purchase_order_items_id +'" class="item-total">$'+ data.item.total_price +'</span>';
+                        item += '</td>';
+                        item += '<td>';
+                        item += '<a href="javascript:void(0);" class="action-icon" id="1" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>';
+                        item += '</td>';
+                        item += '</tr> ';
                 $('#purchase-order-items-table > tbody:last-child').append(item);
                 $('.no-items').remove();
                 recalculateGrandTotal()

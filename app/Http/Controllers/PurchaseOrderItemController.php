@@ -43,9 +43,9 @@ class PurchaseOrderItemController extends Controller
             $item = new PurchaseOrderItem;
             $item->purchase_order_id = $request->purchase_order_id;
             $item->product_id = $request->product_id;
-            $item->tax_id = $product->tax->id;
+            $item->tax = $product->tax->amount;
             $item->quantity_ordered = $request->quantity_ordered;
-            $item->selling_price = $request->selling_price*100;
+            $item->selling_price = $request->selling_price;
             $item->save();
             return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'item' => $item, 'product' => $product]);
         }
@@ -90,7 +90,7 @@ class PurchaseOrderItemController extends Controller
             $item->quantity_ordered = $request->value;
 
         if ($request->field == "price")
-            $item->selling_price = $request->value*100;
+            $item->selling_price = $request->value;
 
         $item->update();
         return response()->json(['success'=>'true', 'code'=>200, 'message'=>'OK']);

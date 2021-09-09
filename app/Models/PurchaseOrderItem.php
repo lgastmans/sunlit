@@ -25,4 +25,11 @@ class PurchaseOrderItem extends Model
     {
         return $this->belongsTo(Product::class);
     } 
+
+    public function getTotalPriceAttribute()
+    {
+        $total = ($this->selling_price + ($this->selling_price * $this->tax)) * $this->quantity_ordered;
+        \Debugbar::info($total);
+        return  $total;
+    }
 }
