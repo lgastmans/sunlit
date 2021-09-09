@@ -82,7 +82,7 @@
                 'orderable': true 
             },
             { 
-                'data': 'display_amount',
+                'data': 'amount',
                 'orderable': true 
             },
             {
