@@ -278,7 +278,7 @@
         $('.item-total').each(function( index ){
             grand_total = grand_total + parseFloat($(this).html().substr(1));
         });
-        $('#grand-total').html('$'+grand_total);
+        $('#grand-total').html('$'+grand_total.toFixed(2));
         var route = '{{ route("purchase-orders.update", ":id") }}';
         route = route.replace(':id', $('#purchase-order-id').val());
         $.ajax({
@@ -292,7 +292,7 @@
                     '_method': 'PUT'
                 },
                 success : function(result){
-                    console.log('amount updated')
+                    //
                 }
             });
     }
@@ -338,6 +338,11 @@
         })
     });
 
+    function getTaxValue(tax_percentage)
+    {
+        return tax = 1 + (parseFloat(tax_percentage.replace('%','') / 100));
+    }
+
     $('.editable-field ').on('blur', function(e){        
         if ($(this).val() != $(this).attr('data-value')){
             if ($(this).attr('data-field') == "price"){
@@ -347,8 +352,8 @@
                 var item_id = $(this).parent().parent().attr('data-id');
             }
 
-            var tax = 1 + (parseFloat($('#item-tax-' + item_id).html().replace('%','') / 100));
-            var total = $('#item-price-' + item_id).val() * tax * $('#item-quantity-' + item_id).val();
+            // var tax = 1 + (parseFloat($('#item-tax-' + item_id).html().replace('%','') / 100));
+            var total = $('#item-price-' + item_id).val() * getTaxValue($('#item-tax-' + item_id).html()) * $('#item-quantity-' + item_id).val();
             
             $('#item-total-' + item_id).html('$'+total.toFixed(2));
             $.ajaxSetup({
@@ -424,7 +429,7 @@
                         item += '<span id="item-total-'+ data.item.tax +'" class="item-total">'+ data.item.tax +'%</span>';
                         item += '</td>';
                         item += '<td>';
-                        item += '<span id="item-total-'+ data.item.purchase_order_items_id +'" class="item-total">$'+ (data.item.selling_price + (data.item.selling_price * data.item.tax)) * data.item.quantity_ordered +'</span>';
+                        item += '<span id="item-total-'+ data.item.purchase_order_items_id +'" class="item-total">$'+((data.item.selling_price * getTaxValue(data.item.tax)) * parseInt(data.item.quantity_ordered)).toFixed(2) +'</span>';
                         item += '</td>';
                         item += '<td>';
                         item += '<a href="javascript:void(0);" class="action-icon" id="1" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>';
@@ -535,9 +540,7 @@
                 console.log("Error: " + textStatus);
             }
         });     
-    });
-
-    
+    });    
 
     </script>
 

@@ -231,7 +231,7 @@ class ProductController extends Controller
 
     public function getById($id)
     {
-        $product = Product::find($id);
+        $product = Product::with('tax')->find($id);
         if ($product)
             return $product;
         return false;
