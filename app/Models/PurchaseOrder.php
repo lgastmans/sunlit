@@ -84,6 +84,26 @@ class PurchaseOrder extends Model
         $this->attributes['confirmed_at'] = $dt->toDateTimeString();  
     }
 
+    /**
+     * Returns the ordered_at date for display Month Day, Year
+     */
+    public function getDisplayShippedAtAttribute()
+    {
+        $dt = Carbon::parse($this->shipped_at);
+        return $this->attributes['shipped_at'] = $dt->toFormattedDateString();  
+    }
+
+    public function setShippedAtAttribute($value)
+    {
+        $dt = Carbon::parse($value);
+        $this->attributes['shipped_at'] = $dt->toDateTimeString();  
+    }
+
+
+
+
+
+
     /* * Retrieve orders with status RECEIVED
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query

@@ -29,7 +29,7 @@
         </div>
     </div> <!-- end col -->
 
-    <div class="col-lg-3 e">
+    <div class="col-lg-3 d-none">
         <div class="card">
             <div class="card-body">
                 <h4 class="header-title mb-3">Payment Information</h4>
@@ -44,16 +44,16 @@
         </div>
     </div> <!-- end col -->
 
-    <div class="col-lg-3 ">
+    <div class="col-lg-3  @if (!$purchase_order->shipped_at) d-none @endif">
         <div class="card">
             <div class="card-body">
                 <h4 class="header-title mb-3">Delivery Info</h4>
 
                 <div class="text-center">
                     <i class="mdi mdi-truck-fast h2 text-muted"></i>
-                    <h5><b>UPS Delivery</b></h5>
-                    <p class="mb-1"><b>Order ID :</b> xxxx235</p>
-                    <p class="mb-0"><b>Payment Mode :</b> COD</p>
+                    <h5><b>{{ $purchase_order->courier }}</b></h5>
+                    <p class="mb-1"><b>Tracking # :</b> {{ $purchase_order->tracking_number }}</p>
+                    <p class="mb-0"><b>ETA :</b> ???</p>
                 </div>
             </div>
         </div>

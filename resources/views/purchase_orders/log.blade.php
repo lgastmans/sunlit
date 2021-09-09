@@ -18,10 +18,14 @@
                         @endif
                         @if ($purchase_order->status >= 3)
                         <tr>
-                            <td>{{ $purchase_order->display_confirmed_at }}</td><td>The order has been confirmed by {{ $purchase_order->supplier->company }}</td>
+                            <td>{{ $purchase_order->display_confirmed_at }}</td><td>The order has been confirmed by <b>{{ $purchase_order->supplier->company }}</b></td>
                         </tr>
                         @endif
-                        
+                        @if ($purchase_order->status >= 4)
+                        <tr>
+                            <td>{{ $purchase_order->display_shipped_at }}</td><td>The order has been shipped via <b>{{ $purchase_order->courier }}</b>, <b>#{{ $purchase_order->tracking_number }}</b></td>
+                        </tr>
+                        @endif
                     </tbody>
                 </table>
             </div>

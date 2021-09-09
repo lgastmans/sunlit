@@ -55,8 +55,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/purchase-orders/{order_number}/cart', [PurchaseOrderController::class, 'cart'])->name('purchase-orders.cart');
     Route::get('/purchase-orders/{id}/edit', [PurchaseOrderController::class, 'edit'])->name('purchase-orders.edit');
     Route::post('/purchase-orders', [PurchaseOrderController::class, 'store'])->name('purchase-orders.store');
-    Route::put('/purchase-orders/{id}/order', [PurchaseOrderController::class, 'order'])->name('purchase-orders.order');
-    Route::put('/purchase-orders/{id}/confirm', [PurchaseOrderController::class, 'confirm'])->name('purchase-orders.confirm');
+    Route::put('/purchase-orders/{id}/ordered', [PurchaseOrderController::class, 'ordered'])->name('purchase-orders.ordered');
+    Route::put('/purchase-orders/{id}/confirmed', [PurchaseOrderController::class, 'confirmed'])->name('purchase-orders.confirmed');
+    Route::put('/purchase-orders/{id}/shipped', [PurchaseOrderController::class, 'shipped'])->name('purchase-orders.shipped');
     Route::put('/purchase-orders/{id}', [PurchaseOrderController::class, 'update'])->name('purchase-orders.update');
     Route::delete('/purchase-orders/{id}', [PurchaseOrderController::class, 'destroy'])->name('purchase-orders.delete');
 

@@ -270,7 +270,7 @@ class PurchaseOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function order(Request $request, $id)
+    public function ordered(Request $request, $id)
     {
         $order = PurchaseOrder::find($id);
         $order->ordered_at = $request->get('ordered_at');
@@ -288,7 +288,7 @@ class PurchaseOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function confirm(Request $request, $id)
+    public function confirmed(Request $request, $id)
     {
         $order = PurchaseOrder::find($id);
         $order->confirmed_at = $request->get('confirmed_at');
@@ -296,6 +296,25 @@ class PurchaseOrderController extends Controller
         $order->update();
         return redirect(route('purchase-orders.show', $order->order_number))->with('success', 'order confirmed'); 
     }
+
+    /**
+     * Update the shipped_at and status of an order
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function shipped(Request $request, $id)
+    {
+        $order = PurchaseOrder::find($id);
+        $order->shipped_at = $request->get('shipped_at');
+        $order->tracking_number = $request->get('tracking_number');
+        $order->courier = $request->get('courier');
+        $order->status = PurchaseOrder::SHIPPED;
+        $order->update();
+        return redirect(route('purchase-orders.show', $order->order_number))->with('success', 'order shipped'); 
+    }
+
 
 
     /**
