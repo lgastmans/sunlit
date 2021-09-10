@@ -53,31 +53,39 @@
 
                 <div class="table-responsive">
                     <table class="table mb-0">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Description</th>
-                                <th>Price</th>
-                            </tr>
-                        </thead>
                         <tbody>
                             <tr>
-                                <td>Grand Total (USD):</td>
-                                <td>{{ __('app.currency_symbol_usd')}}{{ $purchase_order->amount_usd }} // {{ __('app.currency_symbol_inr')}}{{ $purchase_order->order_exchange_rate }}</td>
+                                <td>Grand Total :</td>
+                                <td>
+                                    <span>{{ __('app.currency_symbol_usd')}}</span>
+                                    <span id="grand-total">{{ $purchase_order->amount_usd }}</span>
+                                </td>
+                            </tr>
+                          
+                            <tr>
+                                <td>Exchange Rate :</td>
+                                <td>
+                                    <span>{{ __('app.currency_symbol_inr')}}</span>
+                                    <span id="echange-rate">{{ $purchase_order->order_exchange_rate }}</span>
+                                </td>
                             </tr>
                             <tr>
-                                <td>Grand Total (INR):</td>
-                                <td>{{ __('app.currency_symbol_inr')}}{{ $purchase_order->amount_inr }}</td>
+                                <td>Amount in {{ __('app.currency_symbol_inr')}} : </td>
+                                <td>
+                                    <span>{{ __('app.currency_symbol_inr')}}</span>
+                                    <span id="amount-inr">{{ $purchase_order->amount_inr }}</span>
+                                </td>
                             </tr>
-                            {{-- todo 
-                                add all the other rates/charges
-                                
-                                --}}
                             <tr>
                                 <th>Total :</th>
-                                <th>{{ __('app.currency_symbol_usd')}}{{ $purchase_order->amount_usd }}</th>
+                                <th>
+                                    <span>{{ __('app.currency_symbol_usd')}}</span>
+                                    <span id="total">{{ $purchase_order->amount_usd }}</span>
+                                </th>
                             </tr>
                         </tbody>
                     </table>
+                    
                 </div>
                 <!-- end table-responsive -->
             </div>
