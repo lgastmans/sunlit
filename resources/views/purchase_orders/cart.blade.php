@@ -176,7 +176,7 @@
                         <div class=" mt-4 mt-lg-0 rounded @if (count($purchase_order->items)==0) d-none @endif">
                             <div class="card mt-4 border">
                                 <div class="card-body">
-                                    <form name="place-order-form" action="{{ route('purchase-orders.ordered', $purchase_order->id) }}" method="POST">
+                                    <form name="place-order-form" action="{{ route('purchase-orders.ordered', $purchase_order->id) }}" method="POST" class="needs-validation" novalidate>
                                         @csrf()
                                         @method('PUT')
                                         <div class="mb-3 position-relative" id="ordered_at">
@@ -185,8 +185,13 @@
                                             data-provide="datepicker" 
                                             data-date-container="#ordered_at"
                                             data-date-autoclose="true"
-                                            data-date-format="d-M-yyyy">
+                                            data-date-format="d-M-yyyy"
+                                            required>
+                                            <div class="invalid-feedback">
+                                                Ordered date is required
+                                            </div>
                                         </div>
+                                        
                                         <button class="col-lg-12 text-center btn btn-danger" type="submit" name="place_order"><i class="mdi mdi-cart-plus me-1"></i> Place order</button>
                                     </form>
 

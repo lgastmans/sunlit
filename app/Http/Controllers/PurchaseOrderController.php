@@ -271,6 +271,10 @@ class PurchaseOrderController extends Controller
      */
     public function ordered(Request $request, $id)
     {
+        $validated = $request->validate([
+            'ordered_at' => 'required|date'
+        ]);
+
         $order = PurchaseOrder::find($id);
         $order->ordered_at = $request->get('ordered_at');
         $order->status = PurchaseOrder::ORDERED;
@@ -282,7 +286,7 @@ class PurchaseOrderController extends Controller
         }
         $order->amount_inr = $order->amount_usd * $order->order_exchange_rate;
         
-        $order->update();
+       $order->update();
         return redirect(route('purchase-orders.show', $order->order_number))->with('success', 'order placed'); 
     }
 
@@ -296,6 +300,9 @@ class PurchaseOrderController extends Controller
      */
     public function confirmed(Request $request, $id)
     {
+        $validated = $request->validate([
+            'confirmed_at' => 'required|date'
+        ]);
         $order = PurchaseOrder::find($id);
         $order->confirmed_at = $request->get('confirmed_at');
         $order->status = PurchaseOrder::CONFIRMED;
@@ -312,6 +319,11 @@ class PurchaseOrderController extends Controller
      */
     public function shipped(Request $request, $id)
     {
+        $validated = $request->validate([
+            'shipped_at' => 'required|date',
+            'tracking_number' => 'required',
+            'courier' => 'required'
+        ]);
         $order = PurchaseOrder::find($id);
         $order->shipped_at = $request->get('shipped_at');
         $order->tracking_number = $request->get('tracking_number');
@@ -331,6 +343,10 @@ class PurchaseOrderController extends Controller
      */
     public function customs(Request $request, $id)
     {
+        $validated = $request->validate([
+            'customs_at' => 'required|date',
+            'boe_number' => 'required',
+        ]);
         $order = PurchaseOrder::find($id);
         $order->customs_at = $request->get('customs_at');
         $order->boe_number = $request->get('boe_number');

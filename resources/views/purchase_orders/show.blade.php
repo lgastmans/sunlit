@@ -90,11 +90,17 @@
                 <!-- end table-responsive -->
             </div>
         </div>
-        @include('purchase_orders.status_update')
     </div> <!-- end col -->
 </div>
-
-    @include('purchase_orders.info_cards')
+<div class="row">
+    <div class="col-lg-8">
+        @include('purchase_orders.info_cards')
+    </div>
+    <div class="col-lg-4">
+        @include('purchase_orders.status_update')
+    </div>
+</div>
+<div class="row">    
     @include('purchase_orders.log')
-
+</div>
 @endsection
