@@ -10,7 +10,7 @@
                 <div class="mb-3 position-relative" id="ordered_at">
                     <label class="form-label">Ordered date</label>
                     <input type="text" class="form-control" name="ordered_at"
-                        value="{{ $purchase_order->display_ordered_at }}" data-provide="datepicker"
+                        value="{{ $purchase_order->display_ordered_at }}" data-provide="datepicker" data-date-autoclose="true"
                         data-date-container="#ordered_at" data-date-format="d-M-yyyy">
                 </div>
                 <button class="col-lg-12 text-center btn btn-warning" type="submit"
@@ -32,7 +32,7 @@
                 <div class="mb-3 position-relative" id="confirmed_at">
                     <label class="form-label">Confirmed date</label>
                     <input type="text" class="form-control" name="confirmed_at"
-                        value="{{ $purchase_order->display_confirmed_at }}" data-provide="datepicker"
+                        value="{{ $purchase_order->display_confirmed_at }}" data-provide="datepicker" data-date-autoclose="true"
                         data-date-container="#confirmed_at" data-date-format="d-M-yyyy">
                 </div>
                 <button class="col-lg-12 text-center btn btn-danger" type="submit"
@@ -55,7 +55,7 @@
                     <div class="col-xl-4" id="shipped_at">
                         <label class="form-label">Shipped date</label>
                         <input type="text" class="form-control" name="shipped_at"
-                            value="{{ $purchase_order->display_shipped_at }}" data-provide="datepicker"
+                            value="{{ $purchase_order->display_shipped_at }}" data-provide="datepicker" data-date-autoclose="true"
                             data-date-container="#shipped_at" data-date-format="d-M-yyyy">
                     </div>
                     <div class="col-xl-8" id="tracking_number">

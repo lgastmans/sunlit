@@ -184,6 +184,7 @@
                                             <input type="text" class="form-control" name="ordered_at" value="{{ $purchase_order->display_ordered_at }}"
                                             data-provide="datepicker" 
                                             data-date-container="#ordered_at"
+                                            data-date-autoclose="true"
                                             data-date-format="d-M-yyyy">
                                         </div>
                                         <button class="col-lg-12 text-center btn btn-danger" type="submit" name="place_order"><i class="mdi mdi-cart-plus me-1"></i> Place order</button>
