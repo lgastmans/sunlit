@@ -31,7 +31,7 @@
                         <div class="mb-3">
                             <label class="form-label" for="product-select">Price</label>
                             <div class="input-group flex-nowrap">
-                                <span class="input-group-text">$</span>
+                                <span class="input-group-text">{{ __('app.currency_symbol_usd')}}</span>
                                 <input type="selling_price" class="form-control" name="selling_price"  id="selling_price" value="">
                                 <input type="hidden" name="tax" id="tax" value="">
                             </div>
@@ -81,7 +81,7 @@
                                             </td>
                                             <td>
                                                 <div class="input-group flex-nowrap">
-                                                    <span class="input-group-text">$</span>
+                                                    <span class="input-group-text">{{ __('app.currency_symbol_usd')}}</span>
                                                     <input id="item-price-{{ $item->id }}" type="text" class="editable-field form-control" data-value="{{ $item->selling_price }}" data-field="price" data-item="{{ $item->id }}" placeholder="" value="{{ $item->selling_price }}">
                                                 </div>
                                             </td>
@@ -93,7 +93,8 @@
                                                 <span id="item-tax-{{ $item->id }}">{{ $item->tax }}%</span>
                                             </td>
                                             <td>
-                                                <span id="item-total-{{ $item->id }}" class="item-total">${{ $item->total_price }}</span>
+                                                <span>{{ __('app.currency_symbol_usd')}}</span>
+                                                <span id="item-total-{{ $item->id }}" class="item-total">{{ $item->total_price }}</span>
                                             </td>
                                             <td>
                                                 <a href="javascript:void(0);" class="action-icon" id="{{ $item->id }}" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>
@@ -139,20 +140,32 @@
                                     <tbody>
                                         <tr>
                                             <td>Grand Total :</td>
-                                            <td id="grand-total">${{ $purchase_order->amount_usd }}</td>
+                                            <td>
+                                                <span>{{ __('app.currency_symbol_usd')}}</span>
+                                                <span id="grand-total">{{ $purchase_order->amount_usd }}</span>
+                                            </td>
                                         </tr>
                                       
-                                        <tr class="d-none">
-                                            <td>Shipping Charge :</td>
-                                            <td>${{ $purchase_order->transport_charges }}</td>
+                                        <tr>
+                                            <td>Current Exchange Rate :</td>
+                                            <td>
+                                                <span>{{ __('app.currency_symbol_inr')}}</span>
+                                                <span id="echange-rate">{{ Setting::get('purchase_order.exchange_rate') }}</span>
+                                            </td>
                                         </tr>
-                                        <tr class="d-none">
-                                            <td>Estimated Tax : </td>
-                                            <td>$19.22</td>
+                                        <tr>
+                                            <td>Amount in {{ __('app.currency_symbol_inr')}} : </td>
+                                            <td>
+                                                <span>{{ __('app.currency_symbol_inr')}}</span>
+                                                <span id="amount-inr">{{ $purchase_order->amount_usd * Setting::get('purchase_order.exchange_rate') }}</span>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <th>Total :</th>
-                                            <th>${{ $purchase_order->amount_usd }}</th>
+                                            <th>
+                                                <span>{{ __('app.currency_symbol_usd')}}</span>
+                                                <span id="total">{{ $purchase_order->amount_usd }}</span>
+                                            </th>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -199,9 +212,9 @@
                 <address class="mb-0 font-14 address-lg">
                     {{ $purchase_order->supplier->address }}<br>
                     @if ($purchase_order->supplier->address2)
-                    {{ $purchase_order->supplier->address2 }}<br>
+                       {{ $purchase_order->supplier->address2 }}<br>
                     @else
-                    &nbsp;<br>
+                      &nbsp;<br>
                     @endif
                     {{ $purchase_order->supplier->city }}, {{ $purchase_order->supplier->zip_code }}<br/>
                     <abbr title="Phone">P:</abbr> {{ $purchase_order->supplier->phone }} <br/>
@@ -246,20 +259,7 @@
         </div>
     </div> <!-- end col -->
 
-    <div class="col-lg-4 d-none">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="header-title mb-3">Delivery Info</h4>
-
-                <div class="text-center">
-                    <i class="mdi mdi-truck-fast h2 text-muted"></i>
-                    <h5><b>UPS Delivery</b></h5>
-                    <p class="mb-1"><b>Order ID :</b> xxxx235</p>
-                    <p class="mb-0"><b>Payment Mode :</b> COD</p>
-                </div>
-            </div>
-        </div>
-    </div> <!-- end col -->
+    
 </div>
 <!-- end row -->
 
@@ -275,9 +275,14 @@
     function recalculateGrandTotal(){
         var grand_total = 0;
         $('.item-total').each(function( index ){
-            grand_total = grand_total + parseFloat($(this).html().substr(1));
+            grand_total = grand_total + parseFloat($(this).html());
         });
-        $('#grand-total').html('$'+grand_total.toFixed(2));
+        $('#grand-total').html(grand_total.toFixed(2));
+        $('#total').html(grand_total.toFixed(2));
+        
+        var amount_inr = grand_total * {{ Setting::get('purchase_order.exchange_rate') }}
+        $('#amount-inr').html(amount_inr.toFixed(2));
+
         var route = '{{ route("purchase-orders.update", ":id") }}';
         route = route.replace(':id', $('#purchase-order-id').val());
         $.ajax({
@@ -354,7 +359,7 @@
             // var tax = 1 + (parseFloat($('#item-tax-' + item_id).html().replace('%','') / 100));
             var total = $('#item-price-' + item_id).val() * getTaxValue($('#item-tax-' + item_id).html()) * $('#item-quantity-' + item_id).val();
             
-            $('#item-total-' + item_id).html('$'+total.toFixed(2));
+            $('#item-total-' + item_id).html(total.toFixed(2));
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
@@ -428,7 +433,7 @@
                         item += '<span id="item-total-'+ data.item.tax +'" class="item-total">'+ data.item.tax +'%</span>';
                         item += '</td>';
                         item += '<td>';
-                        item += '<span id="item-total-'+ data.item.purchase_order_items_id +'" class="item-total">$'+((data.item.selling_price * getTaxValue(data.item.tax)) * parseInt(data.item.quantity_ordered)).toFixed(2) +'</span>';
+                        item += '<span>{{ __('app.currency_symbol_usd')}}</span><span id="item-total-'+ data.item.purchase_order_items_id +'" class="item-total">'+((data.item.selling_price * getTaxValue(data.item.tax)) * parseInt(data.item.quantity_ordered)).toFixed(2) +'</span>';
                         item += '</td>';
                         item += '<td>';
                         item += '<a href="javascript:void(0);" class="action-icon" id="1" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>';

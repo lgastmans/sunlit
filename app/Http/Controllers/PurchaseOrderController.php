@@ -251,12 +251,11 @@ class PurchaseOrderController extends Controller
 
         if ($request->get('field') == "amount"){
             $order = PurchaseOrder::find($id);
-            $items = PurchaseOrderItem::where('purchase_order_id', "=", $id)->select('quantity_ordered','selling_price')->get();
-            $total = 0;
+            $items = PurchaseOrderItem::where('purchase_order_id', "=", $id)->get();
+            $order->amount_usd = 0;
             foreach($items as $item){
-                $total += $item->quantity_ordered * $item->selling_price;
+                $order->amount_usd += $item->total_price;
             }
-            $order->amount_usd = $total;
             $order->update();
 
             return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'field' => $request->get('field')]);
@@ -275,7 +274,14 @@ class PurchaseOrderController extends Controller
         $order = PurchaseOrder::find($id);
         $order->ordered_at = $request->get('ordered_at');
         $order->status = PurchaseOrder::ORDERED;
-        $order->amount_usd = PurchaseOrderItem::where('purchase_order_id', "=", $id)->sum('selling_price');
+        $order->order_exchange_rate = \Setting::get('purchase_order.exchange_rate');
+        $items = PurchaseOrderItem::where('purchase_order_id', "=", $id)->select('quantity_ordered', 'selling_price', 'tax')->get();
+        $order->amount_usd = 0;
+        foreach($items as $item){
+            $order->amount_usd += $item->total_price; 
+        }
+        $order->amount_inr = $order->amount_usd * $order->order_exchange_rate;
+        
         $order->update();
         return redirect(route('purchase-orders.show', $order->order_number))->with('success', 'order placed'); 
     }

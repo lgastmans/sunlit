@@ -30,9 +30,9 @@
                             <tr>
                                 <td>{{ $item->product->name }}</td>
                                 <td>{{ $item->quantity_ordered }}</td>
-                                <td>${{ number_format($item->selling_price,2) }}</td>
+                                <td>{{ __('app.currency_symbol_usd')}}{{ number_format($item->selling_price,2) }}</td>
                                 <td>{{ number_format($item->tax,2) }}%</td>
-                                <td>${{ number_format($item->total_price,2) }}</td>
+                                <td>{{ __('app.currency_symbol_usd')}}{{ number_format($item->total_price,2) }}</td>
                             </tr>
                             @endforeach
 
@@ -61,20 +61,20 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>Grand Total :</td>
-                                <td>${{ $purchase_order->amount_usd }}</td>
+                                <td>Grand Total (USD):</td>
+                                <td>{{ __('app.currency_symbol_usd')}}{{ $purchase_order->amount_usd }} // {{ __('app.currency_symbol_inr')}}{{ $purchase_order->order_exchange_rate }}</td>
                             </tr>
                             <tr>
-                                <td>Shipping Charge :</td>
-                                <td></td>
+                                <td>Grand Total (INR):</td>
+                                <td>{{ __('app.currency_symbol_inr')}}{{ $purchase_order->amount_inr }}</td>
                             </tr>
-                            <tr>
-                                <td>Estimated Tax : </td>
-                                <td></td>
-                            </tr>
+                            {{-- todo 
+                                add all the other rates/charges
+                                
+                                --}}
                             <tr>
                                 <th>Total :</th>
-                                <th>$1683.22</th>
+                                <th>{{ __('app.currency_symbol_usd')}}{{ $purchase_order->amount_usd }}</th>
                             </tr>
                         </tbody>
                     </table>
