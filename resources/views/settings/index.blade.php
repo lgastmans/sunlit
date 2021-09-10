@@ -66,13 +66,44 @@
                         <div class="col-sm-12">
                             <h4 class="mb-4">Purchase Order</h4>
                                 <div class="mb-3 row">
-                                    <div class="col-xl-3">
+                                    <div class="col-xl-4">
                                         <label class="form-label" for="igst">IGST</label>
-                                        <input type="text" class="form-control" name="purchase_order__igst" id="igst" placeholder="" value="{{ $settings['purchase_order']['igst'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="purchase_order__igst" id="igst" placeholder="" value="{{ $settings['purchase_order']['igst'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
+                                            <span class="input-group-text" id="inputGroupPrepend">%</span>
+                                        </div>
+
                                     </div>
-                                    <div class="col-xl-3">
+                                    <div class="col-xl-4">
                                         <label class="form-label" for="transport">Transport</label>
-                                        <input type="text" class="form-control" name="purchase_order__transport" id="transport" placeholder="" value="{{ $settings['purchase_order']['transport'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="purchase_order__transport" id="transport" placeholder="" value="{{ $settings['purchase_order']['transport'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
+                                            <span class="input-group-text" id="inputGroupPrepend">%</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-4">
+                                        <label class="form-label" for="customs_duty">Customs Duty</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="purchase_order__customs_duty" id="customs_duty" placeholder="" value="{{ $settings['purchase_order']['customs_duty'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
+                                            <span class="input-group-text" id="inputGroupPrepend">%</span>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="mb-3 row">
+                                    <div class="col-xl-6">
+                                        <label class="form-label" for="social_welfare_surcharge">Social Welfare Surcharge</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="purchase_order__social_welfare_surcharge" id="social_welfare_surcharge" placeholder="" value="{{ $settings['purchase_order']['social_welfare_surcharge'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
+                                            <span class="input-group-text" id="inputGroupPrepend">%</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6">
+                                        <label class="form-label" for="exchange_rate">Exchange Rate</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="inputGroupPrepend">{{ __('app.currency_symbol_inr')}}</span>
+                                        <input type="text" class="form-control" name="purchase_order__exchange_rate" id="exchange_rate" placeholder="" value="{{ $settings['purchase_order']['exchange_rate'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
+                                    </div>
                                     </div>
                                 </div>
                         </div><!-- end col-->

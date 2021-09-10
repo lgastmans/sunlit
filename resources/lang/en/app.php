@@ -19,4 +19,7 @@ return [
     'modal_close' => 'Close',
     'modal_delete' => 'Delete',
     'save_profile' => 'Save',
+    'currency_symbol_inr' => '₹',
+    'currency_symbol_usd' => '$',
+    'currency_symbol_eur' => '€',
 ];
