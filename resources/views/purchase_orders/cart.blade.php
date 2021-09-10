@@ -185,7 +185,7 @@
                                             data-provide="datepicker" 
                                             data-date-container="#ordered_at"
                                             data-date-autoclose="true"
-                                            data-date-format="d-M-yyyy"
+                                            data-date-format="M d, yyyy"
                                             required>
                                             <div class="invalid-feedback">
                                                 Ordered date is required
