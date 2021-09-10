@@ -28,8 +28,13 @@ class SettingSeeder extends Seeder
 
         // Setting::set("general.grid_rows" , "10");
 
-        Setting::set("purchase_order.igst", "10");
-        Setting::set("purchase_order.transport", "5");
+        Setting::set("purchase_order.igst", "5");
+        Setting::set("purchase_order.transport", ".5");
+
+        Setting::set("purchase_order.customs_duty", "10");
+        Setting::set("purchase_order.social_welfare_surchage", "10");
+        Setting::set("purchase_order.exchange_rate", "73.52");
+
 
         Setting::save();
 
