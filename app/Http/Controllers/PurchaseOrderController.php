@@ -322,6 +322,56 @@ class PurchaseOrderController extends Controller
     }
 
 
+    /**
+     * Update the shipped_at and status of an order
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function customs(Request $request, $id)
+    {
+        $order = PurchaseOrder::find($id);
+        $order->customs_at = $request->get('customs_at');
+        $order->boe_number = $request->get('boe_number');
+        $order->status = PurchaseOrder::CUSTOMS;
+        $order->update();
+        return redirect(route('purchase-orders.show', $order->order_number))->with('success', 'order at customs'); 
+    }
+
+    /**
+     * Update the cleared_at and status of an order
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function cleared(Request $request, $id)
+    {
+        $order = PurchaseOrder::find($id);
+        $order->cleared_at = $request->get('cleared_at');
+        $order->status = PurchaseOrder::CLEARED;
+        $order->update();
+        return redirect(route('purchase-orders.show', $order->order_number))->with('success', 'order cleared'); 
+    }
+
+    /**
+     * Update the shipped_at and status of an order
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function received(Request $request, $id)
+    {
+        $order = PurchaseOrder::find($id);
+        $order->received_at = $request->get('received_at');
+        $order->status = PurchaseOrder::RECEIVED;
+        $order->update();
+        return redirect(route('purchase-orders.show', $order->order_number))->with('success', 'order received'); 
+    }
+
+
 
     /**
      * Remove the specified resource from storage.

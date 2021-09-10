@@ -26,6 +26,11 @@
                             <td>{{ $purchase_order->display_shipped_at }}</td><td>The order has been shipped via <b>{{ $purchase_order->courier }}</b>, <b>#{{ $purchase_order->tracking_number }}</b></td>
                         </tr>
                         @endif
+                        @if ($purchase_order->status >= 5)
+                        <tr>
+                            <td>{{ $purchase_order->display_customs_at }}</td><td>The order is at Customs, Bill of Entry <b>#{{ $purchase_order->boe_number }}</b></td>
+                        </tr>
+                        @endif
                     </tbody>
                 </table>
             </div>

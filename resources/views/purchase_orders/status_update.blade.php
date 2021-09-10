@@ -75,3 +75,33 @@
         </div>
     </div>
 </div>
+
+{{-- customs --}}
+<div class=" mt-4 mt-lg-0 rounded @if ($purchase_order->status != 4) d-none @endif">
+    <div class="card mt-4 border">
+        <div class="card-body">
+            <form name="place-order-form"
+                action="{{ route('purchase-orders.customs', $purchase_order->id) }}" method="POST">
+                @csrf()
+                @method('PUT')
+                <div class="row mb-3">
+                    <div class="col-xl-4" id="customs_at">
+                        <label class="form-label">Customs date</label>
+                        <input type="text" class="form-control" name="customs_at"
+                            value="{{ $purchase_order->display_customs_at }}" data-provide="datepicker" data-date-autoclose="true"
+                            data-date-container="#customs_at" data-date-format="d-M-yyyy">
+                    </div>
+                    <div class="col-xl-8" id="boe_number">
+                        <label class="form-label">Bill of Entry #</label>
+                        <input type="text" class="form-control" name="boe_number">
+                    </div>
+                </div>
+                
+             
+                <button class="col-lg-12 text-center btn btn-danger" type="submit"
+                    name="ship_order">Order at Customs</button>
+            </form>
+
+        </div>
+    </div>
+</div>

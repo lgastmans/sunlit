@@ -85,7 +85,7 @@ class PurchaseOrder extends Model
     }
 
     /**
-     * Returns the ordered_at date for display Month Day, Year
+     * Returns the shipped_at date for display Month Day, Year
      */
     public function getDisplayShippedAtAttribute()
     {
@@ -97,6 +97,51 @@ class PurchaseOrder extends Model
     {
         $dt = Carbon::parse($value);
         $this->attributes['shipped_at'] = $dt->toDateTimeString();  
+    }
+
+    /**
+     * Returns the customs_at date for display Month Day, Year
+     */
+    public function getDisplayCustomsAtAttribute()
+    {
+        $dt = Carbon::parse($this->shipped_at);
+        return $this->attributes['customs_at'] = $dt->toFormattedDateString();  
+    }
+
+    public function setCustomsAtAttribute($value)
+    {
+        $dt = Carbon::parse($value);
+        $this->attributes['customs_at'] = $dt->toDateTimeString();  
+    }
+
+    /**
+     * Returns the customs_at date for display Month Day, Year
+     */
+    public function getDisplayClearedAtAttribute()
+    {
+        $dt = Carbon::parse($this->shipped_at);
+        return $this->attributes['cleared_at'] = $dt->toFormattedDateString();  
+    }
+
+    public function setClearedAtAttribute($value)
+    {
+        $dt = Carbon::parse($value);
+        $this->attributes['cleared_at'] = $dt->toDateTimeString();  
+    }
+
+    /**
+     * Returns the customs_at date for display Month Day, Year
+     */
+    public function getDisplayReceivedAtAttribute()
+    {
+        $dt = Carbon::parse($this->shipped_at);
+        return $this->attributes['received_at'] = $dt->toFormattedDateString();  
+    }
+
+    public function setReceivedAtAttribute($value)
+    {
+        $dt = Carbon::parse($value);
+        $this->attributes['received_at'] = $dt->toDateTimeString();  
     }
 
 
