@@ -31,6 +31,10 @@ Booked Stock: SO.Processing
 Triggers
 --------
 
-1. The PO and SO models should have triggers when the status changes to the ones listed above, and update these columns in the 'Inventory' table.
+1. The Product model should trigger an entry in the 'Inventory' table when a new product is created
 
-2. The PO and SO Models should have triggers for each status change, creating an entry in the 'Inventory Movement' table
+2. The Product model should trigger corresponding delete when a product is 'deleted' in the 'Inventory' and 'Inventory Movement' table
+
+2. The PO and SO models should have triggers when the status changes to the ones listed above, and update these columns in the 'Inventory' table.
+
+3. The PO and SO Models should have triggers for each status change, creating an entry in the 'Inventory Movement' table
