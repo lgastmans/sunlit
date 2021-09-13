@@ -18,7 +18,7 @@ class PurchaseOrder extends Model
     const CLEARED = 6;
     const RECEIVED = 7;
 
-    protected $dates = ['ordered_at', 'confirmed_at', 'received_at', 'se_due_date', 'se_payment_date',];
+    protected $dates = ['ordered_at', 'confirmed_at', 'received_at', 'paid_at', 'due_at', 'shipped_at', 'customs_at', 'cleare_at'];
 
     protected $fillable = ['warehouse_id', 'supplier_id', 'order_number', 'boe_number', 'ordered_at', 'expected_at', 'received_at', 'credit_period', 'amount_usd', 'amount_inr', 'customs_ex_rate', 'se_ex_rate', 'duty_amount', 'social_surcharge', 'igst', 'bank_charges', 'clearing_charges', 'transport_charges', 'se_due_date', 'se_payment_date', 'status', 'user_id'];
 
@@ -99,12 +99,28 @@ class PurchaseOrder extends Model
         $this->attributes['shipped_at'] = $dt->toDateTimeString();  
     }
 
+
+    /**
+     * Returns the due_at date for display Month Day, Year
+     */
+    public function getDisplayDueAtAttribute()
+    {
+        $dt = Carbon::parse($this->due_at);
+        return $this->attributes['due_at'] = $dt->toFormattedDateString();  
+    }
+
+    public function setDueAtAttribute($value)
+    {
+        $dt = Carbon::parse($value);
+        $this->attributes['due_at'] = $dt->toDateTimeString();  
+    }
+
     /**
      * Returns the customs_at date for display Month Day, Year
      */
     public function getDisplayCustomsAtAttribute()
     {
-        $dt = Carbon::parse($this->shipped_at);
+        $dt = Carbon::parse($this->customs_at);
         return $this->attributes['customs_at'] = $dt->toFormattedDateString();  
     }
 
@@ -119,7 +135,7 @@ class PurchaseOrder extends Model
      */
     public function getDisplayClearedAtAttribute()
     {
-        $dt = Carbon::parse($this->shipped_at);
+        $dt = Carbon::parse($this->cleared_at);
         return $this->attributes['cleared_at'] = $dt->toFormattedDateString();  
     }
 
@@ -134,7 +150,7 @@ class PurchaseOrder extends Model
      */
     public function getDisplayReceivedAtAttribute()
     {
-        $dt = Carbon::parse($this->shipped_at);
+        $dt = Carbon::parse($this->received_at);
         return $this->attributes['received_at'] = $dt->toFormattedDateString();  
     }
 
@@ -142,6 +158,22 @@ class PurchaseOrder extends Model
     {
         $dt = Carbon::parse($value);
         $this->attributes['received_at'] = $dt->toDateTimeString();  
+    }
+
+    /**
+     * Returns the amount paid with customs exchange rate
+     */
+    public function getAmountInrCustomsAttribute()
+    {
+        return $this->amount_usd * $this->customs_exchange_rate;
+    }
+
+    /**
+     * Returns the landed cost for an order
+     */
+    public function getLandedCostAttribute()
+    {
+        return $this->amount_inr + $this->customs_duty + $this->social_welfare_surcharge + $this->bank_and_tranport_charge;
     }
 
 

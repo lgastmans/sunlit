@@ -53,7 +53,7 @@
                     <i class="mdi mdi-truck-fast h2 text-muted"></i>
                     <h5><b>{{ $purchase_order->courier }}</b></h5>
                     <p class="mb-1"><b>Tracking # :</b> {{ $purchase_order->tracking_number }}</p>
-                    <p class="mb-0"><b>ETA :</b> ???</p>
+                    <p class="mb-0"><b>ETA :</b> {{ $purchase_order->display_due_at }}</p>
                 </div>
             </div>
         </div>

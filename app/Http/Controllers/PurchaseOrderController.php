@@ -65,72 +65,72 @@ class PurchaseOrderController extends Controller
         }
 
         // Total records
-        $totalRecords = PurchaseOrder::get()->count();
-        $totalRecordswithFilter = PurchaseOrder::join('warehouses', 'warehouses.id', '=', 'purchase_orders.warehouse_id')
-            ->join('suppliers', 'suppliers.id', '=', 'purchase_orders.supplier_id')
-            ->join('users', 'users.id', '=', 'purchase_orders.user_id')
+        $totalRecords = PurchaseOrder::count();
+        $totalRecordswithFilter = PurchaseOrder::with(['supplier'])
             ->where('order_number', 'like', '%'.$search.'%')
-            ->orWhere('suppliers.company', 'like', '%'.$search.'%')
-            ->get()
             ->count();
         
 
         // Fetch records
         if ($length < 0){
-            $po = $po = PurchaseOrder::select('purchase_orders.*', 'suppliers.company', 'users.name')
-                ->join('warehouses', 'warehouses.id', '=', 'purchase_orders.warehouse_id')
-                ->join('suppliers', 'suppliers.id', '=', 'purchase_orders.supplier_id')
-                ->join('users', 'users.id', '=', 'purchase_orders.user_id')
-                ->where('order_number', 'like', '%'.$search.'%')
-                ->orWhere('suppliers.company', 'like', '%'.$search.'%')
-                ->orderBy($order_column, $order_dir)
-                ->get();
+            $orders = PurchaseOrder::with(['warehouse', 'supplier', 'user'])
+                    ->where('order_number', 'like', '%'.$search.'%')
+                    ->orderBy($order_column, $order_dir)
+                    ->get();
         }
         else{
-            $po = PurchaseOrder::select('purchase_orders.*', 'suppliers.company', 'users.name')
-                ->join('warehouses', 'warehouses.id', '=', 'purchase_orders.warehouse_id')
-                ->join('suppliers', 'suppliers.id', '=', 'purchase_orders.supplier_id')
-                ->join('users', 'users.id', '=', 'purchase_orders.user_id')
-                ->where('order_number', 'like', '%'.$search.'%')
-                ->orWhere('suppliers.company', 'like', '%'.$search.'%')
-                ->orderBy($order_column, $order_dir)
-                ->skip($start)
-                ->take($length)
-                ->get();
 
+            $orders = PurchaseOrder::with(['warehouse', 'supplier', 'user'])
+                    ->where('order_number', 'like', '%'.$search.'%')
+                    ->orderBy($order_column, $order_dir)
+                    ->skip($start)
+                    ->take($length)
+                    ->get();
         }
+
         $arr = array();
         $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
-        foreach($po as $record)
+        foreach($orders as $order)
         {
-            if ($record->status==1)
-                $status = '<span class="badge badge-secondary-lighten">Draft</span>';
-            elseif ($record->status==2)
-                $status = '<span class="badge badge-info-lighten">Ordered</span>';
-            elseif ($record->status==3)
-                $status = '<span class="badge badge-primary-lighten">Confirmed</span>';
-            elseif ($record->status==4)
-                $status = '<span class="badge badge-dark-lighten">Shipped</span>';
-            elseif ($record->status==5)
-                $status = '<span class="badge badge-warning-lighten">Customs</span>';
-            elseif ($record->status==6)
-                $status = '<span class="badge badge-light-lighten">Cleared</span>';
-            elseif ($record->status==7)
-                $status = '<span class="badge badge-success-lighten">Received</span>';
-            else
+            switch($order->status)
+            {
+                case PurchaseOrder::DRAFT:
+                    $status = '<span class="badge badge-secondary-lighten">Draft</span>';
+                    break;
+                case PurchaseOrder::ORDERED:
+                    $status = '<span class="badge badge-info-lighten">Ordered</span>';
+                    break;
+                case PurchaseOrder::CONFIRMED:
+                    $status = '<span class="badge badge-primary-lighten">Confirmed</span>';
+                    break;
+                case PurchaseOrder::SHIPPED:
+                    $status = '<span class="badge badge-dark-lighten">Shipped</span>';
+                    break;
+                case PurchaseOrder::CUSTOMS:
+                    $status = '<span class="badge badge-warning-lighten">Customs</span>';
+                    break;
+                case PurchaseOrder::CLEARED:
+                    $status = '<span class="badge badge-light-lighten">Cleared</span>';
+                    break;
+                case PurchaseOrder::RECEIVED:
+                    $status = '<span class="badge badge-success-lighten">Received</span>';
+                    break;
+                default:
                 $status = '<span class="badge badge-error-lighten">Unknown</span>';
+            }
+            
 
             $arr[] = array(
-                "id" => $record->id,
-                "order_number" => $record->order_number,
-                "supplier" => $record->company,
-                "ordered_at" => (is_null($record->ordered_at)? '' : $record->ordered_at->format('d/M/Y')),
-                "expected_at" => (is_null($record->expected_at)? '' : $record->expected_at->format('d/M/Y')),
-                "received_at" => (is_null($record->received_at)? '' : $record->received_at->format('d/M/Y'))    ,
-                "amount_inr" => $fmt->format($record->amount_inr),
+                "id" => $order->id,
+                "order_number" => $order->order_number,
+                "supplier" => $order->supplier->company,
+                "ordered_at" => $order->display_ordered_at,
+                "expected_at" => $order->display_due_at,
+                "received_at" => $order->display_received_at,
+                "amount_inr" => $fmt->format($order->amount_inr),
                 "status" => $status,
-                "warehouse" => $record->warehouse->name,
-                "user" => ucfirst($record->name)
+                "warehouse" => $order->warehouse->name,
+                "user" => $order->user->display_name
             );
         }
 
@@ -142,7 +142,7 @@ class PurchaseOrderController extends Controller
             'error' => null
         );
         echo json_encode($response);
-
+        // return response()->json($response);
         exit;
     }
 
@@ -286,7 +286,7 @@ class PurchaseOrderController extends Controller
         }
         $order->amount_inr = $order->amount_usd * $order->order_exchange_rate;
         
-       $order->update();
+        $order->update();
         return redirect(route('purchase-orders.show', $order->order_number))->with('success', 'order placed'); 
     }
 
@@ -321,11 +321,13 @@ class PurchaseOrderController extends Controller
     {
         $validated = $request->validate([
             'shipped_at' => 'required|date',
+            'due_at' => 'required|date',
             'tracking_number' => 'required',
             'courier' => 'required'
         ]);
         $order = PurchaseOrder::find($id);
         $order->shipped_at = $request->get('shipped_at');
+        $order->due_at = $request->get('due_at');
         $order->tracking_number = $request->get('tracking_number');
         $order->courier = $request->get('courier');
         $order->status = PurchaseOrder::SHIPPED;
@@ -364,8 +366,25 @@ class PurchaseOrderController extends Controller
      */
     public function cleared(Request $request, $id)
     {
+        $validated = $request->validate([
+            'cleared_at' => 'required|date',
+            'customs_exchange_rate' => 'required',
+            
+        ]);
         $order = PurchaseOrder::find($id);
         $order->cleared_at = $request->get('cleared_at');
+        $order->customs_exchange_rate = $request->get('customs_exchange_rate');
+        $order->customs_duty = $order->amount_inr_customs * \Setting::get('purchase_order.customs_duty') / 100;
+        $order->social_welfare_surcharge = $order->customs_duty * \Setting::get('purchase_order.social_welfare_surcharge') / 100;
+        $order->igst = ($order->amount_inr + $order->customs_duty + $order->social_welfare_surcharge )* \Setting::get('purchase_order.igst') / 100;
+        $order->bank_and_transport_charges = $order->amount_inr * \Setting::get('purchase_order.transport') / 100;
+        $charges = [
+            'customs_duty'=> \Setting::get('purchase_order.customs_duty'),
+            'social_welfare_surcharge'=> \Setting::get('purchase_order.social_welfare_surcharge'),
+            'igst'=> \Setting::get('purchase_order.igst'),
+            'transport'=> \Setting::get('purchase_order.transport'),
+        ];
+        $order->charges = json_encode($charges);
         $order->status = PurchaseOrder::CLEARED;
         $order->update();
         return redirect(route('purchase-orders.show', $order->order_number))->with('success', 'order cleared'); 
