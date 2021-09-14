@@ -5,7 +5,7 @@
 @section('content')
 
 <div class="row">
-    <div class="col-6">
+    <div class="col-5">
         <div class="card">
             <div class="card-body">
                 <x-forms.errors class="mb-4" :errors="$errors" />
@@ -14,18 +14,12 @@
                         @if ($category->id)
                             @method('PUT')
                         @endif
-                        @if ($category->id)
-                            <div class="mb-3">
-                                <input type="hidden" name="id" value="{{ old('id', $category->id) }}" />
+                        <div class="row mb-3">
+                            <div class="col-xl-5">
+                                <x-forms.input label="Name" name="name" value="{{ old('name', $category->name) }}" required="true"/>
                             </div>
-                        @endif
-                        <div class="mb-3">
-                            <x-forms.input label="Name" name="name" value="{{ old('name', $category->name) }}" required="true"/>
-                        </div>
-                        
-                       
+                        </div>                      
                         <button class="btn btn-primary" type="submit">@if ($category->id) {{ __('app.edit_title', ['field' => 'category']) }} @else {{ __('app.add_title', ['field' => 'category']) }} @endif</button>
-
                     </form>
                 </div>
             </div> <!-- end card-body-->
