@@ -240,7 +240,7 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        $product = Product::find($id);
+        $product = Product::withCount('purchase_order_item')->find($id);
         if ($product){
             return view('products.form', ['product' => $product]);
         }

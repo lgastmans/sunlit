@@ -14,11 +14,6 @@
                         @if ($product->id)
                             @method('PUT')
                         @endif
-                        @if ($product->id)
-                            <div class="mb-3">
-                                <input type="hidden" name="id" value="{{ old('id', $product->id) }}" />
-                            </div>
-                        @endif
                         <div class="mb-3 row">
                             <div class="col-xl-3">
                                 <label class="form-label" for="category-select">Category</label>
@@ -34,11 +29,16 @@
 
                             <div class="col-xl-3">
                                 <label class="form-label" for="supplier-select">Supplier</label>
+                                @if ($product->purchase_order_item_count == 0)
                                 <select class="supplier-select form-control" name="supplier_id">
                                     @if ($product->supplier)
                                         <option value="{{$product->supplier->id}}" selected="selected">{{$product->supplier->company}}</option>
                                     @endif
                                 </select>
+                                @else
+                                <input type="text" class="form-control" value="{{$product->supplier->company}}" disabled>
+                                    <input type="hidden" value="{{$product->supplier->id}}" name="supplier_id">
+                                @endif
                                 <div class="invalid-feedback">
                                     {{ __('error.form_invalid_field', ['field' => 'supplier' ]) }}
                                 </div>
