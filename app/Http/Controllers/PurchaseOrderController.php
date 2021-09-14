@@ -122,8 +122,8 @@ class PurchaseOrderController extends Controller
      */
     public function create()
     {
-        $purchase_order = new PurchaseOrder();
-        return view('purchase_orders.form', ['purchase_order' => $purchase_order]);
+        $order = new PurchaseOrder();
+        return view('purchase_orders.form', ['purchase_order' => $order]);
     }
 
     /**
@@ -135,11 +135,9 @@ class PurchaseOrderController extends Controller
     public function store(StorePurchaseOrderRequest $request)
     {
         $validatedData = $request->validated();
-        $purchase_order = PurchaseOrder::create($validatedData);
-        if ($purchase_order) {
-            return redirect()->action(
-                [PurchaseOrderController::class, 'cart'], ['id' => $purchase_order->id]
-            );
+        $order = PurchaseOrder::create($validatedData);
+        if ($order) {
+            return redirect(route('purchase-orders.cart', $order->order_number)); 
         }
         return back()->withInputs($request->input())->with('error', trans('error.record_added', ['field' => 'purchase order']));        
     }

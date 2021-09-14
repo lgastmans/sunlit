@@ -353,7 +353,7 @@
         return tax = 1 + (parseFloat(tax_percentage.replace('%','') / 100));
     }
 
-    $('.editable-field ').on('blur', function(e){        
+    $('body').on('blur', '.editable-field', function(e){        
         if ($(this).val() != $(this).attr('data-value')){
             if ($(this).attr('data-field') == "price"){
                 item_id = $(this).parent().parent().parent().attr('data-id');
@@ -361,8 +361,6 @@
             else{
                 var item_id = $(this).parent().parent().attr('data-id');
             }
-
-            // var tax = 1 + (parseFloat($('#item-tax-' + item_id).html().replace('%','') / 100));
             var total = $('#item-price-' + item_id).val() * getTaxValue($('#item-tax-' + item_id).html()) * $('#item-quantity-' + item_id).val();
             
             $('#item-total-' + item_id).html(total.toFixed(2));
@@ -417,7 +415,7 @@
             dataType: 'json',
             data: $( this ).serialize(),
             success: function (data) {
-                var item = '<tr class="item" data-id="'+ ['purchase_order_item_id'] +'">';
+                var item = '<tr class="item" data-id="'+ data.item.id +'">';
                 item += '<td>';
                     item += '<p class="m-0 d-inline-block align-middle font-16">';
                         item += '<a href="javascript:void(0); class="text-body product-name">'+ data.product.name +'</a>';
@@ -429,17 +427,17 @@
                             item += '<td>';
                                 item += '<div class="input-group flex-nowrap">';
                                     item += '<span class="input-group-text">$</span>';
-                                    item += '<input id="item-price-'+ data.item.purchase_order_items_id +'" type="text" class="editable-field form-control" data-value="'+ data.item.selling_price +'" data-field="price" data-item="'+ data.item.purchase_order_items_id +'" placeholder="" value="'+ data.item.selling_price  +'">';
+                                    item += '<input id="item-price-'+ data.item.id +'" type="text" class="editable-field form-control" data-value="'+ data.item.selling_price +'" data-field="price" data-item="'+ data.item.id +'" placeholder="" value="'+ data.item.selling_price  +'">';
                                     item += '</div>';
                                     item += '</td>';
                                     item += '<td>';
-                                        item += '<input id="item-quantity-'+ data.item.purchase_order_items_id +'" type="number" min="1" value="'+ data.item.quantity_ordered +'" class="editable-field form-control" data-value="'+ data.item.quantity_ordered +'" data-field="quantity" data-item="'+ data.item.purchase_order_items_id +'" placeholder="Qty" style="width: 90px;">';
+                                        item += '<input id="item-quantity-'+ data.item.id +'" type="number" min="1" value="'+ data.item.quantity_ordered +'" class="editable-field form-control" data-value="'+ data.item.quantity_ordered +'" data-field="quantity" data-item="'+ data.item.id +'" placeholder="Qty" style="width: 90px;">';
                         item += '</td>';
                         item += '<td>';
-                        item += '<span id="item-total-'+ data.item.tax +'" class="item-total">'+ data.item.tax +'%</span>';
+                        item += '<span id="item-tax-'+ data.item.id +'" class="item-tax">'+ data.item.tax +'%</span>';
                         item += '</td>';
                         item += '<td>';
-                        item += '<span>{{ __('app.currency_symbol_usd')}}</span><span id="item-total-'+ data.item.purchase_order_items_id +'" class="item-total">'+((data.item.selling_price * getTaxValue(data.item.tax)) * parseInt(data.item.quantity_ordered)).toFixed(2) +'</span>';
+                        item += '<span>{{ __('app.currency_symbol_usd')}}</span><span id="item-total-'+ data.item.id +'" class="item-total">'+((data.item.selling_price * getTaxValue(data.item.tax)) * parseInt(data.item.quantity_ordered)).toFixed(2) +'</span>';
                         item += '</td>';
                         item += '<td>';
                         item += '<a href="javascript:void(0);" class="action-icon" id="1" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>';
