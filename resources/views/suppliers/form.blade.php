@@ -13,7 +13,6 @@
                         @csrf()
                         @if ($supplier->id)
                             @method('PUT')
-                                <input type="hidden" name="id" value="{{ old('id', $supplier->id) }}" />
                         @endif
 
                         <div class="mb-3 row">

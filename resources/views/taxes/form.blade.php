@@ -14,11 +14,6 @@
                         @if ($tax->id)
                             @method('PUT')
                         @endif
-                        @if ($tax->id)
-                            <div class="mb-3">
-                                <input type="hidden" name="id" value="{{ old('id', $tax->id) }}" />
-                            </div>
-                        @endif
                         <div class="row mb-3">  
                             <div class="col-xl-5">              
                                 <x-forms.input label="name" name="name" value="{{ old('name', $tax->name) }}" required="true"/>
