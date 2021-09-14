@@ -29,7 +29,7 @@
                             <!-- Product description -->
                             <div class="mt-4">
                                 <h6 class="font-14">{{ $product->supplier->company }} Purchase Price:</h6>
-                                <h3>{{ $product->display_purchase_price }}</h3>
+                                <h3>{{ __('app.currency_symbol_inr')}}{{ $product->display_purchase_price }}</h3>
                             </div>
                 
                             <!-- Product description -->
@@ -51,7 +51,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <h6 class="font-14">Revenue:</h6>
-                                        <p class="text-sm lh-150">$8,57,014</p>
+                                        <p class="text-sm lh-150">{{ __('app.currency_symbol_inr')}}8,57,014</p>
                                     </div>
                                 </div>
                             </div>
@@ -73,7 +73,7 @@
                         <tbody>
                             <tr>
                                 <td>ASOS Ridley Outlet - NYC</td>
-                                <td>$139.58</td>
+                                <td>{{ __('app.currency_symbol_inr')}}139.58</td>
                                 <td>
                                     <div class="progress-w-percent mb-0">
                                         <span class="progress-value">478 </span>
@@ -82,11 +82,11 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td>$1,89,547</td>
+                                <td>{{ __('app.currency_symbol_inr')}}1,89,547</td>
                             </tr>
                             <tr>
                                 <td>Marco Outlet - SRT</td>
-                                <td>$149.99</td>
+                                <td>{{ __('app.currency_symbol_inr')}}149.99</td>
                                 <td>
                                     <div class="progress-w-percent mb-0">
                                         <span class="progress-value">73 </span>
@@ -95,11 +95,11 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td>$87,245</td>
+                                <td>{{ __('app.currency_symbol_inr')}}87,245</td>
                             </tr>
                             <tr>
                                 <td>Chairtest Outlet - HY</td>
-                                <td>$135.87</td>
+                                <td>{{ __('app.currency_symbol_inr')}}135.87</td>
                                 <td>
                                     <div class="progress-w-percent mb-0">
                                         <span class="progress-value">781 </span>
@@ -108,11 +108,11 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td>$5,87,478</td>
+                                <td>{{ __('app.currency_symbol_inr')}}5,87,478</td>
                             </tr>
                             <tr>
                                 <td>Nworld Group - India</td>
-                                <td>$159.89</td>
+                                <td>{{ __('app.currency_symbol_inr')}}159.89</td>
                                 <td>
                                     <div class="progress-w-percent mb-0">
                                         <span class="progress-value">815 </span>
@@ -121,7 +121,7 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td>$55,781</td>
+                                <td>{{ __('app.currency_symbol_inr')}}55,781</td>
                             </tr>
                         </tbody>
                     </table>

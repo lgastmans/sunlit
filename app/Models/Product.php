@@ -59,9 +59,10 @@ class Product extends Model
      */
     public function getDisplayPurchasePriceAttribute()
     {
-        $fmt = new NumberFormatter('en_IN', NumberFormatter::CURRENCY);
+        return $this->purchase_price;
+        // $fmt = new NumberFormatter('en_IN', NumberFormatter::CURRENCY);
         
-        return $fmt->format($this->purchase_price/100); //sprintf('%01.2f', $this->purchase_price / 100);
+        // return $fmt->format($this->purchase_price/100); //sprintf('%01.2f', $this->purchase_price / 100);
     }
 
 
