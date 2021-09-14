@@ -59,10 +59,8 @@ class CategoryController extends Controller
         }
 
         // Total records
-        $totalRecords = Category::get()->count();
-        $totalRecordswithFilter = Category::where('name', 'like', '%'.$search.'%')
-            ->get()
-            ->count();
+        $totalRecords = Category::count();
+        $totalRecordswithFilter = Category::where('name', 'like', '%'.$search.'%')->count();
 
     
         // Fetch records
@@ -72,10 +70,11 @@ class CategoryController extends Controller
                 ->get(['id','name']);
         else
             $categories = Category::where('name', 'like', '%'.$search.'%')
+                ->select('id', 'name')
                 ->orderBy($order_column, $order_dir)
                 ->skip($start)
                 ->take($length)
-                ->get(['id','name']);
+                ->get();
                
 
         $response = array(
@@ -86,8 +85,7 @@ class CategoryController extends Controller
             'error' => null
         );
 
-        echo json_encode($response);
-        exit;
+        return response()->json($response);
     }
 
     /**
