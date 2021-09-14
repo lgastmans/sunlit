@@ -177,6 +177,37 @@ class PurchaseOrder extends Model
     }
 
 
+    public function getDisplayStatusAttribute()
+    {
+        switch ($this->status)
+        {
+            case PurchaseOrder::DRAFT:
+                $status =  '<span class="badge badge-secondary-lighten">Draft</span>';
+                break;
+            case PurchaseOrder::ORDERED:
+                $status = '<span class="badge badge-info-lighten">Ordered</span>';
+                break;
+            case PurchaseOrder::CONFIRMED:
+                $status = '<span class="badge badge-primary-lighten">Confirmed</span>';
+                break;
+            case PurchaseOrder::SHIPPED:
+                $status = '<span class="badge badge-dark-lighten">Shipped</span>';
+                break;
+            case PurchaseOrder::CUSTOMS:
+                $status = '<span class="badge badge-warning-lighten">Customs</span>';
+                break;
+            case PurchaseOrder::CLEARED:
+                $status = '<span class="badge badge-light-lighten">Cleared</span>';
+                break;
+            case PurchaseOrder::RECEIVED:
+                $status = '<span class="badge badge-success-lighten">Received</span>';
+                break;
+            default:
+        $status = '<span class="badge badge-error-lighten">Unknown</span>';
+        }
+        return $status;
+    }
+
 
 
 

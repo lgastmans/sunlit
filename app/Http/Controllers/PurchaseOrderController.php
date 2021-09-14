@@ -91,35 +91,7 @@ class PurchaseOrderController extends Controller
         $arr = array();
         $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
         foreach($orders as $order)
-        {
-            switch($order->status)
-            {
-                case PurchaseOrder::DRAFT:
-                    $status = '<span class="badge badge-secondary-lighten">Draft</span>';
-                    break;
-                case PurchaseOrder::ORDERED:
-                    $status = '<span class="badge badge-info-lighten">Ordered</span>';
-                    break;
-                case PurchaseOrder::CONFIRMED:
-                    $status = '<span class="badge badge-primary-lighten">Confirmed</span>';
-                    break;
-                case PurchaseOrder::SHIPPED:
-                    $status = '<span class="badge badge-dark-lighten">Shipped</span>';
-                    break;
-                case PurchaseOrder::CUSTOMS:
-                    $status = '<span class="badge badge-warning-lighten">Customs</span>';
-                    break;
-                case PurchaseOrder::CLEARED:
-                    $status = '<span class="badge badge-light-lighten">Cleared</span>';
-                    break;
-                case PurchaseOrder::RECEIVED:
-                    $status = '<span class="badge badge-success-lighten">Received</span>';
-                    break;
-                default:
-                $status = '<span class="badge badge-error-lighten">Unknown</span>';
-            }
-            
-
+        {           
             $arr[] = array(
                 "id" => $order->id,
                 "order_number" => $order->order_number,
@@ -128,7 +100,7 @@ class PurchaseOrderController extends Controller
                 "expected_at" => $order->display_due_at,
                 "received_at" => $order->display_received_at,
                 "amount_inr" => $fmt->format($order->amount_inr),
-                "status" => $status,
+                "status" => $order->display_status,
                 "warehouse" => $order->warehouse->name,
                 "user" => $order->user->display_name
             );
