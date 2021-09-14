@@ -113,9 +113,7 @@ class PurchaseOrderController extends Controller
             "data" => $arr,
             'error' => null
         );
-        echo json_encode($response);
-        // return response()->json($response);
-        exit;
+        return response()->json($response);
     }
 
     /**
