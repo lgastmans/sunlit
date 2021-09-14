@@ -89,7 +89,6 @@ class PurchaseOrderController extends Controller
         }
 
         $arr = array();
-        $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
         foreach($orders as $order)
         {           
             $arr[] = array(
@@ -99,7 +98,7 @@ class PurchaseOrderController extends Controller
                 "ordered_at" => $order->display_ordered_at,
                 "expected_at" => $order->display_due_at,
                 "received_at" => $order->display_received_at,
-                "amount_inr" => $fmt->format($order->amount_inr),
+                "amount_inr" => trans('app.currency_symbol_inr')." ".$order->amount_inr,
                 "status" => $order->display_status,
                 "warehouse" => $order->warehouse->name,
                 "user" => $order->user->display_name
