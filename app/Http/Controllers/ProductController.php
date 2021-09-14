@@ -133,16 +133,11 @@ class ProductController extends Controller
         }
 
         $query->orderBy($order_column, $order_dir);
+        $query->skip($start)->take($length);
 
-        if ($length < 0)
-            $query->skip($start)
-                ->take($length);
-
-        $products = $query->get(['products.*', 'categories.name as category_name', 'taxes.name as tax_name']);
+        $products = $query->select('products.*', 'categories.name as category_name', 'taxes.name as tax_name')->get();
 
         $arr = array();
-
-        $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
 
         foreach($products as $record)
         {
@@ -151,11 +146,11 @@ class ProductController extends Controller
                 "id" => $record->id,
                 "category" => $record->category->name,
                 "supplier" => $record->supplier->company,
-                "tax" => $record->tax->display_amount,
+                "tax" => $record->tax->amount,
                 "code" => $record->code,
                 "name" => $record->name,
                 "model" => $record->model,
-                "purchase_price" => $fmt->format($record->purchase_price/100), //sprintf('%01.2f',($record->purchase_price/100)),
+                "purchase_price" => $record->purchase_price,
                 "minimum_quantity" => $record->minimum_quantity,
                 "cable_length" => $record->cable_length,
                 "kw_rating" => $record->kw_rating,
@@ -303,7 +298,7 @@ class ProductController extends Controller
         if ($request->has('q')){
             $query->where('code', 'like', '%'.$request->get('q').'%');
         }
-        $products = $query->get(['id', 'code as text']);
+        $products = $query->select('id', 'code as text')->get();
      
         return ['results' => $products];
     }   

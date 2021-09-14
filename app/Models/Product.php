@@ -39,7 +39,7 @@ class Product extends Model
      */
     public function tax()
     {
-        return $this->hasOne(Tax::class);
+        return $this->belongsTo(Tax::class);
     }
 
     /**
