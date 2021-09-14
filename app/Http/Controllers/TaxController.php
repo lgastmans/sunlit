@@ -62,51 +62,37 @@ class TaxController extends Controller
         }
 
         // Total records
-        $totalRecords = Tax::get()->count();
+        $totalRecords = Tax::count();
         $totalRecordswithFilter = Tax::where('name', 'like', '%'.$search.'%')
             ->orWhere('amount', 'like', '%'.$search.'%')
-            ->get()
             ->count();
         
 
         // Fetch records
         if ($length < 0)
-            $taxes = Tax::where('name', 'like', '%'.$search.'%')
+            $taxes = Tax::select('id', 'name', 'amount')
+                ->where('name', 'like', '%'.$search.'%')
                 ->orWhere('amount', 'like', '%'.$search.'%')
                 ->orderBy($order_column, $order_dir)
                 ->get();
         else
-            $taxes = Tax::where('name', 'like', '%'.$search.'%')
+            $taxes = Tax::select('id', 'name', 'amount')
+                ->where('name', 'like', '%'.$search.'%')
                 ->orWhere('amount', 'like', '%'.$search.'%')
                 ->orderBy($order_column, $order_dir)
                 ->skip($start)
                 ->take($length)
                 ->get();
-
-        $arr = array();
-
-        foreach($taxes as $record)
-        {
-            $arr[] = array(
-                "id" => $record->id,
-                "name" => $record->name,
-                "amount" => $record->amount,
-                "display_amount" => $record->display_amount
-            );
-        }
-
+                
         $response = array(
             "draw" => $draw,
             "recordsTotal" => $totalRecords,
             "recordsFiltered" => $totalRecordswithFilter,
-            "data" => $arr,
+            "data" => $taxes,
             'error' => null
         );
 
-        
-        echo json_encode($response);
-
-        exit;
+        return response()->json($response);
     }
 
 
@@ -206,12 +192,11 @@ class TaxController extends Controller
      */
     public function getListForSelect2(Request $request)
     {
+        $query = Tax::query();
         if ($request->has('q')){
-            $taxes = Tax::where('name', 'like', $request->get('q').'%')->get(['id', 'name as text']);
+            $query->where('name', 'like', '%'.$request->get('q').'%');
         }
-        else{
-            $taxes = Tax::get(['id', 'name as text']);
-        }
+        $taxes = $query->select('id', 'name as text')->get();
         return ['results' => $taxes];
     }     
 }
