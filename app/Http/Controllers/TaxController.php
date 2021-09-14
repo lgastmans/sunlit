@@ -194,7 +194,7 @@ class TaxController extends Controller
     {
         $query = Tax::query();
         if ($request->has('q')){
-            $query->where('name', 'like', '%'.$request->get('q').'%');
+            $query->where('name', 'like', $request->get('q').'%');
         }
         $taxes = $query->select('id', 'name as text')->get();
         return ['results' => $taxes];

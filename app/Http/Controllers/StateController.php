@@ -91,12 +91,11 @@ class StateController extends Controller
      */
     public function getListForSelect2(Request $request)
     {
+        $query = State::query();
         if ($request->has('q')){
-            $states = State::where('name', 'like', $request->get('q').'%')->get(['id', 'name as text']);
+            $query->where('name', 'like', $request->get('q').'%');
         }
-        else{
-            $states = State::get(['id', 'name as text']);
-        }
+        $states = $query->select('id', 'name as text')->get();
         return ['results' => $states];
-    }
+    }   
 }

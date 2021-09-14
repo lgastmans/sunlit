@@ -214,12 +214,11 @@ class SupplierController extends Controller
      */
     public function getListForSelect2(Request $request)
     {
+        $query = Supplier::query();
         if ($request->has('q')){
-            $suppliers = Supplier::where('company', 'like', $request->get('q').'%')->get(['id', 'company as text']);
+            $query->where('company', 'like', $request->get('q').'%');
         }
-        else{
-            $suppliers = Supplier::get(['id', 'company as text']);
-        }
+        $suppliers = $query->select('id', 'company as text')->get();
         return ['results' => $suppliers];
     }        
 }

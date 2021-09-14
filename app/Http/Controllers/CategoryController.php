@@ -183,12 +183,11 @@ class CategoryController extends Controller
      */
     public function getListForSelect2(Request $request)
     {
+        $query = Category::query();
         if ($request->has('q')){
-            $categories = Category::where('name', 'like', $request->get('q').'%')->get(['id', 'name as text']);
+            $query->where('name', 'like', $request->get('q').'%');
         }
-        else{
-            $categories = Category::select('id', 'name as text')->get();
-        }
+        $categories = $query->select('id', 'name as text')->get();
         return ['results' => $categories];
-    }    
+    }     
 }
