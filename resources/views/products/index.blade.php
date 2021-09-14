@@ -108,7 +108,10 @@
             },
             { 
                 'data': 'tax',
-                'orderable': true 
+                'orderable': true,
+                'render': function(data){
+                    return data + '%';
+                }
             },
             { 
                 'data': 'code',
@@ -124,7 +127,7 @@
             },
             {
                 'data': 'purchase_price',
-                'orderable': true
+                'orderable': true,
             },
             {
                 'data': 'id',
