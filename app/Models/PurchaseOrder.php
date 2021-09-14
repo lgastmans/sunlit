@@ -203,7 +203,7 @@ class PurchaseOrder extends Model
                 $status = '<span class="badge badge-success-lighten">Received</span>';
                 break;
             default:
-        $status = '<span class="badge badge-error-lighten">Unknown</span>';
+                $status = '<span class="badge badge-error-lighten">Unknown</span>';
         }
         return $status;
     }

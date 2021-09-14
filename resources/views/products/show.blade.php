@@ -19,7 +19,7 @@
                         <form class="ps-lg-4">
                             <!-- Product title -->
                             <h3 class="mt-0">{{ $product->name }} <a href="{{ route('products.edit', $product->id) }}" class="text-muted"><i class="mdi mdi-square-edit-outline ms-2"></i></a> </h3>
-                            <p class="mb-1">Added Date: {{ $product->created_at->format('jS F Y') }}</p>
+                            <p class="mb-1">Added Date: {{ $product->display_created_at }}</p>
 
                             <!-- Product stock -->
                             <div class="mt-3">

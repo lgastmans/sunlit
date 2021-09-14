@@ -14,19 +14,19 @@
                         </div>
                         <div class="step-item @if ($purchase_order->status == 4) current @endif">
                             <span data-bs-container="#tooltip-container" data-bs-toggle="tooltip"
-                                data-bs-placement="bottom" title="{{ $purchase_order->shipped_at }}">Shipped</span>
+                                data-bs-placement="bottom" title="{{ $purchase_order->display_shipped_at }}">Shipped</span>
                         </div>
                         <div class="step-item @if ($purchase_order->status == 5) current @endif">
                             <span data-bs-container="#tooltip-container" data-bs-toggle="tooltip"
-                                data-bs-placement="bottom" title="{{ $purchase_order->customs_at }}">Customs</span>
+                                data-bs-placement="bottom" title="{{ $purchase_order->display_customs_at }}">Customs</span>
                         </div>
                         <div class="step-item @if ($purchase_order->status == 6) current @endif">
                             <span data-bs-container="#tooltip-container" data-bs-toggle="tooltip"
-                                data-bs-placement="bottom" title="{{ $purchase_order->cleared_at }}">Cleared</span>
+                                data-bs-placement="bottom" title="{{ $purchase_order->display_cleared_at }}">Cleared</span>
                         </div>
                         <div class="step-item @if ($purchase_order->status == 7) current @endif">
                             <span data-bs-container="#tooltip-container" data-bs-toggle="tooltip"
-                                data-bs-placement="bottom" title="{{ $purchase_order->received_at }}">Received</span>
+                                data-bs-placement="bottom" title="{{ $purchase_order->display_received_at }}">Received</span>
                         </div>
                     </div>
                     <div class="process-line"

@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use \NumberFormatter;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
@@ -62,6 +62,13 @@ class Product extends Model
         $fmt = new NumberFormatter('en_IN', NumberFormatter::CURRENCY);
         
         return $fmt->format($this->purchase_price/100); //sprintf('%01.2f', $this->purchase_price / 100);
+    }
+
+
+    public function getDisplayCreatedAtAttribute()
+    {
+        $dt = Carbon::parse($this->created_at);
+        return $dt->toFormattedDateString();  
     }
 
 }

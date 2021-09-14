@@ -1,5 +1,5 @@
 {{-- ordered --}}
-<div class="mt-lg-0 rounded @if ($purchase_order->status > 2) d-none @else d-none @endif">
+{{-- <div class="mt-lg-0 rounded @if ($purchase_order->status > 2) d-none @else d-none @endif">
     <div class="card border">
         <div class="card-body">
             <form name="place-order-form"  class="needs-validation" novalidate
@@ -22,7 +22,7 @@
 
         </div>
     </div>
-</div>
+</div> --}}
 
 {{-- confirmed --}}
 <div class="mt-lg-0 rounded @if ($purchase_order->status != 2) d-none @endif">
