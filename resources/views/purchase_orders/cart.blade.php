@@ -139,7 +139,7 @@
                                 <table class="table mb-0">
                                     <tbody>
                                         <tr>
-                                            <td>Grand Total :</td>
+                                            <td>Order Total :</td>
                                             <td>
                                                 <span>{{ __('app.currency_symbol_usd')}}</span>
                                                 <span id="grand-total">{{ $purchase_order->amount_usd }}</span>
@@ -147,26 +147,21 @@
                                         </tr>
                                       
                                         <tr>
-                                            <td>Current Exchange Rate :</td>
+                                            <td>Exchange Rate <abbr title="Supplier"> :</td>
                                             <td>
                                                 <span>{{ __('app.currency_symbol_inr')}}</span>
-                                                <span id="echange-rate">{{ Setting::get('purchase_order.exchange_rate') }}</span>
+                                                <span id="order-echange-rate">{{ Setting::get('purchase_order.exchange_rate') }}</span>
+                                                
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>Amount in {{ __('app.currency_symbol_inr')}} : </td>
+                                            <td>Amount : </td>
                                             <td>
                                                 <span>{{ __('app.currency_symbol_inr')}}</span>
-                                                <span id="amount-inr">{{ $purchase_order->amount_usd * Setting::get('purchase_order.exchange_rate') }}</span>
+                                                <span id="amount-inr">{{ $purchase_order->amount_inr }}</span>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <th>Total :</th>
-                                            <th>
-                                                <span>{{ __('app.currency_symbol_usd')}}</span>
-                                                <span id="total">{{ $purchase_order->amount_usd }}</span>
-                                            </th>
-                                        </tr>
+                                    
                                     </tbody>
                                 </table>
                                 
@@ -284,7 +279,6 @@
             grand_total = grand_total + parseFloat($(this).html());
         });
         $('#grand-total').html(grand_total.toFixed(2));
-        $('#total').html(grand_total.toFixed(2));
         
         var amount_inr = grand_total * {{ Setting::get('purchase_order.exchange_rate') }}
         $('#amount-inr').html(amount_inr.toFixed(2));
