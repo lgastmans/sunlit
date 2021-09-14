@@ -19,18 +19,21 @@
                                 <input type="hidden" name="id" value="{{ old('id', $tax->id) }}" />
                             </div>
                         @endif
-                        <x-forms.input label="name" name="name" value="{{ old('name', $tax->name) }}" required="true"/>
-                        <div class="mb-3">
-                            <label class="form-label" for="amount">Amount</label>
-                            <div class="input-group">
-                                <input class="form-control" id="amount" name="amount" value="{{ old('amount', $tax->amount) }}" required="true" data-toggle="input-mask"/>
-                                <span class="input-group-text" id="inputGroupPrepend">%</span>
-                                <div class="invalid-feedback">
-                                    {{ __('error.form_invalid_field', ['field' => 'percentage']) }}
+                        <div class="row mb-3">  
+                            <div class="col-xl-5">              
+                                <x-forms.input label="name" name="name" value="{{ old('name', $tax->name) }}" required="true"/>
+                            </div>        
+                            <div class="col-xl-2">
+                                <label class="form-label" for="amount">Amount</label>
+                                <div class="input-group">
+                                    <input class="form-control" id="amount" name="amount" value="{{ old('amount', $tax->amount) }}" required="true" data-toggle="input-mask"/>
+                                    <span class="input-group-text" id="inputGroupPrepend">%</span>
+                                    <div class="invalid-feedback">
+                                        {{ __('error.form_invalid_field', ['field' => 'percentage']) }}
+                                    </div>
                                 </div>
-                            </div>
                         </div>
-                       
+                        </div>
                         <button class="btn btn-primary" type="submit">@if ($tax->id) {{ __('app.edit_title', ['field' => 'tax']) }} @else {{ __('app.add_title', ['field' => 'tax']) }} @endif</button>
 
                     </form>

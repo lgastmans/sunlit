@@ -83,7 +83,12 @@
             },
             { 
                 'data': 'amount',
-                'orderable': true 
+                'orderable': true ,
+                'render' : function(data, type, row, meta){
+                    if (type === 'display'){
+                        return data + '%';
+                    }
+                },
             },
             {
                 'data': 'id',
