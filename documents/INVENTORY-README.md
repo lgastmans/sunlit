@@ -4,14 +4,14 @@ Inventory
 table 'Inventory' is a one-to-one relationship with products, holds the 3 different stock values
 table 'Inventory Movements' tracks the movement of stock from both the Purchase Orders and Sales Orders
 
+
 Inventory table
 ---------------
 id
 warehouse_id
 product_id
-model_name 		POR|SOR (Purchase Order or Sales Order)
-model_id		references the id of POR or SOR
-model_status	references the status of the model
+purchase_order_id 	references Purchase Order, null if Sales Order
+sales_order_id		references Sales Order, null if Purchase Order
 quantity
 date_created
 user_id
@@ -28,6 +28,7 @@ Shipped
 Customs			
 Cleared			
 Received		- trigger stock in, update Available Stock (add), update Ordered Stock (deduct)
+
 
 Sales Order (SO)
 ----------------
