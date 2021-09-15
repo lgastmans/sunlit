@@ -133,7 +133,9 @@ class ProductController extends Controller
         }
 
         $query->orderBy($order_column, $order_dir);
-        $query->skip($start)->take($length);
+
+        if ($length > 0)
+            $query->skip($start)->take($length);
 
         $products = $query->select('products.*', 'categories.name as category_name', 'taxes.name as tax_name')->get();
 
