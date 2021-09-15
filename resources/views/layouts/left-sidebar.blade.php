@@ -27,6 +27,13 @@
                     <span> Purchase Orders </span>
                 </a>
             </li>
+            <li class="side-nav-item {{ (Request::is('inventory*') ? ' menuitem-active' : '') }}">
+                <a href="{{ route('inventory')}}" class="side-nav-link {{ (Request::is('inventory*') ? ' active' : '') }}">
+                    <i class="mdi mdi-cube-outline"></i>
+                    <span> Inventory </span>
+                </a>
+            </li>
+
             {{-- <li class="side-nav-item">
                <a data-bs-toggle="collapse" href="#sidebarDashboards" aria-expanded="false" aria-controls="sidebarDashboards" class="side-nav-link">
                     <i class="uil-home-alt"></i>
@@ -50,6 +57,7 @@
                     </ul>
                 </div> 
             </li> --}}
+
 
             <li class="side-nav-title side-nav-item">Components</li>
 
