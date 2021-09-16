@@ -28,6 +28,7 @@
                                 <th>Available Stock</th>
                                 <th>Ordered Stock</th>
                                 <th>Booked Stock</th>
+                                <th>Projected Stock</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -81,6 +82,18 @@
             },
             { 
                 'data': 'available',
+                'orderable': false
+            },
+            { 
+                'data': 'booked',
+                'orderable': false
+            },
+            { 
+                'data': 'ordered',
+                'orderable': false
+            },
+            { 
+                'data': 'projected',
                 'orderable': false
             },
         ],

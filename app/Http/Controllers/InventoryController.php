@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Models\PurchaseOrder;
-use App\Models\PurchaseOrderItem;
+use App\Models\Inventory;
 
 class InventoryController extends Controller
 {
@@ -13,23 +12,6 @@ class InventoryController extends Controller
     public function index()
     {
   
-        /*
-        $received = PurchaseOrder::received()
-            ->selectRaw("purchase_order_items.product_id as id, SUM(purchase_order_items.quantity_received) as total_received")
-            ->join('purchase_order_items', 'purchase_order_items.purchase_order_id', '=', 'purchase_orders.id')
-            ->groupBy('purchase_order_items.product_id')
-            ->get();
-
-        //dd($received);
-
-        $received = PurchaseOrder::received()
-            ->join('purchase_order_items', 'purchase_order_items.purchase_order_id', '=', 'purchase_orders.id')
-            ->groupBy('purchase_order_items.product_id')
-            ->sum('purchase_order_items.quantity_received');
-        */
-
-
-
         return view('inventory.index');
     }
 
@@ -48,7 +30,7 @@ class InventoryController extends Controller
             $length = $request->get("length");
         }
 
-        $order_column = 'name';
+        $order_column = 'products.name';
         $order_dir = 'ASC';
         $order_arr = array();
         if ($request->has('order')) {
@@ -58,6 +40,7 @@ class InventoryController extends Controller
             $order_column = $column_arr[$column_index]['data'];
             $order_dir = $order_arr[0]['dir'];
         }
+        $order_column = 'stock_available';
 
         $search = '';
         if ($request->has('search')) {
@@ -66,43 +49,50 @@ class InventoryController extends Controller
         }
 
         // Total records
-        $totalRecords = PurchaseOrder::received()
-            ->selectRaw("purchase_order_items.product_id AS product_id, products.code, products.name, SUM(purchase_order_items.quantity_received) AS total_received")
-            ->join('purchase_order_items', 'purchase_order_items.purchase_order_id', '=', 'purchase_orders.id')
-            ->join('products', 'products.id', '=', 'purchase_order_items.product_id')
-            ->groupBy('purchase_order_items.product_id')
-            ->get()
-            ->count();
-        $totalRecordswithFilter = $totalRecords;
+        $totalRecords = Inventory::count();
+        $totalRecordswithFilter = Inventory::with('product')
+                ->join('products', 'products.id', '=', 'product_id')
+                ->select('inventories.*', 'products.code', 'products.name')
+                ->where('products.name', 'like', '%'.$search.'%')
+                ->orWhere('products.code', 'like', '%'.$search.'%')
+                ->count();
 
     
         // Fetch records
         if ($length < 0)
-            $inventory = PurchaseOrder::received()
-                ->selectRaw("purchase_order_items.product_id AS product_id, products.code, products.name, SUM(purchase_order_items.quantity_received) AS total_received")
-                ->join('purchase_order_items', 'purchase_order_items.purchase_order_id', '=', 'purchase_orders.id')
-                ->join('products', 'products.id', '=', 'purchase_order_items.product_id')
-                ->groupBy('purchase_order_items.product_id')
+            $inventory = Inventory::with('product')
+                ->select('inventories.*', 'products.code', 'products.name')
+                ->join('products', 'products.id', '=', 'product_id')
+                ->where('products.name', 'like', '%'.$search.'%')
+                ->orWhere('products.code', 'like', '%'.$search.'%')
+                ->orderBy($order_column, $order_dir)
                 ->get();
         else
-            $inventory = PurchaseOrder::received()
-                ->selectRaw("purchase_order_items.product_id AS product_id, products.code, products.name, SUM(purchase_order_items.quantity_received) AS total_received")
-                ->join('purchase_order_items', 'purchase_order_items.purchase_order_id', '=', 'purchase_orders.id')
-                ->join('products', 'products.id', '=', 'purchase_order_items.product_id')
-                ->groupBy('purchase_order_items.product_id')
+            $inventory = Inventory::with('product')
+                ->select('inventories.*', 'products.code', 'products.name')
+                ->join('products', 'products.id', '=', 'product_id')
+                ->where('products.name', 'like', '%'.$search.'%')
+                ->orWhere('products.code', 'like', '%'.$search.'%')
+                ->orderBy($order_column, $order_dir)
                 ->skip($start)
                 ->take($length)
+                //->toSql();
                 ->get();
+
+//dd($inventory);
 
         $arr = array();
 
         foreach ($inventory as $record)
         {
             $arr[] = array(
-                "id" => $record->product_id,
-                "code" => $record->code,
-                "name" => $record->name,
-                "available" => $record->total_received
+                "id" => $record->id,
+                "code" => $record->product->code,
+                "name" => $record->product->name,
+                "available" => $record->stock_available,
+                "booked" => $record->stock_booked,
+                "ordered" => $record->stock_ordered,
+                "projected" => ($record->stock_available - $record->stock_booked)
             );
 
         }

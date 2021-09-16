@@ -275,6 +275,10 @@ class PurchaseOrderController extends Controller
         $order->confirmed_at = $request->get('confirmed_at');
         $order->status = PurchaseOrder::CONFIRMED;
         $order->update();
+
+        $inventory = new Inventory();
+        $inventory->updateStock($order);
+        
         return redirect(route('purchase-orders.show', $order->order_number))->with('success', 'order confirmed'); 
     }
 
