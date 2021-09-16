@@ -7,6 +7,7 @@ use App\Models\Warehouse;
 use Illuminate\Http\Request;
 use App\Models\PurchaseOrder;
 use App\Models\PurchaseOrderItem;
+use App\Models\Inventory;
 use Illuminate\Support\Facades\Auth;
 use \App\Http\Requests\StorePurchaseOrderRequest;
 
@@ -370,6 +371,10 @@ class PurchaseOrderController extends Controller
         $order->received_at = $request->get('received_at');
         $order->status = PurchaseOrder::RECEIVED;
         $order->update();
+
+        $inventory = new Inventory();
+        $inventory->updateStock($order);
+
         return redirect(route('purchase-orders.show', $order->order_number))->with('success', 'order received'); 
     }
 
