@@ -69,10 +69,10 @@
                         </div>
                         <div class="mb-3 row">
                             <div class="col-xl-2">
-                                <label class="form-label" for="display_purchase_price">Amount</label>
+                                <label class="form-label" for="purchase_price">Amount</label>
                                 <div class="input-group">
                                     <span class="input-group-text" id="inputGroupPrepend">{{ __('app.currency_symbol_inr')}}</span>
-                                    <input class="form-control" id="display_purchase_price" name="display_purchase_price" value="{{ old('display_purchase_price', $product->display_purchase_price) }}" required="true" data-toggle="input-mask" />
+                                    <input class="form-control" id="purchase_price" name="purchase_price" value="{{ old('purchase_price', $product->purchase_price) }}" required="true" data-toggle="input-mask" />
                                     <div class="invalid-feedback">
                                         {{ __('error.form_invalid_field', ['field' => 'percentage']) }}
                                     </div>
