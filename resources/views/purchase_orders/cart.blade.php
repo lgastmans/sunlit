@@ -168,7 +168,7 @@
                             </div>
                             <!-- end table-responsive -->
                         </div>
-                        <div class=" mt-4 mt-lg-0 rounded @if (count($purchase_order->items)==0) d-none @endif">
+                        <div class="place-order-form-container mt-4 mt-lg-0 rounded @if (count($purchase_order->items)==0) d-none @endif">
                             <div class="card mt-4 border">
                                 <div class="card-body">
                                     <form name="place-order-form" action="{{ route('purchase-orders.ordered', $purchase_order->id) }}" method="POST" class="needs-validation" novalidate>
@@ -439,6 +439,7 @@
                         item += '</tr> ';
                 $('#purchase-order-items-table > tbody:last-child').append(item);
                 $('.no-items').remove();
+                $('.place-order-form-container').removeClass('d-none');
                 recalculateGrandTotal()
 
             },
