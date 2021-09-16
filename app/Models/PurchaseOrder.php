@@ -209,9 +209,20 @@ class PurchaseOrder extends Model
     }
 
 
+    public function is_overdue()
+    {
+        if (Carbon::now()->greaterThan(Carbon::parse( $this->due_at))){
+            return true;
+        }
+        return false;
+    }
 
+    public function getOrderedDaysAgoAttribute()
+    {
+        return Carbon::parse( $this->ordered_at)->diffForHumans();
+    }
 
-
+    
     /* * Retrieve orders with status RECEIVED
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
@@ -221,4 +232,24 @@ class PurchaseOrder extends Model
     {
         return $query->where('status', PurchaseOrder::RECEIVED);
     }    
+
+    /* * Retrieve due orders
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeDue($query)
+    {
+        return $query->whereBetween('status', [PurchaseOrder::ORDERED, PurchaseOrder::CLEARED]);
+    }   
+
+    /* * Retrieve overdued orders
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOverdue($query)
+    {
+        return $query->whereBetween('status', [PurchaseOrder::ORDERED, PurchaseOrder::CLEARED])->where('due_at', '<', Carbon::now());
+    }   
 }

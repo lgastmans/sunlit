@@ -10,11 +10,12 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\PurchaseOrderItemController;
-use App\Http\Controllers\InventoryController;
 
 
 /*
@@ -39,13 +40,8 @@ Route::post('/invite', [UserController::class, 'registrationPassword'])->name('r
 
 Route::group(['middleware' => ['auth']], function () { 
 
-    Route::get('/', function () {
-        return view('dashboard');
-    })->name('home');
-
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/', [DashboardController::class, 'index'])->name('home');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/purchase-orders', [PurchaseOrderController::class, 'index'])->name('purchase-orders');
     Route::get('/purchase-orders/create', [PurchaseOrderController::class, 'create'])->name('purchase-orders.create');
