@@ -21,13 +21,13 @@ soft-deletes
 
 Purchase Order (PO)
 -------------------
-Draft			
-Ordered			
-Confirmed		- trigger stock ordered, update Ordered Stock (add)
-Shipped			
-Customs			
-Cleared			
-Received		- trigger stock in, update Available Stock (add), update Ordered Stock (deduct)
+1 Draft			
+2 Ordered			
+3 Confirmed		- trigger stock ordered, update Ordered Stock (add)
+4 Shipped			
+5 Customs			
+6 Cleared			
+7 Received		- trigger stock in, update Available Stock (add), update Ordered Stock (deduct)
 
 
 Sales Order (SO)
