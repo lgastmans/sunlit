@@ -38,15 +38,23 @@ class PurchaseOrderItemController extends Controller
      */
     public function store(Request $request)
     {
+        \Debugbar::info($request->all());
         $product = Product::find($request->get('product_id'));
         if ($product){
-            $item = new PurchaseOrderItem;
-            $item->purchase_order_id = $request->purchase_order_id;
-            $item->product_id = $request->product_id;
-            $item->tax = $product->tax->amount;
-            $item->quantity_ordered = $request->quantity_ordered;
-            $item->selling_price = $request->selling_price;
-            $item->save();
+            $item = PurchaseOrderItem::where('purchase_order_id', '=', $request->purchase_order_id)->where('product_id', '=', $request->product_id)->first();
+            if ($item){
+                $item->quantity_ordered = $request->quantity_ordered;
+                $item->update();
+            }
+            else{
+                $item = new PurchaseOrderItem();
+                $item->purchase_order_id = $request->purchase_order_id;
+                $item->product_id = $request->product_id;
+                $item->tax = $product->tax->amount;
+                $item->quantity_ordered = $request->quantity_ordered;
+                $item->selling_price = $request->selling_price;
+                $item->save();
+            }
             return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'item' => $item, 'product' => $product]);
         }
         

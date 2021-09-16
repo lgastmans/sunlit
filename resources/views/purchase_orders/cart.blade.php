@@ -18,13 +18,13 @@
                     <div class="col-lg-3">
                         <div class="mb-3">
                             <label class="form-label" for="product-select">Product</label>
-                            <select class="product-select form-control" name="product_id"></select>
+                            <select class="product-select form-control" name="product_id" id="product_id"></select>
                         </div>
                     </div>
                     <div class="col-lg-1">
                         <div class="mb-3">
                             <label class="form-label" for="product-select">Quantity</label>
-                            <input type="quantity_ordered" class="form-control" name="quantity_ordered"  value="1">
+                            <input type="text" class="form-control" name="quantity_ordered" id="quantity_ordered"  value="1">
                         </div>
                     </div>
                     <div class="col-lg-2">
@@ -33,7 +33,7 @@
                             <div class="input-group flex-nowrap">
                                 <span class="input-group-text">{{ __('app.currency_symbol_usd')}}</span>
                                 <input type="selling_price" class="form-control" name="selling_price"  id="selling_price" value="">
-                                <input type="hidden" name="tax" id="tax" value="">
+                                <input type="hidden" name="tax" id="tax">
                             </div>
                         </div>
                     </div>
@@ -68,7 +68,7 @@
                                 </thead>
                                 <tbody>
                                     @forelse($purchase_order->items as $item) 
-                                        <tr class="item" data-id="{{$item->id}}">
+                                        <tr class="item" data-id="{{$item->id}}" data-product-id="{{ $item->product->id }}">
                                             <td>
                                                 <p class="m-0 d-inline-block align-middle font-16">
                                                     <a href="javascript:void(0);"
@@ -90,7 +90,7 @@
                                                     placeholder="Qty" style="width: 90px;">
                                             </td>
                                             <td>
-                                                <span id="item-tax-{{ $item->id }}">{{ $item->tax }}%</span>
+                                                <span id="item-tax-{{ $item->id }}">@if ($item->tax){{ $item->tax }}@else 0.00 @endif%</span>
                                             </td>
                                             <td>
                                                 <span>{{ __('app.currency_symbol_usd')}}</span>
@@ -344,6 +344,8 @@
 
     function getTaxValue(tax_percentage)
     {
+        if (tax_percentage == null)
+            return 1;
         return tax = 1 + (parseFloat(tax_percentage.replace('%','') / 100));
     }
 
@@ -394,10 +396,26 @@
         }
     });
 
+    function is_existing_product(product_id)
+    {
+        item_id = 0;
+        $('.item').each(function(index){
+            if ($(this).attr('data-product-id') == product_id){
+                item_id =  $(this).attr('data-id');
+            } 
+        }); 
+        return item_id;
+    }
     
 
     $('.form-product').on('submit', function(e){
-        e.preventDefault();       
+        e.preventDefault();     
+        var existing_item_id = is_existing_product($('#product_id').val());
+        if (existing_item_id > 0){
+            var asked_quantity = $('#quantity_ordered').val();
+            var new_quantity = parseInt(asked_quantity) + parseInt($('#item-quantity-'+existing_item_id).val())
+            $('#quantity_ordered').val(new_quantity);
+        }          
         $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
@@ -409,36 +427,50 @@
             dataType: 'json',
             data: $( this ).serialize(),
             success: function (data) {
-                var item = '<tr class="item" data-id="'+ data.item.id +'">';
-                item += '<td>';
-                    item += '<p class="m-0 d-inline-block align-middle font-16">';
-                        item += '<a href="javascript:void(0); class="text-body product-name">'+ data.product.name +'</a>';
-                            item += '<br>';
-                            item += '<small class="me-2"><b>Code:</b> <span class="product-code">'+ data.product.code +'</span> </small>';
-                            item += '<small><b>Model:</b> <span class="product-model">'+ data.product.model +'</span></small>';
-                            item += '</p>';
+                if (existing_item_id > 0){
+                    $('.item').each(function(index){
+                        if ($(this).attr('data-product-id') == data.product.id){
+                            var existing_item_id = $(this).attr('data-id');
+                            var existing_item_quantity = $('#item-quantity-'+existing_item_id).val();
+                            $('#item-quantity-'+existing_item_id).val(parseInt(data.item.quantity_ordered));
+                            var new_total = (data.item.selling_price * getTaxValue(data.item.tax)) * parseInt($('#item-quantity-'+existing_item_id).val()).toFixed(2);
+                            $('#item-total-'+existing_item_id).html(new_total.toFixed(2))
+                            new_product = false;
+                        } 
+                    });
+                }
+                else{
+                    var item = '<tr class="item" data-id="'+ data.item.id +'" data-product-id="'+data.product.id+'">';
+                    item += '<td>';
+                        item += '<p class="m-0 d-inline-block align-middle font-16">';
+                            item += '<a href="javascript:void(0); class="text-body product-name">'+ data.product.name +'</a>';
+                                item += '<br>';
+                                item += '<small class="me-2"><b>Code:</b> <span class="product-code">'+ data.product.code +'</span> </small>';
+                                item += '<small><b>Model:</b> <span class="product-model">'+ data.product.model +'</span></small>';
+                                item += '</p>';
+                                item += '</td>';
+                                item += '<td>';
+                                    item += '<div class="input-group flex-nowrap">';
+                                        item += '<span class="input-group-text">$</span>';
+                                        item += '<input id="item-price-'+ data.item.id +'" type="text" class="editable-field form-control" data-value="'+ data.item.selling_price +'" data-field="price" data-item="'+ data.item.id +'" placeholder="" value="'+ data.item.selling_price  +'">';
+                                        item += '</div>';
+                                        item += '</td>';
+                                        item += '<td>';
+                                            item += '<input id="item-quantity-'+ data.item.id +'" type="number" min="1" value="'+ data.item.quantity_ordered +'" class="editable-field form-control" data-value="'+ data.item.quantity_ordered +'" data-field="quantity" data-item="'+ data.item.id +'" placeholder="Qty" style="width: 90px;">';
                             item += '</td>';
                             item += '<td>';
-                                item += '<div class="input-group flex-nowrap">';
-                                    item += '<span class="input-group-text">$</span>';
-                                    item += '<input id="item-price-'+ data.item.id +'" type="text" class="editable-field form-control" data-value="'+ data.item.selling_price +'" data-field="price" data-item="'+ data.item.id +'" placeholder="" value="'+ data.item.selling_price  +'">';
-                                    item += '</div>';
-                                    item += '</td>';
-                                    item += '<td>';
-                                        item += '<input id="item-quantity-'+ data.item.id +'" type="number" min="1" value="'+ data.item.quantity_ordered +'" class="editable-field form-control" data-value="'+ data.item.quantity_ordered +'" data-field="quantity" data-item="'+ data.item.id +'" placeholder="Qty" style="width: 90px;">';
-                        item += '</td>';
-                        item += '<td>';
-                        item += '<span id="item-tax-'+ data.item.id +'" class="item-tax">'+ data.item.tax +'%</span>';
-                        item += '</td>';
-                        item += '<td>';
-                        item += '<span>{{ __('app.currency_symbol_usd')}}</span><span id="item-total-'+ data.item.id +'" class="item-total">'+((data.item.selling_price * getTaxValue(data.item.tax)) * parseInt(data.item.quantity_ordered)).toFixed(2) +'</span>';
-                        item += '</td>';
-                        item += '<td>';
-                        item += '<a href="javascript:void(0);" class="action-icon" id="1" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>';
-                        item += '</td>';
-                        item += '</tr> ';
-                $('#purchase-order-items-table > tbody:last-child').append(item);
-                $('.no-items').remove();
+                            item += '<span id="item-tax-'+ data.item.id +'" class="item-tax">'+ data.item.tax +'%</span>';
+                            item += '</td>';
+                            item += '<td>';
+                            item += '<span>{{ __('app.currency_symbol_usd')}}</span><span id="item-total-'+ data.item.id +'" class="item-total">'+((data.item.selling_price * getTaxValue(data.item.tax)) * parseInt(data.item.quantity_ordered)).toFixed(2) +'</span>';
+                            item += '</td>';
+                            item += '<td>';
+                            item += '<a href="javascript:void(0);" class="action-icon" id="1" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>';
+                            item += '</td>';
+                            item += '</tr> ';
+                    $('#purchase-order-items-table > tbody:last-child').append(item);
+                    $('.no-items').remove();
+                }
                 $('.place-order-form-container').removeClass('d-none');
                 recalculateGrandTotal()
 
