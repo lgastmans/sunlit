@@ -36,24 +36,49 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
-        $permission = Permission::create(['name' => 'list purchase orders']);
+        // $permission = Permission::create(['name' => 'list purchase orders']);
+        // $permission->assignRole('user');
+        // $permission->assignRole('staff');
+        // $permission->assignRole('admin');
+        // $permission->assignRole('super-admin');
+
+        // $permission = Permission::create(['name' => 'view purchase orders']);
+        // $permission->assignRole('user');
+        // $permission->assignRole('staff');
+        // $permission->assignRole('admin');
+        // $permission->assignRole('super-admin');
+
+        // $permission = Permission::create(['name' => 'edit purchase orders']);
+        // $permission->assignRole('staff');
+        // $permission->assignRole('admin');
+        // $permission->assignRole('super-admin');
+
+        // $permission = Permission::create(['name' => 'delete purchase orders']);
+        // $permission->assignRole('admin');
+        // $permission->assignRole('super-admin');
+
+        $permission = Permission::create(['name' => 'list inventories']);
         $permission->assignRole('user');
         $permission->assignRole('staff');
         $permission->assignRole('admin');
         $permission->assignRole('super-admin');
 
-        $permission = Permission::create(['name' => 'view purchase orders']);
+        $permission = Permission::create(['name' => 'view inventories']);
         $permission->assignRole('user');
         $permission->assignRole('staff');
         $permission->assignRole('admin');
         $permission->assignRole('super-admin');
 
-        $permission = Permission::create(['name' => 'edit purchase orders']);
+        $permission = Permission::create(['name' => 'edit inventories']);
         $permission->assignRole('staff');
         $permission->assignRole('admin');
         $permission->assignRole('super-admin');
 
-        $permission = Permission::create(['name' => 'delete purchase orders']);
+        $permission = Permission::create(['name' => 'delete inventories']);
+        $permission->assignRole('admin');
+        $permission->assignRole('super-admin');
+
+        $permission = Permission::create(['name' => 'view dashboard']);
         $permission->assignRole('admin');
         $permission->assignRole('super-admin');
     }

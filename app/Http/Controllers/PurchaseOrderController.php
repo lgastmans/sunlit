@@ -21,7 +21,7 @@ class PurchaseOrderController extends Controller
     public function index()
     {
         $user = Auth::user();
-        // if ($user->can('list purchase orders'))
+        if ($user->can('list purchase orders'))
             return view('purchase_orders.index');
     
         return abort(403, trans('error.unauthorized'));
