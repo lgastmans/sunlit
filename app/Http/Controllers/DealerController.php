@@ -131,10 +131,16 @@ class DealerController extends Controller
      */
     public function show($id)
     {
-        $dealer = Dealer::with('state')->find($id);
-        if ($dealer)
-            return view('dealers.show', ['dealer' => $dealer]);
-        return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'dealer']));
+        $user = Auth::user();
+        if ($user->can('view dealers')){
+            $dealer = Dealer::with('state')->find($id);
+            if ($dealer)
+                return view('dealers.show', ['dealer' => $dealer]);
+
+            return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'dealer']));
+        }
+
+        return abort(403, trans('error.unauthorized'));
     }
 
     /**

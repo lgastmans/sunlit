@@ -24,8 +24,7 @@ class StorePurchaseOrderRequest extends FormRequest
      */
     public function authorize()
     {
-        //return $this->user()->can('edit purchase orders');
-        return $this->user()->can('edit suppliers');
+        return $this->user()->can('edit purchase orders');
     }
 
     protected function prepareForValidation()

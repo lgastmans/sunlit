@@ -219,11 +219,16 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::find($id);
-        if ($product)
-            return view('products.show', ['product'=>$product]);
+        $user = Auth::user();
+        if ($user->can('view products')){
+            $product = Product::find($id);
+            if ($product)
+                return view('products.show', ['product'=>$product]);
 
-        return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'product']));
+            return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'product']));
+        }
+        return abort(403, trans('error.unauthorized'));
+
     }
 
     public function getById($id)

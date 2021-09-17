@@ -123,8 +123,12 @@ class PurchaseOrderController extends Controller
      */
     public function create()
     {
-        $order = new PurchaseOrder();
-        return view('purchase_orders.form', ['purchase_order' => $order]);
+        $user = Auth::user();
+        if ($user->can('edit purchase orderss')){
+            $order = new PurchaseOrder();
+            return view('purchase_orders.form', ['purchase_order' => $order]);
+        }
+        return abort(403, trans('error.unauthorized'));
     }
 
     /**
@@ -158,6 +162,7 @@ class PurchaseOrderController extends Controller
 
             return redirect(route('purchase-orders.show', $order->order_number)); 
         }
+        
     }
 
     /**
@@ -168,11 +173,15 @@ class PurchaseOrderController extends Controller
      */
     public function show($order_number)
     {
-        $purchase_order = PurchaseOrder::with(['supplier', 'warehouse', 'items', 'items.product'])->where('order_number', '=', $order_number)->first();
-        if ($purchase_order)
-            return view('purchase_orders.show', ['purchase_order' => $purchase_order ]);
+        $user = Auth::user();
+        if ($user->can('view purchase orders')){
+            $purchase_order = PurchaseOrder::with(['supplier', 'warehouse', 'items', 'items.product'])->where('order_number', '=', $order_number)->first();
+            if ($purchase_order)
+                return view('purchase_orders.show', ['purchase_order' => $purchase_order ]);
 
-        return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'purchase order']));
+            return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'purchase order']));
+        }
+        return abort(403, trans('error.unauthorized'));
     }
 
     /**
