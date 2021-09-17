@@ -124,7 +124,7 @@ class PurchaseOrderController extends Controller
     public function create()
     {
         $user = Auth::user();
-        if ($user->can('edit purchase orderss')){
+        if ($user->can('edit purchase orders')){
             $order = new PurchaseOrder();
             return view('purchase_orders.form', ['purchase_order' => $order]);
         }
