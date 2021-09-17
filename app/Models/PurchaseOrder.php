@@ -222,7 +222,13 @@ class PurchaseOrder extends Model
         return Carbon::parse( $this->ordered_at)->diffForHumans();
     }
 
-    
+
+    public function scopeOrdered($query)
+    {
+        return $query->where('status', '>=', PurchaseOrder::ORDERED);
+    }
+
+
     /* * Retrieve orders with status RECEIVED
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query

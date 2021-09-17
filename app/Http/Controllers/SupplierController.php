@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use App\Models\PurchaseOrder;
+use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use \App\Http\Requests\StoreSupplierRequest;
-
-use App\Models\PurchaseOrder;
 
 class SupplierController extends Controller
 {
@@ -135,9 +135,13 @@ class SupplierController extends Controller
     {
         $user = Auth::user();
         if ($user->can('view suppliers')){
-            $supplier = Supplier::with('state')->find($id);
-            if ($supplier)
-                return view('suppliers.show', ['supplier' => $supplier]);
+            $supplier = Supplier::withCount('purchase_orders')->with('state')->find($id);
+            if ($supplier){
+                $total_orders = PurchaseOrder::ordered()->where('supplier_id', '=', $supplier->id)->sum('amount_usd');
+                $products = Product::with('inventory')->where('supplier_id', '=', $supplier->id)->get();
+
+                return view('suppliers.show', ['supplier' => $supplier, 'total_orders' => $total_orders, 'products' => $products]);
+            }
             return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'supplier']));
         }
         return abort(403, trans('error.unauthorized'));

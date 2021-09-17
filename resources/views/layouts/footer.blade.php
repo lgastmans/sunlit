@@ -10,6 +10,7 @@
 <script src="{{ asset("/js/vendor/responsive.bootstrap4.min.js") }}"></script>
 <script src="{{ asset("/js/vendor/dataTables.checkboxes.min.js") }}"></script>
 <script src="{{ asset("/js/vendor/Chart.bundle.min.js") }}"></script>
+<script src="{{ asset("/js/vendor/apexcharts.min.js") }}"></script>
 <!-- third party js ends -->
 
 <script src="{{ asset('/js/app.js') }}"></script>
