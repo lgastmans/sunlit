@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 //use App\Models\PurchaseOrder;
 //use App\Models\SalesOrder;
@@ -59,8 +60,6 @@ class Inventory extends Model
      */
     public function updateStock(Model $model)
     {
-        //dd($model);
-
         /*
         *   get name of model
         */
@@ -70,7 +69,6 @@ class Inventory extends Model
         *   set the warehouse id of the model
         */
         $this->warehouse_id = $model->warehouse_id;
-
 
         /*
         *    iterate through the related items of the model
@@ -105,12 +103,29 @@ class Inventory extends Model
                         $ordered += $product->quantity_ordered;
                         
                     }
-                    elseif ($model->status == PurchaseOrder::RECEIVED) {
+                    elseif ($model->status == PurchaseOrder::RECEIVED) 
+                    {
                         /*
                         *    update Available Stock (add), update Ordered Stock (deduct)
                         */
                         $ordered -= $product->quantity_ordered;
                         $available += $product->quantity_ordered;
+
+                        /*
+                        *   register stock received in the Inventory Movement model
+                        *   status RECEIVED
+                        */
+                        $data = array(
+                            "warehouse_id" => $model->warehouse_id,
+                            "product_id" => $product->product_id,
+                            "purchase_order_id" => $model->id,
+                            "sales_order_id" => null,
+                            "quantity" => $product->quantity_ordered,
+                            "user_id" => Auth::user()->id,
+                            "movement_type" => InventoryMovement::RECEIVED
+                        );
+                        $movement = new InventoryMovement();
+                        $movement->updateMovement($data);
                     }
 
                     $result = $inventory->update([
