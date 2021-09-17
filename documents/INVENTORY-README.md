@@ -18,6 +18,16 @@ user_id
 soft-deletes
 
 
+Inventory Movement table
+------------------------
+id
+warehouse_id
+product_id
+purchase_order_id
+quantity
+user_id
+movement_type 		1 - RECEIVED | 2 - DELIVERED | (RETURNED | CANCELLED | CORRECTED...)
+
 
 Purchase Order (PO)
 -------------------
@@ -27,14 +37,14 @@ Purchase Order (PO)
 4 Shipped			
 5 Customs			
 6 Cleared			
-7 Received		- trigger stock in, update Available Stock (add), update Ordered Stock (deduct)
+7 Received		- trigger stock in, update Available Stock (add), update Ordered Stock (deduct), create a RECEIVED Inventory Movement 
 
 
 Sales Order (SO)
 ----------------
 Draft
 Processing		- trigger stock out, update Booked Stock (add)
-Dispatched		- trigger stock out, update Available Stock (deduct), update Booked Stock (deduct)
+Dispatched		- trigger stock out, update Available Stock (deduct), update Booked Stock (deduct), create a DELIVERED Inventory Movement 
 Delivered
 
 
