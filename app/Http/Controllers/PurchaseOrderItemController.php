@@ -38,7 +38,6 @@ class PurchaseOrderItemController extends Controller
      */
     public function store(Request $request)
     {
-        \Debugbar::info($request->all());
         $product = Product::find($request->get('product_id'));
         if ($product){
             $item = PurchaseOrderItem::where('purchase_order_id', '=', $request->purchase_order_id)->where('product_id', '=', $request->product_id)->first();

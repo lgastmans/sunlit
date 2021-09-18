@@ -187,9 +187,17 @@
                                             </div>
                                         </div>
                                         
-                                        <button class="col-lg-12 text-center btn btn-danger" type="submit" name="place_order"><i class="mdi mdi-cart-plus me-1"></i> Place order</button>
+                                        <button class="col-lg-12 text-center btn btn-warning" type="submit" name="place_order"><i class="mdi mdi-cart-plus me-1"></i> Place order</button>
                                     </form>
 
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 mt-lg-0 rounded">
+                            <div class="card mt-4 border">
+                                <div class="card-body">
+                                    <button id="{{ $purchase_order->id }}" class="col-lg-12 text-center btn btn-danger" type="submit" name="delete_order" data-bs-toggle="modal" data-bs-target="#delete-modal-order"><i class="mdi mdi-delete"></i> Delete order</button>
                                 </div>
                             </div>
                         </div>
@@ -263,6 +271,30 @@
     
 </div>
 <!-- end row -->
+
+<div id="delete-modal-order" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="delete-modalLabelOrder" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="delete-order-form" action="" method="POST">
+                @method("DELETE")
+                @csrf()
+                <div class="modal-header modal-colored-header bg-danger">
+                    <h4 class="modal-title" id="delete-modalLabelOrder">Delete Purchase Order {{ $purchase_order->order_number }}</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    {{ __('app.delete_confirm', ['field' => "Purchase Order" ]) }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('app.modal_close') }}</button>
+                    <button type="button" class="btn btn-danger" onclick="event.preventDefault(); document.getElementById('delete-order-form').submit();">{{ __('app.modal_delete') }}</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
 
 <x-modal-confirm type="danger" target="item"></x-modal-confirm>
 
@@ -342,8 +374,7 @@
         })
     });
 
-    function getTaxValue(tax_percentage)
-    {
+    function getTaxValue(tax_percentage){
         if (tax_percentage == null)
             return 1;
         return tax = 1 + (parseFloat(tax_percentage.replace('%','') / 100));
@@ -393,6 +424,15 @@
         if (button != null){
             route = route.replace(':id', button.id);
             $('#delete-form').attr('action', route);
+        }
+    });
+
+    $('#delete-modal-order').on('show.bs.modal', function (e) {
+        var route = '{{ route("purchase-orders.delete", ":id") }}';
+        var button = e.relatedTarget;
+        if (button != null){
+            route = route.replace(':id', button.id);
+            $('#delete-order-form').attr('action', route);
         }
     });
 

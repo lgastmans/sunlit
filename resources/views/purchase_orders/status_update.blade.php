@@ -19,7 +19,7 @@
                         Confirmation date is required
                     </div>
                 </div>
-                <button class="col-lg-12 text-center btn btn-danger" type="submit"
+                <button class="col-lg-12 text-center btn btn-warning" type="submit"
                     name="confirm_order">Confirm order</button>
             </form>
 
@@ -78,7 +78,7 @@
                         </div>
                     </div>
                 </div>
-                <button class="col-lg-12 text-center btn btn-danger" type="submit"
+                <button class="col-lg-12 text-center btn btn-warning" type="submit"
                     name="ship_order">Ship order</button>
             </form>
 
@@ -114,7 +114,7 @@
                 </div>
                 
              
-                <button class="col-lg-12 text-center btn btn-danger" type="submit"
+                <button class="col-lg-12 text-center btn btn-warning" type="submit"
                     name="custom_order">Order at Customs</button>
             </form>
 
@@ -167,7 +167,7 @@
                     </div>
                 </div> --}}
 
-                <button class="col-lg-12 text-center btn btn-danger" type="submit"
+                <button class="col-lg-12 text-center btn btn-warning" type="submit"
                     name="cleared_order">Clear order</button>
             </form>
 
@@ -192,7 +192,7 @@
                     </div>
                 </div>
             
-                <button class="col-lg-12 text-center btn btn-danger" type="submit"
+                <button class="col-lg-12 text-center btn btn-warning" type="submit"
                     name="ship_order">Receive order</button>
             </form>
 
