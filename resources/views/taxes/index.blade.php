@@ -88,6 +88,7 @@
                     if (type === 'display'){
                         return data + '%';
                     }
+                    return data;
                 },
             },
             {
