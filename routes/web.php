@@ -12,6 +12,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\InventoryMovementController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PurchaseOrderController;
@@ -71,6 +72,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory');
     Route::get('/inventory/list', [InventoryController::class, 'getListForDatatables'])->name('inventory.datatables');
+
+    Route::get('/inventory-movement', [InventoryMovementController::class, 'index'])->name('inventory-movement');
+    Route::get('/inventory-movement/list', [InventoryMovementController::class, 'getListForDatatables'])->name('inventory-movement.datatables');
 
     Route::get('/products', [ProductController::class, 'index'])->name('products');
     Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
