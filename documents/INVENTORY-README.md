@@ -57,7 +57,7 @@ Ordered Stock: PO.Ordered + PO.Confirmed + PO.Shipped + PO.Customs + PO.Cleared
 
 Booked Stock: SO.Processing
 
-Projected Stock: Available Stock - Booked Stock (calculated field)
+Projected Stock: Available Stock + Ordered stock - Booked Stock (calculated field)
 
 
 
