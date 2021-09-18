@@ -68,21 +68,27 @@ class PurchaseOrderController extends Controller
         // Total records
         $totalRecords = PurchaseOrder::count();
         $totalRecordswithFilter = PurchaseOrder::with(['supplier'])
+            ->join('suppliers', 'suppliers.id', '=', 'supplier_id')
             ->where('order_number', 'like', '%'.$search.'%')
+            ->orWhere('suppliers.company', 'like', $search.'%')
             ->count();
         
 
         // Fetch records
         if ($length < 0){
             $orders = PurchaseOrder::with(['warehouse', 'supplier', 'user'])
+                    ->join('suppliers', 'suppliers.id', '=', 'supplier_id')
                     ->where('order_number', 'like', '%'.$search.'%')
+                    ->orWhere('suppliers.company', 'like', $search.'%')
                     ->orderBy($order_column, $order_dir)
                     ->get();
         }
         else{
 
             $orders = PurchaseOrder::with(['warehouse', 'supplier', 'user'])
-                    ->where('order_number', 'like', '%'.$search.'%')
+                    ->join('suppliers', 'suppliers.id', '=', 'supplier_id')
+                    ->where('order_number', 'like', $search.'%')
+                    ->orWhere('suppliers.company', 'like', $search.'%')
                     ->orderBy($order_column, $order_dir)
                     ->skip($start)
                     ->take($length)
