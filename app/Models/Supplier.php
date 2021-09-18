@@ -13,7 +13,7 @@ class Supplier extends Model
 
 
     protected $fillable = ['state_id', 'company', 'address', 'address2', 'city', 'zip_code', 'gstin', 'contact_person', 'phone', 'phone2', 'email', 'currency'];
-
+    protected $with = ['state'];
 
     /**
      * Get the state associated with the supplier.
@@ -35,6 +35,14 @@ class Supplier extends Model
     public function purchase_orders()
     {
         return $this->hasMany(PurchaseOrder::class);
+    }
+
+
+    public function getCurrencyCodeAttribute()
+    {
+        if ($this->currency == "inr")
+            return trans('app.currency_symbol_inr');
+        return trans('app.currency_symbol_usd');
     }
 
 

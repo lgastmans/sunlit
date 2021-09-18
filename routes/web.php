@@ -86,6 +86,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/suppliers/list', [SupplierController::class, 'getListForDatatables'])->name('suppliers.datatables');
     Route::get('/suppliers/{id}', [SupplierController::class, 'show'])->name('suppliers.show');
     Route::get('/suppliers/{id}/edit', [SupplierController::class, 'edit'])->name('suppliers.edit');
+    Route::get('/suppliers/{id}/stats', [SupplierController::class, 'stats'])->name('suppliers.stats');
     Route::post('/suppliers', [SupplierController::class, 'store'])->name('suppliers.store');
     Route::put('/suppliers/{id}', [SupplierController::class, 'update'])->name('suppliers.update');
     Route::delete('/suppliers/{id}', [SupplierController::class, 'destroy'])->name('suppliers.delete');

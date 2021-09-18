@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use App\Models\PurchaseOrder;
-use App\Models\Product;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use \App\Http\Requests\StoreSupplierRequest;
 
@@ -135,12 +136,10 @@ class SupplierController extends Controller
     {
         $user = Auth::user();
         if ($user->can('view suppliers')){
-            $supplier = Supplier::withCount('purchase_orders')->with('state')->find($id);
+            $supplier = Supplier::find($id);
             if ($supplier){
-                $total_orders = PurchaseOrder::ordered()->where('supplier_id', '=', $supplier->id)->sum('amount_usd');
                 $products = Product::with('inventory')->where('supplier_id', '=', $supplier->id)->get();
-
-                return view('suppliers.show', ['supplier' => $supplier, 'total_orders' => $total_orders, 'products' => $products]);
+                return view('suppliers.show', ['supplier' => $supplier, 'products' => $products]);
             }
             return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'supplier']));
         }
@@ -228,5 +227,38 @@ class SupplierController extends Controller
         }
         $suppliers = $query->select('id', 'company as text')->get();
         return ['results' => $suppliers];
-    }        
+    }  
+    
+    
+    public function stats($id)
+    {
+        $monthly_data = DB::table('purchase_orders')
+                    ->select(
+                                DB::raw("year(ordered_at) as ordered_year"), 
+                                DB::raw("month(ordered_at) as ordered_month"), 
+                                DB::raw("sum(amount_usd) as amount_usd"), 
+                                DB::raw("sum(amount_inr) as amount_inr"), 
+                                DB::raw("count(id) as number_orders"))
+                    ->where('supplier_id', '=', $id)
+                    ->where('status', '>=', PurchaseOrder::ORDERED)
+                    ->groupBy(DB::raw("year(ordered_at)"), DB::raw("month(ordered_at)"))
+                    ->get();
+
+        $total_orders = 0;
+        $total_amount['inr'] = 0;
+        
+        $graph_data['orders'] = [];
+        $graph_data['amount_inr'] = [];
+        for($i = 0; $i<12; $i++){
+            $graph_data['amount_inr'][$i] = 0;
+            $graph_data['orders'][$i] = 0;
+        }
+        foreach($monthly_data as $data){
+            $total_orders += $data->number_orders;
+            $total_amount['inr'] += $data->amount_inr;
+            $graph_data['orders'][$data->ordered_month-1] = $data->number_orders;
+            $graph_data['amount_inr'][$data->ordered_month-1] =$data->amount_inr;
+        }
+        return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'data' => ['total_orders' => $total_orders, 'total_amount' => $total_amount, 'graph_data' => $graph_data]]); 
+    }
 }
