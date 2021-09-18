@@ -401,6 +401,14 @@ class PurchaseOrderController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = Auth::user();
+        if ($user->can('delete purchase orders')){
+            $order = PurchaseOrder::find($id);
+            $order->items()->delete();
+            $order->delete();
+            return redirect(route('purchase-orders'))->with('success', trans('app.record_deleted', ['field' => 'Purchase Order']));
+        }
+        return abort(403, trans('error.unauthorized'));
+
     }
 }
