@@ -33,7 +33,6 @@
             @endcan
             
             @can('list inventories')
-
             <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#sidebarInventory" aria-expanded="false" aria-controls="sidebarInventory" class="side-nav-link">
                     <i class="uil-server"></i>
@@ -63,7 +62,6 @@
 --}}
                 </div>
             </li>
-
             @endcan
     
             <li class="side-nav-title side-nav-item">Components</li>
