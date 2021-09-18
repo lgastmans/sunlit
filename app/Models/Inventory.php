@@ -15,11 +15,15 @@ class Inventory extends Model
 
     protected $fillable = ['warehouse_id', 'product_id', 'stock_available', 'stock_booked', 'stock_ordered'];
 
+    public function warehouse()
+    {
+        return $this->belongsTo(Warehouse::class);
+    }
+
     public function product()
     {
         return $this->belongsTo(Product::class);
     }
-
 
     /**
      * Create a new entry in the inventory

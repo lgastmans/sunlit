@@ -51,28 +51,49 @@ class InventoryController extends Controller
         // Total records
         $totalRecords = Inventory::count();
         $totalRecordswithFilter = Inventory::with('product')
+                ->with('warehouse')
                 ->join('products', 'products.id', '=', 'product_id')
-                ->select('inventories.*', 'products.code', 'products.name')
+                ->join('warehouses', 'warehouses.id', '=', 'warehouse_id')
+                ->join('categories', 'categories.id', '=', 'products.category_id')
+                ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
+                ->select('inventories.*', 'products.code', 'products.name', 'suppliers.company', 'categories.name')
                 ->where('products.name', 'like', '%'.$search.'%')
                 ->orWhere('products.code', 'like', '%'.$search.'%')
+                ->orWhere('warehouses.name', 'like', '%'.$search.'%')
+                ->orWhere('categories.name', 'like', '%'.$search.'%')
+                ->orWhere('suppliers.company', 'like', '%'.$search.'%')
                 ->count();
 
     
         // Fetch records
         if ($length < 0)
             $inventory = Inventory::with('product')
-                ->select('inventories.*', 'products.code', 'products.name')
+                ->with('warehouse')
+                ->select('inventories.*', 'products.code', 'products.name', 'suppliers.company', 'categories.name')
                 ->join('products', 'products.id', '=', 'product_id')
+                ->join('warehouses', 'warehouses.id', '=', 'warehouse_id')
+                ->join('categories', 'categories.id', '=', 'products.category_id')
+                ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
                 ->where('products.name', 'like', '%'.$search.'%')
                 ->orWhere('products.code', 'like', '%'.$search.'%')
+                ->orWhere('warehouses.name', 'like', '%'.$search.'%')
+                ->orWhere('categories.name', 'like', '%'.$search.'%')
+                ->orWhere('suppliers.company', 'like', '%'.$search.'%')
                 ->orderBy($order_column, $order_dir)
                 ->get();
         else
             $inventory = Inventory::with('product')
-                ->select('inventories.*', 'products.code', 'products.name')
+                ->with('warehouse')
+                ->select('inventories.*', 'products.code', 'products.name', 'suppliers.company', 'categories.name')
                 ->join('products', 'products.id', '=', 'product_id')
+                ->join('warehouses', 'warehouses.id', '=', 'warehouse_id')
+                ->join('categories', 'categories.id', '=', 'products.category_id')
+                ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
                 ->where('products.name', 'like', '%'.$search.'%')
                 ->orWhere('products.code', 'like', '%'.$search.'%')
+                ->orWhere('warehouses.name', 'like', '%'.$search.'%')
+                ->orWhere('categories.name', 'like', '%'.$search.'%')
+                ->orWhere('suppliers.company', 'like', '%'.$search.'%')
                 ->orderBy($order_column, $order_dir)
                 ->skip($start)
                 ->take($length)
@@ -87,12 +108,15 @@ class InventoryController extends Controller
         {
             $arr[] = array(
                 "id" => $record->id,
+                "supplier" => $record->company,
+                "warehouse" => $record->warehouse->name,
+                "category" => $record->name,
                 "code" => $record->product->code,
                 "name" => $record->product->name,
                 "available" => $record->stock_available,
-                "booked" => $record->stock_booked,
                 "ordered" => $record->stock_ordered,
-                "projected" => ($record->stock_available - $record->stock_booked)
+                "booked" => $record->stock_booked,
+                "projected" => ($record->stock_available + $record->stock_ordered - $record->stock_booked)
             );
 
         }

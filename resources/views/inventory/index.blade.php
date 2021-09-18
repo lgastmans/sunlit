@@ -23,6 +23,9 @@
                     <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="inventory-datatable">
                         <thead class="table-light">
                             <tr>
+                                <th>Supplier</th>
+                                <th>Warehouse</th>
+                                <th>Category</th>
                                 <th>Code</th>
                                 <th>Name</th>
                                 <th>Available Stock</th>
@@ -73,6 +76,18 @@
         
         "columns": [
             { 
+                'data': 'supplier',
+                'orderable': true 
+            },
+            { 
+                'data': 'warehouse',
+                'orderable': true 
+            },
+            { 
+                'data': 'category',
+                'orderable': true 
+            },
+            { 
                 'data': 'code',
                 'orderable': true 
             },
@@ -85,11 +100,11 @@
                 'orderable': false
             },
             { 
-                'data': 'booked',
+                'data': 'ordered',
                 'orderable': false
             },
             { 
-                'data': 'ordered',
+                'data': 'booked',
                 'orderable': false
             },
             { 
