@@ -23,12 +23,12 @@
 
                                     <ul class="mb-0 list-inline text-light">
                                         <li class="list-inline-item me-3">
-                                            <h5 class="mb-1">$ {{ $total_orders }}</h5>
-                                            <p class="mb-0 font-13 text-white-50">Total Purchases</p>
+                                            <h5 class="mb-1">{{ $supplier->currency_code }} <span class="pending_orders_amount"></span></h5>
+                                            <p class="mb-0 font-13 text-white-50">Total Amount</p>
                                         </li>
                                         <li class="list-inline-item">
-                                            <h5 class="mb-1">{{ $supplier->purchase_orders_count }}</h5>
-                                            <p class="mb-0 font-13 text-white-50">Number of Orders</p>
+                                            <h5 class="mb-1 pending_orders_counter"></h5>
+                                            <p class="mb-0 font-13 text-white-50">Pending Orders</p>
                                         </li>
                                     </ul>
                                 </div>
@@ -107,9 +107,7 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="header-title mb-3">Purchase Orders</h4>
-          
-                        <div id="purchase-orders-bar-chart" class="apex-charts"></div>
-                  
+                    <div id="purchase-orders-bar-chart" class="apex-charts"></div>
                 </div>        
             </div>
         </div>
@@ -173,7 +171,7 @@
                         @if ($product->inventory)
                             <tr class="product" data-id="{{ $product->id }}">
                                 <td>{{ $product->name }}</td>
-                                <td>{{ __('app.currency_symbol_usd')}} {{ $product->inventory->landed_cost }}</td>
+                                <td>{{ __('app.currency_symbol_inr')}} {{ $product->inventory->landed_cost }}</td>
                                 <td>
                                     @if ($product->inventory->stock_available <= $product->minimum_quantity)
                                         <span class="badge bg-danger">
@@ -226,16 +224,35 @@
     });
 
 
+    var route = '{{ route("suppliers.stats", ":id") }}';
+    route = route.replace(':id', {{ $supplier->id }});
+    $.ajax({
+        type: 'GET',
+        url: route,
+        dataType: 'json',
+        success : function(res){
+            data = res.data;
+            $('.pending_orders_amount').html(data.total_amount['inr']);
+            $('.pending_orders_counter').html(data.total_orders);
+            chart.updateSeries([
+                {
+                    name: 'Amount',
+                    type:"column",
+                    data: data.graph_data['amount_inr']
+                },
+                {
+                    name: 'Number of orders',
+                    type: "line",
+                    data: data.graph_data['orders']
+                }
+            ]);
+        }
+    })
 
-    var colors = ["#39afd1"];
-    var dataColors = $("#purchase-orders-bar-chart").data('colors');
-    if (dataColors) {
-        colors = dataColors.split(",");
-    }
     var options = {
         chart: {
             height: 300,
-            type: 'bar',
+            type: 'line',
             toolbar: {
                 show: false
             }
@@ -246,15 +263,37 @@
             }
         },
         dataLabels: {
-            enabled: false
+            enabled: true,
+            enabledOnSeries: [1]
         },
-        series: [{
-            data: [100,150,25,23,55,75,200,30,3,0,0,0]
-        }],
-        colors: colors,
+        noData: {
+            text: 'Loading...'
+        },
+        series: [
+        //     {
+        //     data: [100,150,25,23,55,75,200,30,3,0,0,0]
+        // }
+        ],
+        stroke: {
+            width: [0, 3]
+        },
+        colors: ["#727cf5", "#6c757d"],
         xaxis: {
             categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
         },
+        yaxis: [
+        {
+          title: {
+            text: ""
+          }
+        },
+        {
+          opposite: true,
+          title: {
+            text: ""
+          }
+        }
+      ],
         states: {
             hover: {
                 filter: 'none'
