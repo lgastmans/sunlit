@@ -130,7 +130,7 @@
                 action="{{ route('purchase-orders.cleared', $purchase_order->id) }}" method="POST">
                 @csrf()
                 @method('PUT')
-                {{-- <div class="row mb-3">
+               <div class="row mb-3">
                     <div class="col-xl-4" id="cleared_at">
                         <label class="form-label">Cleared date</label>
                         <input type="text" class="form-control" name="cleared_at" value="{{ $purchase_order->display_cleared_at }}"
@@ -143,29 +143,29 @@
                             Cleared date is required
                         </div>
                     </div>
-                    <div class="col-xl-5">
+                     <div class="col-xl-6">
                         <label class="form-label">Customs Exchange Rate</label>
                         <div class="input-group">
-                            <span class="input-group-text" >{{ __('app.currency_symbol_inr')}}</span>
-                            <input class="form-control" id="customs_exchange_rate" name="customs_exchange_rate" value="{{ old('customs_exchange_rate', $purchase_order->customs_exchange_rate) }}" required data-toggle="input-mask"/>
+                            <span class="input-group-text" id="cleared__currency">{{ __('app.currency_symbol_inr')}}</span>
+                            <input class="form-control" id="customs_exchange_rate" name="customs_exchange_rate" value="{{ old('customs_exchange_rate', $purchase_order->customs_exchange_rate) }}" required >
                             <div class="invalid-feedback">
-                                {{ __('error.form_invalid_field', ['field' => 'order_exchange_rate']) }}
+                                {{ __('error.form_invalid_field', ['field' => 'customs exchange rate']) }}
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col-xl-9">
+                    <div class="col-xl-10">
                         <label class="form-label">Amount at Customs</label>
                         <div class="input-group">
                             <span class="input-group-text">{{ __('app.currency_symbol_inr')}}</span>
-                            <input class="form-control" id="customs_amount" name="customs_amount" required data-toggle="input-mask"/>
+                            <input class="form-control" id="customs_amount" name="customs_amount" required />
                             <div class="invalid-feedback">
-                                {{ __('error.form_invalid_field', ['field' => 'order_exchange_rate']) }}
+                                {{ __('error.form_invalid_field', ['field' => 'customs amount']) }}
                             </div>
                         </div>
                     </div>
-                </div> --}}
+                </div>
 
                 <button class="col-lg-12 text-center btn btn-warning" type="submit"
                     name="cleared_order">Clear order</button>
