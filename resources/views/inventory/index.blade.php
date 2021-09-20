@@ -44,10 +44,20 @@
     </div> <!-- end col -->
 </div>
 
+
 <x-modal-confirm type="danger" target="category"></x-modal-confirm>
 
 
 @endsection
+
+
+<style type="text/css">
+    .danger {
+        color: blue;
+        background-color: red;
+    }
+</style>
+
 
 @section('page-scripts')
     <script>
@@ -73,7 +83,11 @@
                 '</select> rows',
         },
         "pageLength": {{ Setting::get('general.grid_rows') }},
-        
+        "fnRowCallback": function( row, data ) {
+            if (data.available.scalar <= data.minimum_quantity.scalar) {
+                $( 'td:eq(4)', row ).addClass( 'danger' );
+            }
+        },
         "columns": [
             { 
                 'data': 'supplier',
@@ -96,8 +110,11 @@
                 'orderable': true 
             },
             { 
-                'data': 'available',
-                'orderable': false
+                "data": 'available',
+                'orderable': false,
+                "render" : function ( data, type, row ) {
+                    return data.scalar;
+                },
             },
             { 
                 'data': 'ordered',

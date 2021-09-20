@@ -72,7 +72,7 @@ class InventoryController extends Controller
         if ($length < 0)
             $inventory = Inventory::with('product')
                 ->with('warehouse')
-                ->select('inventories.*', 'products.code', 'products.name', 'suppliers.company', 'categories.name')
+                ->select('inventories.*', 'products.code', 'products.name', 'products.minimum_quantity', 'suppliers.company', 'categories.name')
                 ->join('products', 'products.id', '=', 'product_id')
                 ->join('warehouses', 'warehouses.id', '=', 'warehouse_id')
                 ->join('categories', 'categories.id', '=', 'products.category_id')
@@ -87,7 +87,7 @@ class InventoryController extends Controller
         else
             $inventory = Inventory::with('product')
                 ->with('warehouse')
-                ->select('inventories.*', 'products.code', 'products.name', 'suppliers.company', 'categories.name')
+                ->select('inventories.*', 'products.code', 'products.name', 'products.minimum_quantity', 'suppliers.company', 'categories.name')
                 ->join('products', 'products.id', '=', 'product_id')
                 ->join('warehouses', 'warehouses.id', '=', 'warehouse_id')
                 ->join('categories', 'categories.id', '=', 'products.category_id')
@@ -109,6 +109,7 @@ class InventoryController extends Controller
 
         foreach ($inventory as $record)
         {
+
             $arr[] = array(
                 "id" => $record->id,
                 "supplier" => $record->company,
@@ -116,10 +117,11 @@ class InventoryController extends Controller
                 "category" => $record->name,
                 "code" => $record->product->code,
                 "name" => $record->product->name,
-                "available" => $record->stock_available,
+                "available" => (object)$record->stock_available,
                 "ordered" => $record->stock_ordered,
                 "booked" => $record->stock_booked,
-                "projected" => ($record->stock_available + $record->stock_ordered - $record->stock_booked)
+                "projected" => ($record->stock_available + $record->stock_ordered - $record->stock_booked),
+                "minimum_quantity" => (object)$record->minimum_quantity
             );
 
         }
