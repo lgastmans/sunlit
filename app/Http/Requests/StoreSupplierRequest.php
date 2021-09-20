@@ -34,7 +34,7 @@ class StoreSupplierRequest extends FormRequest
         return [
             'company' => 'required_without:name|string|max:255',
             'name' => 'required_without:company|string|max:255',
-            'state_id' => 'required|integer',
+            'state_id' => 'nullable|integer',
             'address' => 'required',
             'address2' => 'max:255',
             'city' => 'required|required',
@@ -42,7 +42,7 @@ class StoreSupplierRequest extends FormRequest
             'gstin' => 'required_without:name|string',
             'contact_person' => 'required|string',
             'phone' => 'required|string',
-            'phone2' => 'required|string',
+            'phone2' => 'nullable|string',
             'currency' => 'required|string|max:3',
             'credit_period' => 'required',
             'email' => 'required|email|unique:suppliers,email,'.$this->id

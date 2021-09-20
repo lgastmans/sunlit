@@ -82,10 +82,10 @@
                         </div>
                         <div class="mb-3 row">
                             <div class="col-xl-2">
-                                <x-forms.input label="phone" name="phone" value="{{ old('phone', $supplier->phone) }}" required="true"/>
+                                <x-forms.input label="phone" name="phone" value="{{ old('phone', $supplier->phone) }}" required="false"/>
                             </div>
                             <div class="col-xl-2">
-                                <x-forms.input label="phone 2" name="phone2" value="{{ old('phone2', $supplier->phone2) }}"  required="true"/>
+                                <x-forms.input label="phone 2" name="phone2" value="{{ old('phone2', $supplier->phone2) }}"  required="false"/>
                             </div>
                            <div class="col-xl-4">
                                 <x-forms.inputGroup label="email address" name="email" value="{{ old('email', $supplier->email) }}"  required="true" position="before" symbol="@"/>
