@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 use App\Models\Inventory;
 
 class InventoryController extends Controller
@@ -11,8 +11,11 @@ class InventoryController extends Controller
 
     public function index()
     {
-  
-        return view('inventory.index');
+        $user = Auth::user();
+        if ($user->can('list inventories'))
+            return view('inventory.index');
+    
+        return abort(403, trans('error.unauthorized'));
     }
 
     public function getListForDatatables(Request $request)
