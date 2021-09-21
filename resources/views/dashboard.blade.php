@@ -45,8 +45,14 @@
                 <h5 class="text-muted fw-normal mt-0" title="Growth">Current exchange rate</h5>
                 <h3 class="mt-3 mb-3 text-warning">{{ __('app.currency_symbol_inr')}} {{ number_format(\Setting::get('purchase_order.exchange_rate'),2) }}</h3>
                 <p class="mb-0 text-muted">
-                    <span class="text-success me-2"><i class="mdi mdi-refresh"></i> last update</span>
-                    <span id="currency-rate" class="text-nowrap"><a href="#" data-bs-container="#currency-rate" data-bs-toggle="tooltip" title="{{ \Carbon\Carbon::parse( \Setting::get('exchange_rate_updated_at') )->toDayDateTimeString() }}">{{ \Carbon\Carbon::parse( \Setting::get('exchange_rate_updated_at') )->diffForHumans(\Carbon\Carbon::now()) }}</a></span>
+                    @if (str_contains($exchange_rate_update_ago, 'days'))
+                        <a href="javascript:void(0);" class="update-echange-rate">
+                            <span class="text-success me-2"><i class="mdi mdi-refresh"></i> last update</span>
+                        </a>
+                    @else
+                        <span class="text-success me-2"><i class="mdi mdi-refresh"></i> last update</span>
+                    @endif
+                    <span id="currency-rate" class="text-nowrap"><a href="#" data-bs-container="#currency-rate" data-bs-toggle="tooltip" title="{{ \Carbon\Carbon::parse( \Setting::get('exchange_rate_updated_at') )->toDayDateTimeString() }}">{{ $exchange_rate_update_ago }}</a></span>
                 </p>
             </div> <!-- end card-body-->
         </div> <!-- end card-->
@@ -130,6 +136,11 @@
         $('.due-purchase-order-item').on('dblclick', function(){
             var route = '{{ route("purchase-orders.show", ":order_number") }}';
             window.location.href = route.replace(':order_number', $(this).attr('data-order-number'));
+        });
+        
+        $('.update-echange-rate').on('click', function(){
+            console.log('updating exchange rate...');
+            //This should make an ajax call to update the exchange rate.
         });
 
     </script>
