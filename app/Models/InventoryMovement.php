@@ -14,6 +14,23 @@ class InventoryMovement extends Model
     const RECEIVED = 1;
     const DELIVERED = 2;
 
+
+    public function warehouse()
+    {
+        return $this->belongsTo(Warehouse::class);
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
+
+    public function purchase_order()
+    {
+        return $this->belongsTo(PurchaseOrder::class);
+    }
+
+
     /**
      * create a stock entry
      *

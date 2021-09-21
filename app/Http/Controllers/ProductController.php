@@ -221,7 +221,7 @@ class ProductController extends Controller
     {
         $user = Auth::user();
         if ($user->can('view products')){
-            $product = Product::find($id);
+            $product = Product::with(['inventory', 'inventory.warehouse', 'movement', 'supplier'])->find($id);
             if ($product)
                 return view('products.show', ['product'=>$product]);
 

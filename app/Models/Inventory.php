@@ -35,6 +35,21 @@ class Inventory extends Model
      */
     public function initStock($warehouse_id, $product_id)
     {
+        // $current_inventory = $this->where('warehouse_id', '=', $warehouse_id)->where('product_id', '=', $product_id)->first();
+        // if ($current_inventory){
+        //     return $current_inventory;
+        // }
+        // $inventory = $this->create([
+        //             "warehouse_id" => $warehouse_id,
+        //             "product_id" => $product_id,
+        //             "stock_available" => 0,
+        //             "stock_booked" => 0,
+        //             "stock_ordered" => 0
+        // ]);
+        // if ($inventory) {
+        //     return $this->find($inventory);
+        // }
+        // return false;
         $search = $this->searchWarehouse($warehouse_id)->searchProduct($product_id)->get();
 
         if ($search->isEmpty())
@@ -83,6 +98,8 @@ class Inventory extends Model
             foreach($model->items as $product)
             {
                 
+                // $inventory = $this->initStock($this->warehouse_id, $this->product_id);
+                // if ($inventory){
                 $search = $this->searchWarehouse($this->warehouse_id)->searchProduct($product->product_id)->get();
                 
                 if ($search->isEmpty())

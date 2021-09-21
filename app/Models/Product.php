@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use \NumberFormatter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
@@ -52,7 +51,12 @@ class Product extends Model
 
     public function inventory()
     {
-        return $this->hasOne(Inventory::class);
+        return $this->hasMany(Inventory::class);
+    }
+
+    public function movement()
+    {
+        return $this->hasMany(InventoryMovement::class);
     }
 
 
