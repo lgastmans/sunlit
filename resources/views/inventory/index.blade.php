@@ -102,9 +102,9 @@
                 '</select> rows',
         },
         "pageLength": {{ Setting::get('general.grid_rows') }},
-        "createdRow": function( row, data, dataIndex ) {
+        "createdRow": function( row, data, dataIndex, cells ) {
             if (data.available.scalar <= data.minimum_quantity.scalar) {
-                $( row ).addClass( 'hlclass' );
+                $('td', row).eq(5).html('<span class="badge badge-danger-lighten">'+data.available.scalar +'</span>');
             }
         },
         "columns": [
