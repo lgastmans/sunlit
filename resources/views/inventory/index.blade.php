@@ -2,6 +2,17 @@
 
 @section('page-title', 'Inventory')
 
+@section('page-style')
+
+<style type="text/css">
+    .hlclass {
+        background-color: orange !important;
+    }
+</style>
+
+@endsection
+
+
 @section('content')
 
 <div class="row">
@@ -13,7 +24,7 @@
                     </div>
                     <div class="col-sm-8">
                         <div class="text-sm-end">
-                            <!-- <button type="button" class="btn btn-light mb-2">{{ __('app.export') }}</button> -->
+                           <button type="button" class="btn btn-light mb-2">{{ __('app.export') }}</button> 
                         </div>
                     </div><!-- end col-->
                 </div>
@@ -59,11 +70,7 @@
 @endsection
 
 
-<style type="text/css">
-    .hlclass {
-        background-color: orange !important;
-    }
-</style>
+
 
 
 @section('page-scripts')
@@ -142,9 +149,9 @@
             },
         ],
         
-        "select": {
-            "style": "multi"
-        },
+        // "select": {
+        //     "style": "multi"
+        // },
         "order": [[1, "desc"]],
         "drawCallback": function () {
             $('.dataTables_paginate > .pagination').addClass('pagination-rounded');
