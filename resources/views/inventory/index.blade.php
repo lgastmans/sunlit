@@ -10,7 +10,6 @@
             <div class="card-body">
                 <div class="row mb-2">
                     <div class="col-sm-4">
-                        &nbsp;
                     </div>
                     <div class="col-sm-8">
                         <div class="text-sm-end">
@@ -18,6 +17,15 @@
                         </div>
                     </div><!-- end col-->
                 </div>
+
+{{--                         <div class="dropdown-menu" id="dropdown-inventory-filter">
+                            <a class="dropdown-item" id="__ALL_"  href="#">All</a>
+                            <a class="dropdown-item" id="__BELOW_MIN_"  href="#">Below Minimum</a>
+                            <a class="dropdown-item" id="__NONE_ZERO_"  href="#">Non-zero</a>
+                            <a class="dropdown-item" id="__ZERO_"  href="#">Zero</a>
+                        </div>
+ --}}                    
+                    <input type="hidden" id="dropdown-inventory-filter" value="__BELOW_MIN_" />
 
                 <div class="table-responsive">
                     <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="inventory-datatable">
@@ -52,9 +60,8 @@
 
 
 <style type="text/css">
-    .danger {
-        color: blue;
-        background-color: red;
+    .hlclass {
+        background-color: orange !important;
     }
 </style>
 
@@ -68,8 +75,13 @@
     var table = $('#inventory-datatable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('inventory.datatables') }}",
-        
+        ajax      : 
+            {
+                url   : "{{ route('inventory.datatables') }}",
+                "data": function ( d ) {
+                    d.filterMinQty = "__BELOW_MIN_"; //$(" #dropdown-inventory-filter a ").attr('id');
+                },
+            }, 
         "language": {
             "paginate": {
                 "previous": "<i class='mdi mdi-chevron-left'>",
@@ -83,9 +95,9 @@
                 '</select> rows',
         },
         "pageLength": {{ Setting::get('general.grid_rows') }},
-        "fnRowCallback": function( row, data ) {
+        "createdRow": function( row, data, dataIndex ) {
             if (data.available.scalar <= data.minimum_quantity.scalar) {
-                $( 'td:eq(4)', row ).addClass( 'danger' );
+                $( row ).addClass( 'hlclass' );
             }
         },
         "columns": [
@@ -140,6 +152,45 @@
             
         },
         
+    });
+
+    $(" #dropdown-inventory-filter a ").on("click", function() {
+
+        var sel = $(this).attr('id');
+
+        // console.log('selected value: ' + sel);
+
+        if (sel=="__ALL_") {
+          $(" #dropdownMenuButton ").removeClass( "btn-success" ).addClass( "btn-secondary" );
+          $(" #__ALL_ ").addClass("active");
+          $(" #__BELOW_MIN_ ").removeClass("active");
+          $(" #__NONE_ZERO_ ").removeClass("active");
+          $(" #__ZERO_ ").removeClass("active");
+        }
+        else
+          $(" #dropdownMenuButton ").removeClass( "btn-secondary" ).addClass( "btn-success" );
+
+        if (sel=="__BELOW_MIN_") {
+          $(" #__ALL_ ").removeClass("active");
+          $(" #__BELOW_MIN_ ").addClass("active");
+          $(" #__NONE_ZERO_ ").removeClass("active");
+          $(" #__ZERO_ ").removeClass("active");
+        }
+        else if (sel=="__NONE_ZERO_") {
+          $(" #__ALL_ ").removeClass("active");
+          $(" #__BELOW_MIN_ ").removeClass("active");
+          $(" #__NONE_ZERO_ ").addClass("active");
+          $(" #__ZERO_ ").removeClass("active");
+        }
+        else if (sel=="__ZERO_") {
+          $(" #__ALL_ ").removeClass("active");
+          $(" #__BELOW_MIN_ ").removeClass("active");
+          $(" #__NONE_ZERO_ ").removeClass("active");
+          $(" #__ZERO_ ").addClass("active");
+        }
+
+        table.ajax.reload();
+
     });
 
 
