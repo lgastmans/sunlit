@@ -5,20 +5,20 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
+use App\Models\InventoryMovement;
 
 class InventoryMovementController extends Controller
 {
     //
 
+    
     public function index()
     {
         $user = Auth::user();
         if ($user->can('list inventories')) {
-//            return view('inventory-movement.index');
-
-            $product = Product::with(['inventory', 'inventory.warehouse', 'movement', 'supplier'])->find(307);//->find($id);
-            if ($product)
-                return view('inventory-movement.index', ['product'=>$product]);
+            //$product = Product::with(['inventory', 'inventory.warehouse', 'movement', 'supplier'])->find($id);
+            //if ($product)
+                return view('inventory-movement.index', ['product'=>null]);
 
             return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'product']));
         }
@@ -26,6 +26,26 @@ class InventoryMovementController extends Controller
         return abort(403, trans('error.unauthorized'));
     }
 
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $user = Auth::user();
+        if ($user->can('list inventories')) {
+            $product = Product::with(['inventory', 'inventory.warehouse', 'movement', 'supplier'])->find($id);
+            if ($product)
+                return view('inventory-movement.index', ['product'=>$product]);
+
+            return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'product']));
+        }
+        return abort(403, trans('error.unauthorized'));
+
+    }
 
     public function getListForDatatables(Request $request)
     {
@@ -42,7 +62,7 @@ class InventoryMovementController extends Controller
             $length = $request->get("length");
         }
 
-        $order_column = 'products.name';
+        $order_column = 'created_at';
         $order_dir = 'ASC';
         $order_arr = array();
         if ($request->has('order')) {
@@ -52,7 +72,6 @@ class InventoryMovementController extends Controller
             $order_column = $column_arr[$column_index]['data'];
             $order_dir = $order_arr[0]['dir'];
         }
-        $order_column = 'stock_available';
 
         $search = '';
         if ($request->has('search')) {
@@ -60,94 +79,66 @@ class InventoryMovementController extends Controller
             $search = $search_arr['value'];
         }
 
-        $filter_min_qty = '__ALL_';
-        if ($request->has('filterMinQty'))
-        {
-            $filter_min_qty = $request->get('filterMinQty');
-        }
+        $arr = array();
+
+        // if (!$request->has('filter_product_id'))
+        //     return $arr;
+        // $filter_product_id = $request->get('filter_product_id');
+$filter_product_id = 310;
+
+dd($filter_product_id);
 
         // Total records
-        $totalRecords = Inventory::count();
-        $totalRecordswithFilter = Inventory::with('product')
+        $totalRecords = InventoryMovement::where('product_id', '=', $filter_product_id)->count();
+        $totalRecordswithFilter = InventoryMovement::with('product')
+                ->where('product_id', '=', $filter_product_id)
                 ->with('warehouse')
-                ->join('products', 'products.id', '=', 'product_id')
-                ->join('warehouses', 'warehouses.id', '=', 'warehouse_id')
-                ->join('categories', 'categories.id', '=', 'products.category_id')
-                ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
-                ->select('inventories.*', 'products.code', 'products.name', 'suppliers.company', 'categories.name')
-                ->where('products.name', 'like', '%'.$search.'%')
-                ->orWhere('products.code', 'like', '%'.$search.'%')
-                ->orWhere('warehouses.name', 'like', '%'.$search.'%')
-                ->orWhere('categories.name', 'like', '%'.$search.'%')
-                ->orWhere('suppliers.company', 'like', '%'.$search.'%')
                 ->count();
-
     
         /*
             build the query
+
+            this query will have to be updated when sales orders are added
+
+            IF NOT purchase_order_id == null THEN SET order_number=purchase_orders.order_number
+                ELSEIF NOT sales_order_id == null THEN order_number=sales_orders.order_number
+            END IF
+            AS order_number
+
+            Sometimes you may need to insert an arbitrary string into a query. To create a raw string expression, you may use the raw method provided by the DB facade:
+
+                ->select(DB::raw('count(*) as user_count, status'))
+
         */
-        $query = Inventory::query();
+        $query = InventoryMovement::query();
 
         $query->with('product')
                 ->with('warehouse')
-                ->select('inventories.*', 'products.code', 'products.name', 'products.minimum_quantity', 'suppliers.company', 'categories.name')
-                ->join('products', 'products.id', '=', 'product_id')
-                ->join('warehouses', 'warehouses.id', '=', 'warehouse_id')
-                ->join('categories', 'categories.id', '=', 'products.category_id')
-                ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id');
+                ->leftJoin('purchase_orders', 'purchase_orders.id', '=', 'purchase_order_id')
+                ->select('inventory_movements.*', 'purchase_orders.order_number AS order_number');
 
-        if ($filter_min_qty != '__ALL_') {
-            $query->where( function ($q) use ($filter_min_qty){
-                if ($filter_min_qty == '__BELOW_MIN_')
-                    $q->whereColumn('inventories.stock_available', '<=', 'products.minimum_quantity');
-                elseif ($filter_min_qty == '__NONE_ZERO_')
-                    $q->where('inventories.stock_available', '>', '0');
-                elseif ($filter_min_qty == '__ZERO_')                    
-                    $q->where('inventories.stock_available', '=', '0');
-            });    
-
-        }
-
-        if ($request->has('search')){
-            
-            $search = $request->get('search')['value'];
-
-            $query->where( function ($q) use ($search)
-            {
-                $q->where('products.code', 'like', '%'.$search.'%')
-                    ->orWhere('products.name', 'like', '%'.$search.'%')
-                    ->orWhere('warehouses.name', 'like', '%'.$search.'%')
-                    ->orWhere('categories.name', 'like', '%'.$search.'%')
-                    ->orWhere('suppliers.company', 'like', '%'.$search.'%');
-            });    
-        }
+        $query->where('product_id', '=', $filter_product_id);
 
         $query->orderBy($order_column, $order_dir);
 
-        if ($length > 0)
-            $query->skip($start)->take($length);
+        // if ($length > 0)
+        //     $query->skip($start)->take($length);
 
-        // $inventory = $query->toSql();dd($inventory);
-        $inventory = $query->get();
+        $movement = $query->toSql();dd($movement);
+        //$movement = $query->get();
 
 
-        $arr = array();
-
-        foreach ($inventory as $record)
+        foreach ($movement as $record)
         {
 
             $arr[] = array(
                 "id" => $record->id,
-                "supplier" => $record->company,
+                "created_at" => $record->created_at,
+                "order_number" => $record->order_number,
+                "quantity" => $record->quantity,
+                "entry_type" => ($record->movement_type == InventoryMovement::RECEIVED) ? "<span class='badge badge-danger-lighten'>Received</span>" : "<span class='badge badge-danger-lighten'>Delivered</span>",
                 "warehouse" => $record->warehouse->name,
-                "category" => $record->name,
-                "code" => $record->product->code,
-                "name" => $record->product->name,
-                "available" => (object)$record->stock_available,
-                "ordered" => $record->stock_ordered,
-                "booked" => $record->stock_booked,
-                "projected" => ($record->stock_available + $record->stock_ordered - $record->stock_booked),
-                "minimum_quantity" => (object)$record->minimum_quantity
+                "user" => $record->user->name,
             );
 
         }
