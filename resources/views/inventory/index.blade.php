@@ -69,10 +69,8 @@
 @endsection
 
 
-
-
-
 @section('page-scripts')
+
     <script>
         
  $(document).ready(function () {
