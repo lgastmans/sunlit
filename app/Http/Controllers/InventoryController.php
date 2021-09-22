@@ -51,6 +51,12 @@ class InventoryController extends Controller
             $search = $search_arr['value'];
         }
 
+        $filter_min_qty = '__ALL_';
+        if ($request->has('filterMinQty'))
+        {
+            $filter_min_qty = $request->get('filterMinQty');
+        }
+
         // Total records
         $totalRecords = Inventory::count();
         $totalRecordswithFilter = Inventory::with('product')
@@ -68,7 +74,57 @@ class InventoryController extends Controller
                 ->count();
 
     
+        /*
+            build the query
+        */
+        $query = Inventory::query();
+
+        $query->with('product')
+                ->with('warehouse')
+                ->select('inventories.*', 'products.code', 'products.name', 'products.minimum_quantity', 'suppliers.company', 'categories.name')
+                ->join('products', 'products.id', '=', 'product_id')
+                ->join('warehouses', 'warehouses.id', '=', 'warehouse_id')
+                ->join('categories', 'categories.id', '=', 'products.category_id')
+                ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id');
+
+        if ($filter_min_qty != '__ALL_') {
+            $query->where( function ($q) use ($filter_min_qty){
+                if ($filter_min_qty == '__BELOW_MIN_')
+                    $q->whereColumn('inventories.stock_available', '<=', 'products.minimum_quantity');
+                elseif ($filter_min_qty == '__NONE_ZERO_')
+                    $q->where('inventories.stock_available', '>', '0');
+                elseif ($filter_min_qty == '__ZERO_')                    
+                    $q->where('inventories.stock_available', '=', '0');
+            });    
+
+        }
+
+        if ($request->has('search')){
+            
+            $search = $request->get('search')['value'];
+
+            $query->where( function ($q) use ($search)
+            {
+                $q->where('products.code', 'like', '%'.$search.'%')
+                    ->orWhere('products.name', 'like', '%'.$search.'%')
+                    ->orWhere('warehouses.name', 'like', '%'.$search.'%')
+                    ->orWhere('categories.name', 'like', '%'.$search.'%')
+                    ->orWhere('suppliers.company', 'like', '%'.$search.'%');
+            });    
+        }
+
+        $query->orderBy($order_column, $order_dir);
+
+        if ($length > 0)
+            $query->skip($start)->take($length);
+
+        // $inventory = $query->toSql();dd($inventory);
+        $inventory = $query->get();
+
+
+
         // Fetch records
+        /*
         if ($length < 0)
             $inventory = Inventory::with('product')
                 ->with('warehouse')
@@ -102,8 +158,8 @@ class InventoryController extends Controller
                 ->take($length)
                 //->toSql();
                 ->get();
+        */
 
-//dd($inventory);
 
         $arr = array();
 

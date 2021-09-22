@@ -21,6 +21,14 @@
             <div class="card-body">
                 <div class="row mb-2">
                     <div class="col-sm-4">
+                        Show
+                        <select class="form-select form-select-sm" id="dropdown-inventory-filter">
+                            <option value="__ALL_">ALL</option>
+                            <option value="__BELOW_MIN_">Below Minimum</option>
+                            <option value="__NONE_ZERO_">None Zero</option>
+                            <option value="__ZERO_">Zero</option>
+                        </select>
+                        stock
                     </div>
                     <div class="col-sm-8">
                         <div class="text-sm-end">
@@ -28,15 +36,6 @@
                         </div>
                     </div><!-- end col-->
                 </div>
-
-{{--                         <div class="dropdown-menu" id="dropdown-inventory-filter">
-                            <a class="dropdown-item" id="__ALL_"  href="#">All</a>
-                            <a class="dropdown-item" id="__BELOW_MIN_"  href="#">Below Minimum</a>
-                            <a class="dropdown-item" id="__NONE_ZERO_"  href="#">Non-zero</a>
-                            <a class="dropdown-item" id="__ZERO_"  href="#">Zero</a>
-                        </div>
- --}}                    
-                    <input type="hidden" id="dropdown-inventory-filter" value="__BELOW_MIN_" />
 
                 <div class="table-responsive">
                     <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="inventory-datatable">
@@ -86,7 +85,7 @@
             {
                 url   : "{{ route('inventory.datatables') }}",
                 "data": function ( d ) {
-                    d.filterMinQty = "__BELOW_MIN_"; //$(" #dropdown-inventory-filter a ").attr('id');
+                    d.filterMinQty = $(" #dropdown-inventory-filter ").val();
                 },
             }, 
         "language": {
@@ -99,7 +98,7 @@
                 '<option value="10">10</option>' +
                 '<option value="20">20</option>' +
                 '<option value="-1">All</option>' +
-                '</select> rows',
+                '</select> rows'
         },
         "pageLength": {{ Setting::get('general.grid_rows') }},
         "createdRow": function( row, data, dataIndex, cells ) {
@@ -161,11 +160,11 @@
         
     });
 
-    $(" #dropdown-inventory-filter a ").on("click", function() {
+    $(" #dropdown-inventory-filter ").on("change", function() {
 
-        var sel = $(this).attr('id');
+        var sel = $(this).val();
 
-        // console.log('selected value: ' + sel);
+        console.log('selected value: ' + sel);
 
         if (sel=="__ALL_") {
           $(" #dropdownMenuButton ").removeClass( "btn-success" ).addClass( "btn-secondary" );
