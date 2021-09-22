@@ -158,43 +158,18 @@
         
     });
 
+
     $(" #dropdown-inventory-filter ").on("change", function() {
-
         var sel = $(this).val();
-
-        console.log('selected value: ' + sel);
-
-        if (sel=="__ALL_") {
-          $(" #dropdownMenuButton ").removeClass( "btn-success" ).addClass( "btn-secondary" );
-          $(" #__ALL_ ").addClass("active");
-          $(" #__BELOW_MIN_ ").removeClass("active");
-          $(" #__NONE_ZERO_ ").removeClass("active");
-          $(" #__ZERO_ ").removeClass("active");
-        }
-        else
-          $(" #dropdownMenuButton ").removeClass( "btn-secondary" ).addClass( "btn-success" );
-
-        if (sel=="__BELOW_MIN_") {
-          $(" #__ALL_ ").removeClass("active");
-          $(" #__BELOW_MIN_ ").addClass("active");
-          $(" #__NONE_ZERO_ ").removeClass("active");
-          $(" #__ZERO_ ").removeClass("active");
-        }
-        else if (sel=="__NONE_ZERO_") {
-          $(" #__ALL_ ").removeClass("active");
-          $(" #__BELOW_MIN_ ").removeClass("active");
-          $(" #__NONE_ZERO_ ").addClass("active");
-          $(" #__ZERO_ ").removeClass("active");
-        }
-        else if (sel=="__ZERO_") {
-          $(" #__ALL_ ").removeClass("active");
-          $(" #__BELOW_MIN_ ").removeClass("active");
-          $(" #__NONE_ZERO_ ").removeClass("active");
-          $(" #__ZERO_ ").addClass("active");
-        }
-
+//        console.log('selected value: ' + sel);
         table.ajax.reload();
+    });
 
+
+    $('#inventory-datatable').on('dblclick', 'tr', function () {
+        var route = '{{  route("inventory-movement.show", ":id") }}';
+        route = route.replace(':id', table.row( this ).data().product_id);
+        window.location.href = route;
     });
 
 
