@@ -1,6 +1,12 @@
 @extends('layouts.app')
 
-@section('page-title', 'Users')
+@section('title')
+    @parent() | Create a user
+@endsection
+
+@section('page-title')
+    Create a user
+@endsection
 
 @section('content')
 

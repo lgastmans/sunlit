@@ -1,6 +1,10 @@
 @extends('layouts.app')
 
-@section('page-title', 'Suppliers')
+@section('title')
+    @parent() | Create a supplier
+@endsection
+
+@section('page-title', 'Create a Supplier')
 
 @section('content')
 

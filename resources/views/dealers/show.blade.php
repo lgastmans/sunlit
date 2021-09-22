@@ -1,6 +1,12 @@
 @extends('layouts.app')
 
-@section('page-title', ucfirst(Request::segment(1)) )
+@section('title')
+    @parent() | Dealer {{ $dealer->company }}
+@endsection
+
+@section('page-title')
+    Dealer {{ $dealer->company }}
+@endsection
 
 @section('content')
 <div class="row">

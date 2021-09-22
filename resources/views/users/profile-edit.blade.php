@@ -1,6 +1,12 @@
 @extends('layouts.app')
 
-@section('page-title', 'Users')
+@section('title')
+    @parent() | Edit Profile 
+@endsection
+
+@section('page-title')
+    Edit Profile
+@endsection
 
 @section('content')
 

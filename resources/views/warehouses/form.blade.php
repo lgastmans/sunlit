@@ -1,6 +1,12 @@
 @extends('layouts.app')
 
-@section('page-title', 'Warehouses')
+@section('title')
+    @parent() | Create a Warehouse
+@endsection
+
+@section('page-title')
+    Create a Warehouse
+@endsection
 
 @section('content')
 

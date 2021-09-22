@@ -1,6 +1,12 @@
 @extends('layouts.app')
 
-@section('page-title', ucfirst(Request::segment(1)) )
+@section('title')
+    @parent() | Supplier {{ $supplier->company }}
+@endsection
+
+@section('page-title')
+    Supplier {{ $supplier->company }}
+@endsection
 
 @section('content')
 <div class="row">
@@ -168,42 +174,42 @@
                     </thead>
                     <tbody>
                         @foreach($products as $product)
-                        @if ($product->inventory)
-                            <tr class="product" data-id="{{ $product->id }}">
-                                <td>{{ $product->name }}</td>
-                                <td>{{ __('app.currency_symbol_inr')}} {{ $product->inventory->landed_cost }}</td>
-                                <td>
-                                    @if ($product->inventory->stock_available <= $product->minimum_quantity)
-                                        <span class="badge bg-danger">
-                                    @elseif ($product->inventory->stock_available <= $product->minimum_quantity*10)
-                                        <span class="badge bg-warning">
-                                    @else
-                                        <span class="badge bg-success">
-                                    @endif
-                                    {{ $product->inventory->stock_available }} Pcs</span>
-                                </td>
-                                <td>
-                                    @if ($product->inventory->stock_booked > 100)
-                                        <span class="badge bg-danger">
-                                    @elseif ($product->inventory->stock_booked > 50)
-                                        <span class="badge bg-warning">
-                                    @else
-                                        <span class="badge bg-success">
-                                    @endif
-                                    {{ $product->inventory->stock_booked }} Pcs</span>
-                                </td>
-                                <td>
-                                    @if ($product->inventory->stock_ordered > 100)
-                                        <span class="badge bg-danger">
-                                    @elseif ($product->inventory->stock_ordered > 50)
-                                        <span class="badge bg-warning">
-                                    @else
-                                        <span class="badge bg-success">
-                                    @endif
-                                    {{ $product->inventory->stock_ordered }} Pcs</span>
-                                </td>
-                            </tr>
-                        @endif
+                            @if ($product->inventory)
+                                <tr class="product" data-id="{{ $product->id }}">
+                                    <td>{{ $product->name }}</td>
+                                    <td>{{ __('app.currency_symbol_inr')}} {{ $product->inventory->landed_cost }}</td>
+                                    <td>
+                                        @if ($product->inventory->stock_available <= $product->minimum_quantity)
+                                            <span class="badge bg-danger">
+                                        @elseif ($product->inventory->stock_available <= $product->minimum_quantity*10)
+                                            <span class="badge bg-warning">
+                                        @else
+                                            <span class="badge bg-success">
+                                        @endif
+                                        {{ $product->inventory->stock_available }} Pcs</span>
+                                    </td>
+                                    <td>
+                                        @if ($product->inventory->stock_booked > 100)
+                                            <span class="badge bg-danger">
+                                        @elseif ($product->inventory->stock_booked > 50)
+                                            <span class="badge bg-warning">
+                                        @else
+                                            <span class="badge bg-success">
+                                        @endif
+                                        {{ $product->inventory->stock_booked }} Pcs</span>
+                                    </td>
+                                    <td>
+                                        @if ($product->inventory->stock_ordered > 100)
+                                            <span class="badge bg-danger">
+                                        @elseif ($product->inventory->stock_ordered > 50)
+                                            <span class="badge bg-warning">
+                                        @else
+                                            <span class="badge bg-success">
+                                        @endif
+                                        {{ $product->inventory->stock_ordered }} Pcs</span>
+                                    </td>
+                                </tr>
+                            @endif
                         @endforeach
                       
                     </tbody>

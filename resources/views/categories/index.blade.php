@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('title')
+    @parent() | Categories
+@endsection
+
 @section('page-title', 'Categories')
 
 @section('content')

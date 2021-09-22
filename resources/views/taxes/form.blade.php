@@ -1,6 +1,12 @@
 @extends('layouts.app')
 
-@section('page-title', 'Taxes')
+@section('title')
+    @parent() | Create a tax
+@endsection
+
+@section('page-title')
+    Create a tax 
+@endsection
 
 @section('content')
 

@@ -1,6 +1,12 @@
 @extends('layouts.app')
 
-@section('page-title', ucfirst(Request::segment(1)) )
+@section('title')
+    @parent() | Profile 
+@endsection
+
+@section('page-title')
+    Profile
+@endsection
 
 @section('content')
 
