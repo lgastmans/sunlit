@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('title')
+    @parent() | {{ $product->part_number }}
+@endsection
+
 @section('page-title',)
    Product details {{ $product->part_number }}
 @endsection

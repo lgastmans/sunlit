@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('title')
+    @parent() | PO #{{ $purchase_order->order_number }}
+@endsection
+
 @section('page-title')
     Purchase Orders #{{ $purchase_order->order_number}}
 @endsection

@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('title')
+    @parent() | Settings
+@endsection
+
 @section('page-title', 'Global settings')
 
 @section('content')

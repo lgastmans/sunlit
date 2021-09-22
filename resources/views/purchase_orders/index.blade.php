@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('title')
+    @parent() | Purchase Orders
+@endsection
+
 @section('page-title', 'Purchase Orders')
 
 @section('content')

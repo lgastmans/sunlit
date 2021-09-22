@@ -1,6 +1,10 @@
 @extends('layouts.app')
 
-@section('page-title', 'Dealers')
+@section('title')
+    @parent() | Add a Dealer
+@endsection
+
+@section('page-title', 'Add a dealers')
 
 @section('content')
 
