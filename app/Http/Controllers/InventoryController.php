@@ -33,17 +33,29 @@ class InventoryController extends Controller
             $length = $request->get("length");
         }
 
-        $order_column = 'products.name';
+        $order_column = 'products.code';
         $order_dir = 'ASC';
         $order_arr = array();
         if ($request->has('order')) {
             $order_arr = $request->get('order');
             $column_arr = $request->get('columns');
             $column_index = $order_arr[0]['column'];
-            $order_column = $column_arr[$column_index]['data'];
+            
+            if ($column_index==0)
+                $order_column = "suppliers.company";
+            elseif ($column_index==1)
+                $order_column = "warehouses.name";
+            elseif ($column_index==2)
+                $order_column = "categories.name";
+            elseif ($column_index==3)
+                $order_column = "products.code";
+            elseif ($column_index==4)
+                $order_column = "products.name";
+            else
+                $order_column = $column_arr[$column_index]['data'];            
+            
             $order_dir = $order_arr[0]['dir'];
         }
-        $order_column = 'stock_available';
 
         $search = '';
         if ($request->has('search')) {
