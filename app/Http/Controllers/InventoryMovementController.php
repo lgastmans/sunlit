@@ -96,16 +96,20 @@ class InventoryMovementController extends Controller
         /*
             build the query
 
-            this query will have to be updated when sales orders are added
+            this query will have to be updated when sales orders are added, something along these lines:
 
-            IF NOT purchase_order_id == null THEN SET order_number=purchase_orders.order_number
-                ELSEIF NOT sales_order_id == null THEN order_number=sales_orders.order_number
-            END IF
-            AS order_number
+                IF NOT purchase_order_id == null THEN SET order_number=purchase_orders.order_number
+                    ELSEIF NOT sales_order_id == null THEN order_number=sales_orders.order_number
+                END IF
+                AS order_number
 
-            Sometimes you may need to insert an arbitrary string into a query. To create a raw string expression, you may use the raw method provided by the DB facade:
+                Sometimes you may need to insert an arbitrary string into a query. To create a raw string expression, you may use the raw method provided by the DB facade:
 
-                ->select(DB::raw('count(*) as user_count, status'))
+                    ->select(DB::raw('count(*) as user_count, status'))
+
+            or simply
+
+                an IF() in the SELECT clause
 
         */
         $query = InventoryMovement::query();
