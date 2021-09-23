@@ -21,13 +21,18 @@
         <div class="card d-block">
             <div class="card-body">
 
-                    <div class="col-lg-3">
+{{--                     <div class="col-lg-3">
                         <div class="mb-3">
                             <label class="form-label" for="product-select">Product</label>
                             <select class="product-select form-control" name="product_id" id="product_id"></select>
-                            <input type="hidden" id="hidden_product_id" value=" {{ $product->id ?? '' }} ">
                         </div>
                     </div>
+ --}}                    
+                <input type="hidden" id="hidden_product_id" value=" {{ $product->id ?? '' }} ">
+                
+                <h3 class="mt-0">
+                    {{ $product->code ?? '' }}
+                </h3>
 
                 <!-- project title-->
                 <h3 class="mt-0">
@@ -148,7 +153,7 @@
     var table = $('#inventory-datatable').DataTable({
         processing: true,
         serverSide: true,
-        deferLoading: 0,
+        // deferLoading: 0,
         searching: false,
         paging: false,
         ajax      : {
@@ -206,10 +211,8 @@
         
     });
 
-console.log("id" + $( "#hidden_product_id" ).val());
-
-    if ( $( "#hidden_product_id" ).val().length != 0)
-        table.ajax.reload();
+    // if ( $( "#hidden_product_id" ).val().length != 0)
+    //     table.ajax.reload();
 
     @if(Session::has('success'))
         $.NotificationApp.send("Success","{{ session('success') }}","top-right","","success")

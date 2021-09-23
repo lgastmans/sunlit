@@ -81,12 +81,10 @@ class InventoryMovementController extends Controller
 
         $arr = array();
 
-        // if (!$request->has('filter_product_id'))
-        //     return $arr;
-        // $filter_product_id = $request->get('filter_product_id');
-$filter_product_id = 310;
+        if (!$request->has('filter_product_id'))
+            return $arr;
+        $filter_product_id = $request->get('filter_product_id');
 
-dd($filter_product_id);
 
         // Total records
         $totalRecords = InventoryMovement::where('product_id', '=', $filter_product_id)->count();
@@ -124,8 +122,8 @@ dd($filter_product_id);
         // if ($length > 0)
         //     $query->skip($start)->take($length);
 
-        $movement = $query->toSql();dd($movement);
-        //$movement = $query->get();
+        //$movement = $query->toSql();dd($movement);
+        $movement = $query->get();
 
 
         foreach ($movement as $record)
@@ -140,7 +138,6 @@ dd($filter_product_id);
                 "warehouse" => $record->warehouse->name,
                 "user" => $record->user->name,
             );
-
         }
 
         $response = array(
