@@ -33,34 +33,11 @@
             @endcan
             
             @can('list inventories')
-            <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#sidebarInventory" aria-expanded="false" aria-controls="sidebarInventory" class="side-nav-link">
-                    <i class="uil-server"></i>
+            <li class="side-nav-item {{ (Request::is('inventory*') ? ' menuitem-active' : '') }}">
+                <a href="{{ route('inventory')}}" class="side-nav-link {{ (Request::is('inventory*') ? ' active' : '') }}">
+                    <i class="uil-shop"></i>
                     <span> Inventory </span>
-                    <span class="menu-arrow"></span>
                 </a>
-                <div class="collapse" id="sidebarInventory">
-                    <ul class="side-nav-second-level">
-                        <li>
-                            <a href="{{ route('inventory')}}" {{ (Request::is('inventory*') ? 'class=" active"' : '') }}>
-                                <span> Browse </span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('inventory-movement')}}" {{ (Request::is('inventory-movement*') ? 'class=" active"' : '') }}>
-                                <span> Movement </span>
-                            </a>
-                        </li>
-                    </ul>
-
-{{--                    <li class="side-nav-item {{ (Request::is('inventory*') ? ' menuitem-active' : '') }}">
-                        <a href="{{ route('inventory')}}" class="side-nav-link {{ (Request::is('inventory*') ? ' active' : '') }}">
-                            <i class="mdi mdi-cube-outline"></i>
-                            <span> Browse </span>
-                        </a>
-                    </li>
---}}
-                </div>
             </li>
             @endcan
     
