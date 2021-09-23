@@ -74,8 +74,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/inventory/list', [InventoryController::class, 'getListForDatatables'])->name('inventory.datatables');
 
     Route::get('/inventory-movement', [InventoryMovementController::class, 'index'])->name('inventory-movement');
-    Route::get('/inventory-movement/{id}', [InventoryMovementController::class, 'show'])->name('inventory-movement.show');
     Route::get('/inventory-movement/list', [InventoryMovementController::class, 'getListForDatatables'])->name('inventory-movement.datatables');
+    Route::get('/inventory-movement/{id}', [InventoryMovementController::class, 'show'])->name('inventory-movement.show');
 
     Route::get('/products', [ProductController::class, 'index'])->name('products');
     Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
