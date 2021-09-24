@@ -66,40 +66,8 @@ class InventoryController extends Controller
             $search = $search_arr['value'];
         }
 
-/*
-        $filter_available = '__ALL_';
-        if ($request->has('filter_available'))
-            $filter_available = $request->get('filter_available');
-
-        $filter_ordered = '__ALL_';
-        if ($request->has('filter_ordered'))
-            $filter_ordered = $request->get('filter_ordered');
-
-        $filter_booked = '__ALL_';
-        if ($request->has('filter_booked'))
-            $filter_booked = $request->get('filter_booked');
-
-        $filter_projected = '__ALL_';
-        if ($request->has('filter_projected'))
-            $filter_projected = $request->get('filter_projected');
-*/
-
         // Total records
         $totalRecords = Inventory::count();
-        // $totalRecordswithFilter = Inventory::with('product')
-        //         ->with('warehouse')
-        //         ->join('products', 'products.id', '=', 'product_id')
-        //         ->join('warehouses', 'warehouses.id', '=', 'warehouse_id')
-        //         ->join('categories', 'categories.id', '=', 'products.category_id')
-        //         ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
-        //         ->select('inventories.*', 'products.code', 'products.name', 'suppliers.company', 'categories.name')
-        //         ->where('products.name', 'like', '%'.$search.'%')
-        //         ->orWhere('products.code', 'like', '%'.$search.'%')
-        //         ->orWhere('warehouses.name', 'like', '%'.$search.'%')
-        //         ->orWhere('categories.name', 'like', '%'.$search.'%')
-        //         ->orWhere('suppliers.company', 'like', '%'.$search.'%')
-        //         ->count();
-
     
         /*
             build the query
@@ -227,48 +195,7 @@ class InventoryController extends Controller
         //$inventory = $query->toSql();dd($inventory);
         $inventory = $query->get();
 
-
-
-        // Fetch records
-        /*
-        if ($length < 0)
-            $inventory = Inventory::with('product')
-                ->with('warehouse')
-                ->select('inventories.*', 'products.code', 'products.name', 'products.minimum_quantity', 'suppliers.company', 'categories.name')
-                ->join('products', 'products.id', '=', 'product_id')
-                ->join('warehouses', 'warehouses.id', '=', 'warehouse_id')
-                ->join('categories', 'categories.id', '=', 'products.category_id')
-                ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
-                ->where('products.name', 'like', '%'.$search.'%')
-                ->orWhere('products.code', 'like', '%'.$search.'%')
-                ->orWhere('warehouses.name', 'like', '%'.$search.'%')
-                ->orWhere('categories.name', 'like', '%'.$search.'%')
-                ->orWhere('suppliers.company', 'like', '%'.$search.'%')
-                ->orderBy($order_column, $order_dir)
-                ->get();
-        else
-            $inventory = Inventory::with('product')
-                ->with('warehouse')
-                ->select('inventories.*', 'products.code', 'products.name', 'products.minimum_quantity', 'suppliers.company', 'categories.name')
-                ->join('products', 'products.id', '=', 'product_id')
-                ->join('warehouses', 'warehouses.id', '=', 'warehouse_id')
-                ->join('categories', 'categories.id', '=', 'products.category_id')
-                ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
-                ->where('products.name', 'like', '%'.$search.'%')
-                ->orWhere('products.code', 'like', '%'.$search.'%')
-                ->orWhere('warehouses.name', 'like', '%'.$search.'%')
-                ->orWhere('categories.name', 'like', '%'.$search.'%')
-                ->orWhere('suppliers.company', 'like', '%'.$search.'%')
-                ->orderBy($order_column, $order_dir)
-                ->skip($start)
-                ->take($length)
-                //->toSql();
-                ->get();
-        */
-
-
         $arr = array();
-
         foreach ($inventory as $record)
         {
 
