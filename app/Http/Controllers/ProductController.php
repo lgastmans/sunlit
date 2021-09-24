@@ -78,15 +78,13 @@ class ProductController extends Controller
         // Total records
         $totalRecords = Product::all()->count();
         
-        $totalRecordswithFilter = Product::join('categories', 'categories.id', '=', 'products.category_id')
-            ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
-            ->join('taxes', 'taxes.id', '=', 'products.tax_id')
-            ->where('products.code', 'like', '%'.$search.'%')
-            ->orWhere('products.name', 'like', '%'.$search.'%')
-            ->get()
-            ->count();
-
-
+        // $totalRecordswithFilter = Product::join('categories', 'categories.id', '=', 'products.category_id')
+        //     ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
+        //     ->join('taxes', 'taxes.id', '=', 'products.tax_id')
+        //     ->where('products.code', 'like', '%'.$search.'%')
+        //     ->orWhere('products.name', 'like', '%'.$search.'%')
+        //     ->get()
+        //     ->count();
 
         /*
             build the query
@@ -133,6 +131,8 @@ class ProductController extends Controller
         }
 
         $query->orderBy($order_column, $order_dir);
+
+        $totalRecordswithFilter = $query->count();
 
         if ($length > 0)
             $query->skip($start)->take($length);

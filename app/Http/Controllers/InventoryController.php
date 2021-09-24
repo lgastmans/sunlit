@@ -71,19 +71,19 @@ class InventoryController extends Controller
 
         // Total records
         $totalRecords = Inventory::count();
-        $totalRecordswithFilter = Inventory::with('product')
-                ->with('warehouse')
-                ->join('products', 'products.id', '=', 'product_id')
-                ->join('warehouses', 'warehouses.id', '=', 'warehouse_id')
-                ->join('categories', 'categories.id', '=', 'products.category_id')
-                ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
-                ->select('inventories.*', 'products.code', 'products.name', 'suppliers.company', 'categories.name')
-                ->where('products.name', 'like', '%'.$search.'%')
-                ->orWhere('products.code', 'like', '%'.$search.'%')
-                ->orWhere('warehouses.name', 'like', '%'.$search.'%')
-                ->orWhere('categories.name', 'like', '%'.$search.'%')
-                ->orWhere('suppliers.company', 'like', '%'.$search.'%')
-                ->count();
+        // $totalRecordswithFilter = Inventory::with('product')
+        //         ->with('warehouse')
+        //         ->join('products', 'products.id', '=', 'product_id')
+        //         ->join('warehouses', 'warehouses.id', '=', 'warehouse_id')
+        //         ->join('categories', 'categories.id', '=', 'products.category_id')
+        //         ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
+        //         ->select('inventories.*', 'products.code', 'products.name', 'suppliers.company', 'categories.name')
+        //         ->where('products.name', 'like', '%'.$search.'%')
+        //         ->orWhere('products.code', 'like', '%'.$search.'%')
+        //         ->orWhere('warehouses.name', 'like', '%'.$search.'%')
+        //         ->orWhere('categories.name', 'like', '%'.$search.'%')
+        //         ->orWhere('suppliers.company', 'like', '%'.$search.'%')
+        //         ->count();
 
     
         /*
@@ -126,6 +126,8 @@ class InventoryController extends Controller
         }
 
         $query->orderBy($order_column, $order_dir);
+
+        $totalRecordswithFilter = $query->count();
 
         if ($length > 0)
             $query->skip($start)->take($length);
