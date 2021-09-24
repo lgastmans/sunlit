@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\Inventory;
 
 class InventoryController extends Controller
@@ -12,8 +13,10 @@ class InventoryController extends Controller
     public function index()
     {
         $user = Auth::user();
-        if ($user->can('list inventories'))
-            return view('inventory.index');
+        if ($user->can('list inventories')) {
+            $stock_filter = Inventory::getStockFilterList();
+            return view('inventory.index', ['stock_filter' => $stock_filter]);
+        }
     
         return abort(403, trans('error.unauthorized'));
     }
@@ -63,11 +66,23 @@ class InventoryController extends Controller
             $search = $search_arr['value'];
         }
 
-        $filter_min_qty = '__ALL_';
-        if ($request->has('filterMinQty'))
-        {
-            $filter_min_qty = $request->get('filterMinQty');
-        }
+/*
+        $filter_available = '__ALL_';
+        if ($request->has('filter_available'))
+            $filter_available = $request->get('filter_available');
+
+        $filter_ordered = '__ALL_';
+        if ($request->has('filter_ordered'))
+            $filter_ordered = $request->get('filter_ordered');
+
+        $filter_booked = '__ALL_';
+        if ($request->has('filter_booked'))
+            $filter_booked = $request->get('filter_booked');
+
+        $filter_projected = '__ALL_';
+        if ($request->has('filter_projected'))
+            $filter_projected = $request->get('filter_projected');
+*/
 
         // Total records
         $totalRecords = Inventory::count();
@@ -93,23 +108,100 @@ class InventoryController extends Controller
 
         $query->with('product')
                 ->with('warehouse')
-                ->select('inventories.*', 'products.code', 'products.name', 'products.minimum_quantity', 'suppliers.company', 'categories.name')
+                ->select('inventories.*', 'products.code', 'products.name', 'products.minimum_quantity', 'suppliers.company', 'categories.name', 'warehouses.name')
+                ->addSelect(DB::raw('(inventories.stock_available + inventories.stock_ordered - inventories.stock_booked) AS projected'))
                 ->join('products', 'products.id', '=', 'product_id')
                 ->join('warehouses', 'warehouses.id', '=', 'warehouse_id')
                 ->join('categories', 'categories.id', '=', 'products.category_id')
                 ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id');
 
-        if ($filter_min_qty != '__ALL_') {
-            $query->where( function ($q) use ($filter_min_qty){
-                if ($filter_min_qty == '__BELOW_MIN_')
-                    $q->whereColumn('inventories.stock_available', '<=', 'products.minimum_quantity');
-                elseif ($filter_min_qty == '__NONE_ZERO_')
-                    $q->where('inventories.stock_available', '>', '0');
-                elseif ($filter_min_qty == '__ZERO_')                    
-                    $q->where('inventories.stock_available', '=', '0');
-            });    
+        if (!empty($column_arr[0]['search']['value']))
+            $query->where('suppliers.company', 'like', $column_arr[0]['search']['value'].'%');
 
+        if (!empty($column_arr[1]['search']['value']))
+            $query->where('warehouses.name', 'like', $column_arr[1]['search']['value'].'%');
+
+        if (!empty($column_arr[2]['search']['value']))
+            $query->where('categories.name', 'like', $column_arr[2]['search']['value'].'%');
+
+        if (!empty($column_arr[3]['search']['value']))
+            $query->where('products.code', 'like', $column_arr[3]['search']['value'].'%');
+
+        if (!empty($column_arr[4]['search']['value']))
+            $query->where('products.name', 'like', $column_arr[4]['search']['value'].'%');
+
+        if (!empty($column_arr[5]['search']['value'])){
+            $filter_available = $column_arr[5]['search']['value'];
+            if ($filter_available == '__BELOW_MIN_')
+                $query->whereColumn('inventories.stock_available', '<=', 'products.minimum_quantity');
+            elseif ($filter_available == '__NONE_ZERO_')
+                $query->where('inventories.stock_available', '>', '0');
+            elseif ($filter_available == '__ZERO_')                    
+                $query->where('inventories.stock_available', '=', '0');
         }
+
+        if (!empty($column_arr[6]['search']['value'])){
+            $filter_ordered = $column_arr[6]['search']['value'];
+            if ($filter_ordered == '__BELOW_MIN_')
+                $query->whereColumn('inventories.stock_ordered', '<=', 'products.minimum_quantity');
+            elseif ($filter_ordered == '__NONE_ZERO_')
+                $query->where('inventories.stock_ordered', '>', '0');
+            elseif ($filter_ordered == '__ZERO_')                    
+                $query->where('inventories.stock_ordered', '=', '0');
+        }
+
+        if (!empty($column_arr[7]['search']['value'])){
+            $filter_booked = $column_arr[7]['search']['value'];
+            if ($filter_booked == '__BELOW_MIN_')
+                $query->whereColumn('inventories.stock_booked', '<=', 'products.minimum_quantity');
+            elseif ($filter_booked == '__NONE_ZERO_')
+                $query->where('inventories.stock_booked', '>', '0');
+            elseif ($filter_booked == '__ZERO_')                    
+                $query->where('inventories.stock_booked', '=', '0');
+        }
+        if (!empty($column_arr[8]['search']['value'])){
+            $filter_projected = $column_arr[8]['search']['value'];
+            if ($filter_projected == '__BELOW_MIN_')
+                $query->havingRaw('projected <= products.minimum_quantity');
+            elseif ($filter_projected == '__NONE_ZERO_')
+                $query->havingRaw('projected > 0');
+            elseif ($filter_projected == '__ZERO_')                    
+                $query->havingRaw('projected = 0');
+        }
+
+        /*
+        $query->where( function ($q) use ($filter_available, $filter_ordered, $filter_booked, $filter_projected){
+
+            if ($filter_available == '__BELOW_MIN_')
+                $q->whereColumn('inventories.stock_available', '<=', 'products.minimum_quantity');
+            elseif ($filter_available == '__NONE_ZERO_')
+                $q->where('inventories.stock_available', '>', '0');
+            elseif ($filter_available == '__ZERO_')                    
+                $q->where('inventories.stock_available', '=', '0');
+
+            if ($filter_ordered == '__BELOW_MIN_')
+                $q->whereColumn('inventories.stock_ordered', '<=', 'products.minimum_quantity');
+            elseif ($filter_ordered == '__NONE_ZERO_')
+                $q->where('inventories.stock_ordered', '>', '0');
+            elseif ($filter_ordered == '__ZERO_')                    
+                $q->where('inventories.stock_ordered', '=', '0');
+
+            if ($filter_booked == '__BELOW_MIN_')
+                $q->whereColumn('inventories.stock_booked', '<=', 'products.minimum_quantity');
+            elseif ($filter_booked == '__NONE_ZERO_')
+                $q->where('inventories.stock_booked', '>', '0');
+            elseif ($filter_booked == '__ZERO_')                    
+                $q->where('inventories.stock_booked', '=', '0');
+
+            if ($filter_projected == '__BELOW_MIN_')
+                $q->havingRaw('projected <= products.minimum_quantity');
+            elseif ($filter_projected == '__NONE_ZERO_')
+                $q->havingRaw('projected > 0');
+            elseif ($filter_projected == '__ZERO_')                    
+                $q->havingRaw('projected = 0');
+
+        });
+        */
 
         if ($request->has('search')){
             
@@ -132,7 +224,7 @@ class InventoryController extends Controller
         if ($length > 0)
             $query->skip($start)->take($length);
 
-        // $inventory = $query->toSql();dd($inventory);
+        //$inventory = $query->toSql();dd($inventory);
         $inventory = $query->get();
 
 
@@ -190,7 +282,7 @@ class InventoryController extends Controller
                 "available" => (object)$record->stock_available,
                 "ordered" => $record->stock_ordered,
                 "booked" => $record->stock_booked,
-                "projected" => ($record->stock_available + $record->stock_ordered - $record->stock_booked),
+                "projected" => $record->projected, //($record->stock_available + $record->stock_ordered - $record->stock_booked),
                 "minimum_quantity" => (object)$record->minimum_quantity,
                 "product_id" => $record->product->id
             );

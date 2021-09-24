@@ -164,6 +164,16 @@ class Inventory extends Model
 
     }
 
+    public static function getStockFilterList()
+    {
+        return [
+            '__ALL_' => 'All', 
+            '__BELOW_MIN_' => 'Below Minimum',
+            '__NONE_ZERO_' => 'Non-Zero',
+            '__ZERO_' => 'Zero'
+        ];
+    }
+
     public function scopeSearchProduct($query, $product_id)
     {
       if ($product_id) $query->where('product_id', $product_id);

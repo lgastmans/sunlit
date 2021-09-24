@@ -21,7 +21,7 @@
             <div class="card-body">
                 <div class="row mb-2">
                     <div class="col-sm-4">
-                        Show
+{{--                         Show
                         <select class="form-select form-select-sm" id="dropdown-inventory-filter">
                             <option value="__ALL_">ALL</option>
                             <option value="__BELOW_MIN_">Below Minimum</option>
@@ -29,10 +29,11 @@
                             <option value="__ZERO_">Zero</option>
                         </select>
                         stock
-                    </div>
+ --}}                    </div>
                     <div class="col-sm-8">
                         <div class="text-sm-end">
-                           <button type="button" class="btn btn-light mb-2">{{ __('app.export') }}</button> 
+                            <a class="btn toggle-filters" href="javascript:void(0);"><button type="button" class="btn btn-light mb-2"><i class="mdi mdi-filter"></i></button></a>
+                            <button type="button" class="btn btn-light mb-2">{{ __('app.export') }}</button> 
                         </div>
                     </div><!-- end col-->
                 </div>
@@ -51,6 +52,17 @@
                                 <th>Booked Stock</th>
                                 <th>Projected Stock</th>
                             </tr>
+                            <tr class="filters" >
+                                <th><input type="text" class="form-control"></th>
+                                <th><input type="text" class="form-control"></th>
+                                <th><input type="text" class="form-control"></th>
+                                <th><input type="text" class="form-control"></th>
+                                <th><input type="text" class="form-control"></th>
+                                <th><select class="form-control available-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
+                                <th><select class="form-control ordered-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
+                                <th><select class="form-control booked-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
+                                <th><select disabled class="form-control projected-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
+                            </tr>                            
                         </thead>
                         <tbody>
 
@@ -76,15 +88,22 @@
  $(document).ready(function () {
     "use strict";
 
+    $('.toggle-filters').on('click', function(e) {
+        $( ".filters" ).slideToggle('slow');
+    });
+
     var table = $('#inventory-datatable').DataTable({
         processing: true,
         serverSide: true,
         ajax      : 
             {
                 url   : "{{ route('inventory.datatables') }}",
-                "data": function ( d ) {
-                    d.filterMinQty = $(" #dropdown-inventory-filter ").val();
-                },
+                "data": function ( d ) {[
+                    d.filter_available = $(" .available-filter ").val(),
+                    d.filter_ordered = $(" .ordered-filter ").val(),
+                    d.filter_booked = $(" .booked-filter ").val(),
+                    d.filter_projected = $(" .projected-filter ").val()
+                ]},
             }, 
         "language": {
             "paginate": {
@@ -158,15 +177,56 @@
         
     });
 
-
-    $(" #dropdown-inventory-filter ").on("change", function() {
-        var sel = $(this).val();
-//        console.log('selected value: ' + sel);
+/*
+    $(" .available-filter, .ordered-filter, .booked-filter, .projected-filter ").on("change", function() {
         table.ajax.reload();
     });
 
+    $('.filters th input').on("keyup", function() {
+        console.log('here');
+        table.ajax.reload();
+    });
+*/
 
-    $('#inventory-datatable').on('dblclick', 'tr', function () {
+    table.columns().eq(0).each(function(colIdx) {
+        var cell = $('.filters th').eq($(table.column(colIdx).header()).index());
+        var title = $(cell).text();
+
+        if($(cell).hasClass('no-filter')){
+
+            $(cell).html('&nbsp');
+
+        }
+        else{
+
+            // $(cell).html( '<input class="form-control filter-input" type="text"/>' );
+
+            $('select', $('.filters th').eq($(table.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
+                e.stopPropagation();
+                $(this).attr('title', $(this).val());
+                //var regexr = '({search})'; //$(this).parents('th').find('select').val();
+                table
+                    .column(colIdx)
+                    .search(this.value) //(this.value != "") ? regexr.replace('{search}', 'this.value') : "", this.value != "", this.value == "")
+                    .draw();
+                 
+            });
+            
+            $('input', $('.filters th').eq($(table.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
+                e.stopPropagation();
+                $(this).attr('title', $(this).val());
+                //var regexr = '({search})'; //$(this).parents('th').find('select').val();
+                table
+                    .column(colIdx)
+                    .search(this.value) //(this.value != "") ? regexr.replace('{search}', 'this.value') : "", this.value != "", this.value == "")
+                    .draw();
+                 
+            }); 
+        }
+    });
+
+
+    $(" #inventory-datatable ").on('dblclick', 'tr', function () {
         var route = '{{  route("inventory-movement.show", ":id") }}';
         route = route.replace(':id', table.row( this ).data().product_id);
         window.location.href = route;
