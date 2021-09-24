@@ -135,48 +135,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="table-responsive mt-4">
-                            <h4>Movement</h4>
-                            <table class="table table-bordered table-centered mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Warehouse</th>
-                                        <th>Order #</th>
-                                        <th>Quantity</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($product->movement as $movement)
-                                        <tr>
-                                            <td>{{ $movement->warehouse->name }}</td>
-                                            <td>
-                                                @if($movement->purchase_order_id)
-                                                    {{ $movement->purchase_order->order_number }}
-                                                @else
-                                                    {{ $movement->sales_order_id }}
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if($movement->purchase_order_id)
-                                                    <span class="badge bg-danger">{{ $movement->quantity}}</span>
-                                                @else
-                                                    <span class="badge bg-success">{{ $movement->quantity}}</span>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                   
-                                </tbody>
-                            </table>
-                        </div> <!-- end table-responsive-->
-                    </div>
-                </div>
-            </div>
-        </div>
+        
     </div>
     <div class="col-xl-4">
         <div class="card">
@@ -199,80 +158,51 @@
     </div>
 </div>
 
+<div class="card">
+    <div class="card-body">
+        <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
+            <li class="nav-item">
+                <a href="#inventory" data-bs-toggle="tab" aria-expanded="false" class="nav-link active">
+                    <i class="mdi mdi-home-variant d-md-none d-block"></i>
+                    <span class="d-none d-md-block">Inventory</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#movement" data-bs-toggle="tab" aria-expanded="true" class="nav-link ">
+                    <i class="mdi mdi-account-circle d-md-none d-block"></i>
+                    <span class="d-none d-md-block">Movement</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#purchase-orders" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
+                    <i class="mdi mdi-settings-outline d-md-none d-block"></i>
+                    <span class="d-none d-md-block">Purchase</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#sales-orders" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
+                    <i class="mdi mdi-settings-outline d-md-none d-block"></i>
+                    <span class="d-none d-md-block">Sales</span>
+                </a>
+            </li>
+        </ul>
 
-<ul class="nav nav-tabs mb-3">
-    <li class="nav-item">
-        <a href="#home" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
-            <i class="mdi mdi-home-variant d-md-none d-block"></i>
-            <span class="d-none d-md-block">Home</span>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a href="#profile" data-bs-toggle="tab" aria-expanded="true" class="nav-link active">
-            <i class="mdi mdi-account-circle d-md-none d-block"></i>
-            <span class="d-none d-md-block">Profile</span>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a href="#settings" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
-            <i class="mdi mdi-settings-outline d-md-none d-block"></i>
-            <span class="d-none d-md-block">Settings</span>
-        </a>
-    </li>
-</ul>
-
-<div class="tab-content">
-    <div class="tab-pane" id="home1">
-        <p>...</p>
-    </div>
-    <div class="tab-pane show active" id="profile1">
-        <p>...</p>
-    </div>
-    <div class="tab-pane" id="settings">
-        <div class="row">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="table-responsive mt-4">
-                            <table class="table table-bordered table-centered mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Warehouse</th>
-                                        <th>Order #</th>
-                                        <th>Quantity</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($product->movement as $movement)
-                                        <tr>
-                                            <td>{{ $movement->warehouse->name }}</td>
-                                            <td>
-                                                @if($movement->purchase_order_id)
-                                                    {{ $movement->purchase_order->order_number }}
-                                                @else
-                                                    {{ $movement->sales_order_id }}
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if($movement->purchase_order_id)
-                                                    <span class="badge bg-danger">{{ $movement->quantity}}</span>
-                                                @else
-                                                    <span class="badge bg-success">{{ $movement->quantity}}</span>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                   
-                                </tbody>
-                            </table>
-                        </div> <!-- end table-responsive-->
-                    </div>
-                </div>
+        <div class="tab-content">
+            <div class="tab-pane show active" id="inventory">
+                @include('products.inventory')
+            </div>
+            <div class="tab-pane" id="movement">
+                @include('products.movement')
+            </div>
+            <div class="tab-pane" id="purchase-orders">
+                @include('products.purchase_orders')
+            </div>
+            <div class="tab-pane" id="sales-orders">
+                @include('products.sales_orders')
             </div>
         </div>
     </div>
 </div>
-
 @endsection
 
 @section('page-scripts')
@@ -317,6 +247,68 @@
         var chart = new ApexCharts(document.querySelector("#chart"), options);
         chart.render();
 
+
+
+
+
+        var movementTable = $('#inventory-movement-datatable').DataTable({
+            processing: true,
+            serverSide: true,
+            // deferLoading: 0,
+            searching: false,
+            paging: false,
+            ajax      : {
+                url   : "{{ route('inventory-movement.datatables') }}",
+                "data": function ( d ) {
+                    d.filter_product_id = {{ $product->id }};
+                },
+            }, 
+            "language": {
+                "paginate": {
+                    "previous": "<i class='mdi mdi-chevron-left'>",
+                    "next": "<i class='mdi mdi-chevron-right'>"
+                },
+                "info": "Showing inventory _START_ to _END_ of _TOTAL_",
+                "lengthMenu": "Display <select class='form-select form-select-sm ms-1 me-1'>" +
+                    '<option value="10">10</option>' +
+                    '<option value="20">20</option>' +
+                    '<option value="-1">All</option>' +
+                    '</select> rows'
+            },
+            "pageLength": {{ Setting::get('general.grid_rows') }},
+            "columns": [
+                { 
+                    'data': 'created_at',
+                    'orderable': true 
+                },
+                { 
+                    'data': 'order_number',
+                    'orderable': true 
+                },
+                { 
+                    'data': 'quantity',
+                    'orderable': false
+                },
+                { 
+                    'data': 'entry_type',
+                    'orderable': false
+                },
+                { 
+                    'data': 'warehouse',
+                    'orderable': false
+                },
+                { 
+                    'data': 'user',
+                    'orderable': false
+                }
+            ],
+            
+            "order": [[1, "desc"]],
+            "drawCallback": function () {
+                $('.dataTables_paginate > .pagination').addClass('pagination-rounded');
+               
+            },
+        });
 
     </script>
 
