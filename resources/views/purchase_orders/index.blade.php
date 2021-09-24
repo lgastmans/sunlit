@@ -16,32 +16,57 @@
                     <div class="col-sm-4">
                         <a href="{{ route('purchase-orders.create') }}" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> Create Purchase Order</a>
                     </div>
-                    {{-- <div class="col-sm-8">
+                    <div class="col-sm-8">
                         <div class="text-sm-end">
-                            <a class="btn" href="{{ route('export.products') }}"><button type="button" class="btn btn-light mb-2">{{ __('app.export') }}</button></a>
+                            <a class="btn toggle-filters" href="javascript:void(0);"><button type="button" class="btn btn-light mb-2"><i class="mdi mdi-filter"></i></button></a>
+                            {{-- <a class="btn" href="{{ route('export.products') }}"><button type="button" class="btn btn-light mb-2">{{ __('app.export') }}</button></a> --}}
                         </div>
-                    </div><!-- end col--> --}}
+                    </div><!-- end col-->
                 </div>
 
                 <div class="table-responsive">
                     <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="purchase-orders-datatable">
                         <thead class="table-light">
                             <tr>
-                                {{-- <th style="width: 20px;">
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="customCheck1">
-                                        <label class="form-check-label" for="customCheck1">&nbsp;</label>
-                                    </div>
-                                </th> --}}
                                 <th>Order</th>
                                 <th>Supplier</th>
                                 <th>Ordered On</th> 
                                 <th>Expected On</th> 
                                 <th>Received On</th> 
                                 <th>Amount</th>
-                                <th>Status</th> 
+                                <th style="width:100px;">Status</th> 
                                 <th>Created By</th> 
-                                {{-- <th>Actions</th> --}}
+                            </tr>
+                            <tr class="filters" >
+                                <th><input type="text" class="form-control"></th>
+                                <th><input type="text" class="form-control"></th>
+                                <th id="ordered_at" class="position-relative">
+                                    <input type="text" class="form-control" name="ordered_at" 
+                                    data-provide="datepicker" 
+                                    data-date-container="#ordered_at"
+                                    data-date-autoclose="true"
+                                    data-date-format="M d, yyyy"
+                                    required>
+                                </th>
+                                <th id="due_at" class="position-relative">
+                                    <input type="text" class="form-control" name="due_at" 
+                                    data-provide="datepicker" 
+                                    data-date-container="#due_at"
+                                    data-date-autoclose="true"
+                                    data-date-format="M d, yyyy"
+                                    required>
+                                </th>
+                                <th id="received_at" class="position-relative">
+                                    <input type="text" class="form-control" name="received_at" 
+                                    data-provide="datepicker" 
+                                    data-date-container="#received_at"
+                                    data-date-autoclose="true"
+                                    data-date-format="M d, yyyy"
+                                    required>
+                                </th>
+                                <th><input type="text" class="form-control"></th>
+                                <th><select class="form-control status-select"><option value="all">All</option>@foreach($status as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
+                                <th><input type="text" class="form-control"></th>
                             </tr>
                         </thead>
                         <tbody> 
@@ -64,6 +89,15 @@
         
  $(document).ready(function () {
     "use strict";
+
+    $('.toggle-filters').on('click', function(e) {
+        $( ".filters" ).slideToggle('slow');
+    });
+
+
+    $('.status-select').select2({
+        minimumResultsForSearch: Infinity,
+    });
 
     // Default Datatable
     var table = $('#purchase-orders-datatable').DataTable({
@@ -119,29 +153,6 @@
             { 
                 'data': 'user',
                 'orderable': true 
-            // },
-            // {
-            //     'data': 'id',
-            //     'orderable': false,
-            //     'render' : function(data, type, row, meta){
-            //         if (type === 'display'){
-
-            //             var edit_btn = '';
-            //             var delete_btn = '';
-
-            //             @if (Auth::user()->can('edit purchase ordr'))
-            //                 var edit_route = '{{ route("products.edit", ":id") }}';
-            //                 edit_route = edit_route.replace(':id', data);
-            //                 edit_btn = '<a href="' + edit_route + '" class="action-icon"> <i class="mdi mdi-pencil"></i></a>'                       
-            //             @endif
-            //             @if (Auth::user()->can('delete products'))
-            //                 delete_btn = '<a href="" class="action-icon" id="' + data + '" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>'
-            //             @endif
-
-            //             data = edit_btn +  delete_btn
-            //         }
-            //         return data;
-            //     }
             }
             
         ],
@@ -160,11 +171,37 @@
     table.columns().eq(0).each(function(colIdx) {
         var cell = $('.filters th').eq($(table.column(colIdx).header()).index());
         var title = $(cell).text();
+
         if($(cell).hasClass('no-filter')){
+
             $(cell).html('&nbsp');
+
         }
         else{
-            $(cell).html( '<input type="text"/>' );
+
+            // $(cell).html( '<input class="form-control filter-input" type="text"/>' );
+
+            $('select', $('.filters th').eq($(table.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
+                e.stopPropagation();
+                $(this).attr('title', $(this).val());
+                //var regexr = '({search})'; //$(this).parents('th').find('select').val();
+                table
+                    .column(colIdx)
+                    .search(this.value) //(this.value != "") ? regexr.replace('{search}', 'this.value') : "", this.value != "", this.value == "")
+                    .draw();
+                 
+            });
+            
+            $('input', $('.filters th').eq($(table.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
+                e.stopPropagation();
+                $(this).attr('title', $(this).val());
+                //var regexr = '({search})'; //$(this).parents('th').find('select').val();
+                table
+                    .column(colIdx)
+                    .search(this.value) //(this.value != "") ? regexr.replace('{search}', 'this.value') : "", this.value != "", this.value == "")
+                    .draw();
+                 
+            }); 
         }
     });
 

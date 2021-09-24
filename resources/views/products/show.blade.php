@@ -199,6 +199,80 @@
     </div>
 </div>
 
+
+<ul class="nav nav-tabs mb-3">
+    <li class="nav-item">
+        <a href="#home" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
+            <i class="mdi mdi-home-variant d-md-none d-block"></i>
+            <span class="d-none d-md-block">Home</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="#profile" data-bs-toggle="tab" aria-expanded="true" class="nav-link active">
+            <i class="mdi mdi-account-circle d-md-none d-block"></i>
+            <span class="d-none d-md-block">Profile</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="#settings" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
+            <i class="mdi mdi-settings-outline d-md-none d-block"></i>
+            <span class="d-none d-md-block">Settings</span>
+        </a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane" id="home1">
+        <p>...</p>
+    </div>
+    <div class="tab-pane show active" id="profile1">
+        <p>...</p>
+    </div>
+    <div class="tab-pane" id="settings">
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive mt-4">
+                            <table class="table table-bordered table-centered mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Warehouse</th>
+                                        <th>Order #</th>
+                                        <th>Quantity</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($product->movement as $movement)
+                                        <tr>
+                                            <td>{{ $movement->warehouse->name }}</td>
+                                            <td>
+                                                @if($movement->purchase_order_id)
+                                                    {{ $movement->purchase_order->order_number }}
+                                                @else
+                                                    {{ $movement->sales_order_id }}
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($movement->purchase_order_id)
+                                                    <span class="badge bg-danger">{{ $movement->quantity}}</span>
+                                                @else
+                                                    <span class="badge bg-success">{{ $movement->quantity}}</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                   
+                                </tbody>
+                            </table>
+                        </div> <!-- end table-responsive-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('page-scripts')

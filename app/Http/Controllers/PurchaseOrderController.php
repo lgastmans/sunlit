@@ -22,8 +22,11 @@ class PurchaseOrderController extends Controller
     public function index()
     {
         $user = Auth::user();
-        if ($user->can('list purchase orders'))
-            return view('purchase_orders.index');
+        if ($user->can('list purchase orders')){
+            $status = PurchaseOrder::getStatusList();
+            return view('purchase_orders.index', ['status' => $status]);
+
+        }
     
         return abort(403, trans('error.unauthorized'));
     }
@@ -67,33 +70,52 @@ class PurchaseOrderController extends Controller
 
         // Total records
         $totalRecords = PurchaseOrder::count();
-        $totalRecordswithFilter = PurchaseOrder::with(['supplier'])
-            ->join('suppliers', 'suppliers.id', '=', 'supplier_id')
+        $totalRecordswithFilter = PurchaseOrder::join('suppliers', 'suppliers.id', '=', 'supplier_id')
             ->where('order_number', 'like', '%'.$search.'%')
             ->orWhere('suppliers.company', 'like', $search.'%')
             ->count();
         
 
-        // Fetch records
-        if ($length < 0){
-            $orders = PurchaseOrder::with(['warehouse', 'supplier', 'user'])
-                    ->join('suppliers', 'suppliers.id', '=', 'supplier_id')
-                    ->where('order_number', 'like', '%'.$search.'%')
-                    ->orWhere('suppliers.company', 'like', $search.'%')
-                    ->orderBy($order_column, $order_dir)
-                    ->get();
+        $query = PurchaseOrder::query();
+        $query->join('suppliers', 'suppliers.id', '=', 'supplier_id');
+        $query->join('users', 'users.id', '=', 'user_id');
+        if (!empty($column_arr[0]['search']['value'])){
+            $query->where('purchase_orders.order_number', 'like', $column_arr[0]['search']['value'].'%');
         }
-        else{
+        if (!empty($column_arr[1]['search']['value'])){
+            $query->where('suppliers.company', 'like', $column_arr[1]['search']['value'].'%');
+        }
+        if (!empty($column_arr[2]['search']['value'])){
+            $query->where('purchase_orders.ordered_at', 'like', convertDateToMysql($column_arr[2]['search']['value']));
+        }
+        if (!empty($column_arr[3]['search']['value'])){
+            $query->where('purchase_orders.due_at', 'like', convertDateToMysql($column_arr[3]['search']['value']));
+        }
+        if (!empty($column_arr[4]['search']['value'])){
+            $query->where('purchase_orders.received_at', 'like', convertDateToMysql($column_arr[4]['search']['value']));
+        }
+        if (!empty($column_arr[5]['search']['value'])){
+            $query->where('purchase_orders.amount_inr', 'like', $column_arr[5]['search']['value'].'%');
+        }
+        if (!empty($column_arr[6]['search']['value']) && $column_arr[6]['search']['value'] != "all"){
+            $query->where('purchase_orders.status', 'like', $column_arr[6]['search']['value']);
+        }
+        if (!empty($column_arr[7]['search']['value'])){
+            $query->where('users.name', 'like', $column_arr[7]['search']['value'].'%');
+        }
+        
+        if ($request->has('search')){
+            $search = $request->get('search')['value'];
+            $query->where( function ($q) use ($search){
+                $q->where('purchase_orders.order_number', 'like', $search.'%')
+                    ->orWhere('purchase_orders.amount_inr', 'like', $search.'%')
+                    ->orWhere('suppliers.company', 'like', $search.'%');
+            });    
+        }
+        if ($length > 0)
+            $query->skip($start)->take($length);
 
-            $orders = PurchaseOrder::with(['warehouse', 'supplier', 'user'])
-                    ->join('suppliers', 'suppliers.id', '=', 'supplier_id')
-                    ->where('order_number', 'like', $search.'%')
-                    ->orWhere('suppliers.company', 'like', $search.'%')
-                    ->orderBy($order_column, $order_dir)
-                    ->skip($start)
-                    ->take($length)
-                    ->get();
-        }
+        $orders = $query->get();
 
         $arr = array();
         foreach($orders as $order)
