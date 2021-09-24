@@ -70,10 +70,10 @@ class PurchaseOrderController extends Controller
 
         // Total records
         $totalRecords = PurchaseOrder::count();
-        $totalRecordswithFilter = PurchaseOrder::join('suppliers', 'suppliers.id', '=', 'supplier_id')
-            ->where('order_number', 'like', '%'.$search.'%')
-            ->orWhere('suppliers.company', 'like', $search.'%')
-            ->count();
+        // $totalRecordswithFilter = PurchaseOrder::join('suppliers', 'suppliers.id', '=', 'supplier_id')
+        //     ->where('order_number', 'like', '%'.$search.'%')
+        //     ->orWhere('suppliers.company', 'like', $search.'%')
+        //     ->count();
         
 
         $query = PurchaseOrder::query();
@@ -112,6 +112,10 @@ class PurchaseOrderController extends Controller
                     ->orWhere('suppliers.company', 'like', $search.'%');
             });    
         }
+
+        $totalRecordswithFilter = $query->count();
+
+
         if ($length > 0)
             $query->skip($start)->take($length);
 
