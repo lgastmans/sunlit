@@ -20,5 +20,7 @@ return [
     'tax_has_product' => 'Cannot delete tax because of existing products',
 
     'category_has_product' => 'Cannot delete category because of existing products',
+
+    'state_has_product' => 'Cannot delete state because of existing products',
     
 ];
