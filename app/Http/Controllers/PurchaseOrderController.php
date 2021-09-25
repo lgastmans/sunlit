@@ -312,7 +312,7 @@ class PurchaseOrderController extends Controller
         $validated = $request->validate([
             'confirmed_at' => 'required|date'
         ]);
-        $order = PurchaseOrder::find($id);
+        $order = PurchaseOrder::with('items')->find($id);
         $order->confirmed_at = $request->get('confirmed_at');
         $order->status = PurchaseOrder::CONFIRMED;
         $order->update();
