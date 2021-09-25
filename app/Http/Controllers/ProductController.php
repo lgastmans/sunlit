@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\Warehouse;
 use App\Models\Inventory;
 use App\Models\InventoryMovement;
+use App\Models\PurchaseOrderItem;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use \App\Http\Requests\StoreProductRequest;
@@ -295,6 +296,14 @@ class ProductController extends Controller
     {
         $user = Auth::user();
         if ($user->can('delete products')){
+            /*
+                check if supplier present in purchase orders
+            */
+            $count = PurchaseOrderItem::where('product_id', $id)->count();
+
+            if ($count > 0)
+                return redirect(route('products'))->with('error', trans('error.product_has_purchase_order_item'));
+
             Product::destroy($id);
             return redirect(route('products'))->with('success', trans('app.record_deleted', ['field' => 'product']));
         }
