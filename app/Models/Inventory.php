@@ -25,35 +25,20 @@ class Inventory extends Model
         return $this->belongsTo(Product::class);
     }
 
+
     /**
-     * Create a new entry in the inventory
+     * Create a new entry for each warehouse in the inventory for a given product
      * initializing the stock values to zero
      *
      * @param  int $warehouse_id
      * @param  int $product_id
      * @return boolean
      */
-    public function initStock($warehouse_id, $product_id)
+    public function initStock($product_id)
     {
-        // $current_inventory = $this->where('warehouse_id', '=', $warehouse_id)->where('product_id', '=', $product_id)->first();
-        // if ($current_inventory){
-        //     return $current_inventory;
-        // }
-        // $inventory = $this->create([
-        //             "warehouse_id" => $warehouse_id,
-        //             "product_id" => $product_id,
-        //             "stock_available" => 0,
-        //             "stock_booked" => 0,
-        //             "stock_ordered" => 0
-        // ]);
-        // if ($inventory) {
-        //     return $this->find($inventory);
-        // }
-        // return false;
-        $search = $this->searchWarehouse($warehouse_id)->searchProduct($product_id)->get();
+        $warehouses = Warehouse::pluck('id');
 
-        if ($search->isEmpty())
-        {
+        foreach ($warehouses as $warehouse_id) {
             $inventory = $this->create([
                 "warehouse_id" => $warehouse_id,
                 "product_id" => $product_id,
@@ -61,11 +46,34 @@ class Inventory extends Model
                 "stock_booked" => 0,
                 "stock_ordered" => 0
             ]);
-            if ($inventory) {
-                return $this->searchWarehouse($warehouse_id)->searchProduct($product_id)->get();
-            }
         }
+    }
 
+
+    /**
+     * Create a new entry in the inventory for a given warehouse_id
+     * initializing the stock values to zero
+     *
+     * @param  int $warehouse_id
+     * @param  int $product_id
+     * @return boolean
+     */
+    public function initProductStock($warehouse_id, $product_id)
+    {
+        $current_inventory = $this->where('warehouse_id', '=', $warehouse_id)->where('product_id', '=', $product_id)->first();
+        if ($current_inventory){
+            return $current_inventory;
+        }
+        $inventory = $this->create([
+            "warehouse_id" => $warehouse_id,
+            "product_id" => $product_id,
+            "stock_available" => 0,
+            "stock_booked" => 0,
+            "stock_ordered" => 0
+        ]);
+        if ($inventory) {
+            return $this->find($inventory)->first();
+        }
         return false;
     }
 
@@ -97,18 +105,10 @@ class Inventory extends Model
         {
             foreach($model->items as $product)
             {
-                
-                // $inventory = $this->initStock($this->warehouse_id, $this->product_id);
-                // if ($inventory){
-                $search = $this->searchWarehouse($this->warehouse_id)->searchProduct($product->product_id)->get();
-                
-                if ($search->isEmpty())
-                    $search = $this->initStock($this->warehouse_id, $product->product_id);
+                $inventory = $this->initProductStock($this->warehouse_id, $product->product_id);
 
-                if ($search->count() > 0)
-                {
-
-                    $inventory = $search->first();
+                if ($inventory){
+                    // $inventory->first();
 
                     $inventory->warehouse_id = $model->warehouse_id;
                     $inventory->product_id = $product->product_id;

@@ -56,8 +56,7 @@ class InventoryMovement extends Model
             "movement_type" => $data['movement_type']
         ]);
 
-
-    return $movement->fresh();
+        return $movement->fresh();
     }
 
 

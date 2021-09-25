@@ -7,8 +7,9 @@ use \NumberFormatter;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
-use App\Models\InventoryMovement;
 use App\Models\Warehouse;
+use App\Models\Inventory;
+use App\Models\InventoryMovement;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use \App\Http\Requests\StoreProductRequest;
@@ -208,6 +209,13 @@ class ProductController extends Controller
         $validatedData = Arr::except($validatedData, array('display_purchase_price'));
         $product = Product::create($validatedData);
         if ($product){
+
+            /*
+                create initial stock inventory entries
+            */
+            $inventory = new Inventory();
+            $inventory->initStock($product->id);            
+
             return redirect(route('products'))->with('success', trans('app.record_added', ['field' => 'product']));
         }
         return back()->withInputs($request->input())->with('error', trans('error.record_added', ['field' => 'product']));
