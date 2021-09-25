@@ -297,7 +297,7 @@ class ProductController extends Controller
         $user = Auth::user();
         if ($user->can('delete products')){
             /*
-                check if supplier present in purchase orders
+                check if product present in purchase orders
             */
             $count = PurchaseOrderItem::where('product_id', $id)->count();
 

@@ -14,5 +14,7 @@ return [
     'supplier_has_purchase_order' => 'Cannot delete supplier because of existing purchase orders',
 
     'product_has_purchase_order_item' => 'Cannot delete product because of exisiting purchase order items',
+
+    'warehouse_has_purchase_order' => 'Cannot delete warehouse because of exisiting purchase orders',
     
 ];
