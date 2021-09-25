@@ -227,7 +227,7 @@
 
 
     $(" #inventory-datatable ").on('dblclick', 'tr', function () {
-        var route = '{{  route("inventory-movement.show", ":id") }}';
+        var route = '{{  route("products.show", ":id") }}';
         route = route.replace(':id', table.row( this ).data().product_id);
         window.location.href = route;
     });
