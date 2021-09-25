@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\Product;
 use \App\Http\Requests\StoreCategoryRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -169,6 +170,14 @@ class CategoryController extends Controller
     {
         $user = Auth::user();
         if ($user->can('delete categories')){
+            /*
+                check if tax present in products
+            */
+            $count = Product::where('category_id', $id)->count();
+
+            if ($count > 0)
+                return redirect(route('categories'))->with('error', trans('error.category_has_product'));
+
             Category::destroy($id);
             return redirect(route('categories'))->with('success', trans('app.record_deleted', ['field' => 'category']));
         }

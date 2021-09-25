@@ -16,5 +16,9 @@ return [
     'product_has_purchase_order_item' => 'Cannot delete product because of exisiting purchase order items',
 
     'warehouse_has_purchase_order' => 'Cannot delete warehouse because of exisiting purchase orders',
+
+    'tax_has_product' => 'Cannot delete tax because of existing products',
+
+    'category_has_product' => 'Cannot delete category because of existing products',
     
 ];

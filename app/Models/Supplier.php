@@ -54,7 +54,7 @@ class Supplier extends Model
         self::deleting(function($supplier) { // before delete() method call this
 
              $supplier->products()->each(function($product) {
-                $product->delete(); // <-- direct deletion
+                $product->delete();
              });
 
         });

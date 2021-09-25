@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Tax;
+use App\Models\Product;
 use Illuminate\Support\Arr;
 use \App\Http\Requests\StoreTaxRequest;
 use Illuminate\Support\Facades\Auth;
@@ -178,6 +179,14 @@ class TaxController extends Controller
     {
         $user = Auth::user();
         if ($user->can('delete taxes')){
+            /*
+                check if tax present in products
+            */
+            $count = Product::where('tax_id', $id)->count();
+
+            if ($count > 0)
+                return redirect(route('taxes'))->with('error', trans('error.tax_has_product'));
+
             Tax::destroy($id);
             return redirect(route('taxes'))->with('success', trans('app.record_deleted', ['field' => 'tax']));
         }
