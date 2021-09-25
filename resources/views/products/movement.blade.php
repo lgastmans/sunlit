@@ -4,7 +4,7 @@
             <div class="card-body">
                 <div class="row mb-2">
                     <div class="col-sm-10">
-                        filters: start_period | end_period | “All / Purchase Orders / Sales Orders”
+                        
                     </div>
                     <div class="col-sm-2">
                         <div class="text-sm-end">
@@ -23,6 +23,21 @@
                                 <th>Entry</th>
                                 <th>Warehouse</th>
                                 <th>User</th>
+                            </tr>
+                            <tr class="filters" >
+                                <th id="created_at" class="position-relative">
+                                    <input type="text" class="form-control" name="created_at" 
+                                    data-provide="datepicker" 
+                                    data-date-container="#created_at"
+                                    data-date-autoclose="true"
+                                    data-date-format="M d, yyyy"
+                                    required>
+                                </th>
+                                <th><input type="text" class="form-control"></th>
+                                <th><input type="text" class="form-control"></th>
+                                <th><select class="form-control entry-select">@foreach($entry_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
+                                <th><select class="form-control warehouse-select">@foreach($warehouse_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>                                
+                                <th><input type="text" class="form-control"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -102,6 +117,44 @@
         },
         
     });
+
+    table.columns().eq(0).each(function(colIdx) {
+        var cell = $('.filters th').eq($(table.column(colIdx).header()).index());
+        var title = $(cell).text();
+
+        if($(cell).hasClass('no-filter')){
+
+            $(cell).html('&nbsp');
+
+        }
+        else{
+
+            // $(cell).html( '<input class="form-control filter-input" type="text"/>' );
+
+            $('select', $('.filters th').eq($(table.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
+                e.stopPropagation();
+                $(this).attr('title', $(this).val());
+                //var regexr = '({search})'; //$(this).parents('th').find('select').val();
+                table
+                    .column(colIdx)
+                    .search(this.value) //(this.value != "") ? regexr.replace('{search}', 'this.value') : "", this.value != "", this.value == "")
+                    .draw();
+                 
+            });
+            
+            $('input', $('.filters th').eq($(table.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
+                e.stopPropagation();
+                $(this).attr('title', $(this).val());
+                //var regexr = '({search})'; //$(this).parents('th').find('select').val();
+                table
+                    .column(colIdx)
+                    .search(this.value) //(this.value != "") ? regexr.replace('{search}', 'this.value') : "", this.value != "", this.value == "")
+                    .draw();
+                 
+            }); 
+        }
+    });
+
 
     @if(Session::has('success'))
         $.NotificationApp.send("Success","{{ session('success') }}","top-right","","success")

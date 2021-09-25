@@ -21,4 +21,15 @@ class Warehouse extends Model
     {
         return $this->belongsTo(State::class);
     }
+
+    public static function getWarehouseFilterList()
+    {
+        $warehouse = Warehouse::select('id', 'name')
+           ->orderBy('name')
+           ->get();
+        $arr=array('__ALL_'=> 'All');
+        foreach ($warehouse as $record)
+            $arr[$record->id] = $record->name;
+        return $arr;
+    }    
 }

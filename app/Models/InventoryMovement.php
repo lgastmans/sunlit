@@ -56,11 +56,23 @@ class InventoryMovement extends Model
             "movement_type" => $data['movement_type']
         ]);
 
-        return $movement->fresh();
+
+    return $movement->fresh();
     }
 
+
+    public static function getMovementFilterList()
+    {
+        return [
+            '__ALL_' => 'All', 
+            '__RECEIVED_' => 'Received',
+            '__DELIVERED_' => 'Delivered'
+        ];
+    }
+
+
     /**
-     * Returns the due_at date for display Month Day, Year
+     * Returns the created_at date for display Month Day, Year
      */
     public function getDisplayCreatedAtAttribute()
     {

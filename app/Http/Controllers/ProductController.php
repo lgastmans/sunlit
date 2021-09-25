@@ -7,6 +7,8 @@ use \NumberFormatter;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\InventoryMovement;
+use App\Models\Warehouse;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use \App\Http\Requests\StoreProductRequest;
@@ -222,8 +224,10 @@ class ProductController extends Controller
         $user = Auth::user();
         if ($user->can('view products')){
             $product = Product::with(['inventory', 'inventory.warehouse', 'movement', 'supplier'])->find($id);
+            $entry_filter = InventoryMovement::getMovementFilterList();
+            $warehouse_filter = Warehouse::getWarehouseFilterList();
             if ($product)
-                return view('products.show', ['product'=>$product]);
+                return view('products.show', ['product'=>$product, 'entry_filter' => $entry_filter, 'warehouse_filter' => $warehouse_filter]);
 
             return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'product']));
         }
