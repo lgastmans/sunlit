@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class InventoryMovement extends Model
 {
@@ -57,5 +58,14 @@ class InventoryMovement extends Model
 
         return $movement->fresh();
     }
+
+    /**
+     * Returns the due_at date for display Month Day, Year
+     */
+    public function getDisplayCreatedAtAttribute()
+    {
+        $dt = Carbon::parse($this->created_at);
+        return $this->attributes['created_at'] = $dt->toFormattedDateString();  
+    }    
 
 }

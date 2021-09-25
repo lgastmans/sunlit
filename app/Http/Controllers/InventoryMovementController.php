@@ -135,7 +135,7 @@ class InventoryMovementController extends Controller
 
             $arr[] = array(
                 "id" => $record->id,
-                "created_at" => $record->created_at,
+                "created_at" => $record->display_created_at,
                 "order_number" => $record->order_number,
                 "quantity" => $record->quantity,
                 "entry_type" => ($record->movement_type == InventoryMovement::RECEIVED) ? "<span class='badge badge-danger-lighten'>Received</span>" : "<span class='badge badge-danger-lighten'>Delivered</span>",
