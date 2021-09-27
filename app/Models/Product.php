@@ -41,12 +41,15 @@ class Product extends Model
         return $this->belongsTo(Tax::class);
     }
 
-    /**
-     * Get the tax associated with the product.
-     */
     public function purchase_order_item()
     {
         return $this->hasMany(PurchaseOrderItem::class);
+    }
+
+
+    public function sale_order_item()
+    {
+        return $this->hasMany(SaleOrderItem::class);
     }
 
     public function inventory()

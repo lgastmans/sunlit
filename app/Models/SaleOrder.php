@@ -22,6 +22,13 @@ class SaleOrder extends Model
     // const CLEARED = 6;
     const RECEIVED = 7;
 
+    /**
+     * Get the items associated with the sale order.
+     */
+    public function items()
+    {
+        return $this->hasMany(SaleOrderItem::class);
+    }
 
     /**
      * Get the dealer associated with the sale order.
