@@ -173,13 +173,13 @@
                     <span class="d-none d-md-block">Movement</span>
                 </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item d-none">
                 <a href="#purchase-orders" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
                     <i class="mdi mdi-settings-outline d-md-none d-block"></i>
                     <span class="d-none d-md-block">Purchase</span>
                 </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item d-none">
                 <a href="#sales-orders" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
                     <i class="mdi mdi-settings-outline d-md-none d-block"></i>
                     <span class="d-none d-md-block">Sales</span>
@@ -248,9 +248,6 @@
         chart.render();
 
 
-
-
-
         var movementTable = $('#inventory-movement-datatable').DataTable({
             processing: true,
             serverSide: true,
@@ -306,9 +303,12 @@
             "order": [[1, "desc"]],
             "drawCallback": function () {
                 $('.dataTables_paginate > .pagination').addClass('pagination-rounded');
-               
+
             },
         });
+
+
+        
 
     </script>
 
