@@ -57,6 +57,9 @@
  $(document).ready(function () {
     "use strict";
 
+    $('.entry-select').select2();
+    $('.warehouse-select').select2();
+
     var table = $('#inventory-datatable').DataTable({
         processing: true,
         serverSide: true,
