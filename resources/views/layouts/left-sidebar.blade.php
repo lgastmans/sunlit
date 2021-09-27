@@ -23,6 +23,16 @@
                 </a>
             </li>
             @endcan
+
+            @can('list sale orders')
+            <li class="side-nav-item {{ (Request::is('sale-orders*') ? ' menuitem-active' : '') }}">
+                <a href="{{ route('sale-orders')}}" class="side-nav-link {{ (Request::is('sale-orders*') ? ' active' : '') }}">
+                    <i class="mdi mdi-basket-outline"></i>
+                    <span> Sale Orders </span>
+                </a>
+            </li>
+            @endcan
+
             @can('list purchase orders')
             <li class="side-nav-item {{ (Request::is('purchase-orders*') ? ' menuitem-active' : '') }}">
                 <a href="{{ route('purchase-orders')}}" class="side-nav-link {{ (Request::is('purchase-orders*') ? ' active' : '') }}">

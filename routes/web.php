@@ -12,10 +12,11 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventoryController;
-use App\Http\Controllers\InventoryMovementController;
+use App\Http\Controllers\SaleOrderController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PurchaseOrderController;
+use App\Http\Controllers\InventoryMovementController;
 use App\Http\Controllers\PurchaseOrderItemController;
 
 
@@ -44,10 +45,25 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('home');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+
+    Route::get('/sale-orders', [SaleOrderController::class, 'index'])->name('sale-orders');
+    // Route::get('/sale-orders/create', [SaleOrderController::class, 'create'])->name('sale-orders.create');
+    // Route::get('/sale-orders/list', [SaleOrderController::class, 'getListForDatatables'])->name('sale-orders.datatables');
+    // Route::get('/sale-orders/{order_number}', [SaleOrderController::class, 'show'])->name('sale-orders.show');
+    // Route::get('/sale-orders/{order_number}/cart', [SaleOrderController::class, 'cart'])->name('sale-orders.cart');
+    // Route::get('/sale-orders/{id}/edit', [SaleOrderController::class, 'edit'])->name('sale-orders.edit');
+    // Route::post('/sale-orders', [SaleOrderController::class, 'store'])->name('sale-orders.store');
+    // Route::put('/sale-orders/{id}/ordered', [SaleOrderController::class, 'ordered'])->name('sale-orders.ordered');
+    // Route::put('/sale-orders/{id}/confirmed', [SaleOrderController::class, 'confirmed'])->name('sale-orders.confirmed');
+    // Route::put('/sale-orders/{id}/shipped', [SaleOrderController::class, 'shipped'])->name('sale-orders.shipped');
+    // Route::put('/sale-orders/{id}/received', [SaleOrderController::class, 'received'])->name('sale-orders.received');
+    // Route::put('/sale-orders/{id}', [SaleOrderController::class, 'update'])->name('sale-orders.update');
+    // Route::delete('/sale-orders/{id}', [SaleOrderController::class, 'destroy'])->name('sale-orders.delete');
+
+
     Route::get('/purchase-orders', [PurchaseOrderController::class, 'index'])->name('purchase-orders');
     Route::get('/purchase-orders/create', [PurchaseOrderController::class, 'create'])->name('purchase-orders.create');
     Route::get('/purchase-orders/list', [PurchaseOrderController::class, 'getListForDatatables'])->name('purchase-orders.datatables');
-    
     Route::get('/purchase-orders/{order_number}', [PurchaseOrderController::class, 'show'])->name('purchase-orders.show');
     Route::get('/purchase-orders/{order_number}/cart', [PurchaseOrderController::class, 'cart'])->name('purchase-orders.cart');
     Route::get('/purchase-orders/{id}/edit', [PurchaseOrderController::class, 'edit'])->name('purchase-orders.edit');
