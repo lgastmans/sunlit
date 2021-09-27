@@ -49,4 +49,9 @@ class User extends Authenticatable
         return ucfirst($this->roles()->first()->name);
     }
 
+    public function getDisplayNameAttribute()
+    {
+        return ucfirst($this->name);
+    }
+
 }

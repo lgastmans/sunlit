@@ -77,12 +77,16 @@ class SettingController extends Controller
      */
     public function update(Request $request)
     {
-        foreach($request->except(['_token', '_method']) as $label => $value){
-            $key = str_replace('__', '.', $label);
-            \Setting::set($key, $value);
+        $user = Auth::user();
+        if ($user->can('edit settings')){
+            foreach($request->except(['_token', '_method']) as $label => $value){
+                $key = str_replace('__', '.', $label);
+                \Setting::set($key, $value);
+            }
+            \Setting::save();
+            return redirect(route('settings'))->with('success', trans('app.record_edited', ['field' => 'settings']));
         }
-        \Setting::save();
-        return redirect(route('settings'))->with('success', trans('app.record_edited', ['field' => 'settings']));
+        return abort(403, trans('error.unauthorized'));
     }
 
     /**

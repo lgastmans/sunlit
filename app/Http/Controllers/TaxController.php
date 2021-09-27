@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Tax;
+use App\Models\Product;
 use Illuminate\Support\Arr;
 use \App\Http\Requests\StoreTaxRequest;
 use Illuminate\Support\Facades\Auth;
@@ -47,7 +48,11 @@ class TaxController extends Controller
             $order_arr = $request->get('order');
             $column_arr = $request->get('columns');
             $column_index = $order_arr[0]['column'];
-            $order_column = $column_arr[$column_index]['data'];
+            if ($column_index==1)
+                $order_column = "taxes.amount";
+            else
+                $order_column = $column_arr[$column_index]['data'];
+                
             $order_dir = $order_arr[0]['dir'];
         }
 
@@ -58,51 +63,37 @@ class TaxController extends Controller
         }
 
         // Total records
-        $totalRecords = Tax::get()->count();
+        $totalRecords = Tax::count();
         $totalRecordswithFilter = Tax::where('name', 'like', '%'.$search.'%')
             ->orWhere('amount', 'like', '%'.$search.'%')
-            ->get()
             ->count();
         
 
         // Fetch records
         if ($length < 0)
-            $taxes = Tax::where('name', 'like', '%'.$search.'%')
+            $taxes = Tax::select('id', 'name', 'amount')
+                ->where('name', 'like', '%'.$search.'%')
                 ->orWhere('amount', 'like', '%'.$search.'%')
                 ->orderBy($order_column, $order_dir)
                 ->get();
         else
-            $taxes = Tax::where('name', 'like', '%'.$search.'%')
+            $taxes = Tax::select('id', 'name', 'amount')
+                ->where('name', 'like', '%'.$search.'%')
                 ->orWhere('amount', 'like', '%'.$search.'%')
                 ->orderBy($order_column, $order_dir)
                 ->skip($start)
                 ->take($length)
                 ->get();
-
-        $arr = array();
-
-        foreach($taxes as $record)
-        {
-            $arr[] = array(
-                "id" => $record->id,
-                "name" => $record->name,
-                "amount" => $record->amount,
-                "display_amount" => $record->display_amount
-            );
-        }
-
+                
         $response = array(
             "draw" => $draw,
             "recordsTotal" => $totalRecords,
             "recordsFiltered" => $totalRecordswithFilter,
-            "data" => $arr,
+            "data" => $taxes,
             'error' => null
         );
 
-        
-        echo json_encode($response);
-
-        exit;
+        return response()->json($response);
     }
 
 
@@ -188,6 +179,14 @@ class TaxController extends Controller
     {
         $user = Auth::user();
         if ($user->can('delete taxes')){
+            /*
+                check if tax present in products
+            */
+            $count = Product::where('tax_id', $id)->count();
+
+            if ($count > 0)
+                return redirect(route('taxes'))->with('error', trans('error.tax_has_product'));
+
             Tax::destroy($id);
             return redirect(route('taxes'))->with('success', trans('app.record_deleted', ['field' => 'tax']));
         }
@@ -202,12 +201,11 @@ class TaxController extends Controller
      */
     public function getListForSelect2(Request $request)
     {
+        $query = Tax::query();
         if ($request->has('q')){
-            $taxes = Tax::where('name', 'like', $request->get('q').'%')->get(['id', 'name as text']);
+            $query->where('name', 'like', $request->get('q').'%');
         }
-        else{
-            $taxes = Tax::get(['id', 'name as text']);
-        }
+        $taxes = $query->select('id', 'name as text')->get();
         return ['results' => $taxes];
     }     
 }

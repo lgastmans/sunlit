@@ -52,7 +52,7 @@ class UserController extends Controller
             $column_arr = $request->get('columns');
             $column_index = $order_arr[0]['column'];
             switch($column_index){
-                case "4":
+                case "3":
                     $order_column = "users.deleted_at";
                     break;
                 default:
@@ -71,18 +71,19 @@ class UserController extends Controller
         // Total records
         $totalRecords = User::get()->count();
 
-    
         // Fetch records
         if ($length < 0)
-            $users = User::withTrashed()->where('name', 'like', '%'.$search.'%')
+            $users = User::select('id', 'name', 'email', 'deleted_at')
+                ->withTrashed()->where('name', 'like', '%'.$search.'%')
                 ->orderBy($order_column, $order_dir)
-                ->get(['id','name']);
+                ->get();
         else
-            $users = User::withTrashed()->where('name', 'like', '%'.$search.'%')
+            $users = User::select('id', 'name', 'email', 'deleted_at')
+                ->withTrashed()->where('name', 'like', '%'.$search.'%')
                 ->orderBy($order_column, $order_dir)
                 ->skip($start)
                 ->take($length)
-                ->get(['id','name', 'email', 'created_at', 'deleted_at']);
+                ->get();
                
         $arr = array();
         foreach($users as $user){
@@ -102,8 +103,7 @@ class UserController extends Controller
             "data" => $arr,
             'error' => null
         );
-        echo json_encode($response);
-        exit;
+        return response()->json($response);
     }
 
     /**

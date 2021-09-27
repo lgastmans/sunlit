@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\Product;
 use \App\Http\Requests\StoreCategoryRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -59,23 +60,23 @@ class CategoryController extends Controller
         }
 
         // Total records
-        $totalRecords = Category::get()->count();
-        $totalRecordswithFilter = Category::where('name', 'like', '%'.$search.'%')
-            ->get()
-            ->count();
+        $totalRecords = Category::count();
+        $totalRecordswithFilter = Category::where('name', 'like', '%'.$search.'%')->count();
 
     
         // Fetch records
         if ($length < 0)
             $categories = Category::where('name', 'like', '%'.$search.'%')
+                ->select('id', 'name')
                 ->orderBy($order_column, $order_dir)
                 ->get(['id','name']);
         else
             $categories = Category::where('name', 'like', '%'.$search.'%')
+                ->select('id', 'name')
                 ->orderBy($order_column, $order_dir)
                 ->skip($start)
                 ->take($length)
-                ->get(['id','name']);
+                ->get();
                
 
         $response = array(
@@ -86,8 +87,7 @@ class CategoryController extends Controller
             'error' => null
         );
 
-        echo json_encode($response);
-        exit;
+        return response()->json($response);
     }
 
     /**
@@ -170,6 +170,14 @@ class CategoryController extends Controller
     {
         $user = Auth::user();
         if ($user->can('delete categories')){
+            /*
+                check if tax present in products
+            */
+            $count = Product::where('category_id', $id)->count();
+
+            if ($count > 0)
+                return redirect(route('categories'))->with('error', trans('error.category_has_product'));
+
             Category::destroy($id);
             return redirect(route('categories'))->with('success', trans('app.record_deleted', ['field' => 'category']));
         }
@@ -184,12 +192,11 @@ class CategoryController extends Controller
      */
     public function getListForSelect2(Request $request)
     {
+        $query = Category::query();
         if ($request->has('q')){
-            $categories = Category::where('name', 'like', $request->get('q').'%')->get(['id', 'name as text']);
+            $query->where('name', 'like', $request->get('q').'%');
         }
-        else{
-            $categories = Category::get(['id', 'name as text']);
-        }
+        $categories = $query->select('id', 'name as text')->get();
         return ['results' => $categories];
-    }    
+    }     
 }

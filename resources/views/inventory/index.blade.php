@@ -1,0 +1,246 @@
+@extends('layouts.app')
+
+@section('page-title', 'Inventory')
+
+@section('page-style')
+
+<style type="text/css">
+    .hlclass {
+        background-color: orange !important;
+    }
+</style>
+
+@endsection
+
+
+@section('content')
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row mb-2">
+                    <div class="col-sm-4">
+{{--                         Show
+                        <select class="form-select form-select-sm" id="dropdown-inventory-filter">
+                            <option value="__ALL_">ALL</option>
+                            <option value="__BELOW_MIN_">Below Minimum</option>
+                            <option value="__NONE_ZERO_">None Zero</option>
+                            <option value="__ZERO_">Zero</option>
+                        </select>
+                        stock
+ --}}                    </div>
+                    <div class="col-sm-8">
+                        <div class="text-sm-end">
+                            <a class="btn toggle-filters" href="javascript:void(0);"><button type="button" class="btn btn-light mb-2"><i class="mdi mdi-filter"></i></button></a>
+                            <button type="button" class="btn btn-light mb-2">{{ __('app.export') }}</button> 
+                        </div>
+                    </div><!-- end col-->
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="inventory-datatable">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Supplier</th>
+                                <th>Warehouse</th>
+                                <th>Category</th>
+                                <th>Code</th>
+                                <th>Name</th>
+                                <th>Available Stock</th>
+                                <th>Ordered Stock</th>
+                                <th>Booked Stock</th>
+                                <th>Projected Stock</th>
+                            </tr>
+                            <tr class="filters" >
+                                <th><input type="text" class="form-control"></th>
+                                <th><input type="text" class="form-control"></th>
+                                <th><input type="text" class="form-control"></th>
+                                <th><input type="text" class="form-control"></th>
+                                <th><input type="text" class="form-control"></th>
+                                <th><select class="form-control available-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
+                                <th><select class="form-control ordered-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
+                                <th><select class="form-control booked-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
+                                <th><select disabled class="form-control projected-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
+                            </tr>                            
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div> <!-- end card-body-->
+        </div> <!-- end card-->
+    </div> <!-- end col -->
+</div>
+
+
+<x-modal-confirm type="danger" target="category"></x-modal-confirm>
+
+
+@endsection
+
+
+@section('page-scripts')
+
+    <script>
+        
+ $(document).ready(function () {
+    "use strict";
+
+    $('.toggle-filters').on('click', function(e) {
+        $( ".filters" ).slideToggle('slow');
+    });
+
+    var table = $('#inventory-datatable').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax      : 
+            {
+                url   : "{{ route('inventory.datatables') }}",
+                "data": function ( d ) {[
+                    d.filter_available = $(" .available-filter ").val(),
+                    d.filter_ordered = $(" .ordered-filter ").val(),
+                    d.filter_booked = $(" .booked-filter ").val(),
+                    d.filter_projected = $(" .projected-filter ").val()
+                ]},
+            }, 
+        "language": {
+            "paginate": {
+                "previous": "<i class='mdi mdi-chevron-left'>",
+                "next": "<i class='mdi mdi-chevron-right'>"
+            },
+            "info": "Showing inventory _START_ to _END_ of _TOTAL_",
+            "lengthMenu": "Display <select class='form-select form-select-sm ms-1 me-1'>" +
+                '<option value="10">10</option>' +
+                '<option value="20">20</option>' +
+                '<option value="-1">All</option>' +
+                '</select> rows'
+        },
+        "pageLength": {{ Setting::get('general.grid_rows') }},
+        "createdRow": function( row, data, dataIndex, cells ) {
+            if (data.available.scalar <= data.minimum_quantity.scalar) {
+                $('td', row).eq(5).html('<span class="badge badge-danger-lighten">'+data.available.scalar +'</span>');
+            }
+        },
+        "columns": [
+            { 
+                'data': 'supplier',
+                'orderable': true 
+            },
+            { 
+                'data': 'warehouse',
+                'orderable': true 
+            },
+            { 
+                'data': 'category',
+                'orderable': true 
+            },
+            { 
+                'data': 'code',
+                'orderable': true 
+            },
+            { 
+                'data': 'name',
+                'orderable': true 
+            },
+            { 
+                "data": 'available',
+                'orderable': false,
+                "render" : function ( data, type, row ) {
+                    return data.scalar;
+                },
+            },
+            { 
+                'data': 'ordered',
+                'orderable': false
+            },
+            { 
+                'data': 'booked',
+                'orderable': false
+            },
+            { 
+                'data': 'projected',
+                'orderable': false
+            },
+        ],
+        
+        // "select": {
+        //     "style": "multi"
+        // },
+        "order": [[1, "desc"]],
+        "drawCallback": function () {
+            $('.dataTables_paginate > .pagination').addClass('pagination-rounded');
+            $('#inventory-datatable_length label').addClass('form-label');
+            
+        },
+        
+    });
+
+/*
+    $(" .available-filter, .ordered-filter, .booked-filter, .projected-filter ").on("change", function() {
+        table.ajax.reload();
+    });
+
+    $('.filters th input').on("keyup", function() {
+        console.log('here');
+        table.ajax.reload();
+    });
+*/
+
+    table.columns().eq(0).each(function(colIdx) {
+        var cell = $('.filters th').eq($(table.column(colIdx).header()).index());
+        var title = $(cell).text();
+
+        if($(cell).hasClass('no-filter')){
+
+            $(cell).html('&nbsp');
+
+        }
+        else{
+
+            // $(cell).html( '<input class="form-control filter-input" type="text"/>' );
+
+            $('select', $('.filters th').eq($(table.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
+                e.stopPropagation();
+                $(this).attr('title', $(this).val());
+                //var regexr = '({search})'; //$(this).parents('th').find('select').val();
+                table
+                    .column(colIdx)
+                    .search(this.value) //(this.value != "") ? regexr.replace('{search}', 'this.value') : "", this.value != "", this.value == "")
+                    .draw();
+                 
+            });
+            
+            $('input', $('.filters th').eq($(table.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
+                e.stopPropagation();
+                $(this).attr('title', $(this).val());
+                //var regexr = '({search})'; //$(this).parents('th').find('select').val();
+                table
+                    .column(colIdx)
+                    .search(this.value) //(this.value != "") ? regexr.replace('{search}', 'this.value') : "", this.value != "", this.value == "")
+                    .draw();
+                 
+            }); 
+        }
+    });
+
+
+    $(" #inventory-datatable ").on('dblclick', 'tr', function () {
+        var route = '{{  route("products.show", ":id") }}';
+        route = route.replace(':id', table.row( this ).data().product_id);
+        window.location.href = route;
+    });
+
+
+    @if(Session::has('success'))
+        $.NotificationApp.send("Success","{{ session('success') }}","top-right","","success")
+    @endif
+    @if(Session::has('error'))
+        $.NotificationApp.send("Error","{{ session('error') }}","top-right","","error")
+    @endif
+
+});
+
+    </script>    
+@endsection

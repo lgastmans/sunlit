@@ -25,27 +25,6 @@ class StoreProductRequest extends FormRequest
         return $this->user()->can('edit products');
     }
 
-
-    protected function prepareForValidation()
-    {
-        //$b = str_replace(',', '', $this->display_purchase_price );
-        //$b = filter_var( str_replace(",", "", $this->display_purchase_price), FILTER_SANITIZE_NUMBER_INT, FILTER_FLAG_ALLOW_FRACTION);
-        //$b = preg_replace('/&.*?;/', '', $this->display_purchase_price);
-        $b = preg_replace( '/[^.\d]/', '', $this->display_purchase_price);
-
-
-//        dd($b);
-
-        if (!is_numeric($b) || (empty($b)))
-            $b = 0;
-
-        $this->merge([
-            'purchase_price' => $b * 100,
-        ]);
-
-    }
-
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -60,7 +39,6 @@ class StoreProductRequest extends FormRequest
             'code' => 'required|max:255|unique:products,code,NULL,id,deleted_at,NULL'.$this->id,
             'name' => 'required_without:name|string|max:255',
             'model' => 'max:255',
-            'display_purchase_price'=>'required',
             'purchase_price' => 'max:255',
             'minimum_quantity' => 'integer',
             'cable_length' => 'max:255',

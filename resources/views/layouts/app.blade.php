@@ -1,4 +1,4 @@
-@section('title', 'Sunlit | Inventory')
+@section('title', @env('APP_NAME'))
 
 @include('layouts/header')
 

@@ -1,6 +1,12 @@
 @extends('layouts.app')
 
-@section('page-title', ucfirst(Request::segment(1)) )
+@section('title')
+    @parent() | Supplier {{ $supplier->company }}
+@endsection
+
+@section('page-title')
+    Supplier {{ $supplier->company }}
+@endsection
 
 @section('content')
 <div class="row">
@@ -23,12 +29,12 @@
 
                                     <ul class="mb-0 list-inline text-light">
                                         <li class="list-inline-item me-3">
-                                            <h5 class="mb-1">$ 25,184</h5>
-                                            <p class="mb-0 font-13 text-white-50">Total Sales</p>
+                                            <h5 class="mb-1">{{ $supplier->currency_code }} <span class="pending_orders_amount"></span></h5>
+                                            <p class="mb-0 font-13 text-white-50">Total Amount</p>
                                         </li>
                                         <li class="list-inline-item">
-                                            <h5 class="mb-1">5482</h5>
-                                            <p class="mb-0 font-13 text-white-50">Number of Orders</p>
+                                            <h5 class="mb-1 pending_orders_counter"></h5>
+                                            <p class="mb-0 font-13 text-white-50">Pending Orders</p>
                                         </li>
                                     </ul>
                                 </div>
@@ -78,7 +84,7 @@
                     <p class="text-muted"><strong>Location :</strong> <span class="ms-2">{{ $supplier->address }}, {{ $supplier->city }}, {{ $supplier->state->name }} {{ $supplier->zip_code }}</span></p>
 
                     @if ($supplier->gstin)
-                    <p class="text-muted"><strong>GSTIN :</strong><span class="ms-2">{{ $supplier->gstin }}</span></p>
+                        <p class="text-muted"><strong>GSTIN :</strong><span class="ms-2">{{ $supplier->gstin }}</span></p>
                     @endif
 
 
@@ -106,25 +112,21 @@
         <!-- Chart-->
         <div class="card">
             <div class="card-body">
-                <h4 class="header-title mb-3">Orders & Sales</h4>
-                <div dir="ltr">
-                    <div style="height: 260px;" class="chartjs-chart">
-                        <canvas id="high-performing-product"></canvas>
-                    </div>
+                <h4 class="header-title mb-3">Purchase Orders</h4>
+                    <div id="purchase-orders-bar-chart" class="apex-charts"></div>
                 </div>        
             </div>
         </div>
         <!-- End Chart-->
     </div>
-    <div class="col">
+    {{-- <div class="col">
         <div class="row">
             <div class="col-sm-4">
                 <div class="card tilebox-one">
                     <div class="card-body">
                         <i class="dripicons-basket float-end text-muted"></i>
                         <h6 class="text-muted text-uppercase mt-0">Orders</h6>
-                        <h2 class="m-b-20">1,587</h2>
-                        <span class="badge bg-primary"> +11% </span> <span class="text-muted">From previous period</span>
+                        <h2 class="m-b-20">{{ $supplier->purchase_orders_count }}</h2>
                     </div> <!-- end card-body-->
                 </div> <!--end card-->
             </div><!-- end col -->
@@ -134,25 +136,22 @@
                     <div class="card-body">
                         <i class="dripicons-box float-end text-muted"></i>
                         <h6 class="text-muted text-uppercase mt-0">Sales</h6>
-                        <h2 class="m-b-20">$<span>46,782</span></h2>
-                        <span class="badge bg-danger"> -29% </span> <span class="text-muted">From previous period</span>
+                        <h2 class="m-b-20">$<span> {{ $total_orders }}</span></h2>
                     </div> <!-- end card-body-->
                 </div> <!--end card-->
             </div><!-- end col -->
-
             <div class="col-sm-4">
                 <div class="card tilebox-one">
                     <div class="card-body">
                         <i class="dripicons-jewel float-end text-muted"></i>
                         <h6 class="text-muted text-uppercase mt-0">Product Sold</h6>
-                        <h2 class="m-b-20">1,890</h2>
-                        <span class="badge bg-primary"> +89% </span> <span class="text-muted">Last year</span>
+                        <h2 class="m-b-20">100000</h2>
                     </div> <!-- end card-body-->
                 </div> <!--end card-->
             </div><!-- end col -->
 
         </div>
-        <!-- end row -->
+        <!-- end row --> --}}
 
 
         
@@ -166,43 +165,53 @@
                 <table class="table table-hover table-centered mb-0">
                     <thead>
                         <tr>
-                            <th>Product</th>
+                            <th>Name</th>
                             <th>Price</th>
-                            <th>Stock</th>
-                            <th>Amount</th>
+                            <th>Available</th>
+                            <th>Booked</th>
+                            <th>Ordered</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>ASOS Ridley High Waist</td>
-                            <td>$79.49</td>
-                            <td><span class="badge bg-primary">82 Pcs</span></td>
-                            <td>$6,518.18</td>
-                        </tr>
-                        <tr>
-                            <td>Marco Lightweight Shirt</td>
-                            <td>$128.50</td>
-                            <td><span class="badge bg-primary">37 Pcs</span></td>
-                            <td>$4,754.50</td>
-                        </tr>
-                        <tr>
-                            <td>Half Sleeve Shirt</td>
-                            <td>$39.99</td>
-                            <td><span class="badge bg-warning">6 Pcs</span></td>
-                            <td>$2,559.36</td>
-                        </tr>
-                        <tr>
-                            <td>Lightweight Jacket</td>
-                            <td>$20.00</td>
-                            <td><span class="badge bg-danger">184 Pcs</span></td>
-                            <td>$3,680.00</td>
-                        </tr>
-                        <tr>
-                            <td>Marco Shoes</td>
-                            <td>$28.49</td>
-                            <td><span class="badge bg-primary">69 Pcs</span></td>
-                            <td>$1,965.81</td>
-                        </tr>
+                        @foreach($products as $product)
+                            @if ($product->inventory)
+                                <tr class="product" data-id="{{ $product->id }}">
+                                    <td>{{ $product->name }}</td>
+                                    <td>{{ __('app.currency_symbol_inr')}} {{ $product->inventory->landed_cost }}</td>
+                                    <td>
+                                        @if ($product->inventory->stock_available <= $product->minimum_quantity)
+                                            <span class="badge bg-danger">
+                                        @elseif ($product->inventory->stock_available <= $product->minimum_quantity*10)
+                                            <span class="badge bg-warning">
+                                        @else
+                                            <span class="badge bg-success">
+                                        @endif
+                                        {{ $product->inventory->stock_available }} Pcs</span>
+                                    </td>
+                                    <td>
+                                        @if ($product->inventory->stock_booked > 100)
+                                            <span class="badge bg-danger">
+                                        @elseif ($product->inventory->stock_booked > 50)
+                                            <span class="badge bg-warning">
+                                        @else
+                                            <span class="badge bg-success">
+                                        @endif
+                                        {{ $product->inventory->stock_booked }} Pcs</span>
+                                    </td>
+                                    <td>
+                                        @if ($product->inventory->stock_ordered > 100)
+                                            <span class="badge bg-danger">
+                                        @elseif ($product->inventory->stock_ordered > 50)
+                                            <span class="badge bg-warning">
+                                        @else
+                                            <span class="badge bg-success">
+                                        @endif
+                                        {{ $product->inventory->stock_ordered }} Pcs</span>
+                                    </td>
+                                </tr>
+                            @endif
+                        @endforeach
+                      
                     </tbody>
                 </table>
             </div> <!-- end table responsive-->
@@ -214,169 +223,101 @@
 @endsection
 @section('page-scripts')
 <script>
-    ! function ($) {
-    "use strict";
+    $('.product').on('dblclick', function(){
+        var route = "{{ route('products.show', ':id') }}";
+        route = route.replace(':id', $(this).attr('data-id'));
+        window.location.href = route;
+    });
 
-    var Profile = function () {
-        this.$body = $("body"),
-            this.charts = []
-    };
 
-    Profile.prototype.respChart = function (selector, type, data, options) {
-
-        var draw3 = Chart.controllers.bar.prototype.draw;
-        Chart.controllers.bar = Chart.controllers.bar.extend({
-            draw: function () {
-                draw3.apply(this, arguments);
-                var ctx = this.chart.chart.ctx;
-                var _fill = ctx.fill;
-                ctx.fill = function () {
-                    ctx.save();
-                    ctx.shadowColor = 'rgba(0,0,0,0.01)';
-                    ctx.shadowBlur = 20;
-                    ctx.shadowOffsetX = 4;
-                    ctx.shadowOffsetY = 5;
-                    _fill.apply(this, arguments)
-                    ctx.restore();
+    var route = '{{ route("suppliers.stats", ":id") }}';
+    route = route.replace(':id', {{ $supplier->id }});
+    $.ajax({
+        type: 'GET',
+        url: route,
+        dataType: 'json',
+        success : function(res){
+            data = res.data;
+            $('.pending_orders_amount').html(data.total_amount['inr']);
+            $('.pending_orders_counter').html(data.total_orders);
+            chart.updateSeries([
+                {
+                    name: 'Amount',
+                    type:"column",
+                    data: data.graph_data['amount_inr']
+                },
+                {
+                    name: 'Number of orders',
+                    type: "line",
+                    data: data.graph_data['orders']
                 }
-            }
-        });
+            ]);
+        }
+    })
 
-        //default config
-        Chart.defaults.global.defaultFontColor = "#8391a2";
-        Chart.defaults.scale.gridLines.color = "#8391a2";
-
-        // get selector by context
-        var ctx = selector.get(0).getContext("2d");
-        // pointing parent container to make chart js inherit its width
-        var container = $(selector).parent();
-
-        // this function produce the responsive Chart JS
-        function generateChart() {
-            // make chart width fit with its container
-            var ww = selector.attr('width', $(container).width());
-            var chart;
-            switch (type) {
-                case 'Line':
-                    chart = new Chart(ctx, { type: 'line', data: data, options: options });
-                    break;
-                case 'Doughnut':
-                    chart = new Chart(ctx, { type: 'doughnut', data: data, options: options });
-                    break;
-                case 'Pie':
-                    chart = new Chart(ctx, { type: 'pie', data: data, options: options });
-                    break;
-                case 'Bar':
-                    chart = new Chart(ctx, { type: 'bar', data: data, options: options });
-                    break;
-                case 'Radar':
-                    chart = new Chart(ctx, { type: 'radar', data: data, options: options });
-                    break;
-                case 'PolarArea':
-                    chart = new Chart(ctx, { data: data, type: 'polarArea', options: options });
-                    break;
-            }
-            return chart;
-        };
-        // run function - render chart at first load
-        return generateChart();
-    },
-        // init various charts and returns
-        Profile.prototype.initCharts = function () {
-            var charts = [];
-
-            //barchart
-            if ($('#high-performing-product').length > 0) {
-                // create gradient
-                var ctx = document.getElementById('high-performing-product').getContext("2d");
-                var gradientStroke = ctx.createLinearGradient(0, 500, 0, 150);
-                gradientStroke.addColorStop(0, "#fa5c7c");
-                gradientStroke.addColorStop(1, "#727cf5");
-
-                var barChart = {
-                    // labels: ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"],
-                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-                    datasets: [
-                        {
-                            label: "Orders",
-                            backgroundColor: gradientStroke,
-                            borderColor: gradientStroke,
-                            hoverBackgroundColor: gradientStroke,
-                            hoverBorderColor: gradientStroke,
-                            data: [65, 59, 80, 81, 56, 89, 40, 32, 65, 59, 80, 81]
-                        },
-                        {
-                            label: "Revenue",
-                            backgroundColor: "#e3eaef",
-                            borderColor: "#e3eaef",
-                            hoverBackgroundColor: "#e3eaef",
-                            hoverBorderColor: "#e3eaef",
-                            data: [89, 40, 32, 65, 59, 80, 81, 56, 89, 40, 65, 59]
-                        }
-                    ]
-                };
-                var barOpts = {
-                    maintainAspectRatio: false,
-                    legend: {
-                        display: false
-                    },
-                    scales: {
-                        yAxes: [{
-                            gridLines: {
-                                display: false,
-                                color: "rgba(0,0,0,0.05)"
-                            },
-                            stacked: false,
-                            ticks: {
-                                stepSize: 20
-                            }
-                        }],
-                        xAxes: [{
-                            barPercentage: 0.7,
-                            categoryPercentage: 0.5,
-                            stacked: false,
-                            gridLines: {
-                                color: "rgba(0,0,0,0.01)"
-                            }
-                        }]
-                    }
-                };
-
-                charts.push(this.respChart($("#high-performing-product"), 'Bar', barChart, barOpts));
+    var options = {
+        chart: {
+            height: 300,
+            type: 'line',
+            toolbar: {
+                show: false
             }
         },
-
-        //initializing various components and plugins
-        Profile.prototype.init = function () {
-            var $this = this;
-            // font
-            Chart.defaults.global.defaultFontFamily = '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif';
-
-            // init charts
-            $this.charts = this.initCharts();
-
-            // enable resizing matter
-            $(window).on('resize', function (e) {
-                $.each($this.charts, function (index, chart) {
-                    try {
-                        chart.destroy();
-                    }
-                    catch (err) {
-                    }
-                });
-                $this.charts = $this.initCharts();
-            });
+        plotOptions: {
+            bar: {
+                horizontal: false,
+            }
         },
+        dataLabels: {
+            enabled: true,
+            enabledOnSeries: [1]
+        },
+        noData: {
+            text: 'Loading...'
+        },
+        series: [
+        //     {
+        //     data: [100,150,25,23,55,75,200,30,3,0,0,0]
+        // }
+        ],
+        stroke: {
+            width: [0, 3]
+        },
+        colors: ["#727cf5", "#6c757d"],
+        xaxis: {
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        },
+        yaxis: [
+        {
+          title: {
+            text: ""
+          }
+        },
+        {
+          opposite: true,
+          title: {
+            text: ""
+          }
+        }
+      ],
+        states: {
+            hover: {
+                filter: 'none'
+            }
+        },
+        grid: {
+            borderColor: '#f1f3fa'
+        }
+    }
 
-        //init flotchart
-        $.Profile = new Profile, $.Profile.Constructor = Profile
-}(window.jQuery),
+    var chart = new ApexCharts(
+        document.querySelector("#purchase-orders-bar-chart"),
+        options
+    );
 
-    //initializing Profile
-    function ($) {
-        "use strict";
-        $.Profile.init()
-    }(window.jQuery);
+    chart.render();
+
+
 </script>
 @endsection
 

@@ -24,12 +24,6 @@ class StoreTaxRequest extends FormRequest
         return $this->user()->can('edit taxes');
     }
 
-    protected function prepareForValidation()
-    {
-        $this->merge([
-            'amount' => $this->display_amount * 100,
-        ]);
-    }
 
 
     /**
@@ -42,8 +36,7 @@ class StoreTaxRequest extends FormRequest
 
         return [
             'name' => 'required|max:255|unique:taxes,name,'.$this->id,
-            'display_amount' => 'required',
-            'amount' => 'max:255'
+            'amount' => 'required|max:255'
         ];
     }
 }

@@ -60,11 +60,10 @@ class DealerController extends Controller
         }
 
         // Total records
-        $totalRecords = Dealer::get()->count();
+        $totalRecords = Dealer::count();
         $totalRecordswithFilter = Dealer::where('contact_person', 'like', '%'.$search.'%')
             ->orWhere('company', 'like', '%'.$search.'%')
             ->orWhere('address', 'like', '%'.$search.'%')
-            ->get()
             ->count();
         
 
@@ -92,11 +91,8 @@ class DealerController extends Controller
             "data" => $dealers,
             'error' => null
         );
-
-        
-        echo json_encode($response);
-
-        exit;
+                
+        return response()->json($response);
     }
 
 
@@ -135,10 +131,16 @@ class DealerController extends Controller
      */
     public function show($id)
     {
-        $dealer = Dealer::with('state')->find($id);
-        if ($dealer)
-            return view('dealers.show', ['dealer' => $dealer]);
-        return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'dealer']));
+        $user = Auth::user();
+        if ($user->can('view dealers')){
+            $dealer = Dealer::with('state')->find($id);
+            if ($dealer)
+                return view('dealers.show', ['dealer' => $dealer]);
+
+            return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'dealer']));
+        }
+
+        return abort(403, trans('error.unauthorized'));
     }
 
     /**

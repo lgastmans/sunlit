@@ -1,6 +1,12 @@
 @extends('layouts.app')
 
-@section('page-title', ucfirst(Request::segment(1)) )
+@section('title')
+    @parent() | Taxes
+@endsection
+
+@section('page-title')
+    @parent() | Taxes
+@endsection
 
 @section('content')
 
@@ -10,7 +16,11 @@
             <div class="card-body">
                 <div class="row mb-2">
                     <div class="col-sm-4">
-                        <a href="{{ route('taxes.create') }}" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> Add taxes</a>
+                        @if (Auth::user()->can('edit taxes'))
+                            <a href="{{ route('taxes.create') }}" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> {{ __('app.add_title', ['field' => 'tax']) }}</a>
+                        @else
+                            &nbsp;
+                        @endif
                     </div>
                     <div class="col-sm-8">
                         <div class="text-sm-end">
@@ -23,12 +33,7 @@
                     <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="taxes-datatable">
                         <thead class="table-light">
                             <tr>
-                                <th style="width: 20px;">
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="customCheck1">
-                                        <label class="form-check-label" for="customCheck1">&nbsp;</label>
-                                    </div>
-                                </th>
+                            
                                 <th>Name</th>
                                 <th>Amount</th> 
                                 <th>Actions</th>
@@ -75,29 +80,22 @@
                 '<option value="-1">All</option>' +
                 '</select> taxes',
         },
-        "pageLength": 10,
+        "pageLength": {{ Setting::get('general.grid_rows') }},
         "columns": [
-            {
-                'data': 'id',
-                'orderable': false,
-                'render': function (data, type, row, meta) {
-                    if (type === 'display') {
-                        data = "<div class=\"form-check\"><input type=\"checkbox\" class=\"form-check-input dt-checkboxes\"><label class=\"form-check-label\">&nbsp;</label></div>";
-                    }
-                    return data;
-                },
-                'checkboxes': {
-                    'selectRow': true,
-                    'selectAllRender': '<div class=\"form-check\"><input type=\"checkbox\" class=\"form-check-input dt-checkboxes\"><label class=\"form-check-label\">&nbsp;</label></div>'
-                }
-            },
+           
             { 
                 'data': 'name',
                 'orderable': true 
             },
             { 
-                'data': 'display_amount',
-                'orderable': true 
+                'data': 'amount',
+                'orderable': true ,
+                'render' : function(data, type, row, meta){
+                    if (type === 'display'){
+                        return data + '%';
+                    }
+                    return data;
+                },
             },
             {
                 'data': 'id',
@@ -123,9 +121,6 @@
             }
             
         ],
-        "select": {
-            "style": "multi"
-        },
         "order": [[1, "desc"]],
         "drawCallback": function () {
             $('.dataTables_paginate > .pagination').addClass('pagination-rounded');

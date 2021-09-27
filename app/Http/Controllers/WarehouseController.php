@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Warehouse;
+use App\Models\PurchaseOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Http\Requests\StoreWarehouseRequest;
@@ -180,9 +181,34 @@ class WarehouseController extends Controller
     {
         $user = Auth::user();
         if ($user->can('delete warehouses')){
+            /*
+                check if warehouse present in purchase orders
+            */
+            $count = PurchaseOrder::where('warehouse_id', $id)->count();
+
+            if ($count > 0)
+                return redirect(route('warehouses'))->with('error', trans('error.warehouse_has_purchase_order'));
+
             Warehouse::destroy($id);
             return redirect(route('warehouses'))->with('success', trans('app.record_deleted', ['field' => 'warehouse']));
         }
         return abort(403, trans('error.unauthorized'));
     }
+
+     /**
+     * Display a listing of the resource for select2
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return json
+     */
+    public function getListForSelect2(Request $request)
+    {
+        $query = Warehouse::query();
+        if ($request->has('q')){
+            $query->where('name', 'like', $request->get('q').'%');
+        }
+        $warehouse = $query->get(['id', 'name as text']);
+     
+        return ['results' => $warehouse];
+    } 
 }

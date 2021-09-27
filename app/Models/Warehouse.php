@@ -15,10 +15,21 @@ class Warehouse extends Model
 
 
     /**
-     * Get the state associated with the supplier.
+     * Get the state associated with the warehouse.
      */
     public function state()
     {
         return $this->belongsTo(State::class);
     }
+
+    public static function getWarehouseFilterList()
+    {
+        $warehouse = Warehouse::select('id', 'name')
+           ->orderBy('name')
+           ->get();
+        $arr=array('__ALL_'=> 'All');
+        foreach ($warehouse as $record)
+            $arr[$record->id] = $record->name;
+        return $arr;
+    }    
 }

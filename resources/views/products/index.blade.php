@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('title')
+    @parent() | Products
+@endsection
+
 @section('page-title', 'Products')
 
 @section('content')
@@ -10,10 +14,15 @@
             <div class="card-body">
                 <div class="row mb-2">
                     <div class="col-sm-4">
-                        <a href="{{ route('products.create') }}" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> Add Products</a>
+                        @if (Auth::user()->can('edit products'))
+                            <a href="{{ route('products.create') }}" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> {{ __('app.add_title', ['field' => 'product']) }}</a>
+                        @else
+                            &nbsp;
+                        @endif
                     </div>
                     <div class="col-sm-8">
                         <div class="text-sm-end">
+                            <a class="btn toggle-filters" href="javascript:void(0);"><button type="button" class="btn btn-light mb-2"><i class="mdi mdi-filter"></i></button></a>
                             <a class="btn" href="{{ route('export.products') }}"><button type="button" class="btn btn-light mb-2">{{ __('app.export') }}</button></a>
                         </div>
                     </div><!-- end col-->
@@ -23,12 +32,6 @@
                     <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="products-datatable">
                         <thead class="table-light">
                             <tr>
-                                <th style="width: 20px;">
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="customCheck1">
-                                        <label class="form-check-label" for="customCheck1">&nbsp;</label>
-                                    </div>
-                                </th>
                                 <th>Category</th>
                                 <th>Supplier</th> 
                                 <th>Tax</th>
@@ -36,18 +39,19 @@
                                 <th>Name</th> 
                                 <th>Model</th>
                                 <th>Purchase Price</th>
-                                <th>Min Quantity</th>
-<!--                                 <th>Cable length</th> 
-                                <th>KW rating</th> 
-                                <th>Part number</th> 
- -->                                {{-- <th>Notes</th>  --}}
                                 <th>Actions</th>
                             </tr>
+                            <tr class="filters" style="display:none;">
+                                <th><th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th class="no-filter"></th>
+                            </tr>
                         </thead>
-                        <tbody>
-
-                            
-                            
+                        <tbody> 
                         </tbody>
                     </table>
                 </div>
@@ -68,11 +72,18 @@
  $(document).ready(function () {
     "use strict";
 
+    $('.toggle-filters').on('click', function(e) {
+        $( ".filters" ).slideToggle('slow');
+    });
 
     // Default Datatable
     var table = $('#products-datatable').DataTable({
         processing: true,
         serverSide: true,
+        orderCellsTop: true,
+        fixedHeader: true,
+        search: true,
+        
         ajax: "{{ route('products.datatables') }}",
 
 
@@ -88,22 +99,9 @@
                 '<option value="-1">All</option>' +
                 '</select> Products',
         },
-        "pageLength": 10,
+        "pageLength": {{ Setting::get('general.grid_rows') }},
         "columns": [
-            {
-                'data': 'id',
-                'orderable': false,
-                'render': function (data, type, row, meta) {
-                    if (type === 'display') {
-                        data = "<div class=\"form-check\"><input type=\"checkbox\" class=\"form-check-input dt-checkboxes\"><label class=\"form-check-label\">&nbsp;</label></div>";
-                    }
-                    return data;
-                },
-                'checkboxes': {
-                    'selectRow': true,
-                    'selectAllRender': '<div class=\"form-check\"><input type=\"checkbox\" class=\"form-check-input dt-checkboxes\"><label class=\"form-check-label\">&nbsp;</label></div>'
-                }
-            },
+            
             { 
                 'data': 'category',
                 'orderable': true 
@@ -114,7 +112,10 @@
             },
             { 
                 'data': 'tax',
-                'orderable': true 
+                'orderable': true,
+                'render': function(data){
+                    return data + '%';
+                }
             },
             { 
                 'data': 'code',
@@ -130,28 +131,8 @@
             },
             {
                 'data': 'purchase_price',
-                'orderable': true
+                'orderable': true,
             },
-            {
-                'data': 'minimum_quantity',
-                'orderable': false
-            },
-            // { 
-            //     'data': 'cable_length',
-            //     'orderable': true 
-            // },
-            // { 
-            //     'data': 'kw_rating',
-            //     'orderable': true 
-            // },
-            // { 
-            //     'data': 'part_number',
-            //     'orderable': true 
-            // },
-            // { 
-            //     'data': 'notes',
-            //     'orderable': true 
-            // },
             {
                 'data': 'id',
                 'orderable': false,
@@ -177,15 +158,38 @@
             }
             
         ],
-        "select": {
-            "style": "multi"
-        },
         "order": [[1, "desc"]],
         "drawCallback": function () {
             $('.dataTables_paginate > .pagination').addClass('pagination-rounded');
             $('#products-datatable_length label').addClass('form-label');
             
         },
+    });
+
+    table.columns().eq(0).each(function(colIdx) {
+        var cell = $('.filters th').eq($(table.column(colIdx).header()).index());
+        var title = $(cell).text();
+
+        if($(cell).hasClass('no-filter')){
+
+            $(cell).html('&nbsp');
+
+        }
+        else{
+
+            $(cell).html( '<input class="form-control filter-input" type="text"/>' );
+
+            $('input', $('.filters th').eq($(table.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
+                e.stopPropagation();
+                $(this).attr('title', $(this).val());
+                //var regexr = '({search})'; //$(this).parents('th').find('select').val();
+                table
+                    .column(colIdx)
+                    .search(this.value) //(this.value != "") ? regexr.replace('{search}', 'this.value') : "", this.value != "", this.value == "")
+                    .draw();
+                 
+            });            
+        }
     });
 
     $('#products-datatable').on('dblclick', 'tr', function () {
@@ -202,9 +206,7 @@
             route = route.replace(':id', button.id);
             $('#delete-form').attr('action', route);
         }
-        
     });
-
 
     @if(Session::has('success'))
         $.NotificationApp.send("Success","{{ session('success') }}","top-right","","success")

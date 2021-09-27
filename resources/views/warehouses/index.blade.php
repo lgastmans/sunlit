@@ -1,6 +1,12 @@
 @extends('layouts.app')
 
-@section('page-title', 'warehouses')
+@section('title')
+    @parent() | Warehouses
+@endsection
+
+@section('page-title')
+    Warehouses
+@endsection
 
 @section('content')
 
@@ -10,7 +16,11 @@
             <div class="card-body">
                 <div class="row mb-2">
                     <div class="col-sm-4">
-                        <a href="{{ route('warehouses.create') }}" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> Add Warehouse</a>
+                        @if (Auth::user()->can('edit warehouses'))
+                            <a href="{{ route('warehouses.create') }}" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> {{ __('app.add_title', ['field' => 'warehouse']) }}</a>
+                        @else
+                            &nbsp;
+                        @endif
                     </div>
                     <div class="col-sm-8">
                         <div class="text-sm-end">
@@ -23,12 +33,6 @@
                     <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="warehouses-datatable">
                         <thead class="table-light">
                             <tr>
-                                <th style="width: 20px;">
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="customCheck1">
-                                        <label class="form-check-label" for="customCheck1">&nbsp;</label>
-                                    </div>
-                                </th>
                                 <th>Contact Person</th>
                                 <th>Name</th>
                                 <th>Location</th>
@@ -78,22 +82,8 @@
                 '<option value="-1">All</option>' +
                 '</select> warehouses',
         },
-        "pageLength": 10,
+        "pageLength": {{ Setting::get('general.grid_rows') }},
         "columns": [
-            {
-                'data': 'id',
-                'orderable': false,
-                'render': function (data, type, row, meta) {
-                    if (type === 'display') {
-                        data = "<div class=\"form-check\"><input type=\"checkbox\" class=\"form-check-input dt-checkboxes\"><label class=\"form-check-label\">&nbsp;</label></div>";
-                    }
-                    return data;
-                },
-                'checkboxes': {
-                    'selectRow': true,
-                    'selectAllRender': '<div class=\"form-check\"><input type=\"checkbox\" class=\"form-check-input dt-checkboxes\"><label class=\"form-check-label\">&nbsp;</label></div>'
-                }
-            },
             { 
                 'data': 'contact_person',
                 'orderable': true 

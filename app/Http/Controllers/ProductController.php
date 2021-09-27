@@ -7,6 +7,10 @@ use \NumberFormatter;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Warehouse;
+use App\Models\Inventory;
+use App\Models\InventoryMovement;
+use App\Models\PurchaseOrderItem;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use \App\Http\Requests\StoreProductRequest;
@@ -52,19 +56,22 @@ class ProductController extends Controller
         $order_dir = 'ASC';
         $order_arr = array();
         if ($request->has('order')) {
+
             $order_arr = $request->get('order');
             $column_arr = $request->get('columns');
             $column_index = $order_arr[0]['column'];
-            if ($column_index==1)
+
+            if ($column_index==0)
                 $order_column = "categories.name";
-            elseif ($column_index==2)
+            elseif ($column_index==1)
                 $order_column = "suppliers.company";
-            elseif ($column_index==3)
+            elseif ($column_index==2)
                 $order_column = "taxes.name";
             else
                 $order_column = $column_arr[$column_index]['data'];
             $order_dir = $order_arr[0]['dir'];
         }
+
 
         $search = '';
         if ($request->has('search')) {
@@ -75,41 +82,68 @@ class ProductController extends Controller
         // Total records
         $totalRecords = Product::all()->count();
         
-        $totalRecordswithFilter = Product::join('categories', 'categories.id', '=', 'products.category_id')
-            ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
-            ->join('taxes', 'taxes.id', '=', 'products.tax_id')
-            ->where('products.code', 'like', '%'.$search.'%')
-            ->orWhere('products.name', 'like', '%'.$search.'%')
-            ->get()
-            ->count();
+        // $totalRecordswithFilter = Product::join('categories', 'categories.id', '=', 'products.category_id')
+        //     ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
+        //     ->join('taxes', 'taxes.id', '=', 'products.tax_id')
+        //     ->where('products.code', 'like', '%'.$search.'%')
+        //     ->orWhere('products.name', 'like', '%'.$search.'%')
+        //     ->get()
+        //     ->count();
 
-        // Fetch records
-        if ($length < 0)
-            $products = Product::join('categories', 'categories.id', '=', 'products.category_id')
-                ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
-                ->join('taxes', 'taxes.id', '=', 'products.tax_id')
-                ->where('products.code', 'like', '%'.$search.'%')
-                ->orWhere('products.name', 'like', '%'.$search.'%')
-                ->orWhere('categories.name', 'like', '%'.$search.'%')
-                ->orWhere('suppliers.company', 'like', '%'.$search.'%')
-                ->orderBy($order_column, $order_dir)
-                ->get(['products.*', 'categories.name as category_name', 'taxes.name as tax_name']);
-        else
-            $products = Product::join('categories', 'categories.id', '=', 'products.category_id')
-                ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
-                ->join('taxes', 'taxes.id', '=', 'products.tax_id')
-                ->where('products.code', 'like', '%'.$search.'%')
-                ->orWhere('products.name', 'like', '%'.$search.'%')
-                ->orWhere('categories.name', 'like', '%'.$search.'%')
-                ->orWhere('suppliers.company', 'like', '%'.$search.'%')
-                ->orderBy($order_column, $order_dir)
-                ->skip($start)
-                ->take($length)
-                ->get(['products.*', 'categories.name as category_name', 'taxes.name as tax_name']);
+        /*
+            build the query
+        */
+        $query = Product::query();
+
+        $query->join('categories', 'categories.id', '=', 'products.category_id')
+            ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
+            ->join('taxes', 'taxes.id', '=', 'products.tax_id');
+
+
+        if (!empty($column_arr[0]['search']['value'])){
+            $query->where('categories.name', 'like', '%'.$column_arr[0]['search']['value'].'%');
+        }
+       
+        if (!empty($column_arr[1]['search']['value'])) {
+            $query->where('suppliers.company', 'like', '%'.$column_arr[1]['search']['value'].'%');
+        }
+
+        if (!empty($column_arr[2]['search']['value'])) {
+            $query->where('taxes.name', 'like', '%'.$column_arr[2]['search']['value'].'%');
+        }
+
+        if (!empty($column_arr[3]['search']['value'])) {
+            $query->where('products.code', 'like', '%'.$column_arr[3]['search']['value'].'%');
+        }
+
+        if (!empty($column_arr[4]['search']['value'])) {
+            $query->where('products.name', 'like', '%'.$column_arr[4]['search']['value'].'%');
+        }
+
+        if (!empty($column_arr[5]['search']['value'])) {
+            $query->where('products.model', 'like', '%'.$column_arr[5]['search']['value'].'%');
+        }
+
+        if ($request->has('search')){
+            $search = $request->get('search')['value'];
+            $query->where( function ($q) use ($search){
+                $q->where('products.code', 'like', '%'.$search.'%')
+                    ->orWhere('products.name', 'like', '%'.$search.'%')
+                    ->orWhere('categories.name', 'like', '%'.$search.'%')
+                    ->orWhere('suppliers.company', 'like', '%'.$search.'%');
+            });    
+        }
+
+        $query->orderBy($order_column, $order_dir);
+
+        $totalRecordswithFilter = $query->count();
+
+        if ($length > 0)
+            $query->skip($start)->take($length);
+
+        $products = $query->select('products.*', 'categories.name as category_name', 'taxes.name as tax_name')->get();
 
         $arr = array();
-
-        $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
 
         foreach($products as $record)
         {
@@ -118,11 +152,11 @@ class ProductController extends Controller
                 "id" => $record->id,
                 "category" => $record->category->name,
                 "supplier" => $record->supplier->company,
-                "tax" => $record->tax->display_amount,
+                "tax" => $record->tax->amount,
                 "code" => $record->code,
                 "name" => $record->name,
                 "model" => $record->model,
-                "purchase_price" => $fmt->format($record->purchase_price/100), //sprintf('%01.2f',($record->purchase_price/100)),
+                "purchase_price" => $record->purchase_price,
                 "minimum_quantity" => $record->minimum_quantity,
                 "cable_length" => $record->cable_length,
                 "kw_rating" => $record->kw_rating,
@@ -150,7 +184,6 @@ class ProductController extends Controller
     public function getExportList()
     {
         return Excel::download(new ProductsExport, 'products.xlsx');
-        //return Excel::download(Product::all(), 'products.xlsx');
     }
 
 
@@ -177,6 +210,13 @@ class ProductController extends Controller
         $validatedData = Arr::except($validatedData, array('display_purchase_price'));
         $product = Product::create($validatedData);
         if ($product){
+
+            /*
+                create initial stock inventory entries
+            */
+            $inventory = new Inventory();
+            $inventory->initStock($product->id);            
+
             return redirect(route('products'))->with('success', trans('app.record_added', ['field' => 'product']));
         }
         return back()->withInputs($request->input())->with('error', trans('error.record_added', ['field' => 'product']));
@@ -190,11 +230,26 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::find($id);
-        if ($product)
-            return view('products.show', ['product'=>$product]);
+        $user = Auth::user();
+        if ($user->can('view products')){
+            $product = Product::with(['inventory', 'inventory.warehouse', 'movement', 'supplier'])->find($id);
+            $entry_filter = InventoryMovement::getMovementFilterList();
+            $warehouse_filter = Warehouse::getWarehouseFilterList();
+            if ($product)
+                return view('products.show', ['product'=>$product, 'entry_filter' => $entry_filter, 'warehouse_filter' => $warehouse_filter]);
 
             return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'product']));
+        }
+        return abort(403, trans('error.unauthorized'));
+
+    }
+
+    public function getById($id)
+    {
+        $product = Product::with('tax')->find($id);
+        if ($product)
+            return $product;
+        return false;
     }
 
     /**
@@ -205,7 +260,7 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        $product = Product::find($id);
+        $product = Product::withCount('purchase_order_item')->find($id);
         if ($product){
             return view('products.form', ['product' => $product]);
         }
@@ -241,9 +296,38 @@ class ProductController extends Controller
     {
         $user = Auth::user();
         if ($user->can('delete products')){
+            /*
+                check if product present in purchase orders
+            */
+            $count = PurchaseOrderItem::where('product_id', $id)->count();
+
+            if ($count > 0)
+                return redirect(route('products'))->with('error', trans('error.product_has_purchase_order_item'));
+
             Product::destroy($id);
             return redirect(route('products'))->with('success', trans('app.record_deleted', ['field' => 'product']));
         }
         return abort(403, trans('error.unauthorized'));
     }
+
+
+     /**
+     * Display a listing of the resource for select2
+     *
+     * @return json
+     */
+    public function getListForSelect2($id, Request $request)
+    {
+        $query = Product::query();
+
+        if ($id){
+            $query->where('supplier_id', '=', $id);
+        }
+        if ($request->has('q')){
+            $query->where('code', 'like', '%'.$request->get('q').'%');
+        }
+        $products = $query->select('id', 'code as text')->get();
+     
+        return ['results' => $products];
+    }   
 }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\State;
-
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class StateController extends Controller
@@ -80,7 +80,20 @@ class StateController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = Auth::user();
+        if ($user->can('delete states')){
+            /*
+                check if tax present in products
+            */
+            $count = Product::where('tax_id', $id)->count();
+
+            if ($count > 0)
+                return redirect(route('taxes'))->with('error', trans('error.tax_has_product'));
+
+            State::destroy($id);
+            return redirect(route('states'))->with('success', trans('app.record_deleted', ['field' => 'tax']));
+        }
+        return abort(403, trans('error.unauthorized'));
     }
 
     /**
@@ -91,12 +104,11 @@ class StateController extends Controller
      */
     public function getListForSelect2(Request $request)
     {
+        $query = State::query();
         if ($request->has('q')){
-            $states = State::where('name', 'like', $request->get('q').'%')->get(['id', 'name as text']);
+            $query->where('name', 'like', $request->get('q').'%');
         }
-        else{
-            $states = State::get(['id', 'name as text']);
-        }
+        $states = $query->select('id', 'name as text')->get();
         return ['results' => $states];
-    }
+    }   
 }
