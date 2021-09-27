@@ -69,7 +69,7 @@
                        
                         
                        
-                        <button class="btn btn-primary" type="submit">@if ($warehouse->id) {{ __('app.edit_title', ['field' => 'dealer']) }} @else {{ __('app.add_title', ['field' => 'dealer']) }} @endif</button>
+                        <button class="btn btn-primary" type="submit">@if ($warehouse->id) {{ __('app.edit_title', ['field' => 'warehouse']) }} @else {{ __('app.add_title', ['field' => 'dealer']) }} @endif</button>
 
                     </form>
                 </div>
