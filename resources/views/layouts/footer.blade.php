@@ -15,6 +15,8 @@
 
 <script src="{{ asset('/js/app.js') }}"></script>
 
+@stack('page-scripts')
+
 @yield('page-scripts')
 
 </body>
