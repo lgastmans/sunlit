@@ -316,7 +316,7 @@ class ProductController extends Controller
      *
      * @return json
      */
-    public function getListForSelect2($id, Request $request)
+    public function getListForSelect2($id = false, Request $request)
     {
         $query = Product::query();
 
