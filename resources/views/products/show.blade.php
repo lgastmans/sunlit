@@ -247,7 +247,7 @@
         var chart = new ApexCharts(document.querySelector("#chart"), options);
         chart.render();
 
-
+/*
         var movementTable = $('#inventory-movement-datatable').DataTable({
             processing: true,
             serverSide: true,
@@ -306,7 +306,7 @@
 
             },
         });
-
+*/
 
         
 
