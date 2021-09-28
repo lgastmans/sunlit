@@ -98,60 +98,8 @@
             </div>
         </div>
     </div> <!-- end col -->
-</div>
+</div><!-- end row -->
 
-{{-- <div class="row">
-    <div class="col-xl-8">
-        <div class="row">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        <div id="stocks-container">
-                            <h4>Stock</h4>
-                            <table class="table table-centered mb-0">
-                                <thead class="thead-dark">
-                                    <tr>
-                                        <th>Warehouse</th>
-                                        <th>Available</th>
-                                        <th>Booked</th>
-                                        <th>Ordered</th>
-                                        <th>Landed Cost</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($product->inventory as $inventory)
-    
-                                        <tr>
-                                            <td>{{ $inventory->warehouse->name }}</td>
-                                            <td>{{ $inventory->stock_available }}</td>
-                                            <td>{{ $inventory->stock_booked }}</td>
-                                            <td>{{ $inventory->stock_ordered }}</td>
-                                            <td>{{ __('app.currency_symbol_inr')}} {{ $inventory->landed_cost }}</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-4">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title mb-3 d-none">Progress</h5>
-                <div dir="ltr">
-                    <div id="chart" class="apex-charts"></div>
-                </div>
-            </div>
-        </div>
-        <!-- end card-->
-    </div>
-</div> --}}
-    
-</div>
-<!-- end row -->
 <div class="row">
     <div class="col-lg-8">
         
@@ -173,13 +121,13 @@
                     <span class="d-none d-md-block">Movement</span>
                 </a>
             </li>
-            <li class="nav-item d-none">
+            <li class="nav-item">
                 <a href="#purchase-orders" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
                     <i class="mdi mdi-settings-outline d-md-none d-block"></i>
                     <span class="d-none d-md-block">Purchase</span>
                 </a>
             </li>
-            <li class="nav-item d-none">
+            <li class="nav-item">
                 <a href="#sales-orders" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
                     <i class="mdi mdi-settings-outline d-md-none d-block"></i>
                     <span class="d-none d-md-block">Sales</span>
@@ -246,69 +194,6 @@
 
         var chart = new ApexCharts(document.querySelector("#chart"), options);
         chart.render();
-
-/*
-        var movementTable = $('#inventory-movement-datatable').DataTable({
-            processing: true,
-            serverSide: true,
-            // deferLoading: 0,
-            searching: false,
-            paging: false,
-            ajax      : {
-                url   : "{{ route('inventory-movement.datatables') }}",
-                "data": function ( d ) {
-                    d.filter_product_id = {{ $product->id }};
-                },
-            }, 
-            "language": {
-                "paginate": {
-                    "previous": "<i class='mdi mdi-chevron-left'>",
-                    "next": "<i class='mdi mdi-chevron-right'>"
-                },
-                "info": "Showing inventory _START_ to _END_ of _TOTAL_",
-                "lengthMenu": "Display <select class='form-select form-select-sm ms-1 me-1'>" +
-                    '<option value="10">10</option>' +
-                    '<option value="20">20</option>' +
-                    '<option value="-1">All</option>' +
-                    '</select> rows'
-            },
-            "pageLength": {{ Setting::get('general.grid_rows') }},
-            "columns": [
-                { 
-                    'data': 'created_at',
-                    'orderable': true 
-                },
-                { 
-                    'data': 'order_number',
-                    'orderable': true 
-                },
-                { 
-                    'data': 'quantity',
-                    'orderable': false
-                },
-                { 
-                    'data': 'entry_type',
-                    'orderable': false
-                },
-                { 
-                    'data': 'warehouse',
-                    'orderable': false
-                },
-                { 
-                    'data': 'user',
-                    'orderable': false
-                }
-            ],
-            
-            "order": [[1, "desc"]],
-            "drawCallback": function () {
-                $('.dataTables_paginate > .pagination').addClass('pagination-rounded');
-
-            },
-        });
-*/
-
-        
 
     </script>
 

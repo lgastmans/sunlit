@@ -119,6 +119,28 @@ class InventoryMovementController extends Controller
                 ->leftJoin('purchase_orders', 'purchase_orders.id', '=', 'purchase_order_id')
                 ->select('inventory_movements.*', 'purchase_orders.order_number AS order_number');
 
+
+        if (!empty($column_arr[0]['search']['value']))
+            $query->where('created_at', 'like', '%'.$column_arr[0]['search']['value'].'%');
+
+        if (!empty($column_arr[1]['search']['value']))
+            $query->where('order_number', 'like', '%'.$column_arr[1]['search']['value'].'%');
+
+        if (!empty($column_arr[2]['search']['value']))
+            $query->where('quantity', '=', $column_arr[2]['search']['value']);
+
+        if (!empty($column_arr[3]['search']['value'])){
+            if ($column_arr[3]['search']['value'] == '__RECEIVED_')
+                $query->where('movement_type', '=', InventoryMovement::RECEIVED);
+            elseif ($column_arr[3]['search']['value'] == '__DELIVERED_')
+                $query->where('movement_type', '=', InventoryMovement::DELIVERED);
+        }
+
+        if (!empty($column_arr[4]['search']['value'])){
+            if ($column_arr[4]['search']['value'] != '__ALL_')
+                $query->where('inventory_movements.warehouse_id', '=', $column_arr[4]['search']['value']);
+        }
+
         $query->where('product_id', '=', $filter_product_id);
 
         $query->orderBy($order_column, $order_dir);
@@ -132,7 +154,6 @@ class InventoryMovementController extends Controller
 
         foreach ($movement as $record)
         {
-
             $arr[] = array(
                 "id" => $record->id,
                 "created_at" => $record->display_created_at,

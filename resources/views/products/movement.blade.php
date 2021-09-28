@@ -2,7 +2,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <div class="row mb-2">
+{{--                 <div class="row mb-2">
                     <div class="col-sm-10">
                         
                     </div>
@@ -12,9 +12,9 @@
                         </div>
                     </div><!-- end col-->
                 </div>
-
+ --}}
                 <div class="table-responsive">
-                    <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="inventory-datatable">
+                    <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="movement-datatable">
                         <thead class="table-light">
                             <tr>
                                 <th>Date</th>
@@ -37,7 +37,7 @@
                                 <th><input type="text" class="form-control"></th>
                                 <th><select class="form-control entry-select">@foreach($entry_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
                                 <th><select class="form-control warehouse-select">@foreach($warehouse_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>                                
-                                <th><input type="text" class="form-control"></th>
+                                <th><input type="text" class="form-control" disabled></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -57,15 +57,16 @@
  $(document).ready(function () {
     "use strict";
 
-    $('.entry-select').select2();
-    $('.warehouse-select').select2();
+    // $('.entry-select').select2();
+    // $('.warehouse-select').select2();
 
-    var table = $('#inventory-datatable').DataTable({
+    var movementTable = $('#movement-datatable').DataTable({
         processing: true,
         serverSide: true,
         // deferLoading: 0,
-        searching: false,
+        searching: true,
         paging: false,
+        dom:'',
         ajax      : {
             url   : "{{ route('inventory-movement.datatables') }}",
             "data": function ( d ) {
@@ -92,7 +93,7 @@
             },
             { 
                 'data': 'order_number',
-                'orderable': true 
+                'orderable': true
             },
             { 
                 'data': 'quantity',
@@ -115,14 +116,15 @@
         "order": [[1, "desc"]],
         "drawCallback": function () {
             $('.dataTables_paginate > .pagination').addClass('pagination-rounded');
-            $('#inventory-datatable_length label').addClass('form-label');
+            $('#movement-datatable_length label').addClass('form-label');
             
         },
         
     });
 
-    table.columns().eq(0).each(function(colIdx) {
-        var cell = $('.filters th').eq($(table.column(colIdx).header()).index());
+    movementTable.columns().eq(0).each(function(colIdx) {
+
+        var cell = $('.filters th').eq($(movementTable.column(colIdx).header()).index());
         var title = $(cell).text();
 
         if($(cell).hasClass('no-filter')){
@@ -134,22 +136,22 @@
 
             // $(cell).html( '<input class="form-control filter-input" type="text"/>' );
 
-            $('select', $('.filters th').eq($(table.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
+            $('select', $('.filters th').eq($(movementTable.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
                 e.stopPropagation();
                 $(this).attr('title', $(this).val());
                 //var regexr = '({search})'; //$(this).parents('th').find('select').val();
-                table
+                movementTable
                     .column(colIdx)
                     .search(this.value) //(this.value != "") ? regexr.replace('{search}', 'this.value') : "", this.value != "", this.value == "")
                     .draw();
                  
             });
             
-            $('input', $('.filters th').eq($(table.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
+            $('input', $('.filters th').eq($(movementTable.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
                 e.stopPropagation();
                 $(this).attr('title', $(this).val());
                 //var regexr = '({search})'; //$(this).parents('th').find('select').val();
-                table
+                movementTable
                     .column(colIdx)
                     .search(this.value) //(this.value != "") ? regexr.replace('{search}', 'this.value') : "", this.value != "", this.value == "")
                     .draw();
