@@ -175,6 +175,24 @@ class DealerController extends Controller
         return back()->withInputs($request->input())->with('error', trans('error.record_edited', ['field' => 'dealers']));
     }
 
+
+        /**
+     * Display a listing of the resource for select2
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return json
+     */
+    public function getListForSelect2(Request $request)
+    {
+        $query = Dealer::query();
+        if ($request->has('q')){
+            $query->where('company', 'like', $request->get('q').'%');
+        }
+        $dealers = $query->select('id', 'company as text')->get();
+        return ['results' => $dealers];
+    }  
+
+
     /**
      * Remove the specified resource from storage.
      *
