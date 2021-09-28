@@ -57,8 +57,6 @@
  $(document).ready(function () {
     "use strict";
 
-console.log('movement.blade.php');
-
     // $('.entry-select').select2();
     // $('.warehouse-select').select2();
 

@@ -156,8 +156,6 @@
 @push('page-scripts')
     <script>
 
-console.log('show.blade.php');
-
         var options = {
           series: [{
             name: "Purchases",

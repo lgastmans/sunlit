@@ -60,11 +60,6 @@
  $(document).ready(function () {
     "use strict";
 
-
-console.log('purchase_orders.blade.php');
-
-
-
     var poTable = $('#purchase-orders-datatable').DataTable({
         processing: true,
         serverSide: true,
