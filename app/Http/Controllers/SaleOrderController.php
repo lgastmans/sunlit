@@ -309,6 +309,53 @@ class SaleOrderController extends Controller
     }
 
 
+    /**
+     * Update the shipped_at and status of an order
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function shipped(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'shipped_at' => 'required|date',
+            'due_at' => 'required|date',
+            'tracking_number' => 'required',
+            'courier' => 'required'
+        ]);
+        $order = SaleOrder::find($id);
+        $order->shipped_at = $request->get('shipped_at');
+        $order->due_at = $request->get('due_at');
+        $order->tracking_number = $request->get('tracking_number');
+        $order->courier = $request->get('courier');
+        $order->status = SaleOrder::SHIPPED;
+        $order->update();
+        return redirect(route('sale-orders.show', $order->order_number))->with('success', 'order shipped'); 
+    }
+
+
+    /**
+     * Update the delivered_at and status of an order
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function delivered(Request $request, $id)
+    {
+        $order = SaleOrder::find($id);
+        $order->delivered_at = $request->get('delivered_at');
+        $order->status = SaleOrder::DELIVERED;
+        $order->update();
+
+        // $inventory = new Inventory();
+        // $inventory->updateStock($order);
+
+        return redirect(route('sale-orders.show', $order->order_number))->with('success', 'order delivered'); 
+    }
+
+
 
     /**
      * Remove the specified resource from storage.
