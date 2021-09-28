@@ -121,7 +121,7 @@ class InventoryMovementController extends Controller
 
 
         if (!empty($column_arr[0]['search']['value']))
-            $query->where('created_at', 'like', '%'.$column_arr[0]['search']['value'].'%');
+            $query->where('inventory_movements.created_at', 'like', convertDateToMysql($column_arr[0]['search']['value']).'%');
 
         if (!empty($column_arr[1]['search']['value']))
             $query->where('order_number', 'like', '%'.$column_arr[1]['search']['value'].'%');
@@ -148,7 +148,7 @@ class InventoryMovementController extends Controller
         // if ($length > 0)
         //     $query->skip($start)->take($length);
 
-        //$movement = $query->toSql();dd($movement);
+        // $movement = $query->toSql();dd($movement."    ".convertDateToMysql($column_arr[0]['search']['value']));
         $movement = $query->get();
 
 
