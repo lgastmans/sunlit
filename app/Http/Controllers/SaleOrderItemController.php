@@ -108,9 +108,14 @@ class SaleOrderItemController extends Controller
     public function destroy($id)
     {
         $item = SaleOrderItem::find($id);
-        $order = SaleOrder::find($item->sale_order_id);
         SaleOrderItem::destroy($id);
 
+        $order = SaleOrder::find($item->sale_order_id);
+        $order->amount = 0;
+        foreach($order->items as $item){
+            $order->amount += $item->total_price;
+        }
+        $order->update();
         return redirect(route('sale-orders.cart', $order->order_number))->with('success', trans('app.record_deleted', ['field' => 'item']));
 
     }
