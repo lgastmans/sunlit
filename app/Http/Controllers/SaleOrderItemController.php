@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\SaleOrderItem;
+use App\Models\Product;
+use App\Models\SaleOrder;
 use Illuminate\Http\Request;
+use App\Models\SaleOrderItem;
 
 class SaleOrderItemController extends Controller
 {
@@ -35,7 +37,24 @@ class SaleOrderItemController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $product = Product::find($request->get('product_id'));
+        if ($product){
+            $item = SaleOrderItem::where('sale_order_id', '=', $request->sale_order_id)->where('product_id', '=', $request->product_id)->first();
+            if ($item){
+                $item->quantity_ordered = $request->quantity_ordered;
+                $item->update();
+            }
+            else{
+                $item = new SaleOrderItem();
+                $item->sale_order_id = $request->sale_order_id;
+                $item->product_id = $request->product_id;
+                $item->tax = $product->tax->amount;
+                $item->quantity_ordered = $request->quantity_ordered;
+                $item->selling_price = $request->selling_price;
+                $item->save();
+            }
+            return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'item' => $item, 'product' => $product]);
+        }
     }
 
     /**
@@ -64,22 +83,35 @@ class SaleOrderItemController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\SaleOrderItem  $saleOrderItem
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, SaleOrderItem $saleOrderItem)
+    public function update(Request $request, $id)
     {
-        //
+        $item = SaleOrderItem::find($id);
+        if ($request->field == "quantity")
+            $item->quantity_ordered = $request->value;
+
+        if ($request->field == "price")
+            $item->selling_price = $request->value;
+
+        $item->update();
+        return response()->json(['success'=>'true', 'code'=>200, 'message'=>'OK']);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\SaleOrderItem  $saleOrderItem
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(SaleOrderItem $saleOrderItem)
+    public function destroy($id)
     {
-        //
+        $item = SaleOrderItem::find($id);
+        $order = SaleOrder::find($item->sale_order_id);
+        SaleOrderItem::destroy($id);
+
+        return redirect(route('sale-orders.cart', $order->order_number))->with('success', trans('app.record_deleted', ['field' => 'item']));
+
     }
 }

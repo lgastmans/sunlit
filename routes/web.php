@@ -58,17 +58,17 @@ Route::group(['middleware' => ['auth']], function () {
     // Route::put('/sale-orders/{id}/confirmed', [SaleOrderController::class, 'confirmed'])->name('sale-orders.confirmed');
     // Route::put('/sale-orders/{id}/shipped', [SaleOrderController::class, 'shipped'])->name('sale-orders.shipped');
     // Route::put('/sale-orders/{id}/received', [SaleOrderController::class, 'received'])->name('sale-orders.received');
-    // Route::put('/sale-orders/{id}', [SaleOrderController::class, 'update'])->name('sale-orders.update');
-    // Route::delete('/sale-orders/{id}', [SaleOrderController::class, 'destroy'])->name('sale-orders.delete');
+    Route::put('/sale-orders/{id}', [SaleOrderController::class, 'update'])->name('sale-orders.update');
+    Route::delete('/sale-orders/{id}', [SaleOrderController::class, 'destroy'])->name('sale-orders.delete');
 
     // Route::get('/sale-orders-items', [SaleOrderItemController::class, 'index'])->name('sale-orders-items');
     // Route::get('/sale-orders-items/create', [SaleOrderItemController::class, 'create'])->name('sale-orders-items.create');
     // Route::get('/sale-orders-items/list', [SaleOrderItemController::class, 'getListForDatatables'])->name('sale-orders-items.datatables');
     // Route::get('/sale-orders-items/{id}', [SaleOrderItemController::class, 'show'])->name('sale-orders-items.show');
     // Route::get('/sale-orders-items/{id}/edit', [SaleOrderItemController::class, 'edit'])->name('sale-orders-items.edit');
-    // Route::post('/sale-orders-items', [SaleOrderItemController::class, 'store'])->name('sale-orders-items.store');
-    // Route::put('/sale-orders-items/{id}', [SaleOrderItemController::class, 'update'])->name('sale-orders-items.update');
-    // Route::delete('/sale-orders-items/{id}', [SaleOrderItemController::class, 'destroy'])->name('sale-orders-items.delete');
+    Route::post('/sale-orders-items', [SaleOrderItemController::class, 'store'])->name('sale-orders-items.store');
+    Route::put('/sale-orders-items/{id}', [SaleOrderItemController::class, 'update'])->name('sale-orders-items.update');
+    Route::delete('/sale-orders-items/{id}', [SaleOrderItemController::class, 'destroy'])->name('sale-orders-items.delete');
 
 
     Route::get('/purchase-orders', [PurchaseOrderController::class, 'index'])->name('purchase-orders');

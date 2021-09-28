@@ -14,7 +14,7 @@ class SaleOrder extends Model
 
     protected $fillable = ['dealer_id', 'order_number', 'status', 'user_id'];
     protected $dates = ['ordered_at', 'confirmed_at', 'delivered_at', 'paid_at', 'due_at', 'shipped_at'];
-    protected $with = ['dealer', 'user'];
+    protected $with = ['dealer', 'user', 'items'];
 
     const DRAFT = 1;
     const ORDERED = 2;

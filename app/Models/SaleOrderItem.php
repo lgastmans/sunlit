@@ -11,6 +11,8 @@ class SaleOrderItem extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $with = ['product', 'product.tax'];
+
     /**
      * Get the order associated with the item.
      */
@@ -24,6 +26,13 @@ class SaleOrderItem extends Model
      */
     public function product()
     {
-        return $this->belongsTo(SaleOrder::class);
+        return $this->belongsTo(Product::class);
     }
+
+    public function getTotalPriceAttribute()
+    {
+        $total = ($this->selling_price + ($this->selling_price * $this->tax/100)) * $this->quantity_ordered;
+        return  $total;
+    }
+
 }

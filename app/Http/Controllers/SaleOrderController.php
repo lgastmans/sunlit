@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\SaleOrder;
 use Illuminate\Http\Request;
+use App\Models\SaleOrderItem;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreSaleOrderRequest;
 
@@ -121,7 +122,7 @@ class SaleOrderController extends Controller
                 "ordered_at" => $order->display_ordered_at,
                 "due_at" => $order->display_due_at,
                 "delivered_at" => $order->display_delivered_at,
-                "amount_inr" => trans('app.currency_symbol_inr')." ".$order->amount,
+                "amount" => trans('app.currency_symbol_inr')." ".$order->amount,
                 "status" => $order->display_status,
                 "user" => $order->user->display_name
             );
@@ -179,7 +180,7 @@ class SaleOrderController extends Controller
      */
     public function cart($order_number)
     {
-        $order = SaleOrder::with(['dealer','items', 'items.product', 'items.product.tax'])->where('order_number', '=', $order_number)->first();
+        $order = SaleOrder::where('order_number', '=', $order_number)->first();
         if ($order){
             if ($order->status == SaleOrder::DRAFT)
                 return view('sale_orders.cart', ['order' => $order ]);
@@ -216,22 +217,55 @@ class SaleOrderController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\SaleOrder  $saleOrder
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, SaleOrder $saleOrder)
+    public function update(Request $request, $id)
     {
-        //
+        if ($request->get('field') == "order_number"){
+            $hasOrderNumber = SaleOrder::where('order_number', 'LIKE', $request->get('order_number'))->count();
+            if ($hasOrderNumber){
+                return response()->json([
+                    'success' => 'false',
+                    'errors'  => "This order number is already used by another order",
+                ], 409);
+            }
+            $order = SaleOrder::find($id);
+            $order->order_number = $request->get('order_number');
+            $order->update();
+            return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'field' => $request->get('field')]);
+        }
+
+        if ($request->get('field') == "amount"){
+            $order = SaleOrder::find($id);
+            $items = SaleOrderItem::where('sale_order_id', "=", $id)->get();
+            $order->amount = 0;
+            foreach($items as $item){
+                $order->amount += $item->total_price;
+            }
+            $order->update();
+
+            return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'field' => $request->get('field')]);
+        }
     }
+
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\SaleOrder  $saleOrder
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(SaleOrder $saleOrder)
+    public function destroy($id)
     {
-        //
+        $user = Auth::user();
+        if ($user->can('delete sale orders')){
+            $order = SaleOrder::find($id);
+            $order->items()->delete();
+            $order->delete();
+            return redirect(route('sale-orders'))->with('success', trans('app.record_deleted', ['field' => 'Sale Order']));
+        }
+        return abort(403, trans('error.unauthorized'));
+
     }
 }
