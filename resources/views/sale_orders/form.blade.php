@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('title')
-    @parent() | Create a Purchase Order
+    @parent() | Create a Sale Order
 @endsection
 
-@section('page-title', 'Create a Purchase Order')
+@section('page-title', 'Create a Sale Order')
 
 @section('content')
 
@@ -13,10 +13,10 @@
         <div class="card">
             <div class="card-body">
                 <div class="row mb-2">
-                    <p>{{ __('app.create_title', ['field' => 'purchase order']) }} </p>
+                    <p>{{ __('app.create_title', ['field' => 'sale order']) }} </p>
                 </div>
                 <x-forms.errors class="mb-4" :errors="$errors" />
-                    <form action="{{ route('purchase-orders.store') }}" method="POST" class="needs-validation" novalidate>
+                    <form action="{{ route('sale-orders.store') }}" method="POST" class="needs-validation" novalidate>
                         @csrf()
                         <div class="mb-3">
                             <div>
@@ -28,20 +28,14 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="supplier-select">Supplier</label>
-                            <select class="supplier-select form-control" name="supplier_id"></select>
+                            <label class="form-label" for="dealer-select">Dealer</label>
+                            <select class="dealer-select form-control" name="dealer_id" required></select>
                             <div class="invalid-feedback">
-                                {{ __('error.form_invalid_field', ['field' => 'supplier' ]) }}
+                                {{ __('error.form_invalid_field', ['field' => 'dealer' ]) }}
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="warehouse-select">Warehouse</label>
-                            <select class="warehouse-select form-control" name="warehouse_id"></select>
-                            <div class="invalid-feedback">
-                                {{ __('error.form_invalid_field', ['field' => 'warehouse' ]) }}
-                            </div>
-                        </div>
-                        <button class="btn btn-primary" type="submit">{{ __('app.create_title', ['field' => 'purchase order']) }}</button>
+                    
+                        <button class="btn btn-primary" type="submit">{{ __('app.create_title', ['field' => 'sale order']) }}</button>
                     </form>
                 </div>
             </div> <!-- end card-body-->
@@ -55,23 +49,19 @@
 @section('page-scripts')
 
     <script>
-        var supplierSelect = $(".supplier-select").select2();
-        supplierSelect.select2({
+
+
+        var dealerSelect = $(".dealer-select").select2();
+        dealerSelect.select2({
             ajax: {
-                url: '{{route('ajax.suppliers')}}',
+                url: '{{route('ajax.dealers')}}',
                 dataType: 'json'
             }
         });
+
+
+
     </script>
 
-<script>
-    var warehouseSelect = $(".warehouse-select").select2();
-    warehouseSelect.select2({
-        ajax: {
-            url: '{{route('ajax.warehouses')}}',
-            dataType: 'json'
-        }
-    });
-</script>
 
 @endsection

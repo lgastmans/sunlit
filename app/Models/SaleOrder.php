@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,7 +12,8 @@ class SaleOrder extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $dates = ['ordered_at', 'confirmed_at', 'received_at', 'paid_at', 'due_at', 'shipped_at'];
+    protected $fillable = ['dealer_id', 'order_number', 'status', 'user_id'];
+    protected $dates = ['ordered_at', 'confirmed_at', 'delivered_at', 'paid_at', 'due_at', 'shipped_at'];
     protected $with = ['dealer', 'user'];
 
     const DRAFT = 1;
@@ -20,7 +22,7 @@ class SaleOrder extends Model
     const SHIPPED = 4;
     // const CUSTOMS = 5;
     // const CLEARED = 6;
-    const RECEIVED = 7;
+    const DELIVERED = 7;
 
     /**
      * Get the items associated with the sale order.
@@ -52,8 +54,11 @@ class SaleOrder extends Model
      */
     public function getDisplayOrderedAtAttribute()
     {
-        $dt = Carbon::parse($this->ordered_at);
-        return $this->attributes['ordered_at'] = $dt->toFormattedDateString();  
+        if ($this->ordered_at){
+            $dt = Carbon::parse($this->ordered_at);
+            return $dt->toFormattedDateString(); 
+        } 
+        return "";
     }
 
     public function setOrderedAtAttribute($value)
@@ -67,8 +72,10 @@ class SaleOrder extends Model
      */
     public function getDisplayConfirmedAtAttribute()
     {
-        $dt = Carbon::parse($this->confirmed_at);
-        return $this->attributes['confirmed_at'] = $dt->toFormattedDateString();  
+        if ($this->confirmed_at){
+            $dt = Carbon::parse($this->confirmed_at);
+            return $dt->toFormattedDateString();  
+        }
     }
 
     public function setConfirmedAtAttribute($value)
@@ -82,8 +89,11 @@ class SaleOrder extends Model
      */
     public function getDisplayShippedAtAttribute()
     {
-        $dt = Carbon::parse($this->shipped_at);
-        return $this->attributes['shipped_at'] = $dt->toFormattedDateString();  
+        if ($this->shipped_at){
+            $dt = Carbon::parse($this->shipped_at);
+            return $dt->toFormattedDateString(); 
+        } 
+        return ""; 
     }
 
     public function setShippedAtAttribute($value)
@@ -97,8 +107,11 @@ class SaleOrder extends Model
      */
     public function getDisplayDueAtAttribute()
     {
-        $dt = Carbon::parse($this->due_at);
-        return $this->attributes['due_at'] = $dt->toFormattedDateString();  
+        if ($this->due_at){
+            $dt = Carbon::parse($this->due_at);
+            return $dt->toFormattedDateString(); 
+        } 
+        return ""; 
     }
 
     public function setDueAtAttribute($value)
@@ -110,16 +123,19 @@ class SaleOrder extends Model
     /**
      * Returns the customs_at date for display Month Day, Year
      */
-    public function getDisplayReceivedAtAttribute()
+    public function getDisplayDeliveredAtAttribute()
     {
-        $dt = Carbon::parse($this->received_at);
-        return $this->attributes['received_at'] = $dt->toFormattedDateString();  
+        if ($this->delivered_at){
+            $dt = Carbon::parse($this->delivered_at);
+            return $dt->toFormattedDateString();  
+        } 
+        return "";
     }
 
-    public function setReceivedAtAttribute($value)
+    public function setDeliveredAtAttribute($value)
     {
         $dt = Carbon::parse($value);
-        $this->attributes['received_at'] = $dt->toDateTimeString();  
+        $this->attributes['delivered_at'] = $dt->toDateTimeString();  
     }
 
 
@@ -139,8 +155,8 @@ class SaleOrder extends Model
             case SaleOrder::SHIPPED:
                 $status = '<span class="badge badge-dark-lighten">Shipped</span>';
                 break;
-            case SaleOrder::RECEIVED:
-                $status = '<span class="badge badge-success-lighten">Received</span>';
+            case SaleOrder::DELIVERED:
+                $status = '<span class="badge badge-success-lighten">Delivered</span>';
                 break;
             default:
                 $status = '<span class="badge badge-error-lighten">Unknown</span>';
@@ -155,7 +171,7 @@ class SaleOrder extends Model
             SaleOrder::ORDERED => 'Ordered', 
             SaleOrder::CONFIRMED => 'Confirmed',
             SaleOrder::SHIPPED => 'Shipped', 
-            SaleOrder::RECEIVED => 'Received'
+            SaleOrder::DELIVERED => 'Delivered'
         ];
     }
 
@@ -179,14 +195,14 @@ class SaleOrder extends Model
         return $query->where('status', '>=', SaleOrder::ORDERED);
     }
 
-    /* * Retrieve orders with status RECEIVED
+    /* * Retrieve orders with status DELIVERED
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeReceived($query)
+    public function scopeDelivered($query)
     {
-        return $query->where('status', SaleOrder::RECEIVED);
+        return $query->where('status', SaleOrder::DELIVERED);
     }    
 
 

@@ -14,7 +14,7 @@
             <div class="card-body">
                 <div class="row mb-2">
                     <div class="col-sm-4">
-                        <a href="{{ route('purchase-orders.create') }}" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> Create Purchase Order</a>
+                        <a href="{{ route('sale-orders.create') }}" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> Create Sale Order</a>
                     </div>
                     <div class="col-sm-8">
                         <div class="text-sm-end">
@@ -25,14 +25,14 @@
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="purchase-orders-datatable">
+                    <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="sale-orders-datatable">
                         <thead class="table-light">
                             <tr>
                                 <th>Order</th>
-                                <th>Supplier</th>
+                                <th>Dealer</th>
                                 <th>Ordered On</th> 
                                 <th>Expected On</th> 
-                                <th>Received On</th> 
+                                <th>Delivered On</th> 
                                 <th>Amount</th>
                                 <th style="width:100px;">Status</th> 
                                 <th>Created By</th> 
@@ -56,10 +56,10 @@
                                     data-date-format="M d, yyyy"
                                     required>
                                 </th>
-                                <th id="received_at" class="position-relative">
-                                    <input type="text" class="form-control" name="received_at" 
+                                <th id="delivered_at" class="position-relative">
+                                    <input type="text" class="form-control" name="delivered_at" 
                                     data-provide="datepicker" 
-                                    data-date-container="#received_at"
+                                    data-date-container="#delivered_at"
                                     data-date-autoclose="true"
                                     data-date-format="M d, yyyy"
                                     required>
@@ -79,7 +79,7 @@
 </div>
 
 
-<x-modal-confirm type="danger" target="purchase-order"></x-modal-confirm>
+<x-modal-confirm type="danger" target="sale-order"></x-modal-confirm>
 
 
 @endsection
@@ -100,13 +100,13 @@
     });
 
     // Default Datatable
-    var table = $('#purchase-orders-datatable').DataTable({
+    var table = $('#sale-orders-datatable').DataTable({
         orderCellsTop: true,
         fixedHeader: true,
 
         processing: true,
         serverSide: true,
-        ajax: "{{ route('purchase-orders.datatables') }}",
+        ajax: "{{ route('sale-orders.datatables') }}",
 
         "language": {
             "paginate": {
@@ -127,7 +127,7 @@
                 'orderable': true 
             },
             { 
-                'data': 'supplier',
+                'data': 'dealer',
                 'orderable': true 
             },
             { 
@@ -135,11 +135,11 @@
                 'orderable': true 
             },
             { 
-                'data': 'expected_at',
+                'data': 'due_at',
                 'orderable': true 
             },
             { 
-                'data': 'received_at',
+                'data': 'delivered_at',
                 'orderable': true 
             },
             { 
@@ -161,9 +161,7 @@
         },
         "order": [[1, "desc"]],
         "drawCallback": function () {
-            $('.dataTables_paginate > .pagination').addClass('pagination-rounded');
-            $('#products-datatable_length label').addClass('form-label');
-            
+            $('.dataTables_paginate > .pagination').addClass('pagination-rounded');           
         },
     });
 
@@ -205,27 +203,17 @@
         }
     });
 
-    $('#purchase-orders-datatable').on('dblclick', 'tr', function () {
+    $('#sale-orders-datatable').on('dblclick', 'tr', function () {
         if (table.row(this).data().status.includes('Draft')){
-            var route = '{{  route("purchase-orders.cart", ":id") }}';
+            var route = '{{  route("sale-orders.cart", ":id") }}';
         }
         else{
-            var route = '{{  route("purchase-orders.show", ":id") }}';
+            var route = '{{  route("sale-orders.show", ":id") }}';
         }
         route = route.replace(':id', table.row( this ).data().order_number);
         window.location.href = route;
     });
 
-
-    $('#delete-modal').on('show.bs.modal', function (e) {
-        var route = '{{ route("products.delete", ":id") }}';
-        var button = e.relatedTarget;
-        if (button != null){
-            route = route.replace(':id', button.id);
-            $('#delete-form').attr('action', route);
-        }
-        
-    });
 
     
 

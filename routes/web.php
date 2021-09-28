@@ -48,12 +48,12 @@ Route::group(['middleware' => ['auth']], function () {
 
 
     Route::get('/sale-orders', [SaleOrderController::class, 'index'])->name('sale-orders');
-    // Route::get('/sale-orders/create', [SaleOrderController::class, 'create'])->name('sale-orders.create');
-    // Route::get('/sale-orders/list', [SaleOrderController::class, 'getListForDatatables'])->name('sale-orders.datatables');
-    // Route::get('/sale-orders/{order_number}', [SaleOrderController::class, 'show'])->name('sale-orders.show');
-    // Route::get('/sale-orders/{order_number}/cart', [SaleOrderController::class, 'cart'])->name('sale-orders.cart');
+    Route::get('/sale-orders/create', [SaleOrderController::class, 'create'])->name('sale-orders.create');
+    Route::get('/sale-orders/list', [SaleOrderController::class, 'getListForDatatables'])->name('sale-orders.datatables');
+    Route::get('/sale-orders/{order_number}', [SaleOrderController::class, 'show'])->name('sale-orders.show');
+    Route::get('/sale-orders/{order_number}/cart', [SaleOrderController::class, 'cart'])->name('sale-orders.cart');
     // Route::get('/sale-orders/{id}/edit', [SaleOrderController::class, 'edit'])->name('sale-orders.edit');
-    // Route::post('/sale-orders', [SaleOrderController::class, 'store'])->name('sale-orders.store');
+    Route::post('/sale-orders', [SaleOrderController::class, 'store'])->name('sale-orders.store');
     // Route::put('/sale-orders/{id}/ordered', [SaleOrderController::class, 'ordered'])->name('sale-orders.ordered');
     // Route::put('/sale-orders/{id}/confirmed', [SaleOrderController::class, 'confirmed'])->name('sale-orders.confirmed');
     // Route::put('/sale-orders/{id}/shipped', [SaleOrderController::class, 'shipped'])->name('sale-orders.shipped');
@@ -175,6 +175,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/states', [StateController::class, 'getListForSelect2'])->name('ajax.states');
         Route::get('/categories', [CategoryController::class, 'getListForSelect2'])->name('ajax.categories');
         Route::get('/suppliers', [SupplierController::class, 'getListForSelect2'])->name('ajax.suppliers');
+        Route::get('/dealers', [DealerController::class, 'getListForSelect2'])->name('ajax.dealers');
         Route::get('/warehouses', [WarehouseController::class, 'getListForSelect2'])->name('ajax.warehouses');
         Route::get('/taxes', [TaxController::class, 'getListForSelect2'])->name('ajax.taxes');
         Route::get('/roles', [RoleController::class, 'getListForSelect2'])->name('ajax.roles');
