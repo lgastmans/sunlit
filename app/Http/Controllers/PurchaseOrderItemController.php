@@ -56,54 +56,17 @@ class PurchaseOrderItemController extends Controller
             $search = $search_arr['value'];
         }
 
-        if (!$request->has('filter_product_id'))
-            return $arr;
-        $filter_product_id = $request->get('filter_product_id');
+        // $arr = array();
+        // if (!$request->has('filter_product_id'))
+        //     return $arr;
+        // $filter_product_id = $request->get('filter_product_id');
+$filter_product_id=311;
 
         // Total records
-        $totalRecords = PurchaseOrderItems::where('product_id','=', $filter_product_id)->count();
-        // $totalRecordswithFilter = PurchaseOrder::join('suppliers', 'suppliers.id', '=', 'supplier_id')
-        //     ->where('order_number', 'like', '%'.$search.'%')
-        //     ->orWhere('suppliers.company', 'like', $search.'%')
-        //     ->count();
-        
+        $totalRecords = PurchaseOrderItem::where('product_id','=', $filter_product_id)->count();
 
-        $orders = PurchaseOrderItems::with('order')->where('product_id', '=', $filter_product_id)->get();
-        // $query->join('suppliers', 'suppliers.id', '=', 'supplier_id');
-        // $query->join('users', 'users.id', '=', 'user_id');
-        // if (!empty($column_arr[0]['search']['value'])){
-        //     $query->where('purchase_orders.order_number', 'like', $column_arr[0]['search']['value'].'%');
-        // }
-        // if (!empty($column_arr[1]['search']['value'])){
-        //     $query->where('suppliers.company', 'like', $column_arr[1]['search']['value'].'%');
-        // }
-        // if (!empty($column_arr[2]['search']['value'])){
-        //     $query->where('purchase_orders.ordered_at', 'like', convertDateToMysql($column_arr[2]['search']['value']));
-        // }
-        // if (!empty($column_arr[3]['search']['value'])){
-        //     $query->where('purchase_orders.due_at', 'like', convertDateToMysql($column_arr[3]['search']['value']));
-        // }
-        // if (!empty($column_arr[4]['search']['value'])){
-        //     $query->where('purchase_orders.received_at', 'like', convertDateToMysql($column_arr[4]['search']['value']));
-        // }
-        // if (!empty($column_arr[5]['search']['value'])){
-        //     $query->where('purchase_orders.amount_inr', 'like', $column_arr[5]['search']['value'].'%');
-        // }
-        // if (!empty($column_arr[6]['search']['value']) && $column_arr[6]['search']['value'] != "all"){
-        //     $query->where('purchase_orders.status', 'like', $column_arr[6]['search']['value']);
-        // }
-        // if (!empty($column_arr[7]['search']['value'])){
-        //     $query->where('users.name', 'like', $column_arr[7]['search']['value'].'%');
-        // }
-        
-        // if ($request->has('search')){
-        //     $search = $request->get('search')['value'];
-        //     $query->where( function ($q) use ($search){
-        //         $q->where('purchase_orders.order_number', 'like', $search.'%')
-        //             ->orWhere('purchase_orders.amount_inr', 'like', $search.'%')
-        //             ->orWhere('suppliers.company', 'like', $search.'%');
-        //     });    
-        // }
+        $query = PurchaseOrderItem::with('order')
+            ->where('product_id', '=', $filter_product_id);
 
         $totalRecordswithFilter = $query->count();
 
@@ -111,19 +74,19 @@ class PurchaseOrderItemController extends Controller
         if ($length > 0)
             $query->skip($start)->take($length);
         
-        // $orders = $query->get();
+        $orders = $query->get();
 
         $arr = array();
         foreach($orders as $order)
         {           
             $arr[] = array(
                 "id" => $order->id,
-                "order_number" => $order->order->order_number,
-                "ordered_at" => $order->order->display_ordered_at,
-                "quantity_ordered" => $order->order->quantity_ordered,
-                "status" => $order->order->display_status,
-                "warehouse" => $order->order->warehouse->name,
-                "user" => $order->order->user->display_name
+                "ordered_at" => 'test', //$order->order->display_ordered_at,
+                "order_number" => 'test', //$order->order->order_number,
+                "quantity_ordered" => $order->quantity_ordered,
+                "status" => 'test', //$order->order->display_status,
+                "warehouse" => 'test', //$order->order->warehouse->name,
+                "user" => 'test' //$order->order->user->display_name
             );
         }
 

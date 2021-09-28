@@ -153,8 +153,11 @@
 </div>
 @endsection
 
-@section('page-scripts')
+@push('page-scripts')
     <script>
+
+console.log('show.blade.php');
+
         var options = {
           series: [{
             name: "Purchases",
@@ -192,9 +195,19 @@
         }
         };
 
-        var chart = new ApexCharts(document.querySelector("#chart"), options);
-        chart.render();
+        // var chart = new ApexCharts(document.querySelector("#chart"), options);
+        // chart.render();
+
+
+
+
+        @if(Session::has('success'))
+            $.NotificationApp.send("Success","{{ session('success') }}","top-right","","success")
+        @endif
+        @if(Session::has('error'))
+            $.NotificationApp.send("Error","{{ session('error') }}","top-right","","error")
+        @endif
 
     </script>
 
-@endsection
+@endpush

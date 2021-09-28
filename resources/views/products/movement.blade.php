@@ -57,20 +57,22 @@
  $(document).ready(function () {
     "use strict";
 
+console.log('movement.blade.php');
+
     // $('.entry-select').select2();
     // $('.warehouse-select').select2();
 
     var movementTable = $('#movement-datatable').DataTable({
         processing: true,
         serverSide: true,
-        // deferLoading: 0,
+        //deferLoading: 0,
         searching: true,
         paging: false,
         dom:'',
         ajax      : {
             url   : "{{ route('inventory-movement.datatables') }}",
             "data": function ( d ) {
-                d.filter_product_id = {{ $product->id }}; //$(" #hidden_product_id ").val();
+                d.filter_product_id = {{ $product->id }};
             },
         }, 
         "language": {
@@ -159,14 +161,6 @@
             }); 
         }
     });
-
-
-    @if(Session::has('success'))
-        $.NotificationApp.send("Success","{{ session('success') }}","top-right","","success")
-    @endif
-    @if(Session::has('error'))
-        $.NotificationApp.send("Error","{{ session('error') }}","top-right","","error")
-    @endif
 
 });
 

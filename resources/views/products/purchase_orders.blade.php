@@ -2,7 +2,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <div class="row mb-2">
+{{--                 <div class="row mb-2">
                     <div class="col-sm-10">
                         
                     </div>
@@ -12,15 +12,16 @@
                         </div>
                     </div><!-- end col-->
                 </div>
-
+ --}}
                 <div class="table-responsive">
                     <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="purchase-orders-datatable">
                         <thead class="table-light">
                             <tr>
                                 <th>Date ordered</th>
-                                <th>Warehouse</th>
                                 <th>Order #</th>
                                 <th>Quantity Ordered</th>
+                                <th>Status</th>
+                                <th>Warehouse</th>
                                 <th>User</th>
                             </tr>
                             <tr class="filters" style="display:none;">
@@ -32,9 +33,10 @@
                                     data-date-format="M d, yyyy"
                                     required>
                                 </th>
-                                <th><select class="form-control warehouse-select">@foreach($warehouse_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>                                
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
+                                <th><input type="text" class="form-control"></th>
+                                <th><select class="form-control warehouse-select">@foreach($warehouse_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
                                 <th><input type="text" class="form-control"></th>
                             </tr>
                         </thead>
@@ -49,17 +51,24 @@
 </div>
 
 
-@section('page-scripts')
+
+{{-- @section('page-scripts') --}}
+@push('page-scripts')
+
     <script>
         
  $(document).ready(function () {
     "use strict";
 
 
+console.log('purchase_orders.blade.php');
+
+
+
     var poTable = $('#purchase-orders-datatable').DataTable({
         processing: true,
         serverSide: true,
-        // deferLoading: 0,
+        //deferLoading: 0,
         searching: false,
         paging: false,
         ajax      : {
@@ -115,6 +124,8 @@
         
     });
 
+
+/*
     poTable.columns().eq(0).each(function(colIdx) {
         var cell = $('.filters th').eq($(poTable.column(colIdx).header()).index());
         var title = $(cell).text();
@@ -146,16 +157,10 @@
             }); 
         }
     });
-
-
-    @if(Session::has('success'))
-        $.NotificationApp.send("Success","{{ session('success') }}","top-right","","success")
-    @endif
-    @if(Session::has('error'))
-        $.NotificationApp.send("Error","{{ session('error') }}","top-right","","error")
-    @endif
+*/
 
 });
 
     </script>    
-@endsection
+@endpush
+{{-- @endsection --}}
