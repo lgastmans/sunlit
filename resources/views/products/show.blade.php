@@ -99,7 +99,8 @@
         </div>
     </div> <!-- end col -->
 </div>
-<div class="row">
+
+{{-- <div class="row">
     <div class="col-xl-8">
         <div class="row">
             <div class="col">
@@ -135,7 +136,6 @@
                 </div>
             </div>
         </div>
-        
     </div>
     <div class="col-xl-4">
         <div class="card">
@@ -148,7 +148,7 @@
         </div>
         <!-- end card-->
     </div>
-</div>
+</div> --}}
     
 </div>
 <!-- end row -->
