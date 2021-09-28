@@ -194,12 +194,20 @@ class SaleOrderController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\SaleOrder  $saleOrder
+     * @param  string  $order_number
      * @return \Illuminate\Http\Response
      */
-    public function show(SaleOrder $saleOrder)
+    public function show($order_number)
     {
-        //
+        $user = Auth::user();
+        if ($user->can('view sale orders')){
+            $order = SaleOrder::where('order_number', '=', $order_number)->first();
+            if ($order)
+                return view('sale_orders.show', ['order' => $order ]);
+
+            return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'sale order']));
+        }
+        return abort(403, trans('error.unauthorized'));
     }
 
     /**
@@ -248,6 +256,58 @@ class SaleOrderController extends Controller
             return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'field' => $request->get('field')]);
         }
     }
+
+
+        /**
+     * Update the ordered_at and status of an order
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function ordered(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'ordered_at' => 'required|date'
+        ]);
+
+        $order = SaleOrder::find($id);
+        $order->ordered_at = $request->get('ordered_at');
+        $order->status = SaleOrder::ORDERED;
+        $items = SaleOrderItem::where('sale_order_id', "=", $id)->select('quantity_ordered', 'selling_price', 'tax')->get();
+        $order->amount = 0;
+        foreach($items as $item){
+            $order->amount += $item->total_price; 
+        }
+    
+        $order->update();
+        return redirect(route('sale-orders.show', $order->order_number))->with('success', 'order placed'); 
+    }
+
+
+     /**
+     * Update the confirmed_at and status of an order
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function confirmed(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'confirmed_at' => 'required|date'
+        ]);
+        $order = SaleOrder::with('items')->find($id);
+        $order->confirmed_at = $request->get('confirmed_at');
+        $order->status = SaleOrder::CONFIRMED;
+        $order->update();
+
+        // $inventory = new Inventory();
+        // $inventory->updateStock($order);
+        
+        return redirect(route('sale-orders.show', $order->order_number))->with('success', 'order confirmed'); 
+    }
+
 
 
     /**

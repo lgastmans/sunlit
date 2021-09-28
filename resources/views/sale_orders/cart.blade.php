@@ -158,7 +158,7 @@
                         <div class="place-order-form-container mt-4 mt-lg-0 rounded @if (count($order->items)==0) d-none @endif">
                             <div class="card mt-4 border">
                                 <div class="card-body">
-                                    <form name="place-order-form" action="{{ route('purchase-orders.ordered', $order->id) }}" method="POST" class="needs-validation" novalidate>
+                                    <form name="place-order-form" action="{{ route('sale-orders.ordered', $order->id) }}" method="POST" class="needs-validation" novalidate>
                                         @csrf()
                                         @method('PUT')
                                         <div class="mb-3 position-relative" id="ordered_at">

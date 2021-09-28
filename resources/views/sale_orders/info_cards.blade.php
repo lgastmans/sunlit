@@ -2,58 +2,58 @@
     <div class="col-lg-4">
         <div class="card">
             <div class="card-body">
-                <h4 class="header-title mb-3">Supplier Information</h4>
-                <h5>{{ $purchase_order->supplier->company }}</h5>
-                <h6>{{ $purchase_order->supplier->contact_person }}</h6>
+                <h4 class="header-title mb-3">Dealer Information</h4>
+                <h5>{{ $order->dealer->company }}</h5>
+                <h6>{{ $order->dealer->contact_person }}</h6>
                 <address class="mb-0 font-14 address-lg">
-                    <abbr title="Phone">P:</abbr> {{ $purchase_order->supplier->phone }} <br />
-                    <abbr title="Mobile">M:</abbr> {{ $purchase_order->supplier->phone2 }} <br />
-                    <abbr title="Mobile">@:</abbr> {{ $purchase_order->supplier->email }}
+                    <abbr title="Phone">P:</abbr> {{ $order->dealer->phone }} <br />
+                    <abbr title="Mobile">M:</abbr> {{ $order->dealer->phone2 }} <br />
+                    <abbr title="Mobile">@:</abbr> {{ $order->dealer->email }}
                 </address>
             </div>
         </div>
     </div> <!-- end col -->
 
-    <div class="col-lg-4">
+    {{-- <div class="col-lg-4 d-none">
         <div class="card">
             <div class="card-body">
                 <h4 class="header-title mb-3">Warehouse Information</h4>
-                <h5>{{ $purchase_order->warehouse->name }}</h5>
-                <h6>{{ $purchase_order->warehouse->contact_person }}</h6>
+                <h5>{{ $order->warehouse->name }}</h5>
+                <h6>{{ $order->warehouse->contact_person }}</h6>
                 <address class="mb-0 font-14 address-lg">
-                    <abbr title="Phone">P:</abbr> {{ $purchase_order->warehouse->phone }} <br />
-                    <abbr title="Mobile">M:</abbr> {{ $purchase_order->warehouse->phone2 }} <br />
-                    <abbr title="Mobile">@:</abbr> {{ $purchase_order->warehouse->email }}
+                    <abbr title="Phone">P:</abbr> {{ $order->warehouse->phone }} <br />
+                    <abbr title="Mobile">M:</abbr> {{ $order->warehouse->phone2 }} <br />
+                    <abbr title="Mobile">@:</abbr> {{ $order->warehouse->email }}
                 </address>
             </div>
         </div>
-    </div> <!-- end col -->
+    </div> <!-- end col --> --}}
 
-    <div class="col-lg-4 d-none">
+    {{-- <div class="col-lg-4 d-none">
         <div class="card">
             <div class="card-body">
                 <h4 class="header-title mb-3">Payment Information</h4>
-                <h5>{{ $purchase_order->warehouse->name }}</h5>
-                <h6>{{ $purchase_order->warehouse->contact_person }}</h6>
+                <h5>{{ $order->warehouse->name }}</h5>
+                <h6>{{ $order->warehouse->contact_person }}</h6>
                 <address class="mb-0 font-14 address-lg">
-                    <abbr title="Phone">P:</abbr> {{ $purchase_order->warehouse->phone }} <br />
-                    <abbr title="Mobile">M:</abbr> {{ $purchase_order->warehouse->phone2 }} <br />
-                    <abbr title="Mobile">@:</abbr> {{ $purchase_order->warehouse->email }}
+                    <abbr title="Phone">P:</abbr> {{ $order->warehouse->phone }} <br />
+                    <abbr title="Mobile">M:</abbr> {{ $order->warehouse->phone2 }} <br />
+                    <abbr title="Mobile">@:</abbr> {{ $order->warehouse->email }}
                 </address>
             </div>
         </div>
-    </div> <!-- end col -->
+    </div> <!-- end col --> --}}
 
-    <div class="col-lg-4  @if (!$purchase_order->shipped_at) d-none @endif">
+    <div class="col-lg-4  @if (!$order->shipped_at) d-none @endif">
         <div class="card">
             <div class="card-body">
                 <h4 class="header-title mb-3">Delivery Info</h4>
 
                 <div class="text-center">
                     <i class="mdi mdi-truck-fast h2 text-muted"></i>
-                    <h5><b>{{ $purchase_order->courier }}</b></h5>
-                    <p class="mb-1"><b>Tracking # :</b> {{ $purchase_order->tracking_number }}</p>
-                    <p class="mb-0"><b>ETA :</b> {{ $purchase_order->display_due_at }}</p>
+                    <h5><b>{{ $order->courier }}</b></h5>
+                    <p class="mb-1"><b>Tracking # :</b> {{ $order->tracking_number }}</p>
+                    <p class="mb-0"><b>ETA :</b> {{ $order->display_due_at }}</p>
                 </div>
             </div>
         </div>
