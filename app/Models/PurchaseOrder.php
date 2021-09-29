@@ -64,8 +64,11 @@ class PurchaseOrder extends Model
      */
     public function getDisplayOrderedAtAttribute()
     {
-        $dt = Carbon::parse($this->ordered_at);
-        return $this->attributes['ordered_at'] = $dt->toFormattedDateString();  
+        if ($this->ordered_at){
+            $dt = Carbon::parse($this->ordered_at);
+            return $dt->toFormattedDateString(); 
+        } 
+        return "";
     }
 
     public function setOrderedAtAttribute($value)
@@ -79,8 +82,11 @@ class PurchaseOrder extends Model
      */
     public function getDisplayConfirmedAtAttribute()
     {
-        $dt = Carbon::parse($this->confirmed_at);
-        return $this->attributes['confirmed_at'] = $dt->toFormattedDateString();  
+        if ($this->confirmed_at){
+            $dt = Carbon::parse($this->confirmed_at);
+            return $dt->toFormattedDateString(); 
+        } 
+        return "";  
     }
 
     public function setConfirmedAtAttribute($value)
@@ -94,8 +100,11 @@ class PurchaseOrder extends Model
      */
     public function getDisplayShippedAtAttribute()
     {
-        $dt = Carbon::parse($this->shipped_at);
-        return $this->attributes['shipped_at'] = $dt->toFormattedDateString();  
+        if ($this->shipped_at){
+            $dt = Carbon::parse($this->shipped_at);
+            return $dt->toFormattedDateString(); 
+        } 
+        return "";  
     }
 
     public function setShippedAtAttribute($value)
@@ -110,8 +119,11 @@ class PurchaseOrder extends Model
      */
     public function getDisplayDueAtAttribute()
     {
-        $dt = Carbon::parse($this->due_at);
-        return $this->attributes['due_at'] = $dt->toFormattedDateString();  
+        if ($this->due_at){
+            $dt = Carbon::parse($this->due_at);
+            return $dt->toFormattedDateString(); 
+        } 
+        return "";   
     }
 
     public function setDueAtAttribute($value)
@@ -125,8 +137,11 @@ class PurchaseOrder extends Model
      */
     public function getDisplayCustomsAtAttribute()
     {
-        $dt = Carbon::parse($this->customs_at);
-        return $this->attributes['customs_at'] = $dt->toFormattedDateString();  
+        if ($this->customs_at){
+            $dt = Carbon::parse($this->customs_at);
+            return $dt->toFormattedDateString(); 
+        } 
+        return "";    
     }
 
     public function setCustomsAtAttribute($value)
@@ -140,8 +155,11 @@ class PurchaseOrder extends Model
      */
     public function getDisplayClearedAtAttribute()
     {
-        $dt = Carbon::parse($this->cleared_at);
-        return $this->attributes['cleared_at'] = $dt->toFormattedDateString();  
+        if ($this->cleared_at){
+            $dt = Carbon::parse($this->cleared_at);
+            return $dt->toFormattedDateString(); 
+        } 
+        return "";    
     }
 
     public function setClearedAtAttribute($value)
@@ -155,8 +173,11 @@ class PurchaseOrder extends Model
      */
     public function getDisplayReceivedAtAttribute()
     {
-        $dt = Carbon::parse($this->received_at);
-        return $this->attributes['received_at'] = $dt->toFormattedDateString();  
+        if ($this->received_at){
+            $dt = Carbon::parse($this->received_at);
+            return $dt->toFormattedDateString(); 
+        } 
+        return "";    
     }
 
     public function setReceivedAtAttribute($value)
