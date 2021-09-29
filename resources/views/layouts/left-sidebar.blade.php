@@ -18,30 +18,12 @@
             @can('view dashboard')
             <li class="side-nav-item {{ (Request::is('dashboard*') ? ' menuitem-active' : '') }}">
                 <a href="{{ route('dashboard')}}" class="side-nav-link {{ (Request::is('dashboard*') ? ' active' : '') }}">
-                    <i class="uil-shop"></i>
+                    <i class="mdi mdi-view-dashboard"></i>
                     <span> Dashboard </span>
                 </a>
             </li>
             @endcan
 
-            @can('list sale orders')
-            <li class="side-nav-item {{ (Request::is('sale-orders*') ? ' menuitem-active' : '') }}">
-                <a href="{{ route('sale-orders')}}" class="side-nav-link {{ (Request::is('sale-orders*') ? ' active' : '') }}">
-                    <i class="mdi mdi-basket-outline"></i>
-                    <span> Sale Orders </span>
-                </a>
-            </li>
-            @endcan
-
-            @can('list purchase orders')
-            <li class="side-nav-item {{ (Request::is('purchase-orders*') ? ' menuitem-active' : '') }}">
-                <a href="{{ route('purchase-orders')}}" class="side-nav-link {{ (Request::is('purchase-orders*') ? ' active' : '') }}">
-                    <i class="mdi mdi-cart-outline"></i>
-                    <span> Purchase Orders </span>
-                </a>
-            </li>
-            @endcan
-            
             @can('list inventories')
             <li class="side-nav-item {{ (Request::is('inventory*') ? ' menuitem-active' : '') }}">
                 <a href="{{ route('inventory')}}" class="side-nav-link {{ (Request::is('inventory*') ? ' active' : '') }}">
@@ -50,8 +32,30 @@
                 </a>
             </li>
             @endcan
+
+            <li class="side-nav-title side-nav-item mt-4">Orders</li>
+
+            @can('list sale orders')
+            <li class="side-nav-item {{ (Request::is('sale-orders*') ? ' menuitem-active' : '') }}">
+                <a href="{{ route('sale-orders')}}" class="side-nav-link {{ (Request::is('sale-orders*') ? ' active' : '') }}">
+                    <i class="mdi mdi-basket-outline"></i>
+                    <span> Sales </span>
+                </a>
+            </li>
+            @endcan
+
+            @can('list purchase orders')
+            <li class="side-nav-item {{ (Request::is('purchase-orders*') ? ' menuitem-active' : '') }}">
+                <a href="{{ route('purchase-orders')}}" class="side-nav-link {{ (Request::is('purchase-orders*') ? ' active' : '') }}">
+                    <i class="mdi mdi-cart-outline"></i>
+                    <span> Purchases </span>
+                </a>
+            </li>
+            @endcan
+            
+            
     
-            <li class="side-nav-title side-nav-item">Components</li>
+            <li class="side-nav-title side-nav-item mt-4">Components</li>
             @can('list products')
             <li class="side-nav-item {{ (Request::is('products*') ? ' menuitem-active' : '') }}">
                 <a href="{{ route('products')}}" class="side-nav-link {{ (Request::is('products*') ? ' active' : '') }}">
