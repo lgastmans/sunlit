@@ -76,6 +76,7 @@ class SaleOrder extends Model
             $dt = Carbon::parse($this->confirmed_at);
             return $dt->toFormattedDateString();  
         }
+        return "";
     }
 
     public function setConfirmedAtAttribute($value)

@@ -122,7 +122,7 @@ class SaleOrderController extends Controller
                 "ordered_at" => $order->display_ordered_at,
                 "due_at" => $order->display_due_at,
                 "delivered_at" => $order->display_delivered_at,
-                "amount" => trans('app.currency_symbol_inr')." ".$order->amount,
+                "amount" => (isset($order->amount)) ? trans('app.currency_symbol_inr')." ".$order->amount : "",
                 "status" => $order->display_status,
                 "user" => $order->user->display_name
             );

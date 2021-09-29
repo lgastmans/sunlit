@@ -143,7 +143,7 @@
                 'orderable': true 
             },
             { 
-                'data': 'amount_inr',
+                'data': 'amount',
                 'orderable': true 
             },
             { 
