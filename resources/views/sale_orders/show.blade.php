@@ -61,46 +61,26 @@
                             <tr>
                                 <td>Order Total :</td>
                                 <td>
-                                    <span>{{ __('app.currency_symbol_usd')}}</span>
+                                    <span>{{ __('app.currency_symbol_inr')}}</span>
                                     <span id="grand-total">{{ $order->amount }}</span>
                                 </td>
                             </tr>
                           
                          
                             @if ($order->status >= "5")
+                                
                                 <tr>
-                                    <td>Customs Duty : </td>
+                                    <td>Transport Charges: </td>
                                     <td>
                                         <span>{{ __('app.currency_symbol_inr')}}</span>
-                                        <span id="customs-duty">{{ $order->customs_duty }}</span>
+                                        <span id="bank-transport">{{ $order->transport_charges }}</span>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Social Welfare Surcharge : </td>
-                                    <td>
-                                        <span>{{ __('app.currency_symbol_inr')}}</span>
-                                        <span id="social-welfare-surcharge">{{ $order->social_welfare_surcharge }}</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>IGST : </td>
-                                    <td>
-                                        <span>{{ __('app.currency_symbol_inr')}}</span>
-                                        <span id="igst">{{ $order->igst }}</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Bank & Transport : </td>
-                                    <td>
-                                        <span>{{ __('app.currency_symbol_inr')}}</span>
-                                        <span id="bank-transport">{{ $order->bank_and_transport_charges }}</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Landed Cost :</th>
+                                    <th>Total Cost :</th>
                                     <th>
                                         <span>{{ __('app.currency_symbol_inr')}}</span>
-                                        <span id="landed-cost">{{ $order->landed_cost }}</span>
+                                        <span id="landed-cost">{{ $order->amount + $order->transport_charges }}</span>
                                     </th>
                                 </tr>
                             @endif

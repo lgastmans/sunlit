@@ -50,7 +50,7 @@ class SaleOrderController extends Controller
             $column_arr = $request->get('columns');
             $column_index = $order_arr[0]['column'];
             if ($column_index==1)
-                $order_column = "suppliers.company";
+                $order_column = "dealers.company";
             else
                 $order_column = $column_arr[$column_index]['data'];
             $order_dir = $order_arr[0]['dir'];
