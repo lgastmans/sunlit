@@ -110,6 +110,7 @@ class SaleOrderController extends Controller
         if ($length > 0)
             $query->skip($start)->take($length);
 
+        $query->orderBy($order_column, $order_dir);
         $orders = $query->get();
 
         $arr = array();
