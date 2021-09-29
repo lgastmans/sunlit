@@ -37,7 +37,7 @@
                                 <th style="width:100px;">Status</th> 
                                 <th>Created By</th> 
                             </tr>
-                            <tr class="filters" >
+                            <tr class="filters" style="display:none;">
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
                                 <th id="ordered_at" class="position-relative">
