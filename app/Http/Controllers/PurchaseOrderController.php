@@ -83,12 +83,14 @@ class PurchaseOrderController extends Controller
 
         $query = PurchaseOrder::query();
         $query->join('suppliers', 'suppliers.id', '=', 'supplier_id');
+        $query->join('warehouses', 'warehouses.id', '=', 'warehouse_id');
         $query->join('users', 'users.id', '=', 'user_id');
+
         if (!empty($column_arr[0]['search']['value'])){
             $query->where('purchase_orders.order_number', 'like', $column_arr[0]['search']['value'].'%');
         }
         if (!empty($column_arr[1]['search']['value'])){
-            $query->where('purchase_orders.warehouse_id', 'like', $column_arr[1]['search']['value'].'%');
+            $query->where('warehouses.name', 'like', $column_arr[1]['search']['value'].'%');
         }
         if (!empty($column_arr[2]['search']['value'])){
             $query->where('suppliers.company', 'like', $column_arr[2]['search']['value'].'%');
