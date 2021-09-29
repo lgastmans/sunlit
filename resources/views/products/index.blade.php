@@ -34,16 +34,14 @@
                             <tr>
                                 <th>Category</th>
                                 <th>Supplier</th> 
-                                <th>Tax</th>
                                 <th>Code</th> 
                                 <th>Name</th> 
-                                <th>Model</th>
                                 <th>Purchase Price</th>
+                                <th>Tax</th>
                                 <th>Actions</th>
                             </tr>
                             <tr class="filters" style="display:none;">
                                 <th><th>
-                                <th></th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
@@ -101,7 +99,6 @@
         },
         "pageLength": {{ Setting::get('general.grid_rows') }},
         "columns": [
-            
             { 
                 'data': 'category',
                 'orderable': true 
@@ -111,13 +108,6 @@
                 'orderable': true 
             },
             { 
-                'data': 'tax',
-                'orderable': true,
-                'render': function(data){
-                    return data + '%';
-                }
-            },
-            { 
                 'data': 'code',
                 'orderable': true 
             },
@@ -125,13 +115,19 @@
                 'data': 'name',
                 'orderable': true 
             },
-            { 
-                'data': 'model',
-                'orderable': true 
-            },
             {
                 'data': 'purchase_price',
                 'orderable': true,
+            },
+            { 
+                'data': 'tax',
+                'orderable': true,
+                'render': function(data, type, row, meta){
+                    if (type === 'display'){
+                        return data + '%';
+                    }
+                    return data;
+                }
             },
             {
                 'data': 'id',

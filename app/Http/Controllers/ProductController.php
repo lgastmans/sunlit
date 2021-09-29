@@ -109,19 +109,19 @@ class ProductController extends Controller
         }
 
         if (!empty($column_arr[2]['search']['value'])) {
-            $query->where('taxes.name', 'like', '%'.$column_arr[2]['search']['value'].'%');
+            $query->where('products.code', 'like', '%'.$column_arr[2]['search']['value'].'%');
         }
 
         if (!empty($column_arr[3]['search']['value'])) {
-            $query->where('products.code', 'like', '%'.$column_arr[3]['search']['value'].'%');
+            $query->where('products.name', 'like', '%'.$column_arr[3]['search']['value'].'%');
         }
 
         if (!empty($column_arr[4]['search']['value'])) {
-            $query->where('products.name', 'like', '%'.$column_arr[4]['search']['value'].'%');
+            $query->where('products.purchase_price', 'like', '%'.$column_arr[4]['search']['value'].'%');
         }
 
         if (!empty($column_arr[5]['search']['value'])) {
-            $query->where('products.model', 'like', '%'.$column_arr[5]['search']['value'].'%');
+            $query->where('taxes.name', 'like', '%'.$column_arr[5]['search']['value'].'%');
         }
 
         if ($request->has('search')){
@@ -155,13 +155,7 @@ class ProductController extends Controller
                 "tax" => $record->tax->amount,
                 "code" => $record->code,
                 "name" => $record->name,
-                "model" => $record->model,
-                "purchase_price" => $record->purchase_price,
-                "minimum_quantity" => $record->minimum_quantity,
-                "cable_length" => $record->cable_length,
-                "kw_rating" => $record->kw_rating,
-                "part_number" => $record->part_number,
-                "notes" => $record->notes
+                "purchase_price" => $record->purchase_price
 
             );
         }
