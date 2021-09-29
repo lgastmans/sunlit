@@ -49,10 +49,17 @@ class SaleOrderController extends Controller
             $order_arr = $request->get('order');
             $column_arr = $request->get('columns');
             $column_index = $order_arr[0]['column'];
-            if ($column_index==1)
-                $order_column = "dealers.company";
-            else
-                $order_column = $column_arr[$column_index]['data'];
+            switch ($column_index){
+                case 1:
+                    $order_column = "sale_orders.warehouse_id";
+                    break;
+                case 2:
+                    $order_column = "dealers.company";
+                    break;
+                default:
+                    $order_column = $column_arr[$column_index]['data'];
+            }
+            
             $order_dir = $order_arr[0]['dir'];
         }
 

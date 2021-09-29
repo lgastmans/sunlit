@@ -28,7 +28,7 @@
                     <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="sale-orders-datatable">
                         <thead class="table-light">
                             <tr>
-                                <th>Order</th>
+                                <th>Order #</th>
                                 <th>Warehouse</th>
                                 <th>Dealer</th>
                                 <th>Ordered On</th> 
@@ -38,6 +38,7 @@
                                 <th>Created By</th> 
                             </tr>
                             <tr class="filters" style="display:none;">
+                                <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
                                 <th id="ordered_at" class="position-relative">
@@ -52,14 +53,6 @@
                                     <input type="text" class="form-control" name="due_at" 
                                     data-provide="datepicker" 
                                     data-date-container="#due_at"
-                                    data-date-autoclose="true"
-                                    data-date-format="M d, yyyy"
-                                    required>
-                                </th>
-                                <th id="delivered_at" class="position-relative">
-                                    <input type="text" class="form-control" name="delivered_at" 
-                                    data-provide="datepicker" 
-                                    data-date-container="#delivered_at"
                                     data-date-autoclose="true"
                                     data-date-format="M d, yyyy"
                                     required>

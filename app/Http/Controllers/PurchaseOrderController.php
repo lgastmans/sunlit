@@ -53,10 +53,16 @@ class PurchaseOrderController extends Controller
             $order_arr = $request->get('order');
             $column_arr = $request->get('columns');
             $column_index = $order_arr[0]['column'];
-            if ($column_index==1)
-                $order_column = "suppliers.company";
-            else
-                $order_column = $column_arr[$column_index]['data'];
+            switch ($column_index){
+                case 1:
+                    $order_column = "purchase_orders.warehouse_id";
+                    break;
+                case 2:
+                    $order_column = "suppliers.company";
+                    break;
+                default:
+                    $order_column = $column_arr[$column_index]['data'];
+            }
             $order_dir = $order_arr[0]['dir'];
         }
 
@@ -82,17 +88,18 @@ class PurchaseOrderController extends Controller
             $query->where('purchase_orders.order_number', 'like', $column_arr[0]['search']['value'].'%');
         }
         if (!empty($column_arr[1]['search']['value'])){
-            $query->where('suppliers.company', 'like', $column_arr[1]['search']['value'].'%');
+            $query->where('purchase_orders.warehouse_id', 'like', $column_arr[1]['search']['value'].'%');
         }
         if (!empty($column_arr[2]['search']['value'])){
-            $query->where('purchase_orders.ordered_at', 'like', convertDateToMysql($column_arr[2]['search']['value']));
+            $query->where('suppliers.company', 'like', $column_arr[2]['search']['value'].'%');
         }
         if (!empty($column_arr[3]['search']['value'])){
-            $query->where('purchase_orders.due_at', 'like', convertDateToMysql($column_arr[3]['search']['value']));
+            $query->where('purchase_orders.ordered_at', 'like', convertDateToMysql($column_arr[3]['search']['value']));
         }
         if (!empty($column_arr[4]['search']['value'])){
-            $query->where('purchase_orders.received_at', 'like', convertDateToMysql($column_arr[4]['search']['value']));
+            $query->where('purchase_orders.due_at', 'like', convertDateToMysql($column_arr[4]['search']['value']));
         }
+    
         if (!empty($column_arr[5]['search']['value'])){
             $query->where('purchase_orders.amount_inr', 'like', $column_arr[5]['search']['value'].'%');
         }
@@ -127,10 +134,10 @@ class PurchaseOrderController extends Controller
             $arr[] = array(
                 "id" => $order->id,
                 "order_number" => $order->order_number,
+                "warehouse" => $order->warehouse->name,
                 "supplier" => $order->supplier->company,
                 "ordered_at" => $order->display_ordered_at,
                 "expected_at" => $order->display_due_at,
-                "received_at" => $order->display_received_at,
                 "amount_inr" => (isset($order->amount_inr)) ? trans('app.currency_symbol_inr')." ".$order->amount_inr : "",
                 "status" => $order->display_status,
                 "warehouse" => $order->warehouse->name,

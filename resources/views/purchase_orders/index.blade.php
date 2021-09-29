@@ -28,16 +28,17 @@
                     <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="purchase-orders-datatable">
                         <thead class="table-light">
                             <tr>
-                                <th>Order</th>
+                                <th>Order #</th>
+                                <th>Warehouse</th>
                                 <th>Supplier</th>
                                 <th>Ordered On</th> 
                                 <th>Expected On</th> 
-                                <th>Received On</th> 
                                 <th>Amount</th>
                                 <th style="width:100px;">Status</th> 
                                 <th>Created By</th> 
                             </tr>
                             <tr class="filters" style="display: none;" >
+                                <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
                                 <th id="ordered_at" class="position-relative">
@@ -52,14 +53,6 @@
                                     <input type="text" class="form-control" name="due_at" 
                                     data-provide="datepicker" 
                                     data-date-container="#due_at"
-                                    data-date-autoclose="true"
-                                    data-date-format="M d, yyyy"
-                                    required>
-                                </th>
-                                <th id="received_at" class="position-relative">
-                                    <input type="text" class="form-control" name="received_at" 
-                                    data-provide="datepicker" 
-                                    data-date-container="#received_at"
                                     data-date-autoclose="true"
                                     data-date-format="M d, yyyy"
                                     required>
@@ -127,6 +120,10 @@
                 'orderable': true 
             },
             { 
+                'data': 'warehouse',
+                'orderable': true 
+            },
+            { 
                 'data': 'supplier',
                 'orderable': true 
             },
@@ -136,10 +133,6 @@
             },
             { 
                 'data': 'expected_at',
-                'orderable': true 
-            },
-            { 
-                'data': 'received_at',
                 'orderable': true 
             },
             { 
