@@ -60,7 +60,6 @@ class PurchaseOrderController extends Controller
             $order_dir = $order_arr[0]['dir'];
         }
 
-        $order_column = 'order_number';
 
         $search = '';
         if ($request->has('search')) {
