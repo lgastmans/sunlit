@@ -25,7 +25,7 @@
                                 <th>Product</th>
                                 <th>Quantity</th>
                                 <th>Price</th>
-                                <th>Tax</th>
+                                <th class="d-none">Tax</th>
                                 <th>Total</th>
                             </tr>
                         </thead>
@@ -35,7 +35,7 @@
                                 <td>{{ $item->product->name }}</td>
                                 <td>{{ $item->quantity_ordered }}</td>
                                 <td>{{ __('app.currency_symbol_usd')}}{{ number_format($item->selling_price,2) }}</td>
-                                <td>{{ number_format($item->tax,2) }}%</td>
+                                <td class="d-none">{{ number_format($item->tax,2) }}%</td>
                                 <td>{{ __('app.currency_symbol_usd')}}{{ number_format($item->total_price,2) }}</td>
                             </tr>
                             @endforeach

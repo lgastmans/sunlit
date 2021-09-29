@@ -31,7 +31,8 @@ class PurchaseOrderItem extends Model
 
     public function getTotalPriceAttribute()
     {
-        $total = ($this->selling_price + ($this->selling_price * $this->tax/100)) * $this->quantity_ordered;
+        // $total = ($this->selling_price + ($this->selling_price * $this->tax/100)) * $this->quantity_ordered;
+        $total = $this->selling_price * $this->quantity_ordered;
         return  $total;
     }
 }

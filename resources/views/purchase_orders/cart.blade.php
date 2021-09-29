@@ -65,7 +65,7 @@
                                         <th class="col-5">Product</th>
                                         <th class="col-2">Price</th>
                                         <th class="col-1">Quantity</th>
-                                        <th class="col-1">Tax</th>
+                                        <th class="col-1 d-none">Tax</th>
                                         <th class="col-2">Total</th>
                                         <th class="col-1"></th>
                                     </tr>
@@ -93,8 +93,9 @@
                                                 <input id="item-quantity-{{ $item->id }}" type="number" min="1" value="{{ $item->quantity_ordered }}" class="editable-field form-control" data-value="{{ $item->quantity_ordered }}" data-field="quantity" data-item="{{ $item->id }}"
                                                     placeholder="Qty" style="width: 90px;">
                                             </td>
-                                            <td>
-                                                <span id="item-tax-{{ $item->id }}">@if ($item->tax){{ $item->tax }}@else 0.00 @endif%</span>
+                                            <td class="d-none">
+                                                {{-- <span id="item-tax-{{ $item->id }}">@if ($item->tax){{ $item->tax }}@else 0.00 @endif%</span> --}}
+                                                <span id="item-tax-{{ $item->id }}">0.00%</span>
                                             </td>
                                             <td>
                                                 <span>{{ __('app.currency_symbol_usd')}}</span>
@@ -379,6 +380,7 @@
     });
 
     function getTaxValue(tax_percentage){
+        return 1;
         if (tax_percentage == null)
             return 1;
         return tax = 1 + (parseFloat(tax_percentage.replace('%','') / 100));
@@ -502,8 +504,8 @@
                                         item += '<td>';
                                             item += '<input id="item-quantity-'+ data.item.id +'" type="number" min="1" value="'+ data.item.quantity_ordered +'" class="editable-field form-control" data-value="'+ data.item.quantity_ordered +'" data-field="quantity" data-item="'+ data.item.id +'" placeholder="Qty" style="width: 90px;">';
                             item += '</td>';
-                            item += '<td>';
-                            item += '<span id="item-tax-'+ data.item.id +'" class="item-tax">'+ data.item.tax +'%</span>';
+                            item += '<td class="d-none">';
+                            item += '<span id="item-tax-'+ data.item.id +'" class="item-tax">'+ 0 +'%</span>';
                             item += '</td>';
                             item += '<td>';
                             item += '<span>{{ __('app.currency_symbol_usd')}}</span><span id="item-total-'+ data.item.id +'" class="item-total">'+((data.item.selling_price * getTaxValue(data.item.tax)) * parseInt(data.item.quantity_ordered)).toFixed(2) +'</span>';
