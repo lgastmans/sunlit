@@ -122,7 +122,7 @@
         </div>
         <!-- End Chart-->
     </div>
-    <div class="col">
+    <div class="col d-none">
         <div class="row">
             <div class="col-sm-4">
                 <div class="card tilebox-one">
@@ -160,60 +160,6 @@
         </div>
         <!-- end row -->
 
-
-        
-
-    <!-- end col -->
-    <div class="card">
-        <div class="card-body">
-            <h4 class="header-title mb-3">Products</h4>
-
-            <div class="table-responsive">
-                <table class="table table-hover table-centered mb-0">
-                    <thead>
-                        <tr>
-                            <th>Product</th>
-                            <th>Price</th>
-                            <th>Stock</th>
-                            <th>Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>ASOS Ridley High Waist</td>
-                            <td>$79.49</td>
-                            <td><span class="badge bg-primary">82 Pcs</span></td>
-                            <td>$6,518.18</td>
-                        </tr>
-                        <tr>
-                            <td>Marco Lightweight Shirt</td>
-                            <td>$128.50</td>
-                            <td><span class="badge bg-primary">37 Pcs</span></td>
-                            <td>$4,754.50</td>
-                        </tr>
-                        <tr>
-                            <td>Half Sleeve Shirt</td>
-                            <td>$39.99</td>
-                            <td><span class="badge bg-warning">6 Pcs</span></td>
-                            <td>$2,559.36</td>
-                        </tr>
-                        <tr>
-                            <td>Lightweight Jacket</td>
-                            <td>$20.00</td>
-                            <td><span class="badge bg-danger">184 Pcs</span></td>
-                            <td>$3,680.00</td>
-                        </tr>
-                        <tr>
-                            <td>Marco Shoes</td>
-                            <td>$28.49</td>
-                            <td><span class="badge bg-primary">69 Pcs</span></td>
-                            <td>$1,965.81</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div> <!-- end table responsive-->
-        </div> <!-- end col-->
-    </div> <!-- end row-->
 </div>
 <!-- end row -->
 
@@ -300,7 +246,6 @@
                 gradientStroke.addColorStop(1, "#727cf5");
 
                 var barChart = {
-                    // labels: ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"],
                     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
                     datasets: [
                         {

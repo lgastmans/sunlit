@@ -5,7 +5,7 @@
 @endsection
 
 @section('page-title')
-    @parent() | Taxes
+    Taxes
 @endsection
 
 @section('content')
