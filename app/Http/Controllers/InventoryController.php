@@ -199,9 +199,6 @@ class InventoryController extends Controller
 
         // $inventory = $query->toSql();dd($inventory);
         $inventory = $query->get();
-        \Debugbar::warn('yo');
-        \Debugbar::info($query->toSql());
-
 
         $arr = array();
         foreach ($inventory as $record)

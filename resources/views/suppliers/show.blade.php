@@ -169,8 +169,9 @@
                             <th>Name</th>
                             <th>Price</th>
                             <th>Available</th>
-                            <th>Booked</th>
                             <th>Ordered</th>
+                            <th>Booked</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -189,6 +190,16 @@
                                             <span class="badge bg-success">
                                         @endif
                                         {{ $inventory->stock_available }} Pcs</span>
+                                    </td>   
+                                    <td>
+                                        @if ($inventory->stock_ordered > 100)
+                                            <span class="badge bg-danger">
+                                        @elseif ($inventory->stock_ordered > 50)
+                                            <span class="badge bg-warning">
+                                        @else
+                                            <span class="badge bg-success">
+                                        @endif
+                                        {{ $inventory->stock_ordered }} Pcs</span>
                                     </td>
                                     <td>
                                         @if ($inventory->stock_booked > 100)
@@ -199,16 +210,6 @@
                                             <span class="badge bg-success">
                                         @endif
                                         {{ $inventory->stock_booked }} Pcs</span>
-                                    </td>
-                                    <td>
-                                        @if ($inventory->stock_ordered > 100)
-                                            <span class="badge bg-danger">
-                                        @elseif ($inventory->stock_ordered > 50)
-                                            <span class="badge bg-warning">
-                                        @else
-                                            <span class="badge bg-success">
-                                        @endif
-                                        {{ $inventory->stock_ordered }} Pcs</span>
                                     </td>
                                 </tr>
                             @endforeach
