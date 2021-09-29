@@ -117,10 +117,10 @@ class SaleOrderController extends Controller
             $arr[] = array(
                 "id" => $order->id,
                 "order_number" => $order->order_number,
+                "warehouse" => $order->warehouse->name,
                 "dealer" => $order->dealer->company,
                 "ordered_at" => $order->display_ordered_at,
                 "due_at" => $order->display_due_at,
-                "delivered_at" => $order->display_delivered_at,
                 "amount" => (isset($order->amount)) ? trans('app.currency_symbol_inr')." ".$order->amount : "",
                 "status" => $order->display_status,
                 "user" => $order->user->display_name

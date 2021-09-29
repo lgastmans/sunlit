@@ -29,10 +29,10 @@
                         <thead class="table-light">
                             <tr>
                                 <th>Order</th>
+                                <th>Warehouse</th>
                                 <th>Dealer</th>
                                 <th>Ordered On</th> 
                                 <th>Expected On</th> 
-                                <th>Delivered On</th> 
                                 <th>Amount</th>
                                 <th style="width:100px;">Status</th> 
                                 <th>Created By</th> 
@@ -127,6 +127,10 @@
                 'orderable': true 
             },
             { 
+                'data': 'warehouse',
+                'orderable': true 
+            },
+            { 
                 'data': 'dealer',
                 'orderable': true 
             },
@@ -136,10 +140,6 @@
             },
             { 
                 'data': 'due_at',
-                'orderable': true 
-            },
-            { 
-                'data': 'delivered_at',
                 'orderable': true 
             },
             { 
