@@ -136,10 +136,9 @@ class SupplierController extends Controller
     {
         $user = Auth::user();
         if ($user->can('view suppliers')){
-            $supplier = Supplier::find($id);
+            $supplier = Supplier::with('products','products.inventory')->find($id);
             if ($supplier){
-                $products = Product::with('inventory')->where('supplier_id', '=', $supplier->id)->get();
-                return view('suppliers.show', ['supplier' => $supplier, 'products' => $products]);
+                return view('suppliers.show', ['supplier' => $supplier]);
             }
             return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'supplier']));
         }

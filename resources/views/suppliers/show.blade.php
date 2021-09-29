@@ -165,6 +165,7 @@
                 <table class="table table-hover table-centered mb-0">
                     <thead>
                         <tr>
+                            <th>Warehouse</th>
                             <th>Name</th>
                             <th>Price</th>
                             <th>Available</th>
@@ -173,43 +174,44 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($products as $product)
-                            @if ($product->inventory)
+                        @foreach($supplier->products as $product)
+                            @foreach ($product->inventory as $inventory)
                                 <tr class="product" data-id="{{ $product->id }}">
+                                    <td>{{ $inventory->warehouse->name }}</td>
                                     <td>{{ $product->name }}</td>
-                                    <td>{{ __('app.currency_symbol_inr')}} {{ $product->inventory->landed_cost }}</td>
+                                    <td>{{ __('app.currency_symbol_inr')}} {{ $inventory->average_cost }}</td>
                                     <td>
-                                        @if ($product->inventory->stock_available <= $product->minimum_quantity)
+                                        @if ($inventory->stock_available <= $product->minimum_quantity)
                                             <span class="badge bg-danger">
-                                        @elseif ($product->inventory->stock_available <= $product->minimum_quantity*10)
+                                        @elseif ($inventory->stock_available <= $product->minimum_quantity*10)
                                             <span class="badge bg-warning">
                                         @else
                                             <span class="badge bg-success">
                                         @endif
-                                        {{ $product->inventory->stock_available }} Pcs</span>
+                                        {{ $inventory->stock_available }} Pcs</span>
                                     </td>
                                     <td>
-                                        @if ($product->inventory->stock_booked > 100)
+                                        @if ($inventory->stock_booked > 100)
                                             <span class="badge bg-danger">
-                                        @elseif ($product->inventory->stock_booked > 50)
+                                        @elseif ($inventory->stock_booked > 50)
                                             <span class="badge bg-warning">
                                         @else
                                             <span class="badge bg-success">
                                         @endif
-                                        {{ $product->inventory->stock_booked }} Pcs</span>
+                                        {{ $inventory->stock_booked }} Pcs</span>
                                     </td>
                                     <td>
-                                        @if ($product->inventory->stock_ordered > 100)
+                                        @if ($inventory->stock_ordered > 100)
                                             <span class="badge bg-danger">
-                                        @elseif ($product->inventory->stock_ordered > 50)
+                                        @elseif ($inventory->stock_ordered > 50)
                                             <span class="badge bg-warning">
                                         @else
                                             <span class="badge bg-success">
                                         @endif
-                                        {{ $product->inventory->stock_ordered }} Pcs</span>
+                                        {{ $inventory->stock_ordered }} Pcs</span>
                                     </td>
                                 </tr>
-                            @endif
+                            @endforeach
                         @endforeach
                       
                     </tbody>
