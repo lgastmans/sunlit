@@ -194,8 +194,15 @@ $filter_product_id=311;
     public function destroy($id)
     {
         $item = PurchaseOrderItem::find($id);
-        $order = PurchaseOrder::find($item->purchase_order_id);
         PurchaseOrderItem::destroy($id);
+
+        $order = PurchaseOrder::with('items')->find($item->purchase_order_id);
+        $order->amount_usd = 0;
+        foreach($order->items as $item){
+            $order->amount_usd += $item->total_price; 
+        }
+        $order->amount_inr = $order->amount_usd * $order->order_exchange_rate;
+        $order->update();
 
         return redirect(route('purchase-orders.cart', $order->order_number))->with('success', trans('app.record_deleted', ['field' => 'item']));
 
