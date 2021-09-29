@@ -14,7 +14,7 @@
         </div>
     </div> <!-- end col -->
 
-    {{-- <div class="col-lg-4 d-none">
+    <div class="col-lg-4">
         <div class="card">
             <div class="card-body">
                 <h4 class="header-title mb-3">Warehouse Information</h4>
@@ -27,7 +27,7 @@
                 </address>
             </div>
         </div>
-    </div> <!-- end col --> --}}
+    </div> <!-- end col -->
 
     {{-- <div class="col-lg-4 d-none">
         <div class="card">

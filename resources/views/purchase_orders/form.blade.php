@@ -62,16 +62,14 @@
                 dataType: 'json'
             }
         });
-    </script>
 
-<script>
-    var warehouseSelect = $(".warehouse-select").select2();
-    warehouseSelect.select2({
-        ajax: {
-            url: '{{route('ajax.warehouses')}}',
-            dataType: 'json'
-        }
-    });
-</script>
+        var warehouseSelect = $(".warehouse-select").select2();
+        warehouseSelect.select2({
+            ajax: {
+                url: '{{route('ajax.warehouses')}}',
+                dataType: 'json'
+            }
+        });
+
 
 @endsection

@@ -12,9 +12,9 @@ class SaleOrder extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['dealer_id', 'order_number', 'status', 'user_id'];
+    protected $fillable = ['dealer_id', 'warehouse_id', 'order_number', 'status', 'user_id'];
     protected $dates = ['ordered_at', 'confirmed_at', 'delivered_at', 'paid_at', 'due_at', 'shipped_at'];
-    protected $with = ['dealer', 'user', 'items'];
+    protected $with = ['dealer', 'warehouse', 'user', 'items'];
 
     const DRAFT = 1;
     const ORDERED = 2;
@@ -38,6 +38,14 @@ class SaleOrder extends Model
     public function dealer()
     {
         return $this->belongsTo(Dealer::class);
+    }
+
+    /**
+     * Get the warehouse associated with the sale order.
+     */
+    public function warehouse()
+    {
+        return $this->belongsTo(Warehouse::class);
     }
 
     /**

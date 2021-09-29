@@ -42,6 +42,7 @@ class StoreSaleOrderRequest extends FormRequest
         return [
             'order_number' => 'required',
             'dealer_id' => 'required|integer',
+            'warehouse_id' => 'required|integer',
             'status' => 'required|integer',
             'user_id' => 'required|integer'
         ];

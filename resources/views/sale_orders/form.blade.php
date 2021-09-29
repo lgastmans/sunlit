@@ -34,6 +34,13 @@
                                 {{ __('error.form_invalid_field', ['field' => 'dealer' ]) }}
                             </div>
                         </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="warehouse-select">Warehouse</label>
+                            <select class="warehouse-select form-control" name="warehouse_id" required></select>
+                            <div class="invalid-feedback">
+                                {{ __('error.form_invalid_field', ['field' => 'warehouse' ]) }}
+                            </div>
+                        </div>
                     
                         <button class="btn btn-primary" type="submit">{{ __('app.create_title', ['field' => 'sale order']) }}</button>
                     </form>
@@ -55,6 +62,14 @@
         dealerSelect.select2({
             ajax: {
                 url: '{{route('ajax.dealers')}}',
+                dataType: 'json'
+            }
+        });
+
+        var warehouseSelect = $(".warehouse-select").select2();
+        warehouseSelect.select2({
+            ajax: {
+                url: '{{route('ajax.warehouses')}}',
                 dataType: 'json'
             }
         });
