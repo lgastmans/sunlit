@@ -42,15 +42,16 @@
                     <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="inventory-datatable">
                         <thead class="table-light">
                             <tr>
-                                <th>Supplier</th>
+
                                 <th>Warehouse</th>
                                 <th>Category</th>
+                                <th>Supplier</th>
                                 <th>Code</th>
                                 <th>Name</th>
-                                <th>Available Stock</th>
-                                <th>Ordered Stock</th>
-                                <th>Booked Stock</th>
-                                <th>Projected Stock</th>
+                                <th>Available</th>
+                                <th>Ordered</th>
+                                <th>Booked</th>
+                                <th>Projected</th>
                             </tr>
                             <tr class="filters" style="display: none;">
                                 <th><input type="text" class="form-control"></th>
@@ -95,6 +96,8 @@
     var table = $('#inventory-datatable').DataTable({
         processing: true,
         serverSide: true,
+        orderCellsTop: true,
+        fixedHeader: true,
         ajax      : 
             {
                 url   : "{{ route('inventory.datatables') }}",
@@ -125,15 +128,15 @@
         },
         "columns": [
             { 
-                'data': 'supplier',
-                'orderable': true 
-            },
-            { 
                 'data': 'warehouse',
                 'orderable': true 
             },
             { 
                 'data': 'category',
+                'orderable': true 
+            },
+            { 
+                'data': 'supplier',
                 'orderable': true 
             },
             { 

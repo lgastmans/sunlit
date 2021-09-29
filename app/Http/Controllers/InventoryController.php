@@ -43,19 +43,25 @@ class InventoryController extends Controller
             $order_arr = $request->get('order');
             $column_arr = $request->get('columns');
             $column_index = $order_arr[0]['column'];
-            
-            if ($column_index==0)
-                $order_column = "suppliers.company";
-            elseif ($column_index==1)
-                $order_column = "warehouses.name";
-            elseif ($column_index==2)
-                $order_column = "categories.name";
-            elseif ($column_index==3)
-                $order_column = "products.code";
-            elseif ($column_index==4)
-                $order_column = "products.name";
-            else
-                $order_column = $column_arr[$column_index]['data'];            
+            switch ($column_index){
+                case '0':
+                    $order_column = "warehouses.name";
+                    break;
+                case '1':
+                    $order_column = "categories.name";
+                    break;
+                case '2':
+                    $order_column = "suppliers.company";
+                    break;
+                case '3':
+                    $order_column = "products.code";
+                    break;
+                case '4':
+                    $order_column = "products.name";
+                    break;
+                default:
+                $order_column = $column_arr[$column_index]['data'];    
+            }                       
             
             $order_dir = $order_arr[0]['dir'];
         }
@@ -74,8 +80,7 @@ class InventoryController extends Controller
         */
         $query = Inventory::query();
 
-        $query->with('product')
-                ->with('warehouse')
+        $query->with(['product','warehouse'])
                 ->select('inventories.*', 'products.code', 'products.name', 'products.minimum_quantity', 'suppliers.company', 'categories.name', 'warehouses.name')
                 ->addSelect(DB::raw('(inventories.stock_available + inventories.stock_ordered - inventories.stock_booked) AS projected'))
                 ->join('products', 'products.id', '=', 'product_id')
@@ -84,13 +89,13 @@ class InventoryController extends Controller
                 ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id');
 
         if (!empty($column_arr[0]['search']['value']))
-            $query->where('suppliers.company', 'like', $column_arr[0]['search']['value'].'%');
+            $query->where('warehouses.name', 'like', $column_arr[0]['search']['value'].'%');
 
         if (!empty($column_arr[1]['search']['value']))
-            $query->where('warehouses.name', 'like', $column_arr[1]['search']['value'].'%');
+            $query->where('categories.name', 'like', $column_arr[1]['search']['value'].'%');
 
         if (!empty($column_arr[2]['search']['value']))
-            $query->where('categories.name', 'like', $column_arr[2]['search']['value'].'%');
+            $query->where('suppliers.company', 'like', $column_arr[2]['search']['value'].'%');
 
         if (!empty($column_arr[3]['search']['value']))
             $query->where('products.code', 'like', $column_arr[3]['search']['value'].'%');
@@ -192,8 +197,11 @@ class InventoryController extends Controller
         if ($length > 0)
             $query->skip($start)->take($length);
 
-        //$inventory = $query->toSql();dd($inventory);
+        // $inventory = $query->toSql();dd($inventory);
         $inventory = $query->get();
+        \Debugbar::warn('yo');
+        \Debugbar::info($query->toSql());
+
 
         $arr = array();
         foreach ($inventory as $record)
@@ -203,7 +211,7 @@ class InventoryController extends Controller
                 "id" => $record->id,
                 "supplier" => $record->company,
                 "warehouse" => $record->warehouse->name,
-                "category" => $record->name,
+                "category" => $record->product->category->name,
                 "code" => $record->product->code,
                 "name" => $record->product->name,
                 "available" => (object)$record->stock_available,
