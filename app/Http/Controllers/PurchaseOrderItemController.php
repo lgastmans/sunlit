@@ -56,16 +56,16 @@ class PurchaseOrderItemController extends Controller
             $search = $search_arr['value'];
         }
 
-        // $arr = array();
-        // if (!$request->has('filter_product_id'))
-        //     return $arr;
-        // $filter_product_id = $request->get('filter_product_id');
-$filter_product_id=311;
+        $arr = array();
+        if (!$request->has('filter_product_id'))
+            return $arr;
+        $filter_product_id = $request->get('filter_product_id');
 
         // Total records
         $totalRecords = PurchaseOrderItem::where('product_id','=', $filter_product_id)->count();
 
-        $query = PurchaseOrderItem::with('order')
+
+        $query = PurchaseOrderItem::with('purchase_order')
             ->where('product_id', '=', $filter_product_id);
 
         $totalRecordswithFilter = $query->count();
@@ -74,19 +74,21 @@ $filter_product_id=311;
         if ($length > 0)
             $query->skip($start)->take($length);
         
+\Debugbar::info($query->toSql());
+
         $orders = $query->get();
 
         $arr = array();
-        foreach($orders as $order)
+        foreach($orders as $record)
         {           
             $arr[] = array(
-                "id" => $order->id,
-                "ordered_at" => 'test', //$order->order->display_ordered_at,
-                "order_number" => 'test', //$order->order->order_number,
-                "quantity_ordered" => $order->quantity_ordered,
-                "status" => 'test', //$order->order->display_status,
-                "warehouse" => 'test', //$order->order->warehouse->name,
-                "user" => 'test' //$order->order->user->display_name
+                "id" => $record->id,
+                "ordered_at" => $record->purchase_order->display_ordered_at,
+                "order_number" => $record->purchase_order->order_number,
+                "quantity_ordered" => $record->quantity_ordered,
+                "status" => $record->purchase_order->display_status,
+                "warehouse" => $record->purchase_order->warehouse->name,
+                "user" => $record->purchase_order->user->display_name
             );
         }
 

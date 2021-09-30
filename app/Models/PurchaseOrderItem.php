@@ -19,7 +19,7 @@ class PurchaseOrderItem extends Model
     /**
      * Get the order associated with the purchase order item.
      */
-    public function order()
+    public function purchase_order()
     {
         return $this->belongsTo(PurchaseOrder::class);
     }
