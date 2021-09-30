@@ -179,7 +179,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/warehouses', [WarehouseController::class, 'getListForSelect2'])->name('ajax.warehouses');
         Route::get('/taxes', [TaxController::class, 'getListForSelect2'])->name('ajax.taxes');
         Route::get('/roles', [RoleController::class, 'getListForSelect2'])->name('ajax.roles');
-        Route::get('/products/{supplier?}', [ProductController::class, 'getListForSelect2'])->name('ajax.products');
+        Route::get('/products/{type?}/{id?}', [ProductController::class, 'getListForSelect2'])->name('ajax.products');
         Route::get('/product/{id}', [ProductController::class, 'getById'])->name('product.json');
 
     });

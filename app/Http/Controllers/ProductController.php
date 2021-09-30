@@ -310,18 +310,25 @@ class ProductController extends Controller
      *
      * @return json
      */
-    public function getListForSelect2($id = false, Request $request)
+    public function getListForSelect2($type = false, $id = false, Request $request)
     {
         $query = Product::query();
 
-        if ($id){
-            $query->where('supplier_id', '=', $id);
+        if ($type){
+            if ($type == "supplier" && $id){
+                $query->where('supplier_id', '=', $id);
+            }
+            if ($type == "warehouse" && $id){
+                $query->with(['inventory']);
+                $query->join('inventories', 'inventories.product_id', '=', 'products.id');
+                $query->where('inventories.warehouse_id', '=', $id);
+            }
         }
         if ($request->has('q')){
             $query->where('code', 'like', '%'.$request->get('q').'%');
         }
-        $products = $query->select('id', 'code as text')->get();
-     
+        $products = $query->select('products.id', 'products.code as text')->get();
+        \Debugbar::info($query->toSql());
         return ['results' => $products];
     }   
 }

@@ -17,6 +17,7 @@
                 <form action="{{ route('sale-orders-items.store') }}" method="POST" class="form-product row">
                     <input type="hidden" name="sale_order_id" id="sale-order-id" value="{{ $order->id }}">
                     <input type="hidden" name="dealer_id" id="dealer-id" value="{{ $order->dealer->id }}">
+                    <input type="hidden" name="warehouse_id" id="warehouse-id" value="{{ $order->warehouse  ->id }}">
                     
                     <div class="col-lg-3">
                         <div class="mb-3">
@@ -300,9 +301,11 @@
     });
 
     var productSelect = $(".product-select").select2();
+    var product_route = '{{ route("ajax.products", ["warehouse",":warehouse_id"]) }}';
+    product_route = product_route.replace(':warehouse_id', $('#warehouse-id').val());
     productSelect.select2({
         ajax: {
-            url: '{{ route("ajax.products") }}',
+            url: product_route,
             dataType: 'json'
         }
     });

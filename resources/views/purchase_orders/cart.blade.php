@@ -355,7 +355,7 @@
     });
 
     var productSelect = $(".product-select").select2();
-    var product_route = '{{ route("ajax.products", ":supplier_id") }}';
+    var product_route = '{{ route("ajax.products", ["supplier", ":supplier_id"]) }}';
     product_route = product_route.replace(':supplier_id', $('#supplier-id').val());
     productSelect.select2({
         ajax: {
