@@ -64,7 +64,8 @@ class SupplierController extends Controller
         $totalRecords = Supplier::get()->count();
         $totalRecordswithFilter = Supplier::where('contact_person', 'like', '%'.$search.'%')
             ->orWhere('company', 'like', '%'.$search.'%')
-            ->orWhere('address', 'like', '%'.$search.'%')
+            ->orWhere('city', 'like', '%'.$search.'%')
+            ->orWhere('country', 'like', '%'.$search.'%')
             ->get()
             ->count();
         
@@ -73,13 +74,15 @@ class SupplierController extends Controller
         if ($length < 0)
             $suppliers = Supplier::where('contact_person', 'like', '%'.$search.'%')
                 ->orWhere('company', 'like', '%'.$search.'%')
-                ->orWhere('address', 'like', '%'.$search.'%')
+                ->orWhere('city', 'like', '%'.$search.'%')
+                ->orWhere('country', 'like', '%'.$search.'%')
                 ->orderBy($order_column, $order_dir)
                 ->get();
         else
             $suppliers = Supplier::where('contact_person', 'like', '%'.$search.'%')
                 ->orWhere('company', 'like', '%'.$search.'%')
-                ->orWhere('address', 'like', '%'.$search.'%')
+                ->orWhere('city', 'like', '%'.$search.'%')
+                ->orWhere('country', 'like', '%'.$search.'%')
                 ->orderBy($order_column, $order_dir)
                 ->skip($start)
                 ->take($length)
