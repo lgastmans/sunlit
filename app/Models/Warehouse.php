@@ -12,7 +12,7 @@ class Warehouse extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = ['state_id', 'name', 'address', 'city', 'zip_code', 'contact_person', 'phone', 'phone2', 'email'];
-
+    protected $with = ['state'];
 
     /**
      * Get the state associated with the warehouse.

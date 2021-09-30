@@ -51,6 +51,9 @@ class WarehouseController extends Controller
             $column_arr = $request->get('columns');
             $column_index = $order_arr[0]['column'];
             $order_column = $column_arr[$column_index]['data'];
+            if ($column_index==3)
+                $order_column = "states.name";
+            
             $order_dir = $order_arr[0]['dir'];
         }
 
@@ -61,25 +64,30 @@ class WarehouseController extends Controller
         }
 
         // Total records
-        $totalRecords = Warehouse::get()->count();
+        $totalRecords = Warehouse::count();
         $totalRecordswithFilter = Warehouse::where('contact_person', 'like', '%'.$search.'%')
-            ->orWhere('name', 'like', '%'.$search.'%')
-            ->orWhere('address', 'like', '%'.$search.'%')
-            ->get()
+            ->join('states', 'states.id', '=', 'state_id')
+            ->orWhere('warehouses.name', 'like', '%'.$search.'%')
+            ->orWhere('city', 'like', '%'.$search.'%')
+            ->orWhere('states.name', 'like', '%'.$search.'%')
             ->count();
         
 
         // Fetch records
         if ($length < 0)
             $warehouses = Warehouse::where('contact_person', 'like', '%'.$search.'%')
-                ->orWhere('name', 'like', '%'.$search.'%')
-                ->orWhere('address', 'like', '%'.$search.'%')
+                ->join('states', 'states.id', '=', 'state_id')
+                ->orWhere('warehouses.name', 'like', '%'.$search.'%')
+                ->orWhere('city', 'like', '%'.$search.'%')
+                ->orWhere('states.name', 'like', '%'.$search.'%')
                 ->orderBy($order_column, $order_dir)
                 ->get();
         else
             $warehouses = Warehouse::where('contact_person', 'like', '%'.$search.'%')
-                ->orWhere('name', 'like', '%'.$search.'%')
-                ->orWhere('address', 'like', '%'.$search.'%')
+                ->join('states', 'states.id', '=', 'state_id')
+                ->orWhere('warehouses.name', 'like', '%'.$search.'%')
+                ->orWhere('city', 'like', '%'.$search.'%')
+                ->orWhere('states.name', 'like', '%'.$search.'%')
                 ->orderBy($order_column, $order_dir)
                 ->skip($start)
                 ->take($length)
