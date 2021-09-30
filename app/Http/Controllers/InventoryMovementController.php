@@ -116,9 +116,9 @@ class InventoryMovementController extends Controller
 
         $query->with('product')
                 ->with('warehouse')
+                ->join('users', 'users.id', '=', 'user_id')
                 ->leftJoin('purchase_orders', 'purchase_orders.id', '=', 'purchase_order_id')
                 ->select('inventory_movements.*', 'purchase_orders.order_number AS order_number');
-
 
         if (!empty($column_arr[0]['search']['value']))
             $query->where('inventory_movements.created_at', 'like', convertDateToMysql($column_arr[0]['search']['value']).'%');
@@ -140,6 +140,9 @@ class InventoryMovementController extends Controller
             if ($column_arr[4]['search']['value'] != '__ALL_')
                 $query->where('inventory_movements.warehouse_id', '=', $column_arr[4]['search']['value']);
         }
+
+        if (!empty($column_arr[5]['search']['value']))
+            $query->where('users.name', 'like', '%'.$column_arr[5]['search']['value'].'%');
 
         $query->where('product_id', '=', $filter_product_id);
 

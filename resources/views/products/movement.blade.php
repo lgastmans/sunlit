@@ -37,7 +37,7 @@
                                 <th><input type="text" class="form-control"></th>
                                 <th><select class="form-control entry-select">@foreach($entry_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
                                 <th><select class="form-control warehouse-select">@foreach($warehouse_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>                                
-                                <th><input type="text" class="form-control" disabled></th>
+                                <th><input type="text" class="form-control"></th>
                             </tr>
                         </thead>
                         <tbody>
