@@ -50,6 +50,10 @@ class DealerController extends Controller
             $column_arr = $request->get('columns');
             $column_index = $order_arr[0]['column'];
             $order_column = $column_arr[$column_index]['data'];
+            if ($column_index==3)
+                $order_column = "states.name";
+            
+            
             $order_dir = $order_arr[0]['dir'];
         }
 
