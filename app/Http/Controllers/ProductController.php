@@ -238,11 +238,21 @@ class ProductController extends Controller
 
     }
 
-    public function getById($id)
+    public function getById($id, $warehouse_id = false)
     {
-        $product = Product::with('tax')->find($id);
+        $query = Product::query();
+
+        if ($warehouse_id){
+            $query->join('inventories', 'inventories.product_id', '=', 'products.id');
+            $query->where('inventories.warehouse_id', '=', $warehouse_id);
+            $product = $query->where('product_id', '=', $id)->first();
+        }
+        else{
+            $product = Product::with('tax')->find($id);
+        }
         if ($product)
             return $product;
+
         return false;
     }
 
@@ -328,7 +338,6 @@ class ProductController extends Controller
             $query->where('code', 'like', '%'.$request->get('q').'%');
         }
         $products = $query->select('products.id', 'products.code as text')->get();
-        \Debugbar::info($query->toSql());
         return ['results' => $products];
     }   
 }

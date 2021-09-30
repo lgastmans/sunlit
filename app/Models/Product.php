@@ -15,7 +15,7 @@ class Product extends Model
 
     protected $dates= ['created_at'];
     protected $fillable = ['category_id', 'supplier_id', 'tax_id', 'code', 'name', 'model', 'minimum_quantity', 'purchase_price', 'cable_length', 'kw_rating', 'part_number', 'notes'];
-
+    protected $with = ['tax', 'inventory'];
 
     /**
      * Get the category associated with the product.

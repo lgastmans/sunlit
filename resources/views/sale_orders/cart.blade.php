@@ -312,14 +312,16 @@
 
     productSelect.on("change", function (e) { 
         var product_id = $(".product-select").find(':selected').val();
-        var route = '{{ route("product.json", ":id") }}';
+        var warehouse_id = $(".product-select").find(':selected').val();
+        var route = '{{ route("product.json", [":id", ":warehouse_id"]) }}';
         route = route.replace(':id', product_id);
+        route = route.replace(':warehouse_id', $('#warehouse-id').val());
         $.ajax({
             type: 'GET',
             url: route,
             dataType: 'json',
             success : function(data){
-                $('#selling_price').val(data.purchase_price);
+                $('#selling_price').val(data.average_cost);
                 $('#tax').val(data.tax.amount);
             }
         })
