@@ -31,8 +31,8 @@
                     <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="suppliers-datatable">
                         <thead class="table-light">
                             <tr>
-                                <th>Contact Person</th>
                                 <th>Company</th>
+                                <th>Contact Person</th>
                                 <th>City</th>
                                 <th>Country</th>
                                 <th>Email address</th>
@@ -84,12 +84,11 @@
         "pageLength": {{ Setting::get('general.grid_rows') }},
         "columns": [
             { 
-                'data': 'contact_person',
-
+                'data': 'company',
                 'orderable': true 
             },
             { 
-                'data': 'company',
+                'data': 'contact_person',
                 'orderable': true 
             },
             { 
