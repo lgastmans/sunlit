@@ -33,7 +33,8 @@
                             <tr>
                                 <th>Contact Person</th>
                                 <th>Company</th>
-                                <th>Location</th>
+                                <th>City</th>
+                                <th>Country</th>
                                 <th>Email address</th>
                                 <th>Phone</th>
                                 <th>Actions</th>
@@ -92,7 +93,11 @@
                 'orderable': true 
             },
             { 
-                'data': 'address',
+                'data': 'city',
+                'orderable': true 
+            },
+            { 
+                'data': 'country',
                 'orderable': true 
             },
             { 

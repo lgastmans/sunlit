@@ -44,6 +44,7 @@ class StoreSupplierRequest extends FormRequest
             'phone' => 'required|string',
             'phone2' => 'nullable|string',
             'currency' => 'required|string|max:3',
+            'country' => 'required|string',
             'credit_period' => 'required',
             'email' => 'required|email|unique:suppliers,email,'.$this->id
         ];
