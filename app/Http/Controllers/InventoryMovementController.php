@@ -159,7 +159,7 @@ class InventoryMovementController extends Controller
                 "created_at" => $record->display_created_at,
                 "order_number" => $record->order_number,
                 "quantity" => $record->quantity,
-                "entry_type" => ($record->movement_type == InventoryMovement::RECEIVED) ? "<span class='badge badge-danger-lighten'>Received</span>" : "<span class='badge badge-danger-lighten'>Delivered</span>",
+                "entry_type" => $record->display_movement_type,
                 "warehouse" => $record->warehouse->name,
                 "user" => $record->user->name,
             );

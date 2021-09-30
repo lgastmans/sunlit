@@ -79,4 +79,21 @@ class InventoryMovement extends Model
         return $this->attributes['created_at'] = $dt->toFormattedDateString();  
     }    
 
+
+    public function getDisplayMovementTypeAttribute()
+    {
+        switch ($this->movement_type)
+        {
+            case InventoryMovement::RECEIVED:
+                $status =  '<span class="badge badge-outline-primary">In</span>';
+                break;
+            case InventoryMovement::DELIVERED:
+                $status = '<span class="badge badge-outline-secondary">Out</span>';
+                break;
+            default:
+                $status = '<span class="badge badge-outline-error">Unknown</span>';
+        }
+        return $status;
+    }
+
 }
