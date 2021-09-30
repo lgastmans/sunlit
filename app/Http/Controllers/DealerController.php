@@ -62,22 +62,28 @@ class DealerController extends Controller
         // Total records
         $totalRecords = Dealer::count();
         $totalRecordswithFilter = Dealer::where('contact_person', 'like', '%'.$search.'%')
+            ->join('states', 'states.id', '=', 'dealers.state_id')
             ->orWhere('company', 'like', '%'.$search.'%')
-            ->orWhere('address', 'like', '%'.$search.'%')
+            ->orWhere('city', 'like', '%'.$search.'%')
+            ->orWhere('states.name', 'like', $search.'%')
             ->count();
         
 
         // Fetch records
         if ($length < 0)
             $dealers = Dealer::where('contact_person', 'like', '%'.$search.'%')
-                ->orWhere('company', 'like', '%'.$search.'%')
-                ->orWhere('address', 'like', '%'.$search.'%')
+                ->join('states', 'states.id', '=', 'dealers.state_id')
+                ->orWhere('company', 'like', $search.'%')
+                ->orWhere('city', 'like', $search.'%')
+                ->orWhere('states.name', 'like', $search.'%')
                 ->orderBy($order_column, $order_dir)
                 ->get();
         else
             $dealers = Dealer::where('contact_person', 'like', '%'.$search.'%')
-                ->orWhere('company', 'like', '%'.$search.'%')
-                ->orWhere('address', 'like', '%'.$search.'%')
+                ->join('states', 'states.id', '=', 'state_id')
+                ->orWhere('company', 'like', $search.'%')
+                ->orWhere('city', 'like', $search.'%')
+                ->orWhere('states.name', 'like', $search.'%')
                 ->orderBy($order_column, $order_dir)
                 ->skip($start)
                 ->take($length)

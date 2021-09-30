@@ -31,9 +31,10 @@
                     <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="dealers-datatable">
                         <thead class="table-light">
                             <tr>
-                                <th>Contact Person</th>
                                 <th>Company</th>
-                                <th>Location</th>
+                                <th>Contact Person</th>
+                                <th>City</th>
+                                <th>State</th>
                                 <th>Email address</th>
                                 <th>Phone</th>
                                 <th>Actions</th>
@@ -83,15 +84,19 @@
         "pageLength": {{ Setting::get('general.grid_rows') }},
         "columns": [
             { 
-                'data': 'contact_person',
-                'orderable': true 
-            },
-            { 
                 'data': 'company',
                 'orderable': true 
             },
             { 
-                'data': 'address',
+                'data': 'contact_person',
+                'orderable': true 
+            },
+            { 
+                'data': 'city',
+                'orderable': true 
+            },
+            { 
+                'data': 'state.name',
                 'orderable': true 
             },
             { 

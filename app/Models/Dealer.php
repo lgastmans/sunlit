@@ -12,7 +12,7 @@ class Dealer extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = ['state_id', 'company', 'address', 'address2', 'city', 'zip_code', 'gstin', 'contact_person', 'phone', 'phone2', 'email'];
-
+    protected $with = ['state'];
 
     /**
      * Get the state associated with the dealer.
