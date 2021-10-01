@@ -167,7 +167,7 @@ class InventoryMovementController extends Controller
                 "quantity" => $record->quantity,
                 "entry_type" => $record->display_movement_type,
                 "warehouse" => $record->warehouse->name,
-                "user" => $record->user->name,
+                "user" => $record->user->display_name,
             );
         }
 

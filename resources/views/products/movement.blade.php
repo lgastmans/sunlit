@@ -2,17 +2,16 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-{{--                 <div class="row mb-2">
-                    <div class="col-sm-10">
-                        
+                <div class="row mb-2">
+                    <div class="col-sm-4">
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-8">
                         <div class="text-sm-end">
-                           <button type="button" class="btn btn-light mb-2">{{ __('app.export') }}</button> 
+                            <a class="btn toggle-filters" href="javascript:void(0);"><button type="button" class="btn btn-light mb-2"><i class="mdi mdi-filter"></i></button></a>
+                            {{-- <a class="btn" href="{{ route('export.products') }}"><button type="button" class="btn btn-light mb-2">{{ __('app.export') }}</button></a> --}}
                         </div>
                     </div><!-- end col-->
                 </div>
- --}}
                 <div class="table-responsive">
                     <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="movement-datatable">
                         <thead class="table-light">
@@ -24,7 +23,7 @@
                                 <th>Ordered on</th>
                                 <th>Created by</th>
                             </tr>
-                            <tr class="filters" > 
+                            <tr class="filters" style="display:none;"> 
                                 <th><input type="text" class="form-control"></th>
                                 <th><select class="form-control warehouse-select">@foreach($warehouse_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>      
                                 <th><input type="text" class="form-control"></th>
@@ -56,6 +55,10 @@
         
  $(document).ready(function () {
     "use strict";
+
+    $('.toggle-filters').on('click', function(e) {
+        $( ".filters" ).slideToggle('slow');
+    });
 
     // $('.entry-select').select2();
     // $('.warehouse-select').select2();
