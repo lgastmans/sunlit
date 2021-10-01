@@ -23,9 +23,7 @@
                                 <th>Ordered on</th>
                                 <th>Created by</th>
                             </tr>
-                            {{-- <tr class="filters" style="display:none;"> --}}
-                                <tr class="filters">
-
+                            <tr class="filters" style="display:none;">
                                 <th><input type="text" class="form-control"></th>
                                 <th><select class="form-control warehouse-select">@foreach($warehouse_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option>@endforeach</select></th>
                                 <th><input type="text" class="form-control"></th>
