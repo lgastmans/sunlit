@@ -63,9 +63,9 @@ class InventoryMovement extends Model
     public static function getMovementFilterList()
     {
         return [
-            '__ALL_' => 'All', 
-            '__RECEIVED_' => 'In',
-            '__DELIVERED_' => 'Out'
+            0 => 'All', 
+            InventoryMovement::RECEIVED => 'In',
+            InventoryMovement::DELIVERED => 'Out'
         ];
     }
 
