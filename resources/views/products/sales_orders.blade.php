@@ -26,8 +26,8 @@
                             </tr>
                             <tr class="filters" style="display:none;">
                                 <th><input type="text" class="form-control"></th>
-                                <th><select class="form-control warehouse-select">@foreach($warehouse_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
-                                <th><select class="form-control dealer-select">@foreach($dealers as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
+                                <th><input type="text" class="form-control"></th>
+                                <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
                                 <th><select class="form-control status-select"><option value="0">All</option>@foreach($sale_order_status as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
                                 <th id="sale_ordered_at" class="position-relative">
@@ -99,19 +99,19 @@
             },
             { 
                 'data': 'warehouse',
-                'orderable': false
+                'orderable': true
             },
             { 
                 'data': 'dealer',
-                'orderable': false
+                'orderable': true
             },
             { 
                 'data': 'quantity_ordered',
-                'orderable': false
+                'orderable': true
             },
             { 
                 'data': 'status',
-                'orderable': false
+                'orderable': true
             },
             { 
                 'data': 'ordered_at',
@@ -119,7 +119,7 @@
             },
             { 
                 'data': 'user',
-                'orderable': false
+                'orderable': true
             }
         ],
         

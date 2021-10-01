@@ -43,10 +43,16 @@ class SaleOrderItemController extends Controller
             $column_arr = $request->get('columns');
             $column_index = $order_arr[0]['column'];
             $order_column = $column_arr[$column_index]['data'];
+
+            if ($column_index==1)
+                $order_column = "warehouses.name";
+            if ($column_index==2)
+                $order_column = "dealers.company";
+            if ($column_index==6)
+                $order_column = "users.name";
+
             $order_dir = $order_arr[0]['dir'];
         }
-
-        $order_column = 'order_number';
 
         $search = '';
         if ($request->has('search')) {
@@ -64,10 +70,14 @@ class SaleOrderItemController extends Controller
 
 
         $query = SaleOrderItem::with('sale_order')
-            ->where('product_id', '=', $filter_product_id);
+                ->leftJoin('sale_orders', 'sale_orders.id', '=', 'sale_order_id')
+                ->join('users', 'users.id', '=', 'sale_orders.user_id')
+                ->leftJoin('warehouses', 'warehouses.id', '=', 'sale_orders.warehouse_id')
+                ->where('product_id', '=', $filter_product_id);
 
         $totalRecordswithFilter = $query->count();
 
+        $query->orderBy($order_column, $order_dir);
 
         if ($length > 0)
             $query->skip($start)->take($length);

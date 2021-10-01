@@ -69,11 +69,15 @@ class InventoryMovementController extends Controller
             $order_arr = $request->get('order');
             $column_arr = $request->get('columns');
             $column_index = $order_arr[0]['column'];
+            $order_column = $column_arr[$column_index]['data'];
+
             if ($column_index==1)
                 $order_column = "warehouses.name";
-            else{
-                $order_column = $column_arr[$column_index]['data'];
-            }
+            if ($column_index==3)
+                $order_column = "inventory_movements.movement_type";
+            if ($column_index==5)
+                $order_column = "users.name";
+                
             $order_dir = $order_arr[0]['dir'];
         }
 
@@ -129,8 +133,7 @@ class InventoryMovementController extends Controller
 
 
         if (!empty($column_arr[1]['search']['value'])){
-            if ($column_arr[1]['search']['value'] != '__ALL_')
-                $query->where('inventory_movements.warehouse_id', '=', $column_arr[1]['search']['value']);
+            $query->where('warehouses.name', 'LIKE', $column_arr[1]['search']['value'].'%');
         }
         
         if (!empty($column_arr[2]['search']['value']))

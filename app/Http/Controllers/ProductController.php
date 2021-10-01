@@ -228,18 +228,14 @@ class ProductController extends Controller
         if ($user->can('view products')){
             $product = Product::with(['inventory', 'inventory.warehouse', 'movement', 'supplier'])->find($id);
             $entry_filter = InventoryMovement::getMovementFilterList();
-            $warehouse_filter = Warehouse::getWarehouseFilterList();
             $purchase_order_status = PurchaseOrder::getStatusList();
             $sale_order_status = SaleOrder::getStatusList();
-            $dealers = Dealer::getDealerFilterList();
             if ($product)
                 return view('products.show',
                 ['product'=>$product, 
                 'entry_filter' => $entry_filter, 
-                'warehouse_filter' => $warehouse_filter, 
                 'purchase_order_status' => $purchase_order_status,
                 'sale_order_status' => $sale_order_status,
-                'dealers' => $dealers
             ]);
 
             return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'product']));

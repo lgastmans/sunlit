@@ -25,7 +25,7 @@
                             </tr>
                             <tr class="filters" style="display:none;"> 
                                 <th><input type="text" class="form-control"></th>
-                                <th><select class="form-control warehouse-select">@foreach($warehouse_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>      
+                                <th><input type="text" class="form-control"></th>      
                                 <th><input type="text" class="form-control"></th>
                                 <th><select class="form-control entry-select">@foreach($entry_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
                                 <th id="created_at" class="position-relative">
@@ -98,15 +98,15 @@
             },
             { 
                 'data': 'warehouse',
-                'orderable': false
+                'orderable': true
             },
             { 
                 'data': 'quantity',
-                'orderable': false
+                'orderable': true
             },
             { 
                 'data': 'entry_type',
-                'orderable': false
+                'orderable': true
             },
             { 
                 'data': 'created_at',
@@ -114,7 +114,7 @@
             },
             { 
                 'data': 'user',
-                'orderable': false
+                'orderable': true
             }
         ],
         

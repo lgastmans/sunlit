@@ -25,7 +25,7 @@
                             </tr>
                             <tr class="filters" style="display:none;">
                                 <th><input type="text" class="form-control"></th>
-                                <th><select class="form-control warehouse-select">@foreach($warehouse_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option>@endforeach</select></th>
+                                <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
                                 <th><select class="form-control status-select"><option value="0">All</option>@foreach($purchase_order_status as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
                                 <th id="ordered_at" class="position-relative">
@@ -62,6 +62,8 @@
     var poTable = $('#purchase-orders-datatable').DataTable({
         processing: true,
         serverSide: true,
+        orderCellsTop: true,
+        fixedHeader: true,
         //deferLoading: 0,
         searching: false,
         paging: false,
@@ -92,15 +94,15 @@
             },
             { 
                 'data': 'warehouse',
-                'orderable': false
+                'orderable': true
             },
             { 
                 'data': 'quantity_ordered',
-                'orderable': false
+                'orderable': true
             },
             { 
                 'data': 'status',
-                'orderable': false
+                'orderable': true
             },
             { 
                 'data': 'ordered_at',
@@ -108,7 +110,7 @@
             },
             { 
                 'data': 'user',
-                'orderable': false
+                'orderable': true
             }
         ],
         
