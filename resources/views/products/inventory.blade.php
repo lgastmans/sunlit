@@ -3,8 +3,8 @@
         <tr>
             <th>Warehouse</th>
             <th>Available</th>
-            <th>Booked</th>
             <th>Ordered</th>
+            <th>Booked</th>
             <th>Average Cost</th>
         </tr>
     </thead>
@@ -14,8 +14,8 @@
             <tr>
                 <td>{{ $inventory->warehouse->name }}</td>
                 <td>{{ $inventory->stock_available }}</td>
-                <td>{{ $inventory->stock_booked }}</td>
                 <td>{{ $inventory->stock_ordered }}</td>
+                <td>{{ $inventory->stock_booked }}</td>
                 <td>{{ __('app.currency_symbol_inr')}} {{ $inventory->average_cost }}</td>
             </tr>
         @endforeach
