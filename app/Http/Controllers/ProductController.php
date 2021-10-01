@@ -168,10 +168,7 @@ class ProductController extends Controller
             'error' => null
         );
 
-        
-        echo json_encode($response);
-
-        exit;
+        return response()->json($response);
     }
 
 

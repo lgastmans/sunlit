@@ -136,15 +136,11 @@ class InventoryMovementController extends Controller
         if (!empty($column_arr[2]['search']['value']))
             $query->where('quantity', '=', $column_arr[2]['search']['value']);
         
+
         if (!empty($column_arr[3]['search']['value'])){
             $query->where('movement_type', '=', $column_arr[3]['search']['value']);
         }
-        // if (!empty($column_arr[3]['search']['value'])){
-        //     if ($column_arr[3]['search']['value'] == '__RECEIVED_')
-        //         $query->where('movement_type', '=', InventoryMovement::RECEIVED);
-        //     elseif ($column_arr[3]['search']['value'] == '__DELIVERED_')
-        //         $query->where('movement_type', '=', InventoryMovement::DELIVERED);
-        // }
+
 
         if (!empty($column_arr[4]['search']['value']))
             $query->where('inventory_movements.created_at', 'like', convertDateToMysql($column_arr[4]['search']['value']).'%');
@@ -156,10 +152,9 @@ class InventoryMovementController extends Controller
 
         $query->orderBy($order_column, $order_dir);
 
-        // if ($length > 0)
-        //     $query->skip($start)->take($length);
+        if ($length > 0)
+            $query->skip($start)->take($length);
 
-        // $movement = $query->toSql();dd($movement."    ".convertDateToMysql($column_arr[0]['search']['value']));
         $movement = $query->get();
 
 
@@ -184,8 +179,7 @@ class InventoryMovementController extends Controller
             'error' => null
         );
 
-        echo json_encode($response);
-        exit;
+        return response()->json($response);
     }
 
 }
