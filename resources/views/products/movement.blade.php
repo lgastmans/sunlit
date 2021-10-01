@@ -17,14 +17,18 @@
                     <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="movement-datatable">
                         <thead class="table-light">
                             <tr>
-                                <th>Date</th>
                                 <th>Order #</th>
+                                <th>Warehouse</th>
                                 <th>Quantity</th>
                                 <th>Entry</th>
-                                <th>Warehouse</th>
-                                <th>User</th>
+                                <th>Ordered on</th>
+                                <th>Created by</th>
                             </tr>
-                            <tr class="filters" >
+                            <tr class="filters" > 
+                                <th><input type="text" class="form-control"></th>
+                                <th><select class="form-control warehouse-select">@foreach($warehouse_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>      
+                                <th><input type="text" class="form-control"></th>
+                                <th><select class="form-control entry-select">@foreach($entry_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
                                 <th id="created_at" class="position-relative">
                                     <input type="text" class="form-control" name="created_at" 
                                     data-provide="datepicker" 
@@ -32,11 +36,7 @@
                                     data-date-autoclose="true"
                                     data-date-format="M d, yyyy"
                                     required>
-                                </th>
-                                <th><input type="text" class="form-control"></th>
-                                <th><input type="text" class="form-control"></th>
-                                <th><select class="form-control entry-select">@foreach($entry_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
-                                <th><select class="form-control warehouse-select">@foreach($warehouse_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>                                
+                                </th>                          
                                 <th><input type="text" class="form-control"></th>
                             </tr>
                         </thead>
@@ -63,6 +63,8 @@
     var movementTable = $('#movement-datatable').DataTable({
         processing: true,
         serverSide: true,
+        orderCellsTop: true,
+        fixedHeader: true,
         //deferLoading: 0,
         searching: true,
         paging: false,
@@ -88,12 +90,12 @@
         "pageLength": {{ Setting::get('general.grid_rows') }},
         "columns": [
             { 
-                'data': 'created_at',
-                'orderable': true 
-            },
-            { 
                 'data': 'order_number',
                 'orderable': true
+            },
+            { 
+                'data': 'warehouse',
+                'orderable': false
             },
             { 
                 'data': 'quantity',
@@ -104,8 +106,8 @@
                 'orderable': false
             },
             { 
-                'data': 'warehouse',
-                'orderable': false
+                'data': 'created_at',
+                'orderable': true 
             },
             { 
                 'data': 'user',

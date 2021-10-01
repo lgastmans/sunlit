@@ -229,8 +229,9 @@ class ProductController extends Controller
             $product = Product::with(['inventory', 'inventory.warehouse', 'movement', 'supplier'])->find($id);
             $entry_filter = InventoryMovement::getMovementFilterList();
             $warehouse_filter = Warehouse::getWarehouseFilterList();
+            $status = PurchaseOrder::getStatusList();
             if ($product)
-                return view('products.show', ['product'=>$product, 'entry_filter' => $entry_filter, 'warehouse_filter' => $warehouse_filter]);
+                return view('products.show', ['product'=>$product, 'entry_filter' => $entry_filter, 'warehouse_filter' => $warehouse_filter, 'status' => $status]);
 
             return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'product']));
         }

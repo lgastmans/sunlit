@@ -64,8 +64,8 @@ class InventoryMovement extends Model
     {
         return [
             '__ALL_' => 'All', 
-            '__RECEIVED_' => 'Received',
-            '__DELIVERED_' => 'Delivered'
+            '__RECEIVED_' => 'In',
+            '__DELIVERED_' => 'Out'
         ];
     }
 
@@ -85,13 +85,13 @@ class InventoryMovement extends Model
         switch ($this->movement_type)
         {
             case InventoryMovement::RECEIVED:
-                $status =  '<span class="badge badge-outline-primary">In</span>';
+                $status =  '<h4><span class="badge badge-outline-primary">In</span></h4>';
                 break;
             case InventoryMovement::DELIVERED:
-                $status = '<span class="badge badge-outline-secondary">Out</span>';
+                $status = '<h4><span class="badge badge-outline-secondary">Out</span></h4>';
                 break;
             default:
-                $status = '<span class="badge badge-outline-error">Unknown</span>';
+                $status = '<h4><span class="badge badge-outline-error">Unknown</span></h4>';
         }
         return $status;
     }
