@@ -2,29 +2,34 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-{{--                 <div class="row mb-2">
-                    <div class="col-sm-10">
-                        
+                <div class="row mb-2">
+                    <div class="col-sm-4">
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-8">
                         <div class="text-sm-end">
-                           <button type="button" class="btn btn-light mb-2">{{ __('app.export') }}</button> 
+                            <a class="btn toggle-filters" href="javascript:void(0);"><button type="button" class="btn btn-light mb-2"><i class="mdi mdi-filter"></i></button></a>
+                            {{-- <a class="btn" href="{{ route('export.products') }}"><button type="button" class="btn btn-light mb-2">{{ __('app.export') }}</button></a> --}}
                         </div>
                     </div><!-- end col-->
                 </div>
- --}}
                 <div class="table-responsive">
                     <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="purchase-orders-datatable">
                         <thead class="table-light">
                             <tr>
-                                <th>Date ordered</th>
                                 <th>Order #</th>
-                                <th>Quantity Ordered</th>
-                                <th>Status</th>
                                 <th>Warehouse</th>
-                                <th>User</th>
+                                <th>Quantity</th>
+                                <th>Status</th>
+                                <th>Ordered on</th>
+                                <th>Created by</th>
                             </tr>
-                            <tr class="filters" style="display:none;">
+                            {{-- <tr class="filters" style="display:none;"> --}}
+                                <tr class="filters">
+
+                                <th><input type="text" class="form-control"></th>
+                                <th><select class="form-control warehouse-select">@foreach($warehouse_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option>@endforeach</select></th>
+                                <th><input type="text" class="form-control"></th>
+                                <th><select class="form-control status-select"><option value="0">All</option>@foreach($purchase_order_status as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
                                 <th id="ordered_at" class="position-relative">
                                     <input type="text" class="form-control" name="ordered_at" 
                                     data-provide="datepicker" 
@@ -33,10 +38,6 @@
                                     data-date-format="M d, yyyy"
                                     required>
                                 </th>
-                                <th><input type="text" class="form-control"></th>
-                                <th><input type="text" class="form-control"></th>
-                                <th><input type="text" class="form-control"></th>
-                                <th><select class="form-control warehouse-select">@foreach($warehouse_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
                                 <th><input type="text" class="form-control"></th>
                             </tr>
                         </thead>
@@ -86,13 +87,14 @@
         },
         "pageLength": {{ Setting::get('general.grid_rows') }},
         "columns": [
-            { 
-                'data': 'ordered_at',
-                'orderable': true 
-            },
+            
             { 
                 'data': 'order_number',
                 'orderable': true 
+            },
+            { 
+                'data': 'warehouse',
+                'orderable': false
             },
             { 
                 'data': 'quantity_ordered',
@@ -103,8 +105,8 @@
                 'orderable': false
             },
             { 
-                'data': 'warehouse',
-                'orderable': false
+                'data': 'ordered_at',
+                'orderable': true 
             },
             { 
                 'data': 'user',
@@ -118,42 +120,6 @@
         },
         
     });
-
-
-/*
-    poTable.columns().eq(0).each(function(colIdx) {
-        var cell = $('.filters th').eq($(poTable.column(colIdx).header()).index());
-        var title = $(cell).text();
-
-        if($(cell).hasClass('no-filter')){
-
-            $(cell).html('&nbsp');
-
-        }
-        else{
-            $('select', $('.filters th').eq($(poTable.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
-                e.stopPropagation();
-                $(this).attr('title', $(this).val());
-                poTable
-                    .column(colIdx)
-                    .search(this.value)
-                    .draw();
-                 
-            });
-            
-            $('input', $('.filters th').eq($(poTable.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
-                e.stopPropagation();
-                $(this).attr('title', $(this).val());
-                poTable
-                    .column(colIdx)
-                    .search(this.value)
-                    .draw();
-                 
-            }); 
-        }
-    });
-*/
-
 });
 
     </script>    

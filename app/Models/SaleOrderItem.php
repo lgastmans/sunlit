@@ -16,7 +16,7 @@ class SaleOrderItem extends Model
     /**
      * Get the order associated with the item.
      */
-    public function order()
+    public function sale_order()
     {
         return $this->belongsTo(SaleOrder::class);
     }

@@ -21,4 +21,17 @@ class Dealer extends Model
     {
         return $this->belongsTo(State::class);
     }
+
+    public static function getDealerFilterList()
+    {
+        $dealers = Dealer::select('id', 'company as name')
+           ->orderBy('company')
+           ->get();
+        $arr = ['0'=> 'All'];
+
+        foreach ($dealers as $dealer)
+            $arr[$dealer->id] = $dealer->name;
+
+        return $arr;
+    }  
 }

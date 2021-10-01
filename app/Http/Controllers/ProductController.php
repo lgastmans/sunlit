@@ -5,18 +5,21 @@ namespace App\Http\Controllers;
 
 use \NumberFormatter;
 
-use Illuminate\Http\Request;
+use App\Models\Dealer;
 use App\Models\Product;
-use App\Models\Warehouse;
 use App\Models\Inventory;
+use App\Models\SaleOrder;
+use App\Models\Warehouse;
+use Illuminate\Support\Arr;
+use Illuminate\Http\Request;
+use App\Models\PurchaseOrder;
+use App\Exports\ProductsExport;
+
 use App\Models\InventoryMovement;
 use App\Models\PurchaseOrderItem;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
-use \App\Http\Requests\StoreProductRequest;
-
-use App\Exports\ProductsExport;
 use Maatwebsite\Excel\Facades\Excel;
+use \App\Http\Requests\StoreProductRequest;
 
 
 
@@ -226,9 +229,18 @@ class ProductController extends Controller
             $product = Product::with(['inventory', 'inventory.warehouse', 'movement', 'supplier'])->find($id);
             $entry_filter = InventoryMovement::getMovementFilterList();
             $warehouse_filter = Warehouse::getWarehouseFilterList();
-            // $status = PurchaseOrder::getStatusList();
+            $purchase_order_status = PurchaseOrder::getStatusList();
+            $sale_order_status = SaleOrder::getStatusList();
+            $dealers = Dealer::getDealerFilterList();
             if ($product)
-                return view('products.show', ['product'=>$product, 'entry_filter' => $entry_filter, 'warehouse_filter' => $warehouse_filter]);
+                return view('products.show',
+                ['product'=>$product, 
+                'entry_filter' => $entry_filter, 
+                'warehouse_filter' => $warehouse_filter, 
+                'purchase_order_status' => $purchase_order_status,
+                'sale_order_status' => $sale_order_status,
+                'dealers' => $dealers
+            ]);
 
             return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'product']));
         }

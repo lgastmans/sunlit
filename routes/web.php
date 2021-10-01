@@ -63,7 +63,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Route::get('/sale-orders-items', [SaleOrderItemController::class, 'index'])->name('sale-orders-items');
     // Route::get('/sale-orders-items/create', [SaleOrderItemController::class, 'create'])->name('sale-orders-items.create');
-    // Route::get('/sale-orders-items/list', [SaleOrderItemController::class, 'getListForDatatables'])->name('sale-orders-items.datatables');
+    Route::get('/sale-orders-items/list', [SaleOrderItemController::class, 'getListForDatatables'])->name('sale-orders-items.datatables');
     // Route::get('/sale-orders-items/{id}', [SaleOrderItemController::class, 'show'])->name('sale-orders-items.show');
     // Route::get('/sale-orders-items/{id}/edit', [SaleOrderItemController::class, 'edit'])->name('sale-orders-items.edit');
     Route::post('/sale-orders-items', [SaleOrderItemController::class, 'store'])->name('sale-orders-items.store');

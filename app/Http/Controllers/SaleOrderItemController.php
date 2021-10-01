@@ -19,6 +19,88 @@ class SaleOrderItemController extends Controller
         //
     }
 
+
+    public function getListForDatatables(Request $request)
+    {
+        $draw = 1;
+        if ($request->has('draw'))
+            $draw = $request->get('draw');
+
+        $start = 0;
+        if ($request->has('start'))
+            $start = $request->get("start");
+
+        $length = 10;
+        if ($request->has('length')) {
+            $length = $request->get("length");
+        }
+
+        $order_column = 'order_number';
+        $order_dir = 'ASC';
+        $order_arr = array();
+        if ($request->has('order')) {
+            $order_arr = $request->get('order');
+            $column_arr = $request->get('columns');
+            $column_index = $order_arr[0]['column'];
+            $order_column = $column_arr[$column_index]['data'];
+            $order_dir = $order_arr[0]['dir'];
+        }
+
+        $order_column = 'order_number';
+
+        $search = '';
+        if ($request->has('search')) {
+            $search_arr = $request->get('search');
+            $search = $search_arr['value'];
+        }
+
+        $arr = array();
+        if (!$request->has('filter_product_id'))
+            return $arr;
+        $filter_product_id = $request->get('filter_product_id');
+
+        // Total records
+        $totalRecords = SaleOrderItem::where('product_id','=', $filter_product_id)->count();
+
+
+        $query = SaleOrderItem::with('sale_order')
+            ->where('product_id', '=', $filter_product_id);
+
+        $totalRecordswithFilter = $query->count();
+
+
+        if ($length > 0)
+            $query->skip($start)->take($length);
+        
+        $orders = $query->get();
+
+        $arr = array();
+        foreach($orders as $order)
+        {           
+            $arr[] = array(
+                "id" => $order->id,
+                "ordered_at" => $order->sale_order->display_ordered_at,
+                "order_number" => $order->sale_order->order_number,
+                "quantity_ordered" => $order->quantity_ordered,
+                "status" => $order->sale_order->display_status,
+                "warehouse" => $order->sale_order->warehouse->name,
+                "dealer" => $order->sale_order->dealer->company,
+                "user" => $order->sale_order->user->display_name
+            );
+        }
+
+        $response = array(
+            "draw" => $draw,
+            "recordsTotal" => $totalRecords,
+            "recordsFiltered" => $totalRecordswithFilter,
+            "data" => $arr,
+            'error' => null
+        );
+        return response()->json($response);
+    }
+
+
+
     /**
      * Show the form for creating a new resource.
      *
