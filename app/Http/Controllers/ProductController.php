@@ -229,9 +229,9 @@ class ProductController extends Controller
             $product = Product::with(['inventory', 'inventory.warehouse', 'movement', 'supplier'])->find($id);
             $entry_filter = InventoryMovement::getMovementFilterList();
             $warehouse_filter = Warehouse::getWarehouseFilterList();
-            $status = PurchaseOrder::getStatusList();
+            // $status = PurchaseOrder::getStatusList();
             if ($product)
-                return view('products.show', ['product'=>$product, 'entry_filter' => $entry_filter, 'warehouse_filter' => $warehouse_filter, 'status' => $status]);
+                return view('products.show', ['product'=>$product, 'entry_filter' => $entry_filter, 'warehouse_filter' => $warehouse_filter]);
 
             return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'product']));
         }
@@ -316,25 +316,40 @@ class ProductController extends Controller
     }
 
 
+    public function getListPerSupplier($supplier, Request $request)
+    {
+        $query = Product::query();
+        $query->where('supplier_id', '=', $supplier);
+        if ($request->has('q')){
+            $query->where('code', 'like', '%'.$request->get('q').'%');
+        }
+        $products = $query->select('products.id', 'products.code as text')->get();
+        return ['results' => $products];  
+    }
+
+    public function getListPerWarehouse($warehouse, Request $request)
+    {
+        $query = Product::query();
+        $query->with(['inventory']);
+        $query->join('inventories', 'inventories.product_id', '=', 'products.id');
+        $query->where('inventories.warehouse_id', '=', $warehouse);
+
+        if ($request->has('q')){
+            $query->where('code', 'like', '%'.$request->get('q').'%');
+        }
+        $products = $query->select('products.id', 'products.code as text')->get();
+        return ['results' => $products];  
+    }
+
+
      /**
      * Display a listing of the resource for select2
      *
      * @return json
      */
-    public function getListForSelect2($type = false, $id = false, Request $request)
+    public function getListForSelect2(Request $request)
     {
         $query = Product::query();
-
-        if ($type){
-            if ($type == "supplier" && $id){
-                $query->where('supplier_id', '=', $id);
-            }
-            if ($type == "warehouse" && $id){
-                $query->with(['inventory']);
-                $query->join('inventories', 'inventories.product_id', '=', 'products.id');
-                $query->where('inventories.warehouse_id', '=', $id);
-            }
-        }
         if ($request->has('q')){
             $query->where('code', 'like', '%'.$request->get('q').'%');
         }

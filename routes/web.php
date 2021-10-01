@@ -179,7 +179,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/warehouses', [WarehouseController::class, 'getListForSelect2'])->name('ajax.warehouses');
         Route::get('/taxes', [TaxController::class, 'getListForSelect2'])->name('ajax.taxes');
         Route::get('/roles', [RoleController::class, 'getListForSelect2'])->name('ajax.roles');
-        Route::get('/products/{type?}/{id?}', [ProductController::class, 'getListForSelect2'])->name('ajax.products');
+        Route::get('/products', [ProductController::class, 'getListForSelect2'])->name('ajax.products');
+        Route::get('/products/supplier/{id}', [ProductController::class, 'getListPerSupplier'])->name('ajax.products.supplier');
+        Route::get('/products/warehouse/{id}', [ProductController::class, 'getListPerWarehouse'])->name('ajax.products.warehouse');
         Route::get('/product/{id}/{warehouse_id?}', [ProductController::class, 'getById'])->name('product.json');
 
     });

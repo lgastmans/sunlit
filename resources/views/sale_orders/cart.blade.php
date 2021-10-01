@@ -301,7 +301,7 @@
     });
 
     var productSelect = $(".product-select").select2();
-    var product_route = '{{ route("ajax.products", ["warehouse",":warehouse_id"]) }}';
+    var product_route = '{{ route("ajax.products.warehouse", [":warehouse_id"]) }}';
     product_route = product_route.replace(':warehouse_id', $('#warehouse-id').val());
     productSelect.select2({
         ajax: {
