@@ -145,6 +145,14 @@
         },
     });
 
+
+    $('#warehouses-datatable').on('dblclick', 'tr', function () {
+        var route = '{{  route("warehouses.show", ":id") }}';
+        route = route.replace(':id', table.row( this ).data().id);
+        window.location.href = route;
+    });
+
+
     $('#delete-modal').on('show.bs.modal', function (e) {
         var route = '{{ route("warehouses.delete", ":id") }}';
         var button = e.relatedTarget;
@@ -165,13 +173,6 @@
     @endif
   
 });
-
-
-
-
-
-        
-
         
     </script>
 @endsection

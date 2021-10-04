@@ -134,6 +134,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/warehouses', [WarehouseController::class, 'index'])->name('warehouses');
     Route::get('/warehouses/create', [WarehouseController::class, 'create'])->name('warehouses.create');
     Route::get('/warehouses/list', [WarehouseController::class, 'getListForDatatables'])->name('warehouses.datatables');
+    Route::get('/warehouses/{id}', [WarehouseController::class, 'show'])->name('warehouses.show');
     Route::get('/warehouses/{id}/edit', [WarehouseController::class, 'edit'])->name('warehouses.edit');
     Route::post('/warehouses', [WarehouseController::class, 'store'])->name('warehouses.store');
     Route::put('/warehouses/{id}', [WarehouseController::class, 'update'])->name('warehouses.update');

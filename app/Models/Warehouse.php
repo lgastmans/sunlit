@@ -20,5 +20,25 @@ class Warehouse extends Model
     public function state()
     {
         return $this->belongsTo(State::class);
-    }     
+    }
+    
+    public function purchase_orders()
+    {
+        return $this->hasMany(PurchaseOrder::class);
+    } 
+    
+    public function sale_orders()
+    {
+        return $this->hasMany(SaleOrder::class);
+    }  
+
+    public function inventories()
+    {
+        return $this->hasMany(Inventory::class);
+    }  
+
+    public function movements()
+    {
+        return $this->hasMany(InventoryMovement::class);
+    }  
 }

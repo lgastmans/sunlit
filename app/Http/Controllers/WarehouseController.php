@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SaleOrder;
 use App\Models\Warehouse;
-use App\Models\PurchaseOrder;
 use Illuminate\Http\Request;
+use App\Models\PurchaseOrder;
+use App\Models\InventoryMovement;
 use Illuminate\Support\Facades\Auth;
 use \App\Http\Requests\StoreWarehouseRequest;
 
@@ -81,6 +83,7 @@ class WarehouseController extends Controller
                 ->orWhere('city', 'like', '%'.$search.'%')
                 ->orWhere('states.name', 'like', '%'.$search.'%')
                 ->orderBy($order_column, $order_dir)
+                ->select("warehouses.*")
                 ->get();
         else
             $warehouses = Warehouse::where('contact_person', 'like', '%'.$search.'%')
@@ -91,6 +94,7 @@ class WarehouseController extends Controller
                 ->orderBy($order_column, $order_dir)
                 ->skip($start)
                 ->take($length)
+                ->select("warehouses.*")
                 ->get();
 
 
@@ -144,7 +148,24 @@ class WarehouseController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = Auth::user();
+        if ($user->can('view warehouses')){
+            $warehouse = Warehouse::find($id);
+            $entry_filter = InventoryMovement::getMovementFilterList();
+            $purchase_order_status = PurchaseOrder::getStatusList();
+            $sale_order_status = SaleOrder::getStatusList();
+            if ($warehouse)
+                return view('warehouses.show',
+                ['warehouse'=>$warehouse, 
+                'entry_filter' => $entry_filter, 
+                'purchase_order_status' => $purchase_order_status,
+                'sale_order_status' => $sale_order_status,
+            ]);
+
+            return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'warehouse']));
+        }
+        return abort(403, trans('error.unauthorized'));
+
     }
 
     /**
