@@ -75,6 +75,29 @@ class SaleOrderItemController extends Controller
                 ->leftJoin('warehouses', 'warehouses.id', '=', 'sale_orders.warehouse_id')
                 ->where('product_id', '=', $filter_product_id);
 
+        if (!empty($column_arr[0]['search']['value'])){
+            $query->where('sale_orders.order_number', 'like', $column_arr[0]['search']['value'].'%');
+        }
+        if (!empty($column_arr[1]['search']['value'])){
+            $query->where('warehouses.name', 'like', $column_arr[1]['search']['value'].'%');
+        }
+        if (!empty($column_arr[2]['search']['value'])){
+            $query->where('dealers.company', 'like', $column_arr[2]['search']['value'].'%');
+        }
+        if (!empty($column_arr[3]['search']['value'])){
+            $query->where('sale_orders.quantity_ordered', 'like', $column_arr[3]['search']['value'].'%');
+        }
+        if (!empty($column_arr[4]['search']['value'])){
+            $query->where('sale_orders.status', 'like', $column_arr[4]['search']['value'].'%');
+        }
+        if (!empty($column_arr[5]['search']['value'])){
+            $query->where('sale_orders.ordered_at', 'like', $column_arr[5]['search']['value'].'%');
+        }
+        if (!empty($column_arr[6]['search']['value'])){
+            $query->where('users.name', 'like', $column_arr[6]['search']['value'].'%');
+        }
+                
+
         $totalRecordswithFilter = $query->count();
 
         $query->orderBy($order_column, $order_dir);

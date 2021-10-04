@@ -55,18 +55,19 @@
 @push('page-scripts')
 
     <script>
-        
- $(document).ready(function () {
+
+    $(document).ready(function () {
     "use strict";
 
-    var poTable = $('#purchase-orders-datatable').DataTable({
+    var purchaseTable = $('#purchase-orders-datatable').DataTable({
         processing: true,
         serverSide: true,
         orderCellsTop: true,
         fixedHeader: true,
         //deferLoading: 0,
-        searching: false,
+        searching: true,
         paging: false,
+        dom: '',
         ajax      : {
             url   : "{{ route('purchase-orders-items.datatables') }}",
             "data": function ( d ) {
@@ -87,7 +88,6 @@
         },
         "pageLength": {{ Setting::get('general.grid_rows') }},
         "columns": [
-            
             { 
                 'data': 'order_number',
                 'orderable': true 
@@ -116,9 +116,50 @@
         
         "order": [[1, "desc"]],
         "drawCallback": function () {
-            $('.dataTables_paginate > .pagination').addClass('pagination-rounded'); 
+            $('.dataTables_paginate > .pagination').addClass('pagination-rounded');
+            $('#purchase-orders-datatable_length label').addClass('form-label');
+ 
         },
         
+    });
+
+
+    purchaseTable.columns().eq(0).each(function(colIdx) {
+
+        var cell = $('.filters th').eq($(purchaseTable.column(colIdx).header()).index());
+        var title = $(cell).text();
+
+        if($(cell).hasClass('no-filter')){
+
+            $(cell).html('&nbsp');
+
+        }
+        else{
+
+            // $(cell).html( '<input class="form-control filter-input" type="text"/>' );
+
+            $('select', $('.filters th').eq($(purchaseTable.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
+                e.stopPropagation();
+                $(this).attr('title', $(this).val());
+                //var regexr = '({search})'; //$(this).parents('th').find('select').val();
+                purchaseTable
+                    .column(colIdx)
+                    .search(this.value) //(this.value != "") ? regexr.replace('{search}', 'this.value') : "", this.value != "", this.value == "")
+                    .draw();
+                
+            });
+            
+            $('input', $('.filters th').eq($(purchaseTable.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
+                e.stopPropagation();
+                $(this).attr('title', $(this).val());
+                //var regexr = '({search})'; //$(this).parents('th').find('select').val();
+                purchaseTable
+                    .column(colIdx)
+                    .search(this.value) //(this.value != "") ? regexr.replace('{search}', 'this.value') : "", this.value != "", this.value == "")
+                    .draw();
+                
+            }); 
+        }
     });
 });
 
