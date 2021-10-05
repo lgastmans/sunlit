@@ -10,7 +10,7 @@ class InventoryMovement extends Model
 {
     use HasFactory;
 
-    protected $fillable = ["warehouse_id", "product_id", "purchase_order_id", "sales_order_id", "quantity", "user_id", "movement_type"];
+    protected $fillable = ["warehouse_id", "product_id", "purchase_order_id", "sales_order_id", "quantity", "user_id", "movement_type", "price"];
 
     const RECEIVED = 1;
     const DELIVERED = 2;
@@ -53,14 +53,61 @@ class InventoryMovement extends Model
             "sales_order_id" => $data['sales_order_id'],
             "quantity" => $data['quantity'],
             "user_id" => $data['user_id'],
-            "movement_type" => $data['movement_type']
+            "movement_type" => $data['movement_type'],
+            "price" => $data['price']
         ]);
 
         return $movement->fresh();
     }
 
+    /**
+     * calculate the average buying price
+     *
+     * @param int $warehouse_id
+     * @param int $product_id
+     * @return average buying price
+     */
+    public static function getAverageBuyingPrice($warehouse_id, $product_id)
+    {
+        /*
+            SELECT (SUM(price * quantity) / SUM(quantity)) AS average_price 
+            FROM `inventory_movements` 
+            WHERE warehouse_id = 1 AND product_id = 311 AND purchase_order_id IS NOT NULL  
+        */
+        $query = InventoryMovement::selectRaw('(SUM(price * quantity) / SUM(quantity)) AS average_price ')
+            ->where('warehouse_id', $warehouse_id)
+            ->where('product_id', $product_id)
+            ->whereNotNull('purchase_order_id')
+            ->first();
 
-    public static function getMovementFilterList()
+        return $query->average_price;
+    }
+
+    /**
+     * calculate the average selling price
+     *
+     * @param int $warehouse_id
+     * @param int $product_id
+     * @return average selling price
+     */
+    public function getAverageSellingPrice($warehouse_id, $product_id)
+    {
+        /*
+            SELECT (SUM(price * quantity) / SUM(quantity)) AS average_price 
+            FROM `inventory_movements` 
+            WHERE warehouse_id = 1 AND product_id = 311 AND sales_order_id IS NOT NULL  
+        */
+
+        $query = InventoryMovement::selectRaw('(SUM(price * quantity) / SUM(quantity)) AS average_price ')
+            ->where('warehouse_id', $warehouse_id)
+            ->where('product_id', $product_id)
+            ->whereNotNull('sales_order_id')
+            ->first();
+
+        return $query->average_price;
+    }
+
+    public function getMovementFilterList()
     {
         return [
             0 => 'All', 
