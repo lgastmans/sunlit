@@ -42,14 +42,6 @@ Purchase Order (PO)
 
 Sales Order (SO)
 ----------------
-    const DRAFT = 1;
-    const ORDERED = 2;
-    const CONFIRMED = 3;
-    const SHIPPED = 4;
-    // const CUSTOMS = 5;
-    // const CLEARED = 6;
-    const DELIVERED = 7;
-
 Draft
 Ordered
 Confirmed		- trigger stock out, update Booked Stock (add)
