@@ -142,7 +142,6 @@ class PurchaseOrderController extends Controller
                 "expected_at" => $order->display_due_at,
                 "amount_inr" => (isset($order->amount_inr)) ? trans('app.currency_symbol_inr')." ".$order->amount_inr : "",
                 "status" => $order->display_status,
-                "warehouse" => $order->warehouse->name,
                 "user" => $order->user->display_name
             );
         }
