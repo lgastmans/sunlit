@@ -42,10 +42,19 @@ Purchase Order (PO)
 
 Sales Order (SO)
 ----------------
+    const DRAFT = 1;
+    const ORDERED = 2;
+    const CONFIRMED = 3;
+    const SHIPPED = 4;
+    // const CUSTOMS = 5;
+    // const CLEARED = 6;
+    const DELIVERED = 7;
+
 Draft
-Processing		- trigger stock out, update Booked Stock (add)
-Dispatched		- trigger stock out, update Available Stock (deduct), update Booked Stock (deduct), create a DELIVERED Inventory Movement 
-Delivered
+Ordered
+Confirmed		- trigger stock out, update Booked Stock (add)
+Shipped			
+Delivered		- trigger stock out, update Available Stock (deduct), update Booked Stock (deduct), create a DELIVERED Inventory Movement 
 
 
 To reset/recalculate the current stock:
