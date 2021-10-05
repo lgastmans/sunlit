@@ -38,6 +38,7 @@ Purchase Order (PO)
 5 Customs			
 6 Cleared			
 7 Received		- trigger stock in, update Available Stock (add), update Ordered Stock (deduct), create a RECEIVED Inventory Movement 
+				- update the average buying price
 
 
 Sales Order (SO)
@@ -47,6 +48,7 @@ Ordered
 Confirmed		- trigger stock out, update Booked Stock (add)
 Shipped			
 Delivered		- trigger stock out, update Available Stock (deduct), update Booked Stock (deduct), create a DELIVERED Inventory Movement 
+				- update the average selling price
 
 
 To reset/recalculate the current stock:
