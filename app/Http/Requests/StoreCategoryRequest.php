@@ -33,7 +33,7 @@ class StoreCategoryRequest extends FormRequest
     {
         return [
             'name' => 'required|max:255|unique:categories,name,NULL,id,deleted_at,NULL'.$this->id,
-            
+            'hsn_code' => 'max:255',
         ];
     }
 }

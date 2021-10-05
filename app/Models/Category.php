@@ -12,7 +12,7 @@ class Category extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'hsn_code'];
 
     /**
      * Get the products associated with the category.

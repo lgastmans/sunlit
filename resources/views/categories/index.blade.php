@@ -33,6 +33,7 @@
                             <tr>
 
                                 <th>Name</th>
+                                <th>HSN</th>
                                 <th style="width:10%">
                                     @if (Auth::user()->can('edit categories'))
                                     {{ __('app.dt_actions') }}
@@ -84,6 +85,10 @@
         "columns": [
             { 
                 'data': 'name',
+                'orderable': true 
+            },
+            { 
+                'data': 'hsn_code',
                 'orderable': true 
             },
             {

@@ -23,6 +23,11 @@
                                 <x-forms.input label="Name" name="name" value="{{ old('name', $category->name) }}" required="true"/>
                             </div>
                         </div>                      
+                        <div class="row mb-3">
+                            <div class="col-xl-5">
+                                <x-forms.input label="HSN" name="hsn_code" value="{{ old('hsn_code', $category->hsn_code) }}" required="true"/>
+                            </div>
+                        </div>                      
                         <button class="btn btn-primary" type="submit">@if ($category->id) {{ __('app.edit_title', ['field' => 'category']) }} @else {{ __('app.add_title', ['field' => 'category']) }} @endif</button>
                     </form>
                 </div>
