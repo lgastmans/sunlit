@@ -310,8 +310,8 @@ class SaleOrderController extends Controller
         $order->status = SaleOrder::CONFIRMED;
         $order->update();
 
-        // $inventory = new Inventory();
-        // $inventory->updateStock($order);
+        $inventory = new Inventory();
+        $inventory->updateStock($order);
         
         return redirect(route('sale-orders.show', $order->order_number))->with('success', 'order confirmed'); 
     }
@@ -357,8 +357,8 @@ class SaleOrderController extends Controller
         $order->status = SaleOrder::DELIVERED;
         $order->update();
 
-        // $inventory = new Inventory();
-        // $inventory->updateStock($order);
+        $inventory = new Inventory();
+        $inventory->updateStock($order);
 
         return redirect(route('sale-orders.show', $order->order_number))->with('success', 'order delivered'); 
     }

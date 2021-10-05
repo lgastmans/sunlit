@@ -143,15 +143,19 @@ class Inventory extends Model
                             "sales_order_id" => null,
                             "quantity" => $product->quantity_ordered,
                             "user_id" => Auth::user()->id,
-                            "movement_type" => InventoryMovement::RECEIVED
+                            "movement_type" => InventoryMovement::RECEIVED,
+                            "price" => $product->selling_price
                         );
                         $movement = new InventoryMovement();
                         $movement->updateMovement($data);
+
+                        $avg_price = $movement->getAverageBuyingPrice($inventory->warehouse_id, $product->product_id);
                     }
 
                     $result = $inventory->update([
                         "stock_available" => $available,
-                        "stock_ordered" => $ordered
+                        "stock_ordered" => $ordered,
+                        "average_buying_price" => $avg_price
                     ]);
 
                 }
@@ -159,6 +163,62 @@ class Inventory extends Model
         }
         elseif ($class_name == 'SalesOrder')
         {
+            foreach($model->items as $product)
+            {
+                $inventory = $this->initProductStock($this->warehouse_id, $product->product_id);
+
+                if ($inventory){
+
+                    $inventory->warehouse_id = $model->warehouse_id;
+                    $inventory->product_id = $product->product_id;
+
+                    $booked = $inventory->stock_booked;
+                    $available = $inventory->stock_available;
+
+                    if ($model->status == SaleOrder::CONFIRMED)
+                    {
+                        /*
+                        *    update Booked Stock (add)
+                        */
+                        $ordered += $product->quantity_ordered;
+                        
+                    }
+                    elseif ($model->status == SaleOrder::DELIVERED) 
+                    {
+                        /*
+                        *    update Available Stock (deduct), update Booked Stock (deduct)
+                        */
+                        $booked -= $product->quantity_ordered;
+                        $available -= $product->quantity_ordered;
+
+                        /*
+                        *   register stock delivered in the Inventory Movement model
+                        *   status DELIVERED
+                        */
+                        $data = array(
+                            "warehouse_id" => $model->warehouse_id,
+                            "product_id" => $product->product_id,
+                            "purchase_order_id" => null,
+                            "sales_order_id" => $model->id,
+                            "quantity" => $product->quantity_ordered,
+                            "user_id" => Auth::user()->id,
+                            "movement_type" => InventoryMovement::DELIVERED,
+                            "price" => $product->selling_price
+                        );
+                        $movement = new InventoryMovement();
+                        $movement->updateMovement($data);
+
+                        $avg_price = $movement->getAverageBuyingPrice($inventory->warehouse_id, $product->product_id);
+                    }
+
+                    $result = $inventory->update([
+                        "stock_available" => $available,
+                        "stock_booked" => $booked,
+                        "average_selling_price" => $avg_price
+                    ]);
+
+                }
+            }
 
         }
 
