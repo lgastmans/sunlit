@@ -48,8 +48,8 @@ class PurchaseOrderItemController extends Controller
 
             if ($column_index==1)
                 $order_column = "warehouses.name";
-            if ($column_index==2)
-                $order_column = "dealers.company";
+            // if ($column_index==2)
+            //     $order_column = "dealers.company";
             if ($column_index==5)
                 $order_column = "users.name";
 
@@ -73,9 +73,9 @@ class PurchaseOrderItemController extends Controller
 
 
         $query = PurchaseOrderItem::with('purchase_order')
-            ->leftJoin('purchase_orders', 'purchase_orders.id', '=', 'purchase_order_id')
+            ->join('purchase_orders', 'purchase_orders.id', '=', 'purchase_order_id')
             ->join('users', 'users.id', '=', 'purchase_orders.user_id')
-            ->leftJoin('warehouses', 'warehouses.id', '=', 'purchase_orders.warehouse_id')
+            ->join('warehouses', 'warehouses.id', '=', 'purchase_orders.warehouse_id')
             ->where('product_id', '=', $filter_product_id);
 
 
@@ -86,19 +86,16 @@ class PurchaseOrderItemController extends Controller
             $query->where('warehouses.name', 'like', $column_arr[1]['search']['value'].'%');
         }
         if (!empty($column_arr[2]['search']['value'])){
-            $query->where('dealers.company', 'like', $column_arr[2]['search']['value'].'%');
+            $query->where('purchase_orders.quantity_ordered', '=', $column_arr[2]['search']['value']);
         }
         if (!empty($column_arr[3]['search']['value'])){
-            $query->where('purchase_orders.quantity_ordered', 'like', $column_arr[3]['search']['value'].'%');
+            $query->where('purchase_orders.status', '=', $column_arr[3]['search']['value']);
         }
         if (!empty($column_arr[4]['search']['value'])){
-            $query->where('purchase_orders.status', 'like', $column_arr[4]['search']['value'].'%');
+            $query->where('purchase_orders.ordered_at', 'like', convertDateToMysql($column_arr[4]['search']['value']));
         }
         if (!empty($column_arr[5]['search']['value'])){
-            $query->where('purchase_orders.ordered_at', 'like', $column_arr[5]['search']['value'].'%');
-        }
-        if (!empty($column_arr[6]['search']['value'])){
-            $query->where('users.name', 'like', $column_arr[6]['search']['value'].'%');
+            $query->where('users.name', 'like', $column_arr[5]['search']['value'].'%');
         }
 
 

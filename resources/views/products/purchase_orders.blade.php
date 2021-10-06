@@ -18,16 +18,16 @@
                             <tr>
                                 <th>Order</th>
                                 <th>Warehouse</th>
-{{--                                 <th>Quantity</th>
+                                <th>Quantity</th>
                                 <th>Status</th>
                                 <th>Ordered on</th>
                                 <th>Created by</th>
- --}}                            </tr>
-                            <tr class="filters" style="display:none;">
+                             </tr>
+                            <tr class="purchase-orders-filters" style="display:none;">
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
-
-{{--                                 <th><select class="form-control status-select"><option value="0">All</option>@foreach($purchase_order_status as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
+                                <th><input type="text" class="form-control"></th>
+                                <th><select class="form-control status-select"><option value="0">All</option>@foreach($purchase_order_status as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
                                 <th id="ordered_at" class="position-relative">
                                     <input type="text" class="form-control" name="ordered_at" 
                                     data-provide="datepicker" 
@@ -36,7 +36,7 @@
                                     data-date-format="M d, yyyy"
                                     required>
                                 </th>
- --}}                                
+                                <th><input type="text" class="form-control"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -58,6 +58,11 @@
 
     $(document).ready(function () {
     "use strict";
+
+
+    $('.toggle-filters').on('click', function(e) {
+        $( ".purchase-orders-filters" ).slideToggle('slow');
+    });
 
     var purchaseTable = $('#purchase-orders-datatable').DataTable({
         processing: true,
@@ -96,22 +101,22 @@
                 'data': 'warehouse',
                 'orderable': true
             },
-            // { 
-            //     'data': 'quantity_ordered',
-            //     'orderable': true
-            // },
-            // { 
-            //     'data': 'status',
-            //     'orderable': true
-            // },
-            // { 
-            //     'data': 'ordered_at',
-            //     'orderable': true 
-            // },
-            // { 
-            //     'data': 'user',
-            //     'orderable': true
-            // }
+            { 
+                'data': 'quantity_ordered',
+                'orderable': true
+            },
+            { 
+                'data': 'status',
+                'orderable': true
+            },
+            { 
+                'data': 'ordered_at',
+                'orderable': true 
+            },
+            { 
+                'data': 'user',
+                'orderable': true
+            }
         ],
         
         "order": [[1, "desc"]],
@@ -126,7 +131,7 @@
 
     purchaseTable.columns().eq(0).each(function(colIdx) {
 
-        var cell = $('.filters th').eq($(purchaseTable.column(colIdx).header()).index());
+        var cell = $('.purchase-orders-filters th').eq($(purchaseTable.column(colIdx).header()).index());
         var title = $(cell).text();
 
         if($(cell).hasClass('no-filter')){
@@ -138,7 +143,7 @@
 
             // $(cell).html( '<input class="form-control filter-input" type="text"/>' );
 
-            $('select', $('.filters th').eq($(purchaseTable.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
+            $('select', $('.purchase-orders-filters th').eq($(purchaseTable.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
                 e.stopPropagation();
                 $(this).attr('title', $(this).val());
                 //var regexr = '({search})'; //$(this).parents('th').find('select').val();
@@ -149,7 +154,7 @@
                 
             });
             
-            $('input', $('.filters th').eq($(purchaseTable.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
+            $('input', $('.purchase-orders-filters th').eq($(purchaseTable.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
                 e.stopPropagation();
                 $(this).attr('title', $(this).val());
                 //var regexr = '({search})'; //$(this).parents('th').find('select').val();
