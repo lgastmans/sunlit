@@ -16,18 +16,18 @@
                     <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="purchase-orders-datatable">
                         <thead class="table-light">
                             <tr>
-                                <th>Order #</th>
+                                <th>Order</th>
                                 <th>Warehouse</th>
-                                <th>Quantity</th>
+{{--                                 <th>Quantity</th>
                                 <th>Status</th>
                                 <th>Ordered on</th>
                                 <th>Created by</th>
-                            </tr>
+ --}}                            </tr>
                             <tr class="filters" style="display:none;">
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
-                                <th><input type="text" class="form-control"></th>
-                                <th><select class="form-control status-select"><option value="0">All</option>@foreach($purchase_order_status as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
+
+{{--                                 <th><select class="form-control status-select"><option value="0">All</option>@foreach($purchase_order_status as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
                                 <th id="ordered_at" class="position-relative">
                                     <input type="text" class="form-control" name="ordered_at" 
                                     data-provide="datepicker" 
@@ -36,7 +36,7 @@
                                     data-date-format="M d, yyyy"
                                     required>
                                 </th>
-                                <th><input type="text" class="form-control"></th>
+ --}}                                
                             </tr>
                         </thead>
                         <tbody>
@@ -96,22 +96,22 @@
                 'data': 'warehouse',
                 'orderable': true
             },
-            { 
-                'data': 'quantity_ordered',
-                'orderable': true
-            },
-            { 
-                'data': 'status',
-                'orderable': true
-            },
-            { 
-                'data': 'ordered_at',
-                'orderable': true 
-            },
-            { 
-                'data': 'user',
-                'orderable': true
-            }
+            // { 
+            //     'data': 'quantity_ordered',
+            //     'orderable': true
+            // },
+            // { 
+            //     'data': 'status',
+            //     'orderable': true
+            // },
+            // { 
+            //     'data': 'ordered_at',
+            //     'orderable': true 
+            // },
+            // { 
+            //     'data': 'user',
+            //     'orderable': true
+            // }
         ],
         
         "order": [[1, "desc"]],

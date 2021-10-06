@@ -19,3 +19,5 @@ composer.lock
 package-lock.json
 
 storage/debugbar/
+
+signal-desktop-keyring.gpg

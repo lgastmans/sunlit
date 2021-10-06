@@ -10,8 +10,6 @@ use App\Models\InventoryMovement;
 class InventoryMovementController extends Controller
 {
     //
-
-    
     public function index()
     {
         $user = Auth::user();

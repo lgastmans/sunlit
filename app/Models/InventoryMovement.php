@@ -107,7 +107,7 @@ class InventoryMovement extends Model
         return $query->average_price;
     }
 
-    public function getMovementFilterList()
+    public static function getMovementFilterList()
     {
         return [
             0 => 'All', 

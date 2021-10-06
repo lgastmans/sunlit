@@ -109,8 +109,6 @@ class PurchaseOrderItemController extends Controller
         if ($length > 0)
             $query->skip($start)->take($length);
         
-        \Debugbar::info($query->toSql());
-
         $orders = $query->get();
 
         $arr = array();
