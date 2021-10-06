@@ -55,18 +55,16 @@ class PurchaseOrderController extends Controller
             $column_index = $order_arr[0]['column'];
 
             // the purchase order datatable isn't the same in index than in warehouse>purchase orders 
-            if ($request->has('source')){
-                if ($request->source == "warehouses"){
-                    switch ($column_index){
-                        case 1:
-                            $order_column = "suppliers.company";
+            if ($request->has('source') && $request->source == "warehouses"){
+                switch ($column_index){
+                    case 1:
+                        $order_column = "suppliers.company";
+                        break;
+                    case 4:
+                            $order_column = "users.name";
                             break;
-                        case 4:
-                                $order_column = "users.name";
-                                break;
-                        default:
-                            $order_column = $column_arr[$column_index]['data'];
-                    }
+                    default:
+                        $order_column = $column_arr[$column_index]['data'];
                 }
             }else{
                 switch ($column_index){

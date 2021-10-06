@@ -49,18 +49,36 @@ class SaleOrderController extends Controller
             $order_arr = $request->get('order');
             $column_arr = $request->get('columns');
             $column_index = $order_arr[0]['column'];
-            switch ($column_index){
-                case 1:
-                    $order_column = "sale_orders.warehouse_id";
-                    break;
-                case 2:
-                    $order_column = "dealers.company";
-                    break;
-                default:
-                    $order_column = $column_arr[$column_index]['data'];
+
+            // the sale order datatable isn't the same in index than in warehouse>sale orders 
+            if ($request->has('source') && $request->source == "warehouses"){
+                switch ($column_index){
+                    case 1:
+                        $order_column = "dealers.company";
+                        break;
+                    case 4:
+                        $order_column = "users.name";
+                        break;
+                    default:
+                        $order_column = $column_arr[$column_index]['data'];
+                }
+            }else{
+                switch ($column_index){
+                    case 1:
+                        $order_column = "sale_orders.warehouse_id";
+                        break;
+                    case 2:
+                        $order_column = "dealers.company";
+                        break;
+                    case 7:
+                        $order_column = "users.name";
+                        break;
+                    default:
+                        $order_column = $column_arr[$column_index]['data'];
+                }
+                
+                $order_dir = $order_arr[0]['dir'];
             }
-            
-            $order_dir = $order_arr[0]['dir'];
         }
 
         $search = '';
@@ -77,29 +95,48 @@ class SaleOrderController extends Controller
         $query->join('warehouses', 'warehouses.id', '=', 'warehouse_id');
         $query->join('users', 'users.id', '=', 'user_id');
 
-        if (!empty($column_arr[0]['search']['value'])){
-            $query->where('sale_orders.order_number', 'like', $column_arr[0]['search']['value'].'%');
-        }
-        if (!empty($column_arr[1]['search']['value'])){
-            $query->where('warehouses.name', 'like', $column_arr[1]['search']['value'].'%');
-        }
-        if (!empty($column_arr[2]['search']['value'])){
-            $query->where('dealers.company', 'like', $column_arr[2]['search']['value'].'%');
-        }
-        if (!empty($column_arr[3]['search']['value'])){
-            $query->where('sale_orders.ordered_at', 'like', convertDateToMysql($column_arr[3]['search']['value']));
-        }
-        if (!empty($column_arr[4]['search']['value'])){
-            $query->where('sale_orders.due_at', 'like', convertDateToMysql($column_arr[4]['search']['value']));
-        }
-        if (!empty($column_arr[5]['search']['value'])){
-            $query->where('sale_orders.amount', 'like', $column_arr[5]['search']['value'].'%');
-        }
-        if (!empty($column_arr[6]['search']['value']) && $column_arr[6]['search']['value'] != "all"){
-            $query->where('sale_orders.status', 'like', $column_arr[6]['search']['value']);
-        }
-        if (!empty($column_arr[7]['search']['value'])){
-            $query->where('users.name', 'like', $column_arr[7]['search']['value'].'%');
+
+        if ($request->has('source') && $request->source == "warehouses"){
+            if (!empty($column_arr[0]['search']['value'])){
+                $query->where('sale_orders.order_number', 'like', $column_arr[0]['search']['value'].'%');
+            }
+            if (!empty($column_arr[1]['search']['value'])){
+                $query->where('dealers.company', 'like', $column_arr[1]['search']['value'].'%');
+            }
+            if (!empty($column_arr[2]['search']['value'])){
+                $query->where('sale_orders.status', 'like', $column_arr[2]['search']['value']);
+            }
+            if (!empty($column_arr[3]['search']['value'])){
+                $query->where('sale_orders.ordered_at', 'like', convertDateToMysql($column_arr[3]['search']['value']));
+            }
+            if (!empty($column_arr[4]['search']['value'])){
+                $query->where('users.name', 'like', $column_arr[4]['search']['value'].'%');
+            }
+        }else{
+            if (!empty($column_arr[0]['search']['value'])){
+                $query->where('sale_orders.order_number', 'like', $column_arr[0]['search']['value'].'%');
+            }
+            if (!empty($column_arr[1]['search']['value'])){
+                $query->where('warehouses.name', 'like', $column_arr[1]['search']['value'].'%');
+            }
+            if (!empty($column_arr[2]['search']['value'])){
+                $query->where('dealers.company', 'like', $column_arr[2]['search']['value'].'%');
+            }
+            if (!empty($column_arr[3]['search']['value'])){
+                $query->where('sale_orders.ordered_at', 'like', convertDateToMysql($column_arr[3]['search']['value']));
+            }
+            if (!empty($column_arr[4]['search']['value'])){
+                $query->where('sale_orders.due_at', 'like', convertDateToMysql($column_arr[4]['search']['value']));
+            }
+            if (!empty($column_arr[5]['search']['value'])){
+                $query->where('sale_orders.amount', 'like', $column_arr[5]['search']['value'].'%');
+            }
+            if (!empty($column_arr[6]['search']['value']) && $column_arr[6]['search']['value'] != "all"){
+                $query->where('sale_orders.status', 'like', $column_arr[6]['search']['value']);
+            }
+            if (!empty($column_arr[7]['search']['value'])){
+                $query->where('users.name', 'like', $column_arr[7]['search']['value'].'%');
+            }
         }
         
         if ($request->has('search')){
