@@ -96,10 +96,7 @@ class SaleOrderController extends Controller
         $query->join('users', 'users.id', '=', 'user_id');
 
         if ($request->has('filter_warehouse_id')){
-            $query->where('sale_orders.warehouse_id', '=', $request->has('filter_warehouse_id'));
-        }
-        if($request->has('source') && !empty($column_arr[5]['search']['value'])){
-            $query->where('sale_orders.warehouse_id', '=', $column_arr[5]['search']['value']);
+            $query->where('sale_orders.warehouse_id', '=', $request->filter_warehouse_id);
         }
 
         if ($request->has('source') && $request->source == "warehouses"){

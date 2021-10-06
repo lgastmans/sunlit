@@ -35,7 +35,6 @@
                                     required>
                                 </th>
                                 <th><input type="text" class="form-control"></th>
-                                <th><input type="text" class="form-control" value="{{ $warehouse->id }}"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -111,14 +110,6 @@
             { 
                 'data': 'user',
                 'orderable': true
-            },
-            {
-                'data': 'id',
-                'visible': false,
-                'render': function(){ 
-                    return {{ $warehouse->id }}
-                }
-
             }
         ],
         
