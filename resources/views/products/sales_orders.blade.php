@@ -24,7 +24,7 @@
                                 <th>Ordered on</th>
                                 <th>Created by</th>
                             </tr>
-                            <tr class="filters" style="display:none;">
+                            <tr class="sale-orders-filters" style="display:none;">
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
@@ -60,6 +60,10 @@
         
  $(document).ready(function () {
     "use strict";
+
+    $('.toggle-filters').on('click', function(e) {
+        $( ".sale-orders-filters" ).slideToggle('slow');
+    });
 
     var saleTable = $('#sale-orders-datatable').DataTable({
         processing: true,
@@ -132,7 +136,7 @@
 
     saleTable.columns().eq(0).each(function(colIdx) {
 
-        var cell = $('.filters th').eq($(saleTable.column(colIdx).header()).index());
+        var cell = $('.sale-orders-filters th').eq($(saleTable.column(colIdx).header()).index());
         var title = $(cell).text();
 
         if($(cell).hasClass('no-filter')){
@@ -144,7 +148,7 @@
 
             // $(cell).html( '<input class="form-control filter-input" type="text"/>' );
 
-            $('select', $('.filters th').eq($(saleTable.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
+            $('select', $('.sale-orders-filters th').eq($(saleTable.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
                 e.stopPropagation();
                 $(this).attr('title', $(this).val());
                 //var regexr = '({search})'; //$(this).parents('th').find('select').val();
@@ -155,7 +159,7 @@
                 
             });
             
-            $('input', $('.filters th').eq($(saleTable.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
+            $('input', $('.sale-orders-filters th').eq($(saleTable.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
                 e.stopPropagation();
                 $(this).attr('title', $(this).val());
                 //var regexr = '({search})'; //$(this).parents('th').find('select').val();

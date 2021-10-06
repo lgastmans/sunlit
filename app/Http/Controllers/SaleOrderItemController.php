@@ -70,9 +70,10 @@ class SaleOrderItemController extends Controller
 
 
         $query = SaleOrderItem::with('sale_order')
-                ->leftJoin('sale_orders', 'sale_orders.id', '=', 'sale_order_id')
+                ->join('sale_orders', 'sale_orders.id', '=', 'sale_order_id')
                 ->join('users', 'users.id', '=', 'sale_orders.user_id')
-                ->leftJoin('warehouses', 'warehouses.id', '=', 'sale_orders.warehouse_id')
+                ->join('warehouses', 'warehouses.id', '=', 'sale_orders.warehouse_id')
+                ->join('dealers', 'dealers.id', '=', 'sale_orders.dealer_id')
                 ->where('product_id', '=', $filter_product_id);
 
         if (!empty($column_arr[0]['search']['value'])){
@@ -85,13 +86,13 @@ class SaleOrderItemController extends Controller
             $query->where('dealers.company', 'like', $column_arr[2]['search']['value'].'%');
         }
         if (!empty($column_arr[3]['search']['value'])){
-            $query->where('sale_orders.quantity_ordered', 'like', $column_arr[3]['search']['value'].'%');
+            $query->where('sale_order_items.quantity_ordered', 'like', $column_arr[3]['search']['value'].'%');
         }
         if (!empty($column_arr[4]['search']['value'])){
-            $query->where('sale_orders.status', 'like', $column_arr[4]['search']['value'].'%');
+            $query->where('sale_orders.status', '=', $column_arr[4]['search']['value']);
         }
         if (!empty($column_arr[5]['search']['value'])){
-            $query->where('sale_orders.ordered_at', 'like', $column_arr[5]['search']['value'].'%');
+            $query->where('sale_orders.ordered_at', 'like', convertDateToMysql($column_arr[5]['search']['value']));
         }
         if (!empty($column_arr[6]['search']['value'])){
             $query->where('users.name', 'like', $column_arr[6]['search']['value'].'%');
