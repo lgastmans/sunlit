@@ -21,6 +21,7 @@
                                 <th>Status</th>
                                 <th>Ordered on</th>
                                 <th>Created by</th>
+                                <th>Warehouse ID</th>
                             </tr>
                             <tr class="purchase-orders-filters" style="display:none;">
                                 <th><input type="text" class="form-control"></th>
@@ -35,6 +36,7 @@
                                     required>
                                 </th>
                                 <th><input type="text" class="form-control"></th>
+                                <th><input type="text" class="form-control" value="{{ $warehouse->id }}"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -74,7 +76,7 @@
             url   : "{{ route('purchase-orders.datatables') }}",
             "data": function ( d ) {
                 d.source = 'warehouses',
-                d.filter_product_id = {{ $warehouse->id }};
+                d.filter_warehouse_id = {{ $warehouse->id }};
             },
         }, 
         "language": {
@@ -110,6 +112,14 @@
             { 
                 'data': 'user',
                 'orderable': true
+            },
+            {
+                'data': 'id',
+                'visible': false,
+                'render': function(){ 
+                    return {{ $warehouse->id }}
+                }
+
             }
         ],
         
