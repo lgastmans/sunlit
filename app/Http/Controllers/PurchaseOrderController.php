@@ -53,15 +53,32 @@ class PurchaseOrderController extends Controller
             $order_arr = $request->get('order');
             $column_arr = $request->get('columns');
             $column_index = $order_arr[0]['column'];
-            switch ($column_index){
-                case 1:
-                    $order_column = "purchase_orders.warehouse_id";
-                    break;
-                case 2:
-                    $order_column = "suppliers.company";
-                    break;
-                default:
-                    $order_column = $column_arr[$column_index]['data'];
+
+            // the purchase order datatable isn't the same in index than in warehouse>purchase orders 
+            if ($request->has('source')){
+                if ($request->source == "warehouses"){
+                    switch ($column_index){
+                        case 1:
+                            $order_column = "suppliers.company";
+                            break;
+                        case 4:
+                                $order_column = "users.name";
+                                break;
+                        default:
+                            $order_column = $column_arr[$column_index]['data'];
+                    }
+                }
+            }else{
+                switch ($column_index){
+                    case 1:
+                        $order_column = "purchase_orders.warehouse_id";
+                        break;
+                    case 2:
+                        $order_column = "suppliers.company";
+                        break;
+                    default:
+                        $order_column = $column_arr[$column_index]['data'];
+                }
             }
             $order_dir = $order_arr[0]['dir'];
         }
@@ -73,12 +90,7 @@ class PurchaseOrderController extends Controller
             $search = $search_arr['value'];
         }
 
-        // Total records
         $totalRecords = PurchaseOrder::count();
-        // $totalRecordswithFilter = PurchaseOrder::join('suppliers', 'suppliers.id', '=', 'supplier_id')
-        //     ->where('order_number', 'like', '%'.$search.'%')
-        //     ->orWhere('suppliers.company', 'like', $search.'%')
-        //     ->count();
         
 
         $query = PurchaseOrder::query();
@@ -86,31 +98,50 @@ class PurchaseOrderController extends Controller
         $query->join('warehouses', 'warehouses.id', '=', 'warehouse_id');
         $query->join('users', 'users.id', '=', 'user_id');
 
-        if (!empty($column_arr[0]['search']['value'])){
-            $query->where('purchase_orders.order_number', 'like', $column_arr[0]['search']['value'].'%');
+        if ($request->has('source') && $request->source == "warehouses"){
+            if (!empty($column_arr[0]['search']['value'])){
+                $query->where('purchase_orders.order_number', 'like', $column_arr[0]['search']['value'].'%');
+            }
+            if (!empty($column_arr[1]['search']['value'])){
+                $query->where('suppliers.company', 'like', $column_arr[1]['search']['value'].'%');
+            }
+            if (!empty($column_arr[2]['search']['value'])){
+                $query->where('purchase_orders.status', 'like', $column_arr[2]['search']['value']);
+            }
+            if (!empty($column_arr[3]['search']['value'])){
+                $query->where('purchase_orders.ordered_at', 'like', convertDateToMysql($column_arr[3]['search']['value']));
+            }
+            if (!empty($column_arr[4]['search']['value'])){
+                $query->where('users.name', 'like', $column_arr[4]['search']['value'].'%');
+            }
+        }else{
+            if (!empty($column_arr[0]['search']['value'])){
+                $query->where('purchase_orders.order_number', 'like', $column_arr[0]['search']['value'].'%');
+            }
+            if (!empty($column_arr[1]['search']['value'])){
+                $query->where('warehouses.name', 'like', $column_arr[1]['search']['value'].'%');
+            }
+            if (!empty($column_arr[2]['search']['value'])){
+                $query->where('suppliers.company', 'like', $column_arr[2]['search']['value'].'%');
+            }
+            if (!empty($column_arr[3]['search']['value'])){
+                $query->where('purchase_orders.ordered_at', 'like', convertDateToMysql($column_arr[3]['search']['value']));
+            }
+            if (!empty($column_arr[4]['search']['value'])){
+                $query->where('purchase_orders.due_at', 'like', convertDateToMysql($column_arr[4]['search']['value']));
+            }
+        
+            if (!empty($column_arr[5]['search']['value'])){
+                $query->where('purchase_orders.amount_inr', 'like', $column_arr[5]['search']['value'].'%');
+            }
+            if (!empty($column_arr[6]['search']['value']) && $column_arr[6]['search']['value'] != "all"){
+                $query->where('purchase_orders.status', 'like', $column_arr[6]['search']['value']);
+            }
+            if (!empty($column_arr[7]['search']['value'])){
+                $query->where('users.name', 'like', $column_arr[7]['search']['value'].'%');
+            }
         }
-        if (!empty($column_arr[1]['search']['value'])){
-            $query->where('warehouses.name', 'like', $column_arr[1]['search']['value'].'%');
-        }
-        if (!empty($column_arr[2]['search']['value'])){
-            $query->where('suppliers.company', 'like', $column_arr[2]['search']['value'].'%');
-        }
-        if (!empty($column_arr[3]['search']['value'])){
-            $query->where('purchase_orders.ordered_at', 'like', convertDateToMysql($column_arr[3]['search']['value']));
-        }
-        if (!empty($column_arr[4]['search']['value'])){
-            $query->where('purchase_orders.due_at', 'like', convertDateToMysql($column_arr[4]['search']['value']));
-        }
-    
-        if (!empty($column_arr[5]['search']['value'])){
-            $query->where('purchase_orders.amount_inr', 'like', $column_arr[5]['search']['value'].'%');
-        }
-        if (!empty($column_arr[6]['search']['value']) && $column_arr[6]['search']['value'] != "all"){
-            $query->where('purchase_orders.status', 'like', $column_arr[6]['search']['value']);
-        }
-        if (!empty($column_arr[7]['search']['value'])){
-            $query->where('users.name', 'like', $column_arr[7]['search']['value'].'%');
-        }
+        
         
         if ($request->has('search')){
             $search = $request->get('search')['value'];
