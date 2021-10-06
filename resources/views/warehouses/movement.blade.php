@@ -17,12 +17,14 @@
                         <thead class="table-light">
                             <tr>
                                 <th>Order #</th>
+                                <th>Product</th>
                                 <th>Quantity</th>
                                 <th>Entry</th>
                                 <th>Ordered on</th>
                                 <th>Created by</th>
                             </tr>
-                            <tr class="filters" style="display:none;"> 
+                            <tr class="movement-filters" style="display:none;"> 
+                                <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
                                 <th><select class="form-control entry-select">@foreach($entry_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
@@ -55,7 +57,7 @@
     "use strict";
 
     $('.toggle-filters').on('click', function(e) {
-        $( ".filters" ).slideToggle('slow');
+        $( ".movement-filters" ).slideToggle('slow');
     });
 
     var movementTable = $('#movement-datatable').DataTable({
@@ -70,7 +72,8 @@
         ajax      : {
             url   : "{{ route('inventory-movement.datatables') }}",
             "data": function ( d ) {
-                d.filter_warehouse_id = {{ $warehouse->id }};
+                d.source = 'warehouses',
+                d.filter_warehouse_id = {{ $warehouse->id }}
             },
         }, 
         "language": {
@@ -89,6 +92,10 @@
         "columns": [
             { 
                 'data': 'order_number',
+                'orderable': true
+            },
+            { 
+                'data': 'product',
                 'orderable': true
             },
             { 
@@ -120,7 +127,7 @@
 
     movementTable.columns().eq(0).each(function(colIdx) {
 
-        var cell = $('.filters th').eq($(movementTable.column(colIdx).header()).index());
+        var cell = $('.movement-filters th').eq($(movementTable.column(colIdx).header()).index());
         var title = $(cell).text();
 
         if($(cell).hasClass('no-filter')){
@@ -132,7 +139,7 @@
 
             // $(cell).html( '<input class="form-control filter-input" type="text"/>' );
 
-            $('select', $('.filters th').eq($(movementTable.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
+            $('select', $('.movement-filters th').eq($(movementTable.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
                 e.stopPropagation();
                 $(this).attr('title', $(this).val());
                 //var regexr = '({search})'; //$(this).parents('th').find('select').val();
@@ -143,7 +150,7 @@
                  
             });
             
-            $('input', $('.filters th').eq($(movementTable.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
+            $('input', $('.movement-filters th').eq($(movementTable.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
                 e.stopPropagation();
                 $(this).attr('title', $(this).val());
                 //var regexr = '({search})'; //$(this).parents('th').find('select').val();

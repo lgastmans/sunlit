@@ -69,13 +69,21 @@ class InventoryMovementController extends Controller
             $column_index = $order_arr[0]['column'];
             $order_column = $column_arr[$column_index]['data'];
 
-            if ($column_index==1)
-                $order_column = "warehouses.name";
-            if ($column_index==3)
-                $order_column = "inventory_movements.movement_type";
-            if ($column_index==5)
-                $order_column = "users.name";
-                
+            if ($request->has('source') && $request->source == "warehouses"){
+                if ($column_index==1)
+                    $order_column = "products.name";
+                if ($column_index==3)
+                    $order_column = "inventory_movements.movement_type";
+                if ($column_index==5)
+                    $order_column = "users.name";
+            }else{
+                if ($column_index==1)
+                    $order_column = "warehouses.name";
+                if ($column_index==3)
+                    $order_column = "inventory_movements.movement_type";
+                if ($column_index==5)
+                    $order_column = "users.name";
+            }
             $order_dir = $order_arr[0]['dir'];
         }
 
@@ -87,8 +95,8 @@ class InventoryMovementController extends Controller
 
         $arr = array();
 
-        if (!$request->has('filter_product_id'))
-            return $arr;
+        // if (!$request->has('filter_product_id'))
+        //     return $arr;
         $filter_product_id = $request->get('filter_product_id');
 
 
@@ -122,42 +130,65 @@ class InventoryMovementController extends Controller
 
         $query->with(['product','warehouse'])
                 ->join('users', 'users.id', '=', 'user_id')
-                ->leftJoin('purchase_orders', 'purchase_orders.id', '=', 'purchase_order_id')
-                ->leftJoin('warehouses', 'warehouses.id', '=', 'inventory_movements.warehouse_id')
+                ->join('purchase_orders', 'purchase_orders.id', '=', 'purchase_order_id')
+                ->join('warehouses', 'warehouses.id', '=', 'inventory_movements.warehouse_id')
+                ->join('products', 'products.id', '=', 'inventory_movements.product_id')
                 ->select('inventory_movements.*', 'purchase_orders.order_number AS order_number');
 
-        if (!empty($column_arr[0]['search']['value']))
+        if ($request->has('filter_product_id'))
+            $query->where('inventory_movements.product_id', '=', $request->filter_product_id);
+
+        if ($request->has('filter_warehouse_id'))
+            $query->where('inventory_movements.warehouse_id', '=', $request->filter_warehouse_id);
+
+
+        if ($request->has('source') && $request->source == "warehouses"){
+            if (!empty($column_arr[0]['search']['value']))
                 $query->where('order_number', 'like', '%'.$column_arr[0]['search']['value'].'%');
 
+            if (!empty($column_arr[1]['search']['value'])){
+                $query->where('products.name', 'LIKE', $column_arr[1]['search']['value'].'%');
+            }
+            if (!empty($column_arr[2]['search']['value']))
+                $query->where('quantity', '=', $column_arr[2]['search']['value']);
+            
+            if (!empty($column_arr[3]['search']['value'])){
+                $query->where('movement_type', '=', $column_arr[3]['search']['value']);
+            }
+            if (!empty($column_arr[4]['search']['value']))
+                $query->where('inventory_movements.created_at', 'like', convertDateToMysql($column_arr[4]['search']['value']).'%');
 
-        if (!empty($column_arr[1]['search']['value'])){
-            $query->where('warehouses.name', 'LIKE', $column_arr[1]['search']['value'].'%');
+            if (!empty($column_arr[5]['search']['value']))
+                $query->where('users.name', 'like', '%'.$column_arr[5]['search']['value'].'%');
+        }else{
+            if (!empty($column_arr[0]['search']['value']))
+                    $query->where('order_number', 'like', '%'.$column_arr[0]['search']['value'].'%');
+
+            if (!empty($column_arr[1]['search']['value'])){
+                $query->where('warehouses.name', 'LIKE', $column_arr[1]['search']['value'].'%');
+            }
+            
+            if (!empty($column_arr[2]['search']['value']))
+                $query->where('quantity', '=', $column_arr[2]['search']['value']);
+            
+            if (!empty($column_arr[3]['search']['value'])){
+                $query->where('movement_type', '=', $column_arr[3]['search']['value']);
+            }
+
+            if (!empty($column_arr[4]['search']['value']))
+                $query->where('inventory_movements.created_at', 'like', convertDateToMysql($column_arr[4]['search']['value']).'%');
+
+            if (!empty($column_arr[5]['search']['value']))
+                $query->where('users.name', 'like', '%'.$column_arr[5]['search']['value'].'%');
         }
-        
-        if (!empty($column_arr[2]['search']['value']))
-            $query->where('quantity', '=', $column_arr[2]['search']['value']);
-        
-
-        if (!empty($column_arr[3]['search']['value'])){
-            $query->where('movement_type', '=', $column_arr[3]['search']['value']);
-        }
-
-
-        if (!empty($column_arr[4]['search']['value']))
-            $query->where('inventory_movements.created_at', 'like', convertDateToMysql($column_arr[4]['search']['value']).'%');
-
-        if (!empty($column_arr[5]['search']['value']))
-            $query->where('users.name', 'like', '%'.$column_arr[5]['search']['value'].'%');
-
-        $query->where('product_id', '=', $filter_product_id);
 
         $query->orderBy($order_column, $order_dir);
 
         if ($length > 0)
             $query->skip($start)->take($length);
 
-        $movement = $query->get();
 
+        $movement = $query->get();
 
         foreach ($movement as $record)
         {
@@ -168,6 +199,7 @@ class InventoryMovementController extends Controller
                 "quantity" => $record->quantity,
                 "entry_type" => $record->display_movement_type,
                 "warehouse" => $record->warehouse->name,
+                "product" => $record->product->name,
                 "user" => $record->user->display_name,
             );
         }

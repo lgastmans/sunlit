@@ -60,8 +60,6 @@
         $( ".filters" ).slideToggle('slow');
     });
 
-    // $('.entry-select').select2();
-    // $('.warehouse-select').select2();
 
     var movementTable = $('#movement-datatable').DataTable({
         processing: true,
