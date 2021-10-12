@@ -76,6 +76,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/purchase-orders/list', [PurchaseOrderController::class, 'getListForDatatables'])->name('purchase-orders.datatables');
     Route::get('/purchase-orders/{order_number}', [PurchaseOrderController::class, 'show'])->name('purchase-orders.show');
     Route::get('/purchase-orders/{order_number}/cart', [PurchaseOrderController::class, 'cart'])->name('purchase-orders.cart');
+    Route::get('/purchase-orders/{order_number}/invoice/pdf', [PurchaseOrderController::class, 'exportInvoiceToPdf'])->name('purchase-orders.invoice-pdf');
+    Route::get('/purchase-orders/{order_number}/invoice/', [PurchaseOrderController::class, 'invoice'])->name('purchase-orders.invoice');
     Route::get('/purchase-orders/{id}/edit', [PurchaseOrderController::class, 'edit'])->name('purchase-orders.edit');
     Route::post('/purchase-orders', [PurchaseOrderController::class, 'store'])->name('purchase-orders.store');
     Route::put('/purchase-orders/{id}/ordered', [PurchaseOrderController::class, 'ordered'])->name('purchase-orders.ordered');

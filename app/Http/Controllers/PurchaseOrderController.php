@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use \NumberFormatter;
+use PDF;
+use App\Models\Inventory;
 use App\Models\Warehouse;
 use Illuminate\Http\Request;
 use App\Models\PurchaseOrder;
 use App\Models\PurchaseOrderItem;
-use App\Models\Inventory;
 use Illuminate\Support\Facades\Auth;
 use \App\Http\Requests\StorePurchaseOrderRequest;
 
@@ -466,7 +466,6 @@ class PurchaseOrderController extends Controller
     }
 
 
-
     /**
      * Remove the specified resource from storage.
      *
@@ -484,5 +483,23 @@ class PurchaseOrderController extends Controller
         }
         return abort(403, trans('error.unauthorized'));
 
+    }
+
+
+    public function invoice($order_number)
+    {
+        $order = PurchaseOrder::where('order_number', '=', $order_number)->first();
+        return view('purchase_orders.view_invoice', ['order' => $order]);
+    }
+
+
+    public function exportInvoiceToPdf($order_number)
+    {
+        $order = PurchaseOrder::where('order_number', '=', $order_number)->first();
+        view()->share('order', $order);
+        $pdf = PDF::loadView('purchase_orders.invoice', $order);
+
+        // download PDF file with download method
+        return $pdf->download($order_number.'.pdf');
     }
 }
