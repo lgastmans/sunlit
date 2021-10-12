@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SaleOrder;
 use Illuminate\Http\Request;
 use App\Models\SaleOrderItem;
+use App\Models\Inventory;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreSaleOrderRequest;
 
