@@ -130,10 +130,12 @@ class InventoryMovementController extends Controller
 
         $query->with(['product','warehouse'])
                 ->join('users', 'users.id', '=', 'user_id')
-                ->join('purchase_orders', 'purchase_orders.id', '=', 'purchase_order_id')
+                ->leftJoin('purchase_orders', 'purchase_orders.id', '=', 'purchase_order_id')
+                ->leftJoin('sale_orders', 'sale_orders.id', '=', 'sales_order_id')
                 ->join('warehouses', 'warehouses.id', '=', 'inventory_movements.warehouse_id')
                 ->join('products', 'products.id', '=', 'inventory_movements.product_id')
-                ->select('inventory_movements.*', 'purchase_orders.order_number AS order_number');
+                ->select('inventory_movements.*')
+                ->selectRaw('IF(purchase_order_id IS NULL, sale_orders.order_number, purchase_orders.order_number) AS order_number');
 
         if ($request->has('filter_product_id'))
             $query->where('inventory_movements.product_id', '=', $request->filter_product_id);
@@ -188,7 +190,10 @@ class InventoryMovementController extends Controller
             $query->skip($start)->take($length);
 
 
+//dd($query->toSql());
+
         $movement = $query->get();
+
 
         foreach ($movement as $record)
         {
