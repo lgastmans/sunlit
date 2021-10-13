@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 //use App\Models\PurchaseOrder;
-//use App\Models\SalesOrder;
+//use App\Models\SaleOrder;
 
 class Inventory extends Model
 {
@@ -142,6 +142,11 @@ class Inventory extends Model
                         *    update Ordered Stock (add)
                         */
                         $ordered += $product->quantity_ordered;
+
+                        /*
+                            the average buying price stays the same
+                        */
+                        $avg_price = $inventory->average_buying_price;
                         
                     }
                     elseif ($model->status == PurchaseOrder::RECEIVED) 
@@ -181,7 +186,7 @@ class Inventory extends Model
                 }
             }
         }
-        elseif ($class_name == 'SalesOrder')
+        elseif ($class_name == 'SaleOrder')
         {
             foreach($model->items as $product)
             {
@@ -200,8 +205,12 @@ class Inventory extends Model
                         /*
                         *    update Booked Stock (add)
                         */
-                        $ordered += $product->quantity_ordered;
-                        
+                        $booked += $product->quantity_ordered;
+
+                        /*
+                            the average buying price stays the same
+                        */
+                        $avg_price = $inventory->average_buying_price;
                     }
                     elseif ($model->status == SaleOrder::DELIVERED) 
                     {
@@ -228,7 +237,7 @@ class Inventory extends Model
                         $movement = new InventoryMovement();
                         $movement->updateMovement($data);
 
-                        $avg_price = $movement->getAverageBuyingPrice($inventory->warehouse_id, $product->product_id);
+                        $avg_price = $movement->getAverageSellingPrice($inventory->warehouse_id, $product->product_id);
                     }
 
                     $result = $inventory->update([
