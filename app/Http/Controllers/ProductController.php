@@ -347,11 +347,11 @@ class ProductController extends Controller
     }
 
 
-     /**
-     * Display a listing of the resource for select2
-     *
-     * @return json
-     */
+    /**
+    * Display a listing of the resource for select2
+    *
+    * @return json
+    */
     public function getListForSelect2(Request $request)
     {
         $query = Product::query();
@@ -360,5 +360,42 @@ class ProductController extends Controller
         }
         $products = $query->select('products.id', 'products.code as text')->get();
         return ['results' => $products];
-    }   
+    }
+
+    public function importCsv()
+    {
+        $file = public_path('products-import.csv');
+
+        $dataArr = $this->csvToArray($file);
+dd($dataArr);
+        // for ($i = 0; $i < count($dataArr); $i ++)
+        // {
+        //     User::firstOrCreate($dataArr[$i]);
+        // }
+
+        return true;    
+    }
+
+    function csvToArray($filename = '', $delimiter = "\t")
+    {
+        if (!file_exists($filename) || !is_readable($filename))
+            return false;
+
+        //$header = null;
+        $data = array();
+        if (($handle = fopen($filename, 'r')) !== false)
+        {
+            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false)
+            {
+                //if (!$header)
+                //    $header = $row;
+                //else
+                    $data[] = $row; //array_combine($header, $row);
+            }
+            fclose($handle);
+        }
+
+        return $data;
+    }
+
 }
