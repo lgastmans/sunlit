@@ -191,6 +191,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::prefix('export')->group(function () {
         Route::get('/products', [ProductController::class, 'getExportList'])->name('export.products');
+        Route::get('/inventory', [InventoryController::class, 'getExportList'])->name('export.inventory');
     });
 
     Route::get('/permissions/add', [PermissionController::class, 'store'])->name('permissions.add');
