@@ -13,7 +13,7 @@ class Inventory extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['warehouse_id', 'product_id', 'stock_available', 'stock_booked', 'stock_ordered'];
+    protected $fillable = ['warehouse_id', 'product_id', 'stock_available', 'stock_booked', 'stock_ordered', 'average_buying_price', 'average_selling_price'];
 
     public function warehouse()
     {
@@ -36,7 +36,16 @@ class Inventory extends Model
      */
     public function initStock($product_id)
     {
+        /*
+            retrieve the ids of all warehouses
+        */
         $warehouses = Warehouse::pluck('id');
+
+        /*
+            retrieve the product details
+            for storing the initial average buying price
+        */
+        $product = Product::find($product_id);
 
         foreach ($warehouses as $warehouse_id) {
             $inventory = $this->create([
@@ -44,7 +53,9 @@ class Inventory extends Model
                 "product_id" => $product_id,
                 "stock_available" => 0,
                 "stock_booked" => 0,
-                "stock_ordered" => 0
+                "stock_ordered" => 0,
+                "average_buying_price" => $product->purchase_price,
+                "average_selling_price" => 0
             ]);
         }
     }
