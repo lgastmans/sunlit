@@ -6,6 +6,7 @@
             <th>Ordered</th>
             <th>Booked</th>
             <th>Average Cost</th>
+            <th>Average Price</th>
         </tr>
     </thead>
     <tbody>
@@ -17,6 +18,7 @@
                 <td>{{ $inventory->stock_ordered }}</td>
                 <td>{{ $inventory->stock_booked }}</td>
                 <td>{{ __('app.currency_symbol_inr')}} {{ $inventory->average_buying_price }}</td>
+                <td>{{ __('app.currency_symbol_inr')}} {{ $inventory->average_selling_price }}</td>
             </tr>
         @endforeach
     </tbody>
