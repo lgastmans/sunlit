@@ -321,7 +321,7 @@
             url: route,
             dataType: 'json',
             success : function(data){
-                $('#selling_price').val(data.average_cost);
+                $('#selling_price').val(data.average_selling_price);
                 $('#tax').val(data.tax.amount);
             }
         })
