@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Inventory;
+use App\Exports\InventoryExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Carbon\Carbon;
 
 class InventoryController extends Controller
 {
@@ -233,5 +236,11 @@ class InventoryController extends Controller
         exit;
     }
 
+    public function getExportList()
+    {
+        $current = Carbon::now()->format('YmdHs');
+
+        return Excel::download(new InventoryExport, 'inventory_'.$current.'.xlsx');
+    }
 
 }

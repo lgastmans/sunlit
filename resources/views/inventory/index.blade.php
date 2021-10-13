@@ -33,7 +33,7 @@
                     <div class="col-sm-8">
                         <div class="text-sm-end">
                             <a class="btn toggle-filters" href="javascript:void(0);"><button type="button" class="btn btn-light mb-2"><i class="mdi mdi-filter"></i></button></a>
-                            <button type="button" class="btn btn-light mb-2">{{ __('app.export') }}</button> 
+                            <a class="btn" href="{{ route('export.inventory') }}"><button type="button" class="btn btn-light mb-2">{{ __('app.export') }}</button></a>
                         </div>
                     </div><!-- end col-->
                 </div>
