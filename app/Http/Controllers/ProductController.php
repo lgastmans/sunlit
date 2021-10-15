@@ -10,6 +10,9 @@ use App\Models\Product;
 use App\Models\Inventory;
 use App\Models\SaleOrder;
 use App\Models\Warehouse;
+use App\Models\Category;
+use App\Models\Tax;
+use App\Models\Supplier;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Models\PurchaseOrder;
@@ -362,35 +365,117 @@ class ProductController extends Controller
         return ['results' => $products];
     }
 
+    /*
+        import products csv file from public folder
+    */
     public function importCsv()
     {
+        /*
+            File columns are (in order):
+
+            Unique Code 
+            Part Number 
+            Description 
+            Category    
+            Supplier    
+            Model   
+            Min Qty
+            "Cable Length (input in m)"
+            "Cable Length (output in m)"
+            KW Rating
+            Act Wt(kg)
+            Vol Wt(kg)
+            Cal Wt
+            Std Warranty(yrs)
+            Notes
+        */
+
         $file = public_path('products-import.csv');
 
         $dataArr = $this->csvToArray($file);
-dd($dataArr);
-        // for ($i = 0; $i < count($dataArr); $i ++)
-        // {
-        //     User::firstOrCreate($dataArr[$i]);
-        // }
+        //dd($dataArr);
+
+        /*
+            Tax ID not specified in csv file
+            so default to first row of tax table
+        */
+        $taxes = Tax::first();
+
+        for ($i = 0; $i < count($dataArr); $i ++)
+        {
+            $categories = Category::firstOrCreate([
+                'name' => $dataArr[$i]['category_id']
+            ]);
+            $dataArr[$i]['category_id'] = $categories->id;
+
+            $suppliers = Supplier::firstOrCreate([
+                'company' => $dataArr[$i]['supplier_id'],
+                'address' => 'address',
+                'city' => 'city',
+                'zip_code' => 'zip code',
+                'phone' => 'phone',
+                'currency' => 'inr',
+                'country' => 'country'
+            ]);
+            $dataArr[$i]['supplier_id'] = $suppliers->id;
+
+            $dataArr[$i]['tax_id'] = $taxes->id;
+
+            $product = Product::firstOrCreate($dataArr[$i]);
+
+            $inventory = new Inventory();
+            $inventory->initStock($product->id); 
+        }
 
         return true;    
     }
 
+    /*
+        convert the csv file to array
+    */
     function csvToArray($filename = '', $delimiter = "\t")
     {
         if (!file_exists($filename) || !is_readable($filename))
             return false;
 
-        //$header = null;
         $data = array();
         if (($handle = fopen($filename, 'r')) !== false)
         {
+            $i=0;
             while (($row = fgetcsv($handle, 1000, $delimiter)) !== false)
             {
-                //if (!$header)
-                //    $header = $row;
-                //else
-                    $data[] = $row; //array_combine($header, $row);
+
+                if (strpos($row[0], 'UI') !== false)
+                    continue;
+                else {
+                    $data[$i]['code'] = $row[0];
+                    $data[$i]['part_number'] = $row[1];
+                    $data[$i]['name'] = $row[2];
+                    // the column "category_id" is set to its corresponding
+                    // id in the importCSV function
+                    $data[$i]['category_id'] = $row[3];
+                    // ditto column "supplier_id"
+                    $data[$i]['supplier_id'] = $row[4];
+                    $data[$i]['model'] = $row[5];
+                    if ((empty($row[6])) || (is_null($row[6])))
+                        $data[$i]['minimum_quantity'] = 0;
+                    else
+                        $data[$i]['minimum_quantity'] = $row[6];
+                    $data[$i]['cable_length_input'] = $row[7];
+                    $data[$i]['cable_length_output'] = $row[8];
+                    $data[$i]['kw_rating'] = $row[9];
+                    $data[$i]['weight_actual'] = $row[10];
+                    $data[$i]['weight_volume'] = $row[11];
+                    $data[$i]['weight_calculated'] = $row[12];
+                    $data[$i]['warranty'] = $row[13];
+                    $data[$i]['notes'] = $row[14];
+                    // as tax is not given in the csv file
+                    // the tax_id is initialized in the importCSV function
+                    $data[$i]['tax_id'] = 0;
+                    $data[$i]['purchase_price'] = 0;
+
+                    $i++;
+                }
             }
             fclose($handle);
         }
