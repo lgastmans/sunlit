@@ -14,7 +14,7 @@ class Product extends Model
     use SoftDeletes;
 
     protected $dates= ['created_at'];
-    protected $fillable = ['category_id', 'supplier_id', 'tax_id', 'code', 'name', 'model', 'minimum_quantity', 'purchase_price', 'cable_length', 'kw_rating', 'part_number', 'notes'];
+    protected $fillable = ['category_id', 'supplier_id', 'tax_id', 'code', 'name', 'model', 'minimum_quantity', 'purchase_price', 'cable_length', 'kw_rating', 'part_number', 'notes', 'cable_length_input', 'cable_length_output', 'weight_actual', 'weight_volume', 'weight_calculated', 'warranty'];
     protected $with = ['tax', 'inventory'];
 
     /**
