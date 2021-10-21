@@ -74,6 +74,44 @@
                         </div>
                     @endif
                 </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="mb-4">
+                            <h5>Cable Length<br>Input</h5>
+                            <p>{{ $product->cable_length_input }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="mb-4">
+                            <h5>Cable Length<br>Output</h5>
+                            <p>{{ $product->cable_length_output }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="mb-4">
+                            <h5>Actual Weight</h5>
+                            <p>{{ $product->weight_actual }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="mb-4">
+                            <h5>Volume Weight</h5>
+                            <p>{{ $product->weight_volume }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="mb-4">
+                            <h5>Calculated Weight</h5>
+                            <p>{{ $product->weight_calculated }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="mb-4">
+                            <h5>Warranty</h5>
+                            <p>{{ $product->warranty }}</p>
+                        </div>
+                    </div>
+                </div>
             </div> <!-- end card-body--> 
         </div> <!-- end card-->
     </div> <!-- end col -->
