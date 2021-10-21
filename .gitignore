@@ -21,3 +21,5 @@ package-lock.json
 storage/debugbar/
 
 signal-desktop-keyring.gpg
+
+public/products-import.xlsx
