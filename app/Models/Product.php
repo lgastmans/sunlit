@@ -84,4 +84,48 @@ class Product extends Model
         return $dt->toFormattedDateString();  
     }
 
+    /**
+     * Get the last purchased date for a product
+     *
+     * @param integer
+     * @return date
+     */
+    public function getLastPurchasedOnAttribute()
+    {
+        $result = InventoryMovement::select('created_at')
+            ->whereNotNull('purchase_order_id')
+            ->where('product_id', '=', $this->id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        if ($result) {
+            $dt = Carbon::parse($result->created_at);
+            return $dt->toFormattedDateString();  
+        }
+
+        return 'NF'; // Not Found
+    }
+
+    /**
+     * Get the last sold date for a product
+     *
+     * @param integer
+     * @return date
+     */
+    public function getLastSoldOnAttribute()
+    {
+        $result = InventoryMovement::select('created_at')
+            ->whereNotNull('sales_order_id')
+            ->where('product_id', '=', $this->id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        if ($result) {
+            $dt = Carbon::parse($result->created_at);
+            return $dt->toFormattedDateString();
+        }
+
+        return 'NF'; // Not Found
+    }
+
 }

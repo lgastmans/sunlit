@@ -47,68 +47,80 @@
                 </p>
 
                 <div class="row">
-                    <div class="col-md-3">
+{{--                     <div class="col-md-3">
                         <div class="mb-4">
                             <h5>First Added</h5>
                             <p>{{ $product->display_created_at }}</p>
                         </div>
                     </div>
-                    <div class="col-md-3">
+ --}}                    <div class="col-md-3">
                         <div class="mb-4">
-                            <h5>Last Ordered</h5>
-                            <p>???</p>
+                            <h5>Last Purchased</h5>
+                            <p>{{ $product->last_purchased_on }}</p>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="mb-4">
-                            <h5>Purchase Price</h5>
-                            <p>{{ $product->supplier->currency_code }} {{ $product->purchase_price }}</p>
+                            <h5>Last Sold</h5>
+                            <p>{{ $product->last_sold_on }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-4">
+                            <h5>Cable Length</h5>
+                            <p>Input: {{ empty($product->cable_length_input) ? 'NS' : $product->cable_length_input.' m' }}</p>
+                            <p>Output: {{ empty($product->cable_length_output) ? 'NS' : $product->cable_length_output.' m' }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-4">
+                            <h5>Warranty</h5>
+                            <p>{{ empty($product->warranty) ? '0' : $product->warranty }} Years</p>
+                        </div>
+                    </div>
+
+{{-- 
+                    <div class="col-md-3">
+                        <div class="mb-4">
+                            <h5>Avg Purchase Price</h5>
+                            @foreach ($product->inventory as $row)
+                                <p>{{ $product->supplier->currency_code }} {{ $row->average_buying_price }} {{ $row->warehouse->name }}</p>
+                            @endforeach
                         </div>
                     </div>
                     @if ($product->inventory)
                         <div class="col-md-3">
                             <div class="mb-4">
-                                <h5>Revenue</h5>
-                                <p>{{ __('app.currency_symbol_inr')}} ???</p>
+                                <h5>Avg Selling Price</h5>
+                                @foreach ($product->inventory as $row)
+                                    <p>{{ __('app.currency_symbol_inr')}} {{ $row->average_selling_price}}  {{ $row->warehouse->name }}</p>
+                                @endforeach
                             </div>
                         </div>
                     @endif
+--}}
                 </div>
                 <div class="row">
-                    <div class="col-md-2">
-                        <div class="mb-4">
-                            <h5>Cable Length<br>Input</h5>
-                            <p>{{ $product->cable_length_input }}</p>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="mb-4">
-                            <h5>Cable Length<br>Output</h5>
-                            <p>{{ $product->cable_length_output }}</p>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <div class="mb-4">
                             <h5>Actual Weight</h5>
-                            <p>{{ $product->weight_actual }}</p>
+                            <p>{{ empty($product->weight_actual) ? 'NS' : $product->weight_actual.' kg' }}</p>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <div class="mb-4">
                             <h5>Volume Weight</h5>
-                            <p>{{ $product->weight_volume }}</p>
+                            <p>{{ empty($product->weight_volume) ? 'NS' : $product->weight_volume.' kg' }}</p>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <div class="mb-4">
                             <h5>Calculated Weight</h5>
-                            <p>{{ $product->weight_calculated }}</p>
+                            <p>{{ empty($product->weight_calculated) ? 'NS' : $product->weight_calculated.' kg' }}</p>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <div class="mb-4">
-                            <h5>Warranty</h5>
-                            <p>{{ $product->warranty }}</p>
                         </div>
                     </div>
                 </div>
