@@ -96,6 +96,27 @@
                             </div>
                         </div>
                         <div class="mb-3 row">
+                            <div class="col-xl-2">
+                                <x-forms.input label="Cable Length Input" name="cable_length_input" value="{{ old('cable_length_input', $product->cable_length_input) }}" message="Please provide cable length input" required="false"/>
+                            </div>
+                            <div class="col-xl-2">
+                                <x-forms.input label="Cable Length Output" name="cable_length_output" value="{{ old('cable_length_output', $product->cable_length_output) }}" message="Please provide cable length output" required="false"/>
+                            </div>
+                            <div class="col-xl-2">
+                                <x-forms.input label="Actual Weight" name="weight_actual" value="{{ old('weight_actual', $product->weight_actual) }}" message="Please provide Actual Weight" required="false"/>
+                            </div>
+                            <div class="col-xl-2">
+                                <x-forms.input label="Volume Weight" name="weight_volume" value="{{ old('weight_volume', $product->weight_volume) }}" message="Please provide Volume Weight" required="false"/>
+                            </div>
+                            <div class="col-xl-2">
+                                <x-forms.input label="Calculated Weight" name="weight_calculated" value="{{ old('weight_calculated', $product->weight_calculated) }}" message="Please provide Calculated Weight" required="false"/>
+                            </div>
+                            <div class="col-xl-2">
+                                <x-forms.input label="Warranty" name="warranty" value="{{ old('warranty', $product->warranty) }}" message="Please provide Warranty" required="false"/>
+                            </div>
+                        </div>
+
+                        <div class="mb-3 row">
                             <div class="col-xl-12">
                                 <label for="notes" class="form-label">Notes</label>
                                 <textarea class="form-control" name="notes" rows="5">{{ old('notes', $product->notes) }}</textarea>
