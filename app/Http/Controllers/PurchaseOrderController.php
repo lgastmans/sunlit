@@ -201,7 +201,7 @@ class PurchaseOrderController extends Controller
                 "warehouse" => $order->warehouse->name,
                 "supplier" => $order->supplier->company,
                 "ordered_at" => $order->display_ordered_at,
-                "expected_at" => $order->display_due_at,
+                "due_at" => $order->display_due_at,
                 "amount_inr" => (isset($order->amount_inr)) ? trans('app.currency_symbol_inr')." ".$order->amount_inr : "",
                 "status" => $order->display_status,
                 "user" => $order->user->display_name

@@ -137,7 +137,7 @@
                 'orderable': true 
             },
             { 
-                'data': 'expected_at',
+                'data': 'due_at',
                 'orderable': true 
             },
             { 
