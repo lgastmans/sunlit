@@ -99,8 +99,13 @@
 
         processing: true,
         serverSide: true,
-        ajax: "{{ route('purchase-orders.datatables') }}",
-
+        ajax      : 
+            {
+                url   : "{{ route('purchase-orders.datatables') }}",
+                "data": function ( d ) {[
+                    d.filtered = "{{ $filter ?? '' }}"
+                ]},
+            }, 
         "language": {
             "paginate": {
                 "previous": "<i class='mdi mdi-chevron-left'>",

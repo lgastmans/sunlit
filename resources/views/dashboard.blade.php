@@ -13,7 +13,9 @@
                     <i class="mdi mdi-cart-plus widget-icon"></i>
                 </div>
                 <h5 class="text-muted fw-normal mt-0" title="Number of Orders">Due Pending Orders</h5>
-                <h3 class="mt-3 mb-3 @if (count($due_orders) < 5 ) text-success @elseif (count($due_orders) < 10) text-warning @else text-danger @endif">{{ count($due_orders) }}</h3>
+                <a href="{{ route('purchase-orders.filtered', 'due') }}">
+                    <h3 class="mt-3 mb-3 @if (count($due_orders) < 5 ) text-success @elseif (count($due_orders) < 10) text-warning @else text-danger @endif">{{ count($due_orders) }}</h3>
+                </a>
                 <p class="mb-0 text-muted">
                     <span class="text-danger me-2"></span>
                     <span class="text-nowrap"></span>
@@ -28,7 +30,9 @@
                     <i class="mdi mdi-cart-plus widget-icon"></i>
                 </div>
                 <h5 class="text-muted fw-normal mt-0" title="Number of Orders">Overdue Pending Orders</h5>
-                <h3 class="mt-3 mb-3 @if ($overdue_orders < 5 ) text-success @elseif ($overdue_orders < 10) text-warning @else text-danger @endif">{{ $overdue_orders }}</h3>
+                <a href="{{ route('purchase-orders.filtered', 'overdue') }}">
+                    <h3 class="mt-3 mb-3 @if ($overdue_orders < 5 ) text-success @elseif ($overdue_orders < 10) text-warning @else text-danger @endif">{{ $overdue_orders }}</h3>
+                </a>
                 <p class="mb-0 text-muted">
                     <span class="text-danger me-2"></span>
                     <span class="text-nowrap"></span>

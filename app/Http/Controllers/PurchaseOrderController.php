@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use PDF;
+use Carbon\Carbon;
 use App\Models\Inventory;
 use App\Models\Warehouse;
 use Illuminate\Http\Request;
@@ -30,6 +31,20 @@ class PurchaseOrderController extends Controller
     
         return abort(403, trans('error.unauthorized'));
     }
+
+
+    public function filter($filter)
+    {
+        $user = Auth::user();
+        if ($user->can('list purchase orders')){
+            $status = PurchaseOrder::getStatusList();
+
+            return view('purchase_orders.index', ['status' => $status, 'filter' => $filter]);
+
+        }
+        return abort(403, trans('error.unauthorized'));
+    }
+
 
     public function getListForDatatables(Request $request)
     {
@@ -133,7 +148,6 @@ class PurchaseOrderController extends Controller
             if (!empty($column_arr[4]['search']['value'])){
                 $query->where('purchase_orders.due_at', 'like', convertDateToMysql($column_arr[4]['search']['value']));
             }
-        
             if (!empty($column_arr[5]['search']['value'])){
                 $query->where('purchase_orders.amount_inr', 'like', $column_arr[5]['search']['value'].'%');
             }
@@ -142,6 +156,20 @@ class PurchaseOrderController extends Controller
             }
             if (!empty($column_arr[7]['search']['value'])){
                 $query->where('users.name', 'like', $column_arr[7]['search']['value'].'%');
+            }
+        }
+
+        if ($request->filtered)
+        {
+            switch($request->filtered)
+            {
+                case "due":
+                    $query->whereBetween('status', [PurchaseOrder::ORDERED, PurchaseOrder::CLEARED]);
+                    break;
+                case "overdue":
+                    $query->whereBetween('status', [PurchaseOrder::ORDERED, PurchaseOrder::CLEARED])->where('due_at', '<', Carbon::now());
+                    break;
+                default: "";
             }
         }
         
