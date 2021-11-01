@@ -152,11 +152,13 @@
                                         </tr>
                                       
                                         <tr>
-                                            <td>Exchange Rate <abbr title="Supplier"> :</td>
+                                            <td>Exchange Rate: </td>
                                             <td>
-                                                <span>{{ __('app.currency_symbol_inr')}}</span>
-                                                <span id="order-echange-rate">{{ Setting::get('purchase_order.exchange_rate') }}</span>
-                                                
+                                                <div class="input-group flex-nowrap">
+                                                    <span class="input-group-text">{{ __('app.currency_symbol_inr')}}</span>
+                                                    <input class="form-control" type="text" id="order-exchange-rate"
+                                                    value="@if ($purchase_order->order_exchange_rate) {{ $purchase_order->order_exchange_rate }} @else {{ Setting::get('purchase_order.exchange_rate') }} @endif">
+                                                </div>
                                             </td>
                                         </tr>
                                         <tr>
@@ -181,6 +183,7 @@
                                         @method('PUT')
                                         <div class="mb-3 position-relative" id="ordered_at">
                                             <label class="form-label">Ordered date</label>
+                                            <input type="hidden" id="order_exchange_rate_hidden" name="order_exchange_rate" value="">
                                             <input type="text" class="form-control" name="ordered_at" value="{{ $purchase_order->display_ordered_at }}"
                                             data-provide="datepicker" 
                                             data-date-container="#ordered_at"
@@ -199,7 +202,7 @@
                             </div>
                         </div>
 
-                        <div class="mt-4 mt-lg-0 rounded">
+                        <div class="mt-4 mt-lg-0 rounded @if ($purchase_order->status > 1) d-none @endif">
                             <div class="card mt-4 border">
                                 <div class="card-body">
                                     <button id="{{ $purchase_order->id }}" class="col-lg-12 text-center btn btn-danger" type="submit" name="delete_order" data-bs-toggle="modal" data-bs-target="#delete-modal-order"><i class="mdi mdi-delete"></i> Delete order</button>
@@ -310,33 +313,41 @@
 
     <script>
 
-    function recalculateGrandTotal(){
+    function recalculateGrandTotal(type=false){
         var grand_total = 0;
         $('.item-total').each(function( index ){
             grand_total = grand_total + parseFloat($(this).html());
         });
         $('#grand-total').html(grand_total.toFixed(2));
         
-        var amount_inr = grand_total * {{ Setting::get('purchase_order.exchange_rate') }}
+        var fx_rate = $('#order-exchange-rate').val();
+        var amount_inr = grand_total * fx_rate
         $('#amount-inr').html(amount_inr.toFixed(2));
 
-        var route = '{{ route("purchase-orders.update", ":id") }}';
-        route = route.replace(':id', $('#purchase-order-id').val());
-        $.ajax({
-                type: 'POST',
-                url: route,
-                dataType: 'json',
-                data: { 
-                    'value' : false , 
-                    'field': 'amount', 
-                    'item': false,
-                    '_method': 'PUT'
-                },
-                success : function(result){
-                    //
-                }
-            });
+        if (type !== "rate"){
+            var route = '{{ route("purchase-orders.update", ":id") }}';
+            route = route.replace(':id', $('#purchase-order-id').val());
+            $.ajax({
+                    type: 'POST',
+                    url: route,
+                    dataType: 'json',
+                    data: { 
+                        'value' : false , 
+                        'field': 'amount', 
+                        'item': false,
+                        '_method': 'PUT'
+                    },
+                    success : function(result){
+                        //
+                    }
+                });
+        }
     }
+
+    $('#order-exchange-rate').on('keyup', function(){
+        $('#order_exchange_rate_hidden').val($('#order-exchange-rate').val());
+        recalculateGrandTotal('rate');
+    })
 
     var warehouseSelect = $(".warehouse-select").select2();
     warehouseSelect.select2({

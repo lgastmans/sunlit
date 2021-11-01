@@ -355,9 +355,9 @@ class PurchaseOrderController extends Controller
         ]);
 
         $order = PurchaseOrder::find($id);
-        $order->ordered_at = $request->get('ordered_at');
+        $order->ordered_at = $request->ordered_at;
         $order->status = PurchaseOrder::ORDERED;
-        $order->order_exchange_rate = \Setting::get('purchase_order.exchange_rate');
+        $order->order_exchange_rate = $request->order_exchange_rate;
         $items = PurchaseOrderItem::where('purchase_order_id', "=", $id)->select('quantity_ordered', 'selling_price', 'tax')->get();
         $order->amount_usd = 0;
         foreach($items as $item){
