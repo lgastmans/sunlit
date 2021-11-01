@@ -448,9 +448,9 @@ class ProductController extends Controller
                 if (strpos($row[0], 'UI') !== false)
                     continue;
                 else {
-                    $data[$i]['code'] = $row[0];
+                    $data[$i]['code'] = $row[1];
                     $data[$i]['part_number'] = $row[1];
-                    $data[$i]['name'] = $row[2];
+                    $data[$i]['name'] = $row[1];
                     // the column "category_id" is set to its corresponding
                     // id in the importCSV function
                     $data[$i]['category_id'] = $row[3];
@@ -468,7 +468,7 @@ class ProductController extends Controller
                     $data[$i]['weight_volume'] = $row[11];
                     $data[$i]['weight_calculated'] = $row[12];
                     $data[$i]['warranty'] = $row[13];
-                    $data[$i]['notes'] = $row[14];
+                    $data[$i]['notes'] = $row[2];
                     // as tax is not given in the csv file
                     // the tax_id is initialized in the importCSV function
                     $data[$i]['tax_id'] = 0;
