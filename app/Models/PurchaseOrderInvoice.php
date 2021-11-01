@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class PurchaseOrder extends Model
+
+class PurchaseOrderInvoice extends Model
 {
     use HasFactory;
     use SoftDeletes;
@@ -20,80 +20,37 @@ class PurchaseOrder extends Model
     const CLEARED = 6;
     const RECEIVED = 7;
 
-    protected $dates = ['ordered_at', 'confirmed_at', 'received_at', 'paid_at', 'due_at', 'shipped_at', 'customs_at', 'cleared_at'];
+    protected $dates = ['due_at', 'shipped_at', 'customs_at', 'cleared_at',  'received_at', 'paid_at'];
+    protected $with = ['user'];
 
-    protected $fillable = ['warehouse_id', 'supplier_id', 'order_number', 'boe_number', 'ordered_at', 'expected_at', 'received_at', 'credit_period', 'amount_usd', 'amount_inr', 'customs_ex_rate', 'se_ex_rate', 'duty_amount', 'social_surcharge', 'igst', 'bank_charges', 'clearing_charges', 'transport_charges', 'se_due_date', 'se_payment_date', 'status', 'user_id'];
 
-    protected $with = ['warehouse', 'supplier', 'user'];
-
-    /**
-     * Get the warehouse associated with the purchase order.
-     */
-    public function warehouse()
-    {
-        return $this->belongsTo(Warehouse::class);
-    }
 
     /**
-     * Get the supplier associated with the purchase order.
-     */
-    public function supplier()
-    {
-        return $this->belongsTo(Supplier::class);
-    }
-
-    /**
-     * Get the user associated with the purchase order.
+     * Get the user associated with the purchase order invoice.
      */
     public function user()
     {
         return $this->belongsTo(User::class);
     } 
-    
+
+
     /**
-     * Get the items associated with the purchase order.
+     * Get the purchase order associated with the invoice.
+     */
+    public function purchase_order()
+    {
+        return $this->belongsTo(PurchaseOrder::class);
+    }
+
+    /**
+     * Get the items associated with the purchase order invoice.
      */
     public function items()
     {
-        return $this->hasMany(PurchaseOrderItem::class);
-    }
-    
-
-    /**
-     * Returns the ordered_at date for display Month Day, Year
-     */
-    public function getDisplayOrderedAtAttribute()
-    {
-        if ($this->ordered_at){
-            $dt = Carbon::parse($this->ordered_at);
-            return $dt->toFormattedDateString(); 
-        } 
-        return "";
+        return $this->hasMany(PurchaseOrderInvoiceItem::class);
     }
 
-    public function setOrderedAtAttribute($value)
-    {
-        $dt = Carbon::parse($value);
-        $this->attributes['ordered_at'] = $dt->toDateTimeString();  
-    }
 
-    /**
-     * Returns the confirmed_at date for display Month Day, Year
-     */
-    public function getDisplayConfirmedAtAttribute()
-    {
-        if ($this->confirmed_at){
-            $dt = Carbon::parse($this->confirmed_at);
-            return $dt->toFormattedDateString(); 
-        } 
-        return "";  
-    }
-
-    public function setConfirmedAtAttribute($value)
-    {
-        $dt = Carbon::parse($value);
-        $this->attributes['confirmed_at'] = $dt->toDateTimeString();  
-    }
 
     /**
      * Returns the shipped_at date for display Month Day, Year
@@ -246,55 +203,4 @@ class PurchaseOrder extends Model
             PurchaseOrder::RECEIVED => 'Received'
         ];
     }
-
-
-    public function is_overdue()
-    {
-        if (Carbon::now()->greaterThan(Carbon::parse( $this->due_at))){
-            return true;
-        }
-        return false;
-    }
-
-    public function getOrderedDaysAgoAttribute()
-    {
-        return Carbon::parse( $this->ordered_at)->diffForHumans();
-    }
-
-
-    public function scopeOrdered($query)
-    {
-        return $query->where('status', '>=', PurchaseOrder::ORDERED);
-    }
-
-
-    /* * Retrieve orders with status RECEIVED
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeReceived($query)
-    {
-        return $query->where('status', PurchaseOrder::RECEIVED);
-    }    
-
-    /* * Retrieve due orders
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeDue($query)
-    {
-        return $query->whereBetween('status', [PurchaseOrder::ORDERED, PurchaseOrder::CLEARED]);
-    }   
-
-    /* * Retrieve overdued orders
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeOverdue($query)
-    {
-        return $query->whereBetween('status', [PurchaseOrder::ORDERED, PurchaseOrder::CLEARED])->where('due_at', '<', Carbon::now());
-    }   
 }

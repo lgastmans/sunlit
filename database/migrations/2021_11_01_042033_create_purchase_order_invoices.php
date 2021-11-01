@@ -37,6 +37,8 @@ class CreatePurchaseOrderInvoices extends Migration
             $table->date('customs_at')->nullable();
 
             $table->date('cleared_at')->nullable();
+            
+            $table->date('received_at')->nullable();
 
             $table->decimal('paid_exchange_rate', $precision = 13, $scale = 2)->nullable();
             $table->string('payment_reference')->nullable();
