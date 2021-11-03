@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -39,7 +40,7 @@ class PurchaseOrderInvoice extends Model
      */
     public function purchase_order()
     {
-        return $this->belongsTo(PurchaseOrder::class);
+        return $this->belongsTo(PurchaseOrderInvoice::class);
     }
 
     /**
@@ -164,25 +165,25 @@ class PurchaseOrderInvoice extends Model
     {
         switch ($this->status)
         {
-            case PurchaseOrder::DRAFT:
+            case PurchaseOrderInvoice::DRAFT:
                 $status =  '<span class="badge badge-secondary-lighten">Draft</span>';
                 break;
-            case PurchaseOrder::ORDERED:
+            case PurchaseOrderInvoice::ORDERED:
                 $status = '<span class="badge badge-info-lighten">Ordered</span>';
                 break;
-            case PurchaseOrder::CONFIRMED:
+            case PurchaseOrderInvoice::CONFIRMED:
                 $status = '<span class="badge badge-primary-lighten">Confirmed</span>';
                 break;
-            case PurchaseOrder::SHIPPED:
+            case PurchaseOrderInvoice::SHIPPED:
                 $status = '<span class="badge badge-dark-lighten">Shipped</span>';
                 break;
-            case PurchaseOrder::CUSTOMS:
+            case PurchaseOrderInvoice::CUSTOMS:
                 $status = '<span class="badge badge-warning-lighten">Customs</span>';
                 break;
-            case PurchaseOrder::CLEARED:
+            case PurchaseOrderInvoice::CLEARED:
                 $status = '<span class="badge badge-light-lighten">Cleared</span>';
                 break;
-            case PurchaseOrder::RECEIVED:
+            case PurchaseOrderInvoice::RECEIVED:
                 $status = '<span class="badge badge-success-lighten">Received</span>';
                 break;
             default:
@@ -194,13 +195,13 @@ class PurchaseOrderInvoice extends Model
     public static function getStatusList()
     {
         return [
-            PurchaseOrder::DRAFT => 'Draft', 
-            PurchaseOrder::ORDERED => 'Ordered', 
-            PurchaseOrder::CONFIRMED => 'Confirmed',
-            PurchaseOrder::SHIPPED => 'Shipped', 
-            PurchaseOrder::CUSTOMS => 'Customs', 
-            PurchaseOrder::CLEARED => 'Cleared',
-            PurchaseOrder::RECEIVED => 'Received'
+            PurchaseOrderInvoice::DRAFT => 'Draft', 
+            PurchaseOrderInvoice::ORDERED => 'Ordered', 
+            PurchaseOrderInvoice::CONFIRMED => 'Confirmed',
+            PurchaseOrderInvoice::SHIPPED => 'Shipped', 
+            PurchaseOrderInvoice::CUSTOMS => 'Customs', 
+            PurchaseOrderInvoice::CLEARED => 'Cleared',
+            PurchaseOrderInvoice::RECEIVED => 'Received'
         ];
     }
 }

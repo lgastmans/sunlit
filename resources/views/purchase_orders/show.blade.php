@@ -215,6 +215,7 @@
     </div>
 </div>
 <div class="row">    
+    @include('purchase_orders.invoices')
     @include('purchase_orders.log')
 </div>
 @endsection
