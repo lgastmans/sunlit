@@ -17,13 +17,17 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="header-title mb-3">Items from Order #{{ $purchase_order->order_number }}</h4>
+             
+
 
                 <div class="table-responsive">
                     <table class="table mb-0">
                         <thead class="table-light">
                             <tr>
                                 <th>Product</th>
-                                <th>Quantity</th>
+                                <th>Qty confirmed</th>
+                                <th>Qty remainig</th>
+                                <th>Qty received</th>
                                 <th>Price</th>
                                 <th class="d-none">Tax</th>
                                 <th>Total</th>
@@ -34,6 +38,10 @@
                             <tr>
                                 <td>{{ $item->product->name }}</td>
                                 <td>{{ $item->quantity_ordered }}</td>
+                                <td>
+                                    <input class="form-control input-sm" type="text" value="{{ $item->quantity_ordered - 1}}" size="3" @if ($item->quantity_ordered - 1 == 0) readonly @endif>
+                                </td>
+                                <td>{{ 10 - $item->quantity_ordered }}</td>
                                 <td>{{ __('app.currency_symbol_usd')}}{{ number_format($item->selling_price,2) }}</td>
                                 <td class="d-none">{{ number_format($item->tax,2) }}%</td>
                                 <td>{{ __('app.currency_symbol_usd')}}{{ number_format($item->total_price,2) }}</td>
@@ -41,10 +49,79 @@
                             @endforeach
 
                         </tbody>
+                        <tfoot>
+                            <tr>
+
+                                <div class="mt-lg-0 rounded @if ($purchase_order->status != 3) d-none @endif">
+                                    <div class="card border">
+                                        <div class="card-body">
+                                            <form name="ship-order-form" class="needs-validation" novalidate
+                                                action="{{ route('purchase-orders.shipped', $purchase_order->id) }}" method="POST">
+                                                @csrf()
+                                                @method('PUT')
+                                                <div class="row mb-3">
+                                                    <div class="col-xl-4" id="shipped_at">
+                                                        <label class="form-label">Shipping date</label>
+                                                        <input type="text" class="form-control" name="shipped_at" value="{{ $purchase_order->display_shipped_at }}"
+                                                        data-provide="datepicker" 
+                                                        data-date-container="#shipped_at"
+                                                        data-date-autoclose="true"
+                                                        data-date-format="M d, yyyy"
+                                                        required>
+                                                        <div class="invalid-feedback">
+                                                            Shipping date is required
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-4 offset-xl-2" id="due_at">
+                                                        <label class="form-label">Due date</label>
+                                                        <input type="text" class="form-control" name="due_at" value="{{ $purchase_order->display_due_at }}"
+                                                        data-provide="datepicker" 
+                                                        data-date-container="#due_at"
+                                                        data-date-autoclose="true"
+                                                        data-date-format="M d, yyyy"
+                                                        required>
+                                                        <div class="invalid-feedback">
+                                                            Due date is required
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="row mb-3" >
+                                                    <div class="col-xl-6" id="courier">
+                                                        <label class="form-label">Courier</label>
+                                                        <input type="text" class="form-control" name="courier" required>
+                                                        <div class="invalid-feedback">
+                                                            Courier is required
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-6" id="tracking_number">
+                                                        <label class="form-label">Tracking number</label>
+                                                        <input type="text" class="form-control" name="tracking_number" required>
+                                                        <div class="invalid-feedback">
+                                                           Tracking number is required
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {{-- <button class="col-lg-12 text-center btn btn-warning" type="submit"
+                                                    name="ship_order">Ship order</button> --}}
+                                            </form>
+                                
+                                        </div>
+                                    </div>
+                                </div>
+                            </tr>
+                            <tr>
+                                <td colspan="5"></td>
+                                <td>
+                                    <button class="col-lg-12 text-center btn btn-info" type="submit"name="create_invoice">Create Invoice</button>
+                                </td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
                 <!-- end table-responsive -->
             </div>
+            
         </div>
 
 

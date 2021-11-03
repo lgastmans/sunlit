@@ -204,7 +204,7 @@
     });
 
     $('#purchase-orders-datatable').on('dblclick', 'tr', function () {
-        if (table.row(this).data().status.includes('Draft')){
+        if (table.row(this).data().status.includes('Draft') || table.row(this).data().status.includes('Ordered')){
             var route = '{{  route("purchase-orders.cart", ":id") }}';
         }
         else{

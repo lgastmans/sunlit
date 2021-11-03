@@ -259,7 +259,7 @@ class PurchaseOrderController extends Controller
     {
         $order = PurchaseOrder::with(['supplier','warehouse','items', 'items.product', 'items.product.tax'])->where('order_number', '=', $order_number)->first();
         if ($order){
-            if ($order->status == PurchaseOrder::DRAFT)
+            if ($order->status == PurchaseOrder::DRAFT || $order->status == PurchaseOrder::ORDERED)
                 return view('purchase_orders.cart', ['purchase_order' => $order ]);
 
             return redirect(route('purchase-orders.show', $order->order_number)); 
@@ -354,21 +354,26 @@ class PurchaseOrderController extends Controller
             'ordered_at' => 'required|date'
         ]);
 
+
         $order = PurchaseOrder::find($id);
         $order->ordered_at = $request->ordered_at;
         $order->status = PurchaseOrder::ORDERED;
-        $order->order_exchange_rate = $request->order_exchange_rate;
+        if ($request->order_exchange_rate) 
+            $order->order_exchange_rate = $request->order_exchange_rate;
+        else
+            $order->order_exchange_rate = \Setting::get('purchase_order.exchange_rate');
+
         $items = PurchaseOrderItem::where('purchase_order_id', "=", $id)->select('quantity_ordered', 'selling_price', 'tax')->get();
         $order->amount_usd = 0;
         foreach($items as $item){
             $order->amount_usd += $item->total_price; 
         }
         $order->amount_inr = $order->amount_usd * $order->order_exchange_rate;
-        
-        $order->update();
-        return redirect(route('purchase-orders.show', $order->order_number))->with('success', 'order placed'); 
-    }
 
+        $order->update();
+
+        return redirect(route('purchase-orders.cart', $order->order_number))->with('success', 'order placed'); 
+    }
 
     /**
      * Update the confirmed_at and status of an order
@@ -382,9 +387,22 @@ class PurchaseOrderController extends Controller
         $validated = $request->validate([
             'confirmed_at' => 'required|date'
         ]);
-        $order = PurchaseOrder::with('items')->find($id);
-        $order->confirmed_at = $request->get('confirmed_at');
+
+        $order = PurchaseOrder::find($id);
+        $order->confirmed_at = $request->confirmed_at;
         $order->status = PurchaseOrder::CONFIRMED;
+        if ($request->order_exchange_rate) 
+            $order->order_exchange_rate = $request->order_exchange_rate;
+        else
+            $order->order_exchange_rate = \Setting::get('purchase_order.exchange_rate');
+
+        $items = PurchaseOrderItem::where('purchase_order_id', "=", $id)->select('quantity_ordered', 'selling_price', 'tax')->get();
+        $order->amount_usd = 0;
+        foreach($items as $item){
+            $order->amount_usd += $item->total_price; 
+        }
+        $order->amount_inr = $order->amount_usd * $order->order_exchange_rate;
+
         $order->update();
 
         $inventory = new Inventory();
