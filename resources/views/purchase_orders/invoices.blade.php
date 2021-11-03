@@ -1,7 +1,7 @@
 <div class="col-lg-6">
     <div class="card">
         <div class="card-body">
-            <h4 class="header-title mb-3">Invoices</h4>
+            <h4 class="header-title mb-3">Existing invoices against purchase order</h4>
             <div class="table-responsive">
                 @if (count($purchase_order->invoices) == 0)
                     No invoice.
