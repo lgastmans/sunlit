@@ -35,7 +35,7 @@
                             style="width:0%;"
                             @break
                         @case(3)
-                            style="width:20%;"
+                            style="width:50%;"
                             @break
                         @case(4)
                             style="width:40%;"
