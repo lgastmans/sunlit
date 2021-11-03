@@ -37,11 +37,11 @@
                             @foreach($purchase_order->items as $item)
                             <tr>
                                 <td>{{ $item->product->name }}</td>
-                                <td>{{ $item->quantity_ordered }}</td>
+                                <td>{{ $item->quantity_confirmed }}</td>
                                 <td>
-                                    <input class="form-control input-sm" type="text" value="{{ $item->quantity_ordered - 1}}" size="3" @if ($item->quantity_ordered - 1 == 0) readonly @endif>
+                                    <input class="form-control input-sm" type="text" value="{{ $item->quantity_confirmed - 1}}" size="3" @if ($item->quantity_confirmed - 1 == 0) readonly @endif>
                                 </td>
-                                <td>{{ 10 - $item->quantity_ordered }}</td>
+                                <td>{{ 10 - $item->quantity_confirmed }}</td>
                                 <td>{{ __('app.currency_symbol_usd')}}{{ number_format($item->selling_price,2) }}</td>
                                 <td class="d-none">{{ number_format($item->tax,2) }}%</td>
                                 <td>{{ __('app.currency_symbol_usd')}}{{ number_format($item->total_price,2) }}</td>

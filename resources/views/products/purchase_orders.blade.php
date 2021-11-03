@@ -102,7 +102,7 @@
                 'orderable': true
             },
             { 
-                'data': 'quantity_ordered',
+                'data': 'quantity_confirmed',
                 'orderable': true
             },
             { 

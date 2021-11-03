@@ -86,7 +86,7 @@ class PurchaseOrderItemController extends Controller
             $query->where('warehouses.name', 'like', $column_arr[1]['search']['value'].'%');
         }
         if (!empty($column_arr[2]['search']['value'])){
-            $query->where('purchase_orders.quantity_ordered', '=', $column_arr[2]['search']['value']);
+            $query->where('purchase_orders.quantity_confirmed', '=', $column_arr[2]['search']['value']);
         }
         if (!empty($column_arr[3]['search']['value'])){
             $query->where('purchase_orders.status', '=', $column_arr[3]['search']['value']);
@@ -115,7 +115,7 @@ class PurchaseOrderItemController extends Controller
                 "id" => $record->id,
                 "ordered_at" => $record->purchase_order->display_ordered_at,
                 "order_number" => $record->purchase_order->order_number,
-                "quantity_ordered" => $record->quantity_ordered,
+                "quantity_confirmed" => $record->quantity_confirmed,
                 "status" => $record->purchase_order->display_status,
                 "warehouse" => $record->purchase_order->warehouse->name,
                 "user" => $record->purchase_order->user->display_name
@@ -156,7 +156,7 @@ class PurchaseOrderItemController extends Controller
         if ($product){
             $item = PurchaseOrderItem::where('purchase_order_id', '=', $request->purchase_order_id)->where('product_id', '=', $request->product_id)->first();
             if ($item){
-                $item->quantity_ordered = $request->quantity_ordered;
+                $item->quantity_confirmed = $request->quantity_confirmed;
                 $item->update();
             }
             else{
@@ -164,7 +164,7 @@ class PurchaseOrderItemController extends Controller
                 $item->purchase_order_id = $request->purchase_order_id;
                 $item->product_id = $request->product_id;
                 $item->tax = $product->tax->amount;
-                $item->quantity_ordered = $request->quantity_ordered;
+                $item->quantity_confirmed = $request->quantity_confirmed;
                 $item->selling_price = $request->selling_price;
                 $item->save();
             }
@@ -208,10 +208,10 @@ class PurchaseOrderItemController extends Controller
     {
         $item = PurchaseOrderItem::find($id);
         if ($request->field == "quantity")
-            $item->quantity_ordered = $request->value;
+            $item->quantity_confirmed = $request->value;
 
         if ($request->field == "price")
-            $item->selling_price = $request->value;
+            $item->quantity_confirmed = $request->value;
 
         $item->update();
         return response()->json(['success'=>'true', 'code'=>200, 'message'=>'OK']);

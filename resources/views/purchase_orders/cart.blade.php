@@ -28,7 +28,7 @@
                     <div class="col-lg-1">
                         <div class="mb-3">
                             <label class="form-label" for="product-select">Quantity</label>
-                            <input type="text" class="form-control" name="quantity_ordered" id="quantity_ordered"  value="1">
+                            <input type="text" class="form-control" name="quantity_confirmed" id="quantity_confirmed"  value="1">
                         </div>
                     </div>
                     <div class="col-lg-2">
@@ -90,7 +90,7 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                <input id="item-quantity-{{ $item->id }}" type="number" min="1" value="{{ $item->quantity_ordered }}" class="editable-field form-control" data-value="{{ $item->quantity_ordered }}" data-field="quantity" data-item="{{ $item->id }}"
+                                                <input id="item-quantity-{{ $item->id }}" type="number" min="1" value="{{ $item->quantity_confirmed }}" class="editable-field form-control" data-value="{{ $item->quantity_confirmed }}" data-field="quantity" data-item="{{ $item->id }}"
                                                     placeholder="Qty" style="width: 90px;">
                                             </td>
                                             <td class="d-none">
@@ -496,9 +496,9 @@
         e.preventDefault();     
         var existing_item_id = is_existing_product($('#product_id').val());
         if (existing_item_id > 0){
-            var asked_quantity = $('#quantity_ordered').val();
+            var asked_quantity = $('#quantity_confirmed').val();
             var new_quantity = parseInt(asked_quantity) + parseInt($('#item-quantity-'+existing_item_id).val())
-            $('#quantity_ordered').val(new_quantity);
+            $('#quantity_confirmed').val(new_quantity);
         }          
         $.ajaxSetup({
                 headers: {
@@ -516,7 +516,7 @@
                         if ($(this).attr('data-product-id') == data.product.id){
                             var existing_item_id = $(this).attr('data-id');
                             var existing_item_quantity = $('#item-quantity-'+existing_item_id).val();
-                            $('#item-quantity-'+existing_item_id).val(parseInt(data.item.quantity_ordered));
+                            $('#item-quantity-'+existing_item_id).val(parseInt(data.item.quantity_confirmed));
                             var new_total = (data.item.selling_price * getTaxValue(data.item.tax)) * parseInt($('#item-quantity-'+existing_item_id).val()).toFixed(2);
                             $('#item-total-'+existing_item_id).html(new_total.toFixed(2))
                             new_product = false;
@@ -540,13 +540,13 @@
                                         item += '</div>';
                                         item += '</td>';
                                         item += '<td>';
-                                            item += '<input id="item-quantity-'+ data.item.id +'" type="number" min="1" value="'+ data.item.quantity_ordered +'" class="editable-field form-control" data-value="'+ data.item.quantity_ordered +'" data-field="quantity" data-item="'+ data.item.id +'" placeholder="Qty" style="width: 90px;">';
+                                            item += '<input id="item-quantity-'+ data.item.id +'" type="number" min="1" value="'+ data.item.quantity_confirmed +'" class="editable-field form-control" data-value="'+ data.item.quantity_confirmed +'" data-field="quantity" data-item="'+ data.item.id +'" placeholder="Qty" style="width: 90px;">';
                             item += '</td>';
                             item += '<td class="d-none">';
                             item += '<span id="item-tax-'+ data.item.id +'" class="item-tax">'+ 0 +'%</span>';
                             item += '</td>';
                             item += '<td>';
-                            item += '<span>{{ __('app.currency_symbol_usd')}}</span><span id="item-total-'+ data.item.id +'" class="item-total">'+((data.item.selling_price * getTaxValue(data.item.tax)) * parseInt(data.item.quantity_ordered)).toFixed(2) +'</span>';
+                            item += '<span>{{ __('app.currency_symbol_usd')}}</span><span id="item-total-'+ data.item.id +'" class="item-total">'+((data.item.selling_price * getTaxValue(data.item.tax)) * parseInt(data.item.quantity_confirmed)).toFixed(2) +'</span>';
                             item += '</td>';
                             item += '<td>';
                             item += '<a href="javascript:void(0);" class="action-icon" id="1" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>';

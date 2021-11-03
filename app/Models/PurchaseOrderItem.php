@@ -12,7 +12,7 @@ class PurchaseOrderItem extends Model
     use SoftDeletes;
 
 
-    protected $fillable = ['purchase_order_id', 'product_id', 'tax_id', 'quantity_ordered', 'quantity_received', 'selling_price'];
+    protected $fillable = ['purchase_order_id', 'product_id', 'tax_id', 'quantity_confirmed', 'selling_price'];
 
 
 
@@ -31,8 +31,7 @@ class PurchaseOrderItem extends Model
 
     public function getTotalPriceAttribute()
     {
-        // $total = ($this->selling_price + ($this->selling_price * $this->tax/100)) * $this->quantity_ordered;
-        $total = $this->selling_price * $this->quantity_ordered;
+        $total = $this->selling_price * $this->quantity_confirmed;
         return  $total;
     }
 }

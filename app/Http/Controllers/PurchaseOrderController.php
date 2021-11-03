@@ -363,7 +363,7 @@ class PurchaseOrderController extends Controller
         else
             $order->order_exchange_rate = \Setting::get('purchase_order.exchange_rate');
 
-        $items = PurchaseOrderItem::where('purchase_order_id', "=", $id)->select('quantity_ordered', 'selling_price', 'tax')->get();
+        $items = PurchaseOrderItem::where('purchase_order_id', "=", $id)->select('quantity_confirmed', 'selling_price', 'tax')->get();
         $order->amount_usd = 0;
         foreach($items as $item){
             $order->amount_usd += $item->total_price; 
@@ -396,7 +396,7 @@ class PurchaseOrderController extends Controller
         else
             $order->order_exchange_rate = \Setting::get('purchase_order.exchange_rate');
 
-        $items = PurchaseOrderItem::where('purchase_order_id', "=", $id)->select('quantity_ordered', 'selling_price', 'tax')->get();
+        $items = PurchaseOrderItem::where('purchase_order_id', "=", $id)->select('quantity_confirmed', 'selling_price', 'tax')->get();
         $order->amount_usd = 0;
         foreach($items as $item){
             $order->amount_usd += $item->total_price; 
