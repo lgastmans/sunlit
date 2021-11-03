@@ -12,6 +12,8 @@ class State extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = ['name', 'code', 'abbreviation'];
+
     public $timestamps = false;
 
     /**
