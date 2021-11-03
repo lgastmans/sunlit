@@ -25,9 +25,9 @@
                         <thead class="table-light">
                             <tr>
                                 <th>Product</th>
-                                <th>Qty confirmed</th>
-                                <th>Qty remainig</th>
-                                <th>Qty received</th>
+                                <th>Quantity Confirmed</th>
+                                <th>Quantity Remaining</th>
+                                <th>Quantity Received</th>
                                 <th>Price</th>
                                 <th class="d-none">Tax</th>
                                 <th>Total</th>
@@ -39,9 +39,12 @@
                                 <td>{{ $item->product->name }}</td>
                                 <td>{{ $item->quantity_confirmed }}</td>
                                 <td>
-                                    <input class="form-control input-sm" type="text" value="{{ $item->quantity_confirmed - 1}}" size="3" @if ($item->quantity_confirmed - 1 == 0) readonly @endif>
+                                    <div class="input-group flex-nowrap">
+                                        <input class="form-control input-sm quantity_shipped" type="text" value="0" size="3" name="quantity_shipped" data-product="{{ $item->product_id }}" @if ($item->quantity_confirmed - 1 == 0) readonly @endif>
+                                        <span class="input-group-text">{{ $item->quantity_confirmed - 1}}</span>
+                                    </div>
                                 </td>
-                                <td>{{ 10 - $item->quantity_confirmed }}</td>
+                                <td>{{ $item->quantity_confirmed }}</td>
                                 <td>{{ __('app.currency_symbol_usd')}}{{ number_format($item->selling_price,2) }}</td>
                                 <td class="d-none">{{ number_format($item->tax,2) }}%</td>
                                 <td>{{ __('app.currency_symbol_usd')}}{{ number_format($item->total_price,2) }}</td>
@@ -49,74 +52,6 @@
                             @endforeach
 
                         </tbody>
-                        <tfoot>
-                            <tr>
-
-                                <div class="mt-lg-0 rounded @if ($purchase_order->status != 3) d-none @endif">
-                                    <div class="card border">
-                                        <div class="card-body">
-                                            <form name="ship-order-form" class="needs-validation" novalidate
-                                                action="{{ route('purchase-orders.shipped', $purchase_order->id) }}" method="POST">
-                                                @csrf()
-                                                @method('PUT')
-                                                <div class="row mb-3">
-                                                    <div class="col-xl-4" id="shipped_at">
-                                                        <label class="form-label">Shipping date</label>
-                                                        <input type="text" class="form-control" name="shipped_at" value="{{ $purchase_order->display_shipped_at }}"
-                                                        data-provide="datepicker" 
-                                                        data-date-container="#shipped_at"
-                                                        data-date-autoclose="true"
-                                                        data-date-format="M d, yyyy"
-                                                        required>
-                                                        <div class="invalid-feedback">
-                                                            Shipping date is required
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-xl-4 offset-xl-2" id="due_at">
-                                                        <label class="form-label">Due date</label>
-                                                        <input type="text" class="form-control" name="due_at" value="{{ $purchase_order->display_due_at }}"
-                                                        data-provide="datepicker" 
-                                                        data-date-container="#due_at"
-                                                        data-date-autoclose="true"
-                                                        data-date-format="M d, yyyy"
-                                                        required>
-                                                        <div class="invalid-feedback">
-                                                            Due date is required
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                
-                                                <div class="row mb-3" >
-                                                    <div class="col-xl-6" id="courier">
-                                                        <label class="form-label">Courier</label>
-                                                        <input type="text" class="form-control" name="courier" required>
-                                                        <div class="invalid-feedback">
-                                                            Courier is required
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-xl-6" id="tracking_number">
-                                                        <label class="form-label">Tracking number</label>
-                                                        <input type="text" class="form-control" name="tracking_number" required>
-                                                        <div class="invalid-feedback">
-                                                           Tracking number is required
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                {{-- <button class="col-lg-12 text-center btn btn-warning" type="submit"
-                                                    name="ship_order">Ship order</button> --}}
-                                            </form>
-                                
-                                        </div>
-                                    </div>
-                                </div>
-                            </tr>
-                            <tr>
-                                <td colspan="5"></td>
-                                <td>
-                                    <button class="col-lg-12 text-center btn btn-info" type="submit"name="create_invoice">Create Invoice</button>
-                                </td>
-                            </tr>
-                        </tfoot>
                     </table>
                 </div>
                 <!-- end table-responsive -->
@@ -144,13 +79,10 @@
                             </tr>
                           
                             <tr>
-                                <td>Exchange Rate <abbr title="Supplier">(S</abbr>/<abbr title="Customs">C</abbr>) :</td>
+                                <td>Exchange Rate:</td>
                                 <td>
                                     <span>{{ __('app.currency_symbol_inr')}}</span>
                                     <span id="order-echange-rate">{{ $purchase_order->order_exchange_rate }}</span>
-                                    /
-                                    <span>{{ __('app.currency_symbol_inr')}}</span>
-                                    <span id="customs-echange-rate">{{ $purchase_order->customs_exchange_rate }}</span>
                                 </td>
                             </tr>
                             <tr>
@@ -160,49 +92,14 @@
                                     <span id="amount-inr">{{ $purchase_order->amount_inr }}</span>
                                 </td>
                             </tr>
-                            @if ($purchase_order->status >= "5")
-                                <tr>
-                                    <td>Customs Duty : </td>
-                                    <td>
-                                        <span>{{ __('app.currency_symbol_inr')}}</span>
-                                        <span id="customs-duty">{{ $purchase_order->customs_duty }}</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Social Welfare Surcharge : </td>
-                                    <td>
-                                        <span>{{ __('app.currency_symbol_inr')}}</span>
-                                        <span id="social-welfare-surcharge">{{ $purchase_order->social_welfare_surcharge }}</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>IGST : </td>
-                                    <td>
-                                        <span>{{ __('app.currency_symbol_inr')}}</span>
-                                        <span id="igst">{{ $purchase_order->igst }}</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Bank & Transport : </td>
-                                    <td>
-                                        <span>{{ __('app.currency_symbol_inr')}}</span>
-                                        <span id="bank-transport">{{ $purchase_order->bank_and_transport_charges }}</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Landed Cost :</th>
-                                    <th>
-                                        <span>{{ __('app.currency_symbol_inr')}}</span>
-                                        <span id="landed-cost">{{ $purchase_order->landed_cost }}</span>
-                                    </th>
-                                </tr>
-                            @endif
+                            
                         </tbody>
                     </table>
                     
                 </div>
                 <!-- end table-responsive -->
-            </div>
+                
+            </div>            
         </div>
     </div> <!-- end col -->
 </div>
@@ -211,7 +108,69 @@
         @include('purchase_orders.info_cards')
     </div>
     <div class="col-lg-4">
-        @include('purchase_orders.status_update')
+        <div class="mt-lg-0 rounded @if ($purchase_order->status != 3) d-none @endif">
+            <div class="card border">
+                <div class="card-body">
+                    <form name="ship-order-form" class="form-invoice needs-validatiodn" novalidate
+                        action="{{ route('purchase-order-invoices.store') }}" method="POST">
+                        @csrf()
+                        <input type="hidden" name="purchase_order_id" value="{{ $purchase_order->id }}" />
+                        <div class="row mb-3">
+                            <div class="col-xl-4" id="invoice_number">
+                                <label class="form-label">Invoice #</label>
+                                <input type="text" class="form-control" name="invoice_number" required>
+                                <div class="invalid-feedback">
+                                    Invoice number is required
+                                </div>
+                            </div>
+                            <div class="col-xl-4" id="shipped_at">
+                                <label class="form-label">Shipping date</label>
+                                <input type="text" class="form-control" name="shipped_at"
+                                data-provide="datepicker" 
+                                data-date-container="#shipped_at"
+                                data-date-autoclose="true"
+                                data-date-format="M d, yyyy"
+                                required>
+                                <div class="invalid-feedback">
+                                    Shipping date is required
+                                </div>
+                            </div>
+                            <div class="col-xl-4" id="due_at">
+                                <label class="form-label">Due date</label>
+                                <input type="text" class="form-control" name="due_at"
+                                data-provide="datepicker" 
+                                data-date-container="#due_at"
+                                data-date-autoclose="true"
+                                data-date-format="M d, yyyy"
+                                required>
+                                <div class="invalid-feedback">
+                                    Due date is required
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3" >
+                            <div class="col-xl-6" id="courier">
+                                <label class="form-label">Courier</label>
+                                <input type="text" class="form-control" name="courier" required>
+                                <div class="invalid-feedback">
+                                    Courier is required
+                                </div>
+                            </div>
+                            <div class="col-xl-6" id="tracking_number">
+                                <label class="form-label">Tracking number</label>
+                                <input type="text" class="form-control" name="tracking_number" required>
+                                <div class="invalid-feedback">
+                                   Tracking number is required
+                                </div>
+                            </div>
+                        </div>
+                        <button class="col-lg-12 text-center btn btn-warning" type="submit"
+                            name="ship_order">Ship order</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <div class="row">    
@@ -223,54 +182,33 @@
 @section('page-scripts')
  <script>
        
-    function calculateCharges(from){
-        var settings = Array;
-        settings['customs_duty'] = {{ Setting::get('purchase_order.customs_duty')/100 }};
-        settings['igst'] = {{ Setting::get('purchase_order.igst')/100 }};
-        settings['social_welfare_surcharge'] = {{ Setting::get('purchase_order.social_welfare_surcharge')/100 }};
-        settings['bank_transport'] = {{ Setting::get('purchase_order.transport')/100 }};
-
-
-        if (from == "rate"){
-            var customs_exchange_rate = parseFloat($('#customs_exchange_rate').val());
-            var total_order_customs = $('#grand-total').html() * customs_exchange_rate;
-            $('#customs_amount').val(total_order_customs.toFixed(2));
-        }
-        
-        if (from == "amount"){
-            var total_order_customs = parseFloat($('#customs_amount').val());
-            var customs_exchange_rate = total_order_customs / parseFloat($('#grand-total').html());
-            $('#customs_exchange_rate').val(customs_exchange_rate.toFixed(2));
-        }
-
-        var order_amount_inr = parseFloat($('#amount-inr').html());            
-        var customs_duty = total_order_customs * settings['customs_duty'];
-        var social_welfare_surchage = customs_duty * settings['social_welfare_surcharge'];
-        var igst = (order_amount_inr + customs_duty + social_welfare_surchage) * settings['igst'];
-        var bank_transport = order_amount_inr * settings['bank_transport'];
-        var landed_cost = order_amount_inr + customs_duty + social_welfare_surchage + bank_transport;
-
-
-        $('#customs-echange-rate').html(customs_exchange_rate.toFixed(2));
-        $('#customs-duty').html(customs_duty.toFixed(2));
-        $('#social-welfare-surcharge').html(social_welfare_surchage.toFixed(2));
-        $('#igst').html(igst.toFixed(2));
-        $('#bank-transport').html(bank_transport.toFixed(2));
-        $('#landed-cost').html(landed_cost.toFixed(2));
-
-    }
- 
-
     $(document).ready(function () {
         "use strict";
         
-        $('#customs_exchange_rate').on('change', function(e){
-            calculateCharges('rate');            
+        // add product_id and quantity shipped to form before submitting
+        $('.form-invoice').on('submit', function(e){
+            e.preventDefault();    
+            $('.product_shipped').remove();
+            $( ".quantity_shipped" ).each(function( index ) {
+                if ($(this).val() > 0){
+                    var field = "<input type=\"hidden\" class=\"product_shipped\" name=\"products[" + $( this ).attr('data-product') + "]\" value=\"" + $(this).val() + "\" />";
+                    $(field).appendTo('.form-invoice');
+                }
+            });
+            $.ajax({
+                type: 'POST',
+                url: $(this).attr("action"),
+                dataType: 'json',
+                data: $( this ).serialize(),
+                success: function (data) {},
+                error:function(xhr, textStatus, thrownError, data){
+                    console.log("Error: " + thrownError);
+                    console.log("Error: " + textStatus);
+                }
+            }); 
+
         });
 
-        $('#customs_amount').on('change', function(e){
-            calculateCharges('amount');            
-        });
     }); 
 </script>
 

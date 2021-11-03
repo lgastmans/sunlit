@@ -28,63 +28,7 @@
 </div>
 
 {{-- shipped --}}
-<div class="mt-lg-0 rounded @if ($purchase_order->status != 3) d-none @endif">
-    <div class="card border">
-        <div class="card-body">
-            <form name="ship-order-form" class="needs-validation" novalidate
-                action="{{ route('purchase-orders.shipped', $purchase_order->id) }}" method="POST">
-                @csrf()
-                @method('PUT')
-                <div class="row mb-3">
-                    <div class="col-xl-4" id="shipped_at">
-                        <label class="form-label">Shipping date</label>
-                        <input type="text" class="form-control" name="shipped_at" value="{{ $purchase_order->display_shipped_at }}"
-                        data-provide="datepicker" 
-                        data-date-container="#shipped_at"
-                        data-date-autoclose="true"
-                        data-date-format="M d, yyyy"
-                        required>
-                        <div class="invalid-feedback">
-                            Shipping date is required
-                        </div>
-                    </div>
-                    <div class="col-xl-4 offset-xl-2" id="due_at">
-                        <label class="form-label">Due date</label>
-                        <input type="text" class="form-control" name="due_at" value="{{ $purchase_order->display_due_at }}"
-                        data-provide="datepicker" 
-                        data-date-container="#due_at"
-                        data-date-autoclose="true"
-                        data-date-format="M d, yyyy"
-                        required>
-                        <div class="invalid-feedback">
-                            Due date is required
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="row mb-3" >
-                    <div class="col-xl-6" id="courier">
-                        <label class="form-label">Courier</label>
-                        <input type="text" class="form-control" name="courier" required>
-                        <div class="invalid-feedback">
-                            Courier is required
-                        </div>
-                    </div>
-                    <div class="col-xl-6" id="tracking_number">
-                        <label class="form-label">Tracking number</label>
-                        <input type="text" class="form-control" name="tracking_number" required>
-                        <div class="invalid-feedback">
-                           Tracking number is required
-                        </div>
-                    </div>
-                </div>
-                <button class="col-lg-12 text-center btn btn-warning" type="submit"
-                    name="ship_order">Ship order</button>
-            </form>
 
-        </div>
-    </div>
-</div>
 
 {{-- customs --}}
 <div class="mt-lg-0 rounded @if ($purchase_order->status != 4) d-none @endif">

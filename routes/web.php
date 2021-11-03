@@ -19,6 +19,8 @@ use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\SaleOrderItemController;
 use App\Http\Controllers\InventoryMovementController;
 use App\Http\Controllers\PurchaseOrderItemController;
+use App\Http\Controllers\PurchaseOrderInvoiceController;
+use App\Http\Controllers\PurchaseOrderInvoiceItemController;
 
 
 /*
@@ -98,6 +100,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/purchase-orders-items', [PurchaseOrderItemController::class, 'store'])->name('purchase-orders-items.store');
     Route::put('/purchase-orders-items/{id}', [PurchaseOrderItemController::class, 'update'])->name('purchase-orders-items.update');
     Route::delete('/purchase-orders-items/{id}', [PurchaseOrderItemController::class, 'destroy'])->name('purchase-orders-items.delete');
+
+
+    Route::post('/purchase-order-invoices', [PurchaseOrderInvoiceController::class, 'store'])->name('purchase-order-invoices.store');
+
 
     Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory');
     Route::get('/inventory/list', [InventoryController::class, 'getListForDatatables'])->name('inventory.datatables');
