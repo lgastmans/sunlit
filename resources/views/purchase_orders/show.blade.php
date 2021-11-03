@@ -166,7 +166,7 @@
                             </div>
                         </div>
                         <button class="col-lg-12 text-center btn btn-warning" type="submit"
-                            name="ship_order">Ship order</button>
+                            name="ship_order">Add invoice</button>
                     </form>
                 </div>
             </div>
