@@ -5,7 +5,7 @@
 @endsection
 
 @section('page-title')
-    Invoice #{{ $invoice->invoice_number}}
+    Invoice #{{ $invoice->invoice_number}} 
 @endsection
 
 @section('content')
@@ -134,7 +134,7 @@
         @include('purchase_order_invoices.info_cards')
     </div>
     <div class="col-lg-4">
-        {{-- @include('purchase_order_invoices.status_update') --}}
+        @include('purchase_order_invoices.status_update')
     </div>
 </div>
 <div class="row">    
@@ -147,10 +147,10 @@
        
     function calculateCharges(from){
         var settings = Array;
-        settings['customs_duty'] = {{ Setting::get('invoice.customs_duty')/100 }};
-        settings['igst'] = {{ Setting::get('invoice.igst')/100 }};
-        settings['social_welfare_surcharge'] = {{ Setting::get('invoice.social_welfare_surcharge')/100 }};
-        settings['bank_transport'] = {{ Setting::get('invoice.transport')/100 }};
+        settings['customs_duty'] = {{ Setting::get('purchase_order.customs_duty')/100 }};
+        settings['igst'] = {{ Setting::get('purchase_order.igst')/100 }};
+        settings['social_welfare_surcharge'] = {{ Setting::get('purchase_order.social_welfare_surcharge')/100 }};
+        settings['bank_transport'] = {{ Setting::get('purchase_order.transport')/100 }};
 
 
         if (from == "rate"){

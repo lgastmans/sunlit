@@ -15,7 +15,11 @@
                             @foreach ($purchase_order->invoices as $invoice)
                                 <tr>
                                     <td>{{ $invoice->display_shipped_at }}</td>
-                                    <td><strong>{!! $invoice->display_status !!}  #{{ $invoice->invoice_number }}</strong> {{ $invoice->user->display_name }}</td>
+                                    <td>
+                                        <a href="{{ route('purchase-order-invoices.show', $invoice->invoice_number) }}">
+                                            <strong>{!! $invoice->display_status !!}  #{{ $invoice->invoice_number }}</strong> {{ $invoice->user->display_name }}
+                                        </a>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
