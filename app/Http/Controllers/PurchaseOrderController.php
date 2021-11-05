@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\PurchaseOrder;
 use App\Models\PurchaseOrderItem;
 use Illuminate\Support\Facades\Auth;
+use App\Models\PurchaseOrderInvoiceItem;
 use \App\Http\Requests\StorePurchaseOrderRequest;
 
 
@@ -278,8 +279,12 @@ class PurchaseOrderController extends Controller
         $user = Auth::user();
         if ($user->can('view purchase orders')){
             $purchase_order = PurchaseOrder::with(['supplier', 'warehouse', 'items', 'items.product'])->where('order_number', '=', $order_number)->first();
+            $invoices = $purchase_order->invoices->pluck('id');
+            $shipped = PurchaseOrderInvoiceItem::groupBy('product_id')
+                                ->selectRaw('sum(quantity_shipped) as total_quantity_shipped, product_id')
+                                ->pluck('total_quantity_shipped','product_id');
             if ($purchase_order)
-                return view('purchase_orders.show', ['purchase_order' => $purchase_order ]);
+                return view('purchase_orders.show', ['purchase_order' => $purchase_order, 'shipped' => $shipped ]);
 
             return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'purchase order']));
         }

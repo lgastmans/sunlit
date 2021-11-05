@@ -41,11 +41,11 @@
                                     @else 
                                         <div class="input-group flex-nowrap">
                                             <input class="form-control input-sm quantity_shipped" type="text" value="0" size="3" name="quantity_shipped" data-product="{{ $item->product_id }}">
-                                            <span class="input-group-text">{{ $item->quantity_confirmed - 1}}</span>
+                                            <span class="input-group-text">{{ $item->quantity_confirmed -  $shipped[$item->product_id] }}</span>
                                         </div>
                                     @endif
                                 </td>
-                                <td>{{ $item->quantity_confirmed }}</td>
+                                <td>{{ $shipped[$item->product_id] }}</td>
                                 <td>{{ __('app.currency_symbol_usd')}}{{ number_format($item->selling_price,2) }}</td>
                                 <td class="d-none">{{ number_format($item->tax,2) }}%</td>
                                 <td>{{ __('app.currency_symbol_usd')}}{{ number_format($item->total_price,2) }}</td>
