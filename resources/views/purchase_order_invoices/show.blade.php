@@ -138,7 +138,7 @@
     </div>
 </div>
 <div class="row">    
-    {{-- @include('purchase_order_invoices.log') --}}
+    @include('purchase_order_invoices.log')
 </div>
 @endsection
 
