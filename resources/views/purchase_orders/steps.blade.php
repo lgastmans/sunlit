@@ -12,10 +12,11 @@
                             <span data-bs-container="#tooltip-container" data-bs-toggle="tooltip"
                                 data-bs-placement="bottom" title="{{ $purchase_order->display_confirmed_at }}">Confirmed</span>
                         </div>
-                        {{-- <div class="step-item @if ($purchase_order->status == 4) current @endif">
+                        <div class="step-item @if ($purchase_order->status == 4) current @endif">
                             <span data-bs-container="#tooltip-container" data-bs-toggle="tooltip"
                                 data-bs-placement="bottom" title="{{ $purchase_order->display_shipped_at }}">Shipped</span>
                         </div>
+                        {{-- 
                         <div class="step-item @if ($purchase_order->status == 5) current @endif">
                             <span data-bs-container="#tooltip-container" data-bs-toggle="tooltip"
                                 data-bs-placement="bottom" title="{{ $purchase_order->display_customs_at }}">Customs</span>
@@ -35,10 +36,10 @@
                             style="width:0%;"
                             @break
                         @case(3)
-                            style="width:50%;"
+                            style="width:33%;"
                             @break
                         @case(4)
-                            style="width:40%;"
+                            style="width:66%;"
                             @break
                         @case(5)
                             style="width:60%;"
