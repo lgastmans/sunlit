@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\PurchaseOrder;
 use App\Models\PurchaseOrderItem;
 use App\Models\PurchaseOrderInvoice;
+use Illuminate\Support\Facades\Auth;
 use App\Models\PurchaseOrderInvoiceItem;
 use \App\Http\Requests\StorePurchaseOrderInvoiceRequest;
+
 
 
 class PurchaseOrderInvoiceController extends Controller
@@ -43,7 +45,7 @@ class PurchaseOrderInvoiceController extends Controller
         $validatedData = $request->validated();
 
         $purchase_order = PurchaseOrder::find($request->purchase_order_id);
-        $purchase_order->statue = PurchaseOrder::SHIPPED;
+        $purchase_order->status = PurchaseOrder::SHIPPED;
 
         $invoice = new PurchaseOrderInvoice;
         $invoice->purchase_order_id = $purchase_order->id;
@@ -81,12 +83,20 @@ class PurchaseOrderInvoiceController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\PurchaseOrderInvoice  $purchaseOrderInvoice
+     * @param  string  $order_number
      * @return \Illuminate\Http\Response
      */
-    public function show(PurchaseOrderInvoice $purchaseOrderInvoice)
+    public function show($invoice_number)
     {
-        //
+        $user = Auth::user();
+        if ($user->can('view purchase orders')){
+            $invoice = PurchaseOrderInvoice::with(['items', 'items.product'])->where('invoice_number', '=', $invoice_number)->first();
+            if ($invoice)
+                return view('purchase_order_invoices.show', ['invoice' => $invoice ]);
+
+            return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'purchase order']));
+        }
+        return abort(403, trans('error.unauthorized'));
     }
 
     /**
@@ -111,6 +121,85 @@ class PurchaseOrderInvoiceController extends Controller
     {
         //
     }
+
+
+    /**
+     * Update the shipped_at and status of an order
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function customs(Request $request, $id)
+    {
+        // $validated = $request->validate([
+        //     'customs_at' => 'required|date',
+        //     'boe_number' => 'required',
+        // ]);
+        // $order = PurchaseOrder::find($id);
+        // $order->customs_at = $request->get('customs_at');
+        // $order->boe_number = $request->get('boe_number');
+        // $order->status = PurchaseOrder::CUSTOMS;
+        // $order->update();
+        // return redirect(route('purchase-orders.show', $order->order_number))->with('success', 'order at customs'); 
+    }
+
+    /**
+     * Update the cleared_at and status of an order
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function cleared(Request $request, $id)
+    {
+        // $validated = $request->validate([
+        //     'cleared_at' => 'required|date',
+        //     'customs_exchange_rate' => 'required',
+            
+        // ]);
+        // $order = PurchaseOrder::find($id);
+        // $order->cleared_at = $request->get('cleared_at');
+        // $order->customs_exchange_rate = $request->get('customs_exchange_rate');
+        // $order->customs_duty = $order->amount_inr_customs * \Setting::get('purchase_order.customs_duty') / 100;
+        // $order->social_welfare_surcharge = $order->customs_duty * \Setting::get('purchase_order.social_welfare_surcharge') / 100;
+        // $order->igst = ($order->amount_inr + $order->customs_duty + $order->social_welfare_surcharge )* \Setting::get('purchase_order.igst') / 100;
+        // $order->bank_and_transport_charges = $order->amount_inr * \Setting::get('purchase_order.transport') / 100;
+        // $charges = [
+        //     'customs_duty'=> \Setting::get('purchase_order.customs_duty'),
+        //     'social_welfare_surcharge'=> \Setting::get('purchase_order.social_welfare_surcharge'),
+        //     'igst'=> \Setting::get('purchase_order.igst'),
+        //     'transport'=> \Setting::get('purchase_order.transport'),
+        // ];
+        // $order->charges = json_encode($charges);
+        // $order->status = PurchaseOrder::CLEARED;
+        // $order->update();
+        // return redirect(route('purchase-orders.show', $order->order_number))->with('success', 'order cleared'); 
+    }
+
+    /**
+     * Update the shipped_at and status of an order
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function received(Request $request, $id)
+    {
+        // $order = PurchaseOrder::find($id);
+        // $order->received_at = $request->get('received_at');
+        // $order->status = PurchaseOrder::RECEIVED;
+        // $order->update();
+
+        // $inventory = new Inventory();
+        // $inventory->updateStock($order);
+
+        // return redirect(route('purchase-orders.show', $order->order_number))->with('success', 'order received'); 
+    }
+
+
+
+
 
     /**
      * Remove the specified resource from storage.

@@ -17,9 +17,6 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="header-title mb-3">Items from Order #{{ $purchase_order->order_number }}</h4>
-             
-
-
                 <div class="table-responsive">
                     <table class="table mb-0">
                         <thead class="table-light">
@@ -39,10 +36,14 @@
                                 <td>{{ $item->product->name }}</td>
                                 <td>{{ $item->quantity_confirmed }}</td>
                                 <td>
-                                    <div class="input-group flex-nowrap">
-                                        <input class="form-control input-sm quantity_shipped" type="text" value="0" size="3" name="quantity_shipped" data-product="{{ $item->product_id }}" @if ($item->quantity_confirmed - 1 == 0) readonly @endif>
-                                        <span class="input-group-text">{{ $item->quantity_confirmed - 1}}</span>
-                                    </div>
+                                    @if ($item->quantity_confirmed - 100 <= 0)
+                                        <span class="badge bg-success">Nothing to receive</span>
+                                    @else 
+                                        <div class="input-group flex-nowrap">
+                                            <input class="form-control input-sm quantity_shipped" type="text" value="0" size="3" name="quantity_shipped" data-product="{{ $item->product_id }}">
+                                            <span class="input-group-text">{{ $item->quantity_confirmed - 1}}</span>
+                                        </div>
+                                    @endif
                                 </td>
                                 <td>{{ $item->quantity_confirmed }}</td>
                                 <td>{{ __('app.currency_symbol_usd')}}{{ number_format($item->selling_price,2) }}</td>
@@ -109,7 +110,7 @@
     </div>
     <div class="col-lg-4">
         <div class="mt-lg-0 rounded @if ($purchase_order->status != 3) d-none @endif">
-            <div class="card border">
+            <div class="card ">
                 <div class="card-body">
                     <form name="ship-order-form" class="form-invoice needs-validatiodn" novalidate
                         action="{{ route('purchase-order-invoices.store') }}" method="POST">
