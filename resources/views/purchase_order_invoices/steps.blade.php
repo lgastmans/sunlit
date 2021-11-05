@@ -32,10 +32,8 @@
                     <div class="process-line"
                     @switch($invoice->status)
                         @case(2)
-                            style="width:0%;"
-                            @break
                         @case(3)
-                            style="width:50%;"
+                            style="width:0%;"
                             @break
                         @case(4)
                             style="width:0%;"

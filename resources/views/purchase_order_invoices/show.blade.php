@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section('title')
-    @parent() | PO #{{ $invoice->order_number }}
+    @parent() | Invoice #{{ $invoice->invoice_number }}
 @endsection
 
 @section('page-title')
-    Purchase Orders #{{ $invoice->order_number}}
+    Invoice #{{ $invoice->invoice_number}}
 @endsection
 
 @section('content')
@@ -16,18 +16,13 @@
     <div class="col-lg-8">
         <div class="card">
             <div class="card-body">
-                <h4 class="header-title mb-3">Items from Order #{{ $invoice->order_number }}</h4>
-             
-
-
+                <h4 class="header-title mb-3">Items from Invoice #{{ $invoice->invoice_number }}</h4>
                 <div class="table-responsive">
                     <table class="table mb-0">
                         <thead class="table-light">
                             <tr>
                                 <th>Product</th>
-                                <th>Qty confirmed</th>
-                                <th>Qty remainig</th>
-                                <th>Qty received</th>
+                                <th>Quantity Shipped</th>
                                 <th>Price</th>
                                 <th class="d-none">Tax</th>
                                 <th>Total</th>
@@ -37,11 +32,7 @@
                             @foreach($invoice->items as $item)
                             <tr>
                                 <td>{{ $item->product->name }}</td>
-                                <td>{{ $item->quantity_confirmed }}</td>
-                                <td>
-                                    <input class="form-control input-sm" type="text" value="{{ $item->quantity_confirmed - 1}}" size="3" @if ($item->quantity_confirmed - 1 == 0) readonly @endif>
-                                </td>
-                                <td>{{ 10 - $item->quantity_confirmed }}</td>
+                                <td>{{ $item->quantity_shipped }}</td>
                                 <td>{{ __('app.currency_symbol_usd')}}{{ number_format($item->selling_price,2) }}</td>
                                 <td class="d-none">{{ number_format($item->tax,2) }}%</td>
                                 <td>{{ __('app.currency_symbol_usd')}}{{ number_format($item->total_price,2) }}</td>
@@ -62,13 +53,13 @@
     <div class="col-lg-4">
         <div class="card">
             <div class="card-body">
-                <h4 class="header-title mb-3">Order Summary #{{ $invoice->order_number }}</h4>
+                <h4 class="header-title mb-3">Invoice Summary #{{ $invoice->invoice_number }}</h4>
 
                 <div class="table-responsive">
                     <table class="table mb-0">
                         <tbody>
                             <tr>
-                                <td>Order Total :</td>
+                                <td>Invoice Total :</td>
                                 <td>
                                     <span>{{ __('app.currency_symbol_usd')}}</span>
                                     <span id="grand-total">{{ $invoice->amount_usd }}</span>
