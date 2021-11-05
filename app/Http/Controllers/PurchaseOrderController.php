@@ -420,20 +420,20 @@ class PurchaseOrderController extends Controller
      */
     public function shipped(Request $request, $id)
     {
-        $validated = $request->validate([
-            'shipped_at' => 'required|date',
-            'due_at' => 'required|date',
-            'tracking_number' => 'required',
-            'courier' => 'required'
-        ]);
-        $order = PurchaseOrder::find($id);
-        $order->shipped_at = $request->get('shipped_at');
-        $order->due_at = $request->get('due_at');
-        $order->tracking_number = $request->get('tracking_number');
-        $order->courier = $request->get('courier');
-        $order->status = PurchaseOrder::SHIPPED;
-        $order->update();
-        return redirect(route('purchase-orders.show', $order->order_number))->with('success', 'order shipped'); 
+        // $validated = $request->validate([
+        //     'shipped_at' => 'required|date',
+        //     'due_at' => 'required|date',
+        //     'tracking_number' => 'required',
+        //     'courier' => 'required'
+        // ]);
+        // $order = PurchaseOrder::find($id);
+        // $order->shipped_at = $request->get('shipped_at');
+        // $order->due_at = $request->get('due_at');
+        // $order->tracking_number = $request->get('tracking_number');
+        // $order->courier = $request->get('courier');
+        // $order->status = PurchaseOrder::SHIPPED;
+        // $order->update();
+        // return redirect(route('purchase-orders.show', $order->order_number))->with('success', 'order shipped'); 
     }
 
 
@@ -446,16 +446,16 @@ class PurchaseOrderController extends Controller
      */
     public function customs(Request $request, $id)
     {
-        $validated = $request->validate([
-            'customs_at' => 'required|date',
-            'boe_number' => 'required',
-        ]);
-        $order = PurchaseOrder::find($id);
-        $order->customs_at = $request->get('customs_at');
-        $order->boe_number = $request->get('boe_number');
-        $order->status = PurchaseOrder::CUSTOMS;
-        $order->update();
-        return redirect(route('purchase-orders.show', $order->order_number))->with('success', 'order at customs'); 
+        // $validated = $request->validate([
+        //     'customs_at' => 'required|date',
+        //     'boe_number' => 'required',
+        // ]);
+        // $order = PurchaseOrder::find($id);
+        // $order->customs_at = $request->get('customs_at');
+        // $order->boe_number = $request->get('boe_number');
+        // $order->status = PurchaseOrder::CUSTOMS;
+        // $order->update();
+        // return redirect(route('purchase-orders.show', $order->order_number))->with('success', 'order at customs'); 
     }
 
     /**
@@ -467,28 +467,28 @@ class PurchaseOrderController extends Controller
      */
     public function cleared(Request $request, $id)
     {
-        $validated = $request->validate([
-            'cleared_at' => 'required|date',
-            'customs_exchange_rate' => 'required',
+        // $validated = $request->validate([
+        //     'cleared_at' => 'required|date',
+        //     'customs_exchange_rate' => 'required',
             
-        ]);
-        $order = PurchaseOrder::find($id);
-        $order->cleared_at = $request->get('cleared_at');
-        $order->customs_exchange_rate = $request->get('customs_exchange_rate');
-        $order->customs_duty = $order->amount_inr_customs * \Setting::get('purchase_order.customs_duty') / 100;
-        $order->social_welfare_surcharge = $order->customs_duty * \Setting::get('purchase_order.social_welfare_surcharge') / 100;
-        $order->igst = ($order->amount_inr + $order->customs_duty + $order->social_welfare_surcharge )* \Setting::get('purchase_order.igst') / 100;
-        $order->bank_and_transport_charges = $order->amount_inr * \Setting::get('purchase_order.transport') / 100;
-        $charges = [
-            'customs_duty'=> \Setting::get('purchase_order.customs_duty'),
-            'social_welfare_surcharge'=> \Setting::get('purchase_order.social_welfare_surcharge'),
-            'igst'=> \Setting::get('purchase_order.igst'),
-            'transport'=> \Setting::get('purchase_order.transport'),
-        ];
-        $order->charges = json_encode($charges);
-        $order->status = PurchaseOrder::CLEARED;
-        $order->update();
-        return redirect(route('purchase-orders.show', $order->order_number))->with('success', 'order cleared'); 
+        // ]);
+        // $order = PurchaseOrder::find($id);
+        // $order->cleared_at = $request->get('cleared_at');
+        // $order->customs_exchange_rate = $request->get('customs_exchange_rate');
+        // $order->customs_duty = $order->amount_inr_customs * \Setting::get('purchase_order.customs_duty') / 100;
+        // $order->social_welfare_surcharge = $order->customs_duty * \Setting::get('purchase_order.social_welfare_surcharge') / 100;
+        // $order->igst = ($order->amount_inr + $order->customs_duty + $order->social_welfare_surcharge )* \Setting::get('purchase_order.igst') / 100;
+        // $order->bank_and_transport_charges = $order->amount_inr * \Setting::get('purchase_order.transport') / 100;
+        // $charges = [
+        //     'customs_duty'=> \Setting::get('purchase_order.customs_duty'),
+        //     'social_welfare_surcharge'=> \Setting::get('purchase_order.social_welfare_surcharge'),
+        //     'igst'=> \Setting::get('purchase_order.igst'),
+        //     'transport'=> \Setting::get('purchase_order.transport'),
+        // ];
+        // $order->charges = json_encode($charges);
+        // $order->status = PurchaseOrder::CLEARED;
+        // $order->update();
+        // return redirect(route('purchase-orders.show', $order->order_number))->with('success', 'order cleared'); 
     }
 
     /**
