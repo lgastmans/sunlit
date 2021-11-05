@@ -85,9 +85,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/purchase-orders', [PurchaseOrderController::class, 'store'])->name('purchase-orders.store');
     Route::put('/purchase-orders/{id}/ordered', [PurchaseOrderController::class, 'ordered'])->name('purchase-orders.ordered');
     Route::put('/purchase-orders/{id}/confirmed', [PurchaseOrderController::class, 'confirmed'])->name('purchase-orders.confirmed');
-    Route::put('/purchase-orders/{id}/shipped', [PurchaseOrderController::class, 'shipped'])->name('purchase-orders.shipped');
-    Route::put('/purchase-orders/{id}/customs', [PurchaseOrderController::class, 'customs'])->name('purchase-orders.customs');
-    Route::put('/purchase-orders/{id}/cleared', [PurchaseOrderController::class, 'cleared'])->name('purchase-orders.cleared');
+    // Route::put('/purchase-orders/{id}/shipped', [PurchaseOrderController::class, 'shipped'])->name('purchase-orders.shipped');
+    // Route::put('/purchase-orders/{id}/customs', [PurchaseOrderController::class, 'customs'])->name('purchase-orders.customs');
+    // Route::put('/purchase-orders/{id}/cleared', [PurchaseOrderController::class, 'cleared'])->name('purchase-orders.cleared');
     Route::put('/purchase-orders/{id}/received', [PurchaseOrderController::class, 'received'])->name('purchase-orders.received');
     Route::put('/purchase-orders/{id}', [PurchaseOrderController::class, 'update'])->name('purchase-orders.update');
     Route::delete('/purchase-orders/{id}', [PurchaseOrderController::class, 'destroy'])->name('purchase-orders.delete');
@@ -105,7 +105,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/purchase-order-invoices', [PurchaseOrderInvoiceController::class, 'index'])->name('purchase-order-invoices');
     Route::get('/purchase-order-invoices/{invoice_number}', [PurchaseOrderInvoiceController::class, 'show'])->name('purchase-order-invoices.show');
     Route::post('/purchase-order-invoices', [PurchaseOrderInvoiceController::class, 'store'])->name('purchase-order-invoices.store');
-    // Route::put('/purchase-order-invoices/{id}/shipped', [PurchaseOrderInvoiceController::class, 'shipped'])->name('purchase-order-invoices.shipped');
     Route::put('/purchase-order-invoices/{id}/customs', [PurchaseOrderInvoiceController::class, 'customs'])->name('purchase-order-invoices.customs');
     Route::put('/purchase-order-invoices/{id}/cleared', [PurchaseOrderInvoiceController::class, 'cleared'])->name('purchase-order-invoices.cleared');
     Route::put('/purchase-order-invoices/{id}/received', [PurchaseOrderInvoiceController::class, 'received'])->name('purchase-order-invoices.received');

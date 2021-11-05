@@ -21,7 +21,14 @@ class PurchaseOrderInvoiceController extends Controller
      */
     public function index()
     {
-        //
+        $user = Auth::user();
+        if ($user->can('list purchase orders')){
+            $status = PurchaseOrderInvoice::getStatusList();
+            return view('purchase_order_invoices.index', ['status' => $status]);
+
+        }
+    
+        return abort(403, trans('error.unauthorized'));
     }
 
     /**
