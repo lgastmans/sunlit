@@ -90,9 +90,11 @@ class PurchaseOrderInvoiceController extends Controller
     {
         $user = Auth::user();
         if ($user->can('view purchase orders')){
+            $po = PurchaseOrderInvoice::with('purchase_order')->where('invoice_number', '=', $invoice_number)->first();
+            $purchase_order = $po->purchase_order;
             $invoice = PurchaseOrderInvoice::with(['items', 'items.product'])->where('invoice_number', '=', $invoice_number)->first();
             if ($invoice)
-                return view('purchase_order_invoices.show', ['invoice' => $invoice ]);
+                return view('purchase_order_invoices.show', ['invoice' => $invoice, 'purchase_order' => $purchase_order ]);
 
             return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'purchase order']));
         }

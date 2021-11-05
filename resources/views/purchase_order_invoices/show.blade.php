@@ -131,7 +131,7 @@
 </div>
 <div class="row">
     <div class="col-lg-8">
-        {{-- @include('purchase_order_invoices.info_cards') --}}
+        @include('purchase_order_invoices.info_cards')
     </div>
     <div class="col-lg-4">
         {{-- @include('purchase_order_invoices.status_update') --}}
