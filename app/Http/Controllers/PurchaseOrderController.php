@@ -280,9 +280,12 @@ class PurchaseOrderController extends Controller
         if ($user->can('view purchase orders')){
             $purchase_order = PurchaseOrder::with(['supplier', 'warehouse', 'items', 'items.product'])->where('order_number', '=', $order_number)->first();
             $invoices = $purchase_order->invoices->pluck('id');
-            $shipped = PurchaseOrderInvoiceItem::groupBy('product_id')
-                                ->selectRaw('sum(quantity_shipped) as total_quantity_shipped, product_id')
-                                ->pluck('total_quantity_shipped','product_id');
+            $shipped = [];
+            if (!empty($invoices)) {
+                $shipped = PurchaseOrderInvoiceItem::groupBy('product_id')->whereIn('purchase_order_invoice_id', $invoices)
+                                    ->selectRaw('sum(quantity_shipped) as total_quantity_shipped, product_id')
+                                    ->pluck('total_quantity_shipped','product_id');
+            }
             if ($purchase_order)
                 return view('purchase_orders.show', ['purchase_order' => $purchase_order, 'shipped' => $shipped ]);
 

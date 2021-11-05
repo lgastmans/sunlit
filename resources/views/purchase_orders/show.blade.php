@@ -36,16 +36,23 @@
                                 <td>{{ $item->product->name }}</td>
                                 <td>{{ $item->quantity_confirmed }}</td>
                                 <td>
-                                    @if ($item->quantity_confirmed - 100 <= 0)
-                                        <span class="badge bg-success">Nothing to receive</span>
-                                    @else 
+                                    @if (!empty($shipped[$item->product_id]))
+                                        @if ($item->quantity_confirmed == $shipped[$item->product_id])
+                                            <span class="badge bg-success">Nothing to receive</span>
+                                        @else 
+                                            <div class="input-group flex-nowrap">
+                                                <input class="form-control input-sm quantity_shipped" type="text" value="0" size="3" name="quantity_shipped" data-product="{{ $item->product_id }}">
+                                                <span class="input-group-text">{{ $item->quantity_confirmed -  $shipped[$item->product_id] }}</span>
+                                            </div>
+                                        @endif
+                                    @else
                                         <div class="input-group flex-nowrap">
                                             <input class="form-control input-sm quantity_shipped" type="text" value="0" size="3" name="quantity_shipped" data-product="{{ $item->product_id }}">
-                                            <span class="input-group-text">{{ $item->quantity_confirmed -  $shipped[$item->product_id] }}</span>
-                                        </div>
+                                            <span class="input-group-text">{{ $item->quantity_confirmed }}</span>
+                                        </div>        
                                     @endif
                                 </td>
-                                <td>{{ $shipped[$item->product_id] }}</td>
+                                <td>@if (!empty($shipped[$item->product_id]) ) {{ $shipped[$item->product_id] }} @else 0 @endif</td>
                                 <td>{{ __('app.currency_symbol_usd')}}{{ number_format($item->selling_price,2) }}</td>
                                 <td class="d-none">{{ number_format($item->tax,2) }}%</td>
                                 <td>{{ __('app.currency_symbol_usd')}}{{ number_format($item->total_price,2) }}</td>
