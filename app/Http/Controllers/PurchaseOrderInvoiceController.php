@@ -41,6 +41,116 @@ class PurchaseOrderInvoiceController extends Controller
         //
     }
 
+
+    public function getListForDatatables(Request $request)
+    {
+        $draw = 1;
+        if ($request->has('draw'))
+            $draw = $request->get('draw');
+
+        $start = 0;
+        if ($request->has('start'))
+            $start = $request->get("start");
+
+        $length = 10;
+        if ($request->has('length')) {
+            $length = $request->get("length");
+        }
+
+        $order_column = 'invoice_number';
+        $order_dir = 'ASC';
+        $order_arr = array();
+        if ($request->has('order')) {
+            $order_arr = $request->get('order');
+            $column_arr = $request->get('columns');
+            $column_index = $order_arr[0]['column'];
+            $order_column = $column_arr[$column_index]['data'];
+            $order_dir = $order_arr[0]['dir'];
+        }
+
+
+        $search = '';
+        if ($request->has('search')) {
+            $search_arr = $request->get('search');
+            $search = $search_arr['value'];
+        }
+
+        $totalRecords = PurchaseOrderInvoice::count();
+        
+
+        $query = PurchaseOrderInvoice::query();
+        $query->join('users', 'users.id', '=', 'user_id');
+        $query->join('purchase_orders', 'purchase_orders.id', '=', 'purchase_order_id');
+
+        //     if (!empty($column_arr[0]['search']['value'])){
+        //         $query->where('purchase_orders.order_number', 'like', $column_arr[0]['search']['value'].'%');
+        //     }
+        //     if (!empty($column_arr[1]['search']['value'])){
+        //         $query->where('warehouses.name', 'like', $column_arr[1]['search']['value'].'%');
+        //     }
+        //     if (!empty($column_arr[2]['search']['value'])){
+        //         $query->where('suppliers.company', 'like', $column_arr[2]['search']['value'].'%');
+        //     }
+        //     if (!empty($column_arr[3]['search']['value'])){
+        //         $query->where('purchase_orders.ordered_at', 'like', convertDateToMysql($column_arr[3]['search']['value']));
+        //     }
+        //     if (!empty($column_arr[4]['search']['value'])){
+        //         $query->where('purchase_orders.due_at', 'like', convertDateToMysql($column_arr[4]['search']['value']));
+        //     }
+        //     if (!empty($column_arr[5]['search']['value'])){
+        //         $query->where('purchase_orders.amount_inr', 'like', $column_arr[5]['search']['value'].'%');
+        //     }
+        //     if (!empty($column_arr[6]['search']['value']) && $column_arr[6]['search']['value'] != "all"){
+        //         $query->where('purchase_orders.status', 'like', $column_arr[6]['search']['value']);
+        //     }
+        //     if (!empty($column_arr[7]['search']['value'])){
+        //         $query->where('users.name', 'like', $column_arr[7]['search']['value'].'%');
+       
+        
+        if ($request->has('search')){
+            $search = $request->get('search')['value'];
+            $query->where( function ($q) use ($search){
+                $q->where('purchase_orders.order_number', 'like', $search.'%')
+                    ->orWhere('purchase_orders.amount_inr', 'like', $search.'%')
+                    ->orWhere('purchase_order_invoices.invoice_number', 'like', $search.'%');
+            });    
+        }
+
+        $totalRecordswithFilter = $query->count();
+
+
+        if ($length > 0)
+            $query->skip($start)->take($length);
+
+        $query->orderBy($order_column, $order_dir);
+        $invoices = $query->get();
+
+        $arr = array();
+        foreach($invoices as $invoice)
+        {           
+            $arr[] = array(
+                "id" => $invoice->id,
+                "invoice_number" => $invoice->invoice_number,
+                "order_number" => $invoice->purchase_order->order_number,
+                "shipped_at" => $invoice->display_shipped_at,
+                "due_at" => $invoice->display_due_at,
+                "amount" => (isset($invoice->amount_inr)) ? trans('app.currency_symbol_inr')." ".$invoice->amount_inr : "",
+                "status" => $invoice->display_status,
+                "user" => $invoice->user->display_name
+            );
+        }
+
+        $response = array(
+            "draw" => $draw,
+            "recordsTotal" => $totalRecords,
+            "recordsFiltered" => $totalRecordswithFilter,
+            "data" => $arr,
+            'error' => null
+        );
+        return response()->json($response);
+    }
+
+
     /**
      * Store a newly created resource in storage.
      *

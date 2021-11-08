@@ -13,38 +13,37 @@
         <div class="card">
             <div class="card-body">
                 <div class="row mb-2">
-                    <div class="col-sm-4">
+                    {{-- <div class="col-sm-4">
                         <a href="{{ route('purchase-orders.create') }}" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> Create Purchase Order</a>
-                    </div>
-                    <div class="col-sm-8">
+                    </div> --}}
+                    <div class="col-sm-12">
                         <div class="text-sm-end">
                             <a class="btn toggle-filters" href="javascript:void(0);"><button type="button" class="btn btn-light mb-2"><i class="mdi mdi-filter"></i></button></a>
                             {{-- <a class="btn" href="{{ route('export.products') }}"><button type="button" class="btn btn-light mb-2">{{ __('app.export') }}</button></a> --}}
                         </div>
-                    </div><!-- end col-->
+                    </div> 
+                    <!-- end col-->
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="purchase-orders-datatable">
+                    <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="purchase-order-invoices-datatable">
                         <thead class="table-light">
                             <tr>
+                                <th>Invoice #</th>
                                 <th>Order #</th>
-                                <th>Warehouse</th>
-                                <th>Supplier</th>
-                                <th>Ordered On</th> 
+                                <th>Shipped On</th> 
                                 <th>Expected On</th> 
-                                <th>Amount</th>
+                                <th>Amount</th> 
                                 <th style="width:100px;">Status</th> 
                                 <th>Created By</th> 
                             </tr>
                             <tr class="filters" style="display: none;" >
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
-                                <th><input type="text" class="form-control"></th>
-                                <th id="ordered_at" class="position-relative">
-                                    <input type="text" class="form-control" name="ordered_at" 
+                                <th id="shipped_at" class="position-relative">
+                                    <input type="text" class="form-control" name="shipped_at" 
                                     data-provide="datepicker" 
-                                    data-date-container="#ordered_at"
+                                    data-date-container="#shipped_at"
                                     data-date-autoclose="true"
                                     data-date-format="M d, yyyy"
                                     required>
@@ -93,18 +92,14 @@
     });
 
     // Default Datatable
-    var table = $('#purchase-orders-datatable').DataTable({
+    var table = $('#purchase-order-invoices-datatable').DataTable({
         orderCellsTop: true,
         fixedHeader: true,
-
         processing: true,
         serverSide: true,
         ajax      : 
             {
-                url   : "{{ route('purchase-orders.datatables') }}",
-                "data": function ( d ) {[
-                    d.filtered = "{{ $filter ?? '' }}"
-                ]},
+                url   : "{{ route('purchase-order-invoices.datatables') }}",
             }, 
         "language": {
             "paginate": {
@@ -121,19 +116,15 @@
         "pageLength": {{ Setting::get('general.grid_rows') }},
         "columns": [
             { 
+                'data': 'invoice_number',
+                'orderable': true 
+            },
+            { 
                 'data': 'order_number',
                 'orderable': true 
             },
             { 
-                'data': 'warehouse',
-                'orderable': true 
-            },
-            { 
-                'data': 'supplier',
-                'orderable': true 
-            },
-            { 
-                'data': 'ordered_at',
+                'data': 'shipped_at',
                 'orderable': true 
             },
             { 
@@ -141,7 +132,7 @@
                 'orderable': true 
             },
             { 
-                'data': 'amount_inr',
+                'data': 'amount',
                 'orderable': true 
             },
             { 
@@ -203,14 +194,9 @@
         }
     });
 
-    $('#purchase-orders-datatable').on('dblclick', 'tr', function () {
-        if (table.row(this).data().status.includes('Draft') || table.row(this).data().status.includes('Ordered')){
-            var route = '{{  route("purchase-orders.cart", ":id") }}';
-        }
-        else{
-            var route = '{{  route("purchase-orders.show", ":id") }}';
-        }
-        route = route.replace(':id', table.row( this ).data().order_number);
+    $('#purchase-order-invoices-datatable').on('dblclick', 'tr', function () {
+        var route = '{{  route("purchase-order-invoices.show", ":id") }}';
+        route = route.replace(':id', table.row( this ).data().invoice_number);
         window.location.href = route;
     });
 
