@@ -37,7 +37,7 @@
                                 <td>{{ $item->quantity_confirmed }}</td>
                                 <td>
                                     @if (!empty($shipped[$item->product_id]))
-                                        @if ($item->quantity_confirmed == $shipped[$item->product_id])
+                                        @if ($item->quantity_confirmed <= $shipped[$item->product_id])
                                             <span class="badge bg-success">Nothing to receive</span>
                                         @else 
                                             <div class="input-group flex-nowrap">
@@ -208,7 +208,9 @@
                 url: $(this).attr("action"),
                 dataType: 'json',
                 data: $( this ).serialize(),
-                success: function (data) {},
+                success: function (data) {
+                    window.location.replace(data['redirect']);
+                },
                 error:function(xhr, textStatus, thrownError, data){
                     console.log("Error: " + thrownError);
                     console.log("Error: " + textStatus);
