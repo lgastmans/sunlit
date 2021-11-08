@@ -42,6 +42,7 @@ class importDealers extends Command
     {
         /*
             File columns in order in CSV | corresponding column name:
+            
                 customer names  | company not null
                 location        | city not null
                 state           | state_id can be null
@@ -101,6 +102,7 @@ class importDealers extends Command
                     else
                         $data[$i]['city'] = $row[2];
 
+                    // load the string, the id will be set in the import function
                     if ((empty($row[3])) || (is_null($row[3])))
                         $data[$i]['state_id'] = 1;
                     else
