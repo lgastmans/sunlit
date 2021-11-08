@@ -34,8 +34,7 @@
                             <tr>
                                 <th>Category</th>
                                 <th>Supplier</th> 
-                                <th>Code</th> 
-                                <th>Name</th> 
+                                <th>Part Number</th> 
                                 <th>Purchase Price</th>
                                 <th>Tax</th>
                                 <th>Actions</th>
@@ -107,12 +106,9 @@
                 'data': 'supplier',
                 'orderable': true 
             },
+          
             { 
-                'data': 'code',
-                'orderable': true 
-            },
-            { 
-                'data': 'name',
+                'data': 'part_number',
                 'orderable': true 
             },
             {
