@@ -53,6 +53,7 @@ class PurchaseOrderInvoiceController extends Controller
 
         $purchase_order = PurchaseOrder::find($request->purchase_order_id);
         $purchase_order->status = PurchaseOrder::SHIPPED;
+        // $purchase_order->save();
 
         $invoice = new PurchaseOrderInvoice;
         $invoice->purchase_order_id = $purchase_order->id;
@@ -64,7 +65,11 @@ class PurchaseOrderInvoiceController extends Controller
         $invoice->tracking_number = $validatedData['tracking_number'];
         $invoice->courier = $validatedData['courier'];
         $invoice->user_id = $validatedData['user_id'];
-        $invoice_id = $invoice->save();
+        $invoice->save();
+
+        $invoice_id = $invoice->id;
+        $invoice_number = $invoice->invoice_number;
+        
 
         $amount_usd = 0;
         foreach($request->products as $product_id => $quantity_shipped){
@@ -83,8 +88,7 @@ class PurchaseOrderInvoiceController extends Controller
         $invoice->amount_inr = $invoice->amount_usd * $invoice->order_exchange_rate;
         $invoice->update();
         
-
-        return redirect(route('purchase-order-invoices.show', $invoice->invoice_number)); 
+        return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'redirect' => route('purchase-order-invoices.show', $invoice_number)]);
     }
 
     /**
@@ -195,6 +199,7 @@ class PurchaseOrderInvoiceController extends Controller
     public function received(Request $request, $id)
     {
         $invoice = PurchaseOrderInvoice::find($id);
+        $invoice_number = $invoice->invoice_number;
         $invoice->received_at = $request->get('received_at');
         $invoice->status = PurchaseOrderInvoice::RECEIVED;
         $invoice->update();
@@ -202,7 +207,7 @@ class PurchaseOrderInvoiceController extends Controller
         // $inventory = new Inventory();
         // $inventory->updateStock($invoice);
 
-        return redirect(route('purchase-orders.show', $invoice->invoice_number))->with('success', 'order received'); 
+        return redirect(route('purchase-order-invoices.show', $invoice_number))->with('success', 'order received'); 
     }
 
 
