@@ -163,7 +163,7 @@ class PurchaseOrderInvoiceController extends Controller
 
         $purchase_order = PurchaseOrder::find($request->purchase_order_id);
         $purchase_order->status = PurchaseOrder::SHIPPED;
-        // $purchase_order->save();
+        $purchase_order->save();
 
         $invoice = new PurchaseOrderInvoice;
         $invoice->purchase_order_id = $purchase_order->id;
