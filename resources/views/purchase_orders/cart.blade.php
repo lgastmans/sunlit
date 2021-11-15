@@ -76,11 +76,9 @@
                                             <td>
                                                 <p class="m-0 d-inline-block align-middle font-16">
                                                     <a href="javascript:void(0);"
-                                                        class="text-body product-name">{{ $item->product->name }}</a>
+                                                        class="text-body product-name">{{ $item->product->part_number }}</a>
                                                     <br>
-                                                    <small class="me-2"><b>Code:</b> <span class="product-code">{{  $item->product->code }}</span> </small>
-                                                    <small><b>Model:</b> <span class="product-model">{{ $item->product->model }}</span>
-                                                    </small>
+                                                    <small class="me-2"><b>Description:</b> <span class="product-description">{{  $item->product->notes }}</span> </small>
                                                 </p>
                                             </td>
                                             <td>
@@ -527,10 +525,9 @@
                     var item = '<tr class="item" data-id="'+ data.item.id +'" data-product-id="'+data.product.id+'">';
                     item += '<td>';
                         item += '<p class="m-0 d-inline-block align-middle font-16">';
-                            item += '<a href="javascript:void(0); class="text-body product-name">'+ data.product.name +'</a>';
+                            item += '<a href="javascript:void(0); class="text-body product-name">'+ data.product.part_number +'</a>';
                                 item += '<br>';
-                                item += '<small class="me-2"><b>Code:</b> <span class="product-code">'+ data.product.code +'</span> </small>';
-                                item += '<small><b>Model:</b> <span class="product-model">'+ data.product.model +'</span></small>';
+                                item += '<small class="me-2"><b>Description:</b> <span class="product-description">'+ data.product.note +'</span> </small>';
                                 item += '</p>';
                                 item += '</td>';
                                 item += '<td>';

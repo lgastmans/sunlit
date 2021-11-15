@@ -33,7 +33,7 @@
                         <tbody>
                             @foreach($purchase_order->items as $item)
                             <tr>
-                                <td>{{ $item->product->name }}</td>
+                                <td>{{ $item->product->part_number }}</td>
                                 <td>{{ $item->quantity_confirmed }}</td>
                                 <td>
                                     @if (!empty($shipped[$item->product_id]))
