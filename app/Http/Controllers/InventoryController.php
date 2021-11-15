@@ -101,13 +101,10 @@ class InventoryController extends Controller
             $query->where('suppliers.company', 'like', $column_arr[2]['search']['value'].'%');
 
         if (!empty($column_arr[3]['search']['value']))
-            $query->where('products.code', 'like', $column_arr[3]['search']['value'].'%');
+            $query->where('products.part_number', 'like', $column_arr[3]['search']['value'].'%');
 
-        if (!empty($column_arr[4]['search']['value']))
-            $query->where('products.name', 'like', $column_arr[4]['search']['value'].'%');
-
-        if (!empty($column_arr[5]['search']['value'])){
-            $filter_available = $column_arr[5]['search']['value'];
+        if (!empty($column_arr[4]['search']['value'])){
+            $filter_available = $column_arr[4]['search']['value'];
             if ($filter_available == '__BELOW_MIN_')
                 $query->whereColumn('inventories.stock_available', '<=', 'products.minimum_quantity');
             elseif ($filter_available == '__NONE_ZERO_')
@@ -116,8 +113,8 @@ class InventoryController extends Controller
                 $query->where('inventories.stock_available', '=', '0');
         }
 
-        if (!empty($column_arr[6]['search']['value'])){
-            $filter_ordered = $column_arr[6]['search']['value'];
+        if (!empty($column_arr[5]['search']['value'])){
+            $filter_ordered = $column_arr[5]['search']['value'];
             if ($filter_ordered == '__BELOW_MIN_')
                 $query->whereColumn('inventories.stock_ordered', '<=', 'products.minimum_quantity');
             elseif ($filter_ordered == '__NONE_ZERO_')
@@ -126,8 +123,8 @@ class InventoryController extends Controller
                 $query->where('inventories.stock_ordered', '=', '0');
         }
 
-        if (!empty($column_arr[7]['search']['value'])){
-            $filter_booked = $column_arr[7]['search']['value'];
+        if (!empty($column_arr[6]['search']['value'])){
+            $filter_booked = $column_arr[6]['search']['value'];
             if ($filter_booked == '__BELOW_MIN_')
                 $query->whereColumn('inventories.stock_booked', '<=', 'products.minimum_quantity');
             elseif ($filter_booked == '__NONE_ZERO_')
@@ -135,8 +132,8 @@ class InventoryController extends Controller
             elseif ($filter_booked == '__ZERO_')                    
                 $query->where('inventories.stock_booked', '=', '0');
         }
-        if (!empty($column_arr[8]['search']['value'])){
-            $filter_projected = $column_arr[8]['search']['value'];
+        if (!empty($column_arr[7]['search']['value'])){
+            $filter_projected = $column_arr[7]['search']['value'];
             if ($filter_projected == '__BELOW_MIN_')
                 $query->havingRaw('projected <= products.minimum_quantity');
             elseif ($filter_projected == '__NONE_ZERO_')
@@ -185,8 +182,7 @@ class InventoryController extends Controller
 
             $query->where( function ($q) use ($search)
             {
-                $q->where('products.code', 'like', '%'.$search.'%')
-                    ->orWhere('products.name', 'like', '%'.$search.'%')
+                $q->where('products.part_number', 'like', '%'.$search.'%')
                     ->orWhere('warehouses.name', 'like', '%'.$search.'%')
                     ->orWhere('categories.name', 'like', '%'.$search.'%')
                     ->orWhere('suppliers.company', 'like', '%'.$search.'%');
@@ -212,8 +208,9 @@ class InventoryController extends Controller
                 "supplier" => $record->company,
                 "warehouse" => $record->warehouse->name,
                 "category" => $record->product->category->name,
-                "code" => $record->product->code,
-                "name" => $record->product->name,
+                // "code" => $record->product->code,
+                // "name" => $record->product->name,
+                "part_number" => $record->product->part_number,
                 "available" => (object)$record->stock_available,
                 "ordered" => $record->stock_ordered,
                 "booked" => $record->stock_booked,
