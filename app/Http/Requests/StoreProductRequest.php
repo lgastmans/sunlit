@@ -25,6 +25,15 @@ class StoreProductRequest extends FormRequest
         return $this->user()->can('edit products');
     }
 
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'code' => NULL,
+            'name' => NULL,
+            'model' => NULL,
+        ]);
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -36,20 +45,20 @@ class StoreProductRequest extends FormRequest
             'category_id' => 'required|integer',
             'supplier_id' => 'required|integer',
             'tax_id' => 'required|integer',
-            'code' => 'required|max:255|unique:products,code,NULL,id,deleted_at,NULL'.$this->id,
-            'name' => 'required_without:name|string|max:255',
+            'code' => 'max:255',
+            'name' => 'max:255',
             'model' => 'max:255',
             'purchase_price' => 'max:255',
-            'minimum_quantity' => 'integer',
+            // 'minimum_quantity' => 'integer',
             'kw_rating' => 'max:255',
-            'part_number' => 'max:255',
+            'part_number' => 'max:255|unique:products,part_number,NULL,id,deleted_at,NULL'.$this->id,
             'notes' => 'nullable',
-            'cable_length_input' => 'numeric',
-            'cable_length_output' => 'numeric',
-            'weight_actual' => 'numeric',
-            'weight_volume' => 'numeric',
-            'weight_calculated' => 'numeric',
-            'warranty' => 'integer'
+            // 'cable_length_input' => 'numeric',
+            // 'cable_length_output' => 'numeric',
+            // 'weight_actual' => 'numeric',
+            // 'weight_volume' => 'numeric',
+            // 'weight_calculated' => 'numeric',
+            // 'warranty' => 'integer'
         ];
     }
 }

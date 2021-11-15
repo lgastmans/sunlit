@@ -30,15 +30,9 @@
                 </div>
                 <!-- project title-->
                 <h3 class="mt-0">
-                    {{ $product->name }}
+                    {{ $product->part_number }}
                 </h3>
-                {{-- @if ($product->inventory->stock_available > $product->minimum_quantity * 2)
-                    <div class="badge bg-success text-light mb-3">In stock</div>
-                @elseif ($product->inventory->stock_available > $product->minimum_quantity)
-                    <div class="badge bg-warning text-light mb-3">Low stock</div>
-                @else
-                    <div class="badge bg-danger text-light mb-3">Stock below minium</div>
-                @endif --}}
+
 
                 <h5>Description:</h5>
 
@@ -47,13 +41,7 @@
                 </p>
 
                 <div class="row">
-{{--                     <div class="col-md-3">
-                        <div class="mb-4">
-                            <h5>First Added</h5>
-                            <p>{{ $product->display_created_at }}</p>
-                        </div>
-                    </div>
- --}}                    <div class="col-md-3">
+                    <div class="col-md-3">
                         <div class="mb-4">
                             <h5>Last Purchased</h5>
                             <p>{{ $product->last_purchased_on }}</p>
@@ -78,27 +66,6 @@
                             <p>{{ empty($product->warranty) ? '0' : $product->warranty }} Years</p>
                         </div>
                     </div>
-
-{{-- 
-                    <div class="col-md-3">
-                        <div class="mb-4">
-                            <h5>Avg Purchase Price</h5>
-                            @foreach ($product->inventory as $row)
-                                <p>{{ $product->supplier->currency_code }} {{ $row->average_buying_price }} {{ $row->warehouse->name }}</p>
-                            @endforeach
-                        </div>
-                    </div>
-                    @if ($product->inventory)
-                        <div class="col-md-3">
-                            <div class="mb-4">
-                                <h5>Avg Selling Price</h5>
-                                @foreach ($product->inventory as $row)
-                                    <p>{{ __('app.currency_symbol_inr')}} {{ $row->average_selling_price}}  {{ $row->warehouse->name }}</p>
-                                @endforeach
-                            </div>
-                        </div>
-                    @endif
---}}
                 </div>
                 <div class="row">
                     <div class="col-md-3">

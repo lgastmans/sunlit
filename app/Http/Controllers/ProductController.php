@@ -87,14 +87,6 @@ class ProductController extends Controller
 
         // Total records
         $totalRecords = Product::all()->count();
-        
-        // $totalRecordswithFilter = Product::join('categories', 'categories.id', '=', 'products.category_id')
-        //     ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
-        //     ->join('taxes', 'taxes.id', '=', 'products.tax_id')
-        //     ->where('products.code', 'like', '%'.$search.'%')
-        //     ->orWhere('products.name', 'like', '%'.$search.'%')
-        //     ->get()
-        //     ->count();
 
         /*
             build the query
@@ -129,8 +121,7 @@ class ProductController extends Controller
         if ($request->has('search')){
             $search = $request->get('search')['value'];
             $query->where( function ($q) use ($search){
-                $q->where('products.code', 'like', '%'.$search.'%')
-                    ->orWhere('products.name', 'like', '%'.$search.'%')
+                $q->where('products.part_number', 'like', '%'.$search.'%')
                     ->orWhere('categories.name', 'like', '%'.$search.'%')
                     ->orWhere('suppliers.company', 'like', '%'.$search.'%');
             });    
@@ -326,9 +317,9 @@ class ProductController extends Controller
         $query = Product::query();
         $query->where('supplier_id', '=', $supplier);
         if ($request->has('q')){
-            $query->where('code', 'like', '%'.$request->get('q').'%');
+            $query->where('part_number', 'like', '%'.$request->get('q').'%');
         }
-        $products = $query->select('products.id', 'products.code as text')->get();
+        $products = $query->select('products.id', 'products.part_number as text')->get();
         return ['results' => $products];  
     }
 
@@ -340,9 +331,9 @@ class ProductController extends Controller
         $query->where('inventories.warehouse_id', '=', $warehouse);
 
         if ($request->has('q')){
-            $query->where('code', 'like', '%'.$request->get('q').'%');
+            $query->where('part_number', 'like', '%'.$request->get('q').'%');
         }
-        $products = $query->select('products.id', 'products.code as text')->get();
+        $products = $query->select('products.id', 'products.part_number as text')->get();
         return ['results' => $products];  
     }
 
@@ -356,9 +347,9 @@ class ProductController extends Controller
     {
         $query = Product::query();
         if ($request->has('q')){
-            $query->where('code', 'like', '%'.$request->get('q').'%');
+            $query->where('part_number', 'like', '%'.$request->get('q').'%');
         }
-        $products = $query->select('products.id', 'products.code as text')->get();
+        $products = $query->select('products.id', 'products.part_number as text')->get();
         return ['results' => $products];
     }
 
