@@ -177,6 +177,8 @@ class PurchaseOrderInvoiceController extends Controller
         $invoice_id = $invoice->id;
         $invoice_number = $invoice->invoice_number;
         
+        $inventory = new Inventory();
+        $inventory->updateStock($order);        
 
         $amount_usd = 0;
         foreach($request->products as $product_id => $quantity_shipped){
@@ -311,8 +313,8 @@ class PurchaseOrderInvoiceController extends Controller
         $invoice->status = PurchaseOrderInvoice::RECEIVED;
         $invoice->update();
 
-        // $inventory = new Inventory();
-        // $inventory->updateStock($invoice);
+        $inventory = new Inventory();
+        $inventory->updateStock($invoice);
 
         return redirect(route('purchase-order-invoices.show', $invoice_number))->with('success', 'order received'); 
     }

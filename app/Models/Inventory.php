@@ -123,7 +123,7 @@ class Inventory extends Model
         *    iterate through the related items of the model
         *    and update the stock values
         */
-        if ($class_name == 'PurchaseOrder')
+        if ($class_name == 'PurchaseOrderInvoice')
         {
             foreach($model->items as $product)
             {
@@ -138,12 +138,12 @@ class Inventory extends Model
                     $ordered = $inventory->stock_ordered;
                     $available = $inventory->stock_available;
 
-                    if ($model->status == PurchaseOrder::CONFIRMED)
+                    if ($model->status == PurchaseOrderInvoice::SHIPPED)
                     {
                         /*
                         *    update Ordered Stock (add)
                         */
-                        $ordered += $product->quantity_ordered;
+                        $ordered += $product->quantity_shipped;
 
                         /*
                             the average buying price stays the same
@@ -151,13 +151,13 @@ class Inventory extends Model
                         $avg_price = $inventory->average_buying_price;
                         
                     }
-                    elseif ($model->status == PurchaseOrder::RECEIVED) 
+                    elseif ($model->status == PurchaseOrderInvoice::RECEIVED) 
                     {
                         /*
                         *    update Available Stock (add), update Ordered Stock (deduct)
                         */
-                        $ordered -= $product->quantity_ordered;
-                        $available += $product->quantity_ordered;
+                        $ordered -= $product->quantity_confirmed;
+                        $available += $product->quantity_confirmed;
 
                         /*
                         *   register stock received in the Inventory Movement model
@@ -168,7 +168,7 @@ class Inventory extends Model
                             "product_id" => $product->product_id,
                             "purchase_order_id" => $model->id,
                             "sales_order_id" => null,
-                            "quantity" => $product->quantity_ordered,
+                            "quantity" => $product->quantity_confirmed,
                             "user_id" => Auth::user()->id,
                             "movement_type" => InventoryMovement::RECEIVED,
                             "price" => $product->selling_price
