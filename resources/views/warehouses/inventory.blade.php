@@ -12,7 +12,7 @@
         @foreach($warehouse->inventories as $inventory)
 
             <tr>
-                <td>{{ $inventory->product->code }}</td>
+                <td>{{ $inventory->product->part_number }}</td>
                 <td>{{ $inventory->stock_available }}</td>
                 <td>{{ $inventory->stock_ordered }}</td>
                 <td>{{ $inventory->stock_booked }}</td>
