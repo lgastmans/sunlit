@@ -92,16 +92,16 @@ class InventoryController extends Controller
                 ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id');
 
         if (!empty($column_arr[0]['search']['value']))
-            $query->where('warehouses.name', 'like', $column_arr[0]['search']['value'].'%');
+            $query->where('warehouses.name', 'like', '%'.$column_arr[0]['search']['value'].'%');
 
         if (!empty($column_arr[1]['search']['value']))
-            $query->where('categories.name', 'like', $column_arr[1]['search']['value'].'%');
+            $query->where('categories.name', 'like', '%'.$column_arr[1]['search']['value'].'%');
 
         if (!empty($column_arr[2]['search']['value']))
-            $query->where('suppliers.company', 'like', $column_arr[2]['search']['value'].'%');
+            $query->where('suppliers.company', 'like', '%'.$column_arr[2]['search']['value'].'%');
 
         if (!empty($column_arr[3]['search']['value']))
-            $query->where('products.part_number', 'like', $column_arr[3]['search']['value'].'%');
+            $query->where('products.part_number', 'like', '%'.$column_arr[3]['search']['value'].'%');
 
         if (!empty($column_arr[4]['search']['value'])){
             $filter_available = $column_arr[4]['search']['value'];
