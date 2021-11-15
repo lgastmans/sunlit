@@ -166,7 +166,7 @@
                     <thead>
                         <tr>
                             <th>Warehouse</th>
-                            <th>Name</th>
+                            <th>Part Number</th>
                             <th>Price</th>
                             <th>Available</th>
                             <th>Ordered</th>
@@ -179,7 +179,7 @@
                             @foreach ($product->inventory as $inventory)
                                 <tr class="product" data-id="{{ $product->id }}">
                                     <td>{{ $inventory->warehouse->name }}</td>
-                                    <td>{{ $product->name }}</td>
+                                    <td>{{ $product->part_number }}</td>
                                     <td>{{ __('app.currency_symbol_inr')}} {{ $inventory->average_cost }}</td>
                                     <td>
                                         @if ($inventory->stock_available <= $product->minimum_quantity)
