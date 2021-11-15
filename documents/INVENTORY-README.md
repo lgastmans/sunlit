@@ -41,28 +41,25 @@ Purchase Order (PO)
 
 Purchase Order Invoices
 -----------------------
-4, 5, 6 and 
-7 from PO moves here
-
 DRAFT = 1;
 ORDERED = 2;
 CONFIRMED = 3;
 SHIPPED = 4;		- trigger stock ordered, update Ordered Stock (add)
 CUSTOMS = 5;
 CLEARED = 6;
-RECEIVED = 7;	- trigger stock in, update Available Stock (add), update Ordered Stock (deduct), create a RECEIVED Inventory Movement 
-				- update the average buying price
+RECEIVED = 7;		- trigger stock in, update Available Stock (add), update Ordered Stock (deduct), create a RECEIVED Inventory Movement 
+					- update the average buying price
 
 
 
 Sales Order (SO)
 ----------------
-Draft			- NEW: BLOCKED INVENTORY COLUMN
-Ordered			- 
-Confirmed		- trigger stock out, update Booked Stock (add)
+Draft				- trigger stock out, update Blocked Stock (add)
+Ordered				
+Confirmed			- trigger stock out, update Booked Stock (add), update Blocked Stock (deduct)
 Shipped			
-Delivered		- trigger stock out, update Available Stock (deduct), update Booked Stock (deduct), create a DELIVERED Inventory Movement 
-				- update the average selling price
+Delivered			- trigger stock out, update Available Stock (deduct), update Booked Stock (deduct), create a DELIVERED Inventory Movement 
+					- update the average selling price
 
 
 To reset/recalculate the current stock:
