@@ -82,30 +82,27 @@ class PurchaseOrderInvoiceController extends Controller
         $query->join('users', 'users.id', '=', 'user_id');
         $query->join('purchase_orders', 'purchase_orders.id', '=', 'purchase_order_id');
 
-        //     if (!empty($column_arr[0]['search']['value'])){
-        //         $query->where('purchase_orders.order_number', 'like', $column_arr[0]['search']['value'].'%');
-        //     }
-        //     if (!empty($column_arr[1]['search']['value'])){
-        //         $query->where('warehouses.name', 'like', $column_arr[1]['search']['value'].'%');
-        //     }
-        //     if (!empty($column_arr[2]['search']['value'])){
-        //         $query->where('suppliers.company', 'like', $column_arr[2]['search']['value'].'%');
-        //     }
-        //     if (!empty($column_arr[3]['search']['value'])){
-        //         $query->where('purchase_orders.ordered_at', 'like', convertDateToMysql($column_arr[3]['search']['value']));
-        //     }
-        //     if (!empty($column_arr[4]['search']['value'])){
-        //         $query->where('purchase_orders.due_at', 'like', convertDateToMysql($column_arr[4]['search']['value']));
-        //     }
-        //     if (!empty($column_arr[5]['search']['value'])){
-        //         $query->where('purchase_orders.amount_inr', 'like', $column_arr[5]['search']['value'].'%');
-        //     }
-        //     if (!empty($column_arr[6]['search']['value']) && $column_arr[6]['search']['value'] != "all"){
-        //         $query->where('purchase_orders.status', 'like', $column_arr[6]['search']['value']);
-        //     }
-        //     if (!empty($column_arr[7]['search']['value'])){
-        //         $query->where('users.name', 'like', $column_arr[7]['search']['value'].'%');
-       
+        if (!empty($column_arr[0]['search']['value'])){
+            $query->where('purchase_order_invoices.invoice_number', 'like', $column_arr[0]['search']['value'].'%');
+        }
+        if (!empty($column_arr[1]['search']['value'])){
+            $query->where('purchase_orders.order_number', 'like', $column_arr[1]['search']['value'].'%');
+        }
+        if (!empty($column_arr[2]['search']['value'])){
+            $query->where('purchase_order_invoices.shipped_at', 'like', convertDateToMysql($column_arr[2]['search']['value']));
+        }
+        if (!empty($column_arr[3]['search']['value'])){
+            $query->where('purchase_order_invoices.due_at', 'like', convertDateToMysql($column_arr[3]['search']['value']));
+        }
+        if (!empty($column_arr[4]['search']['value'])){
+            $query->where('purchase_order_invoices.amount_inr', 'like', $column_arr[4]['search']['value'].'%');
+        }
+        if (!empty($column_arr[5]['search']['value']) && $column_arr[5]['search']['value'] != "all"){
+            $query->where('purchase_order_invoices.status', 'like', $column_arr[5]['search']['value']);
+        }
+        if (!empty($column_arr[6]['search']['value'])){
+            $query->where('users.name', 'like', $column_arr[6]['search']['value'].'%');
+        }
         
         if ($request->has('search')){
             $search = $request->get('search')['value'];
