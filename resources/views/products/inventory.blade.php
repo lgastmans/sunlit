@@ -4,6 +4,7 @@
             <th>Warehouse</th>
             <th>Available</th>
             <th>Ordered</th>
+            <th>Blocked</th>
             <th>Booked</th>
             <th>Average Cost</th>
             <th>Average Price</th>
@@ -16,6 +17,7 @@
                 <td>{{ $inventory->warehouse->name }}</td>
                 <td>{{ $inventory->stock_available }}</td>
                 <td>{{ $inventory->stock_ordered }}</td>
+                <td>{{ $inventory->stock_blocked }}</td>
                 <td>{{ $inventory->stock_booked }}</td>
                 <td>{{ __('app.currency_symbol_inr')}} {{ $inventory->average_buying_price }}</td>
                 <td>{{ __('app.currency_symbol_inr')}} {{ $inventory->average_selling_price }}</td>

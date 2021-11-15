@@ -49,6 +49,7 @@
                                 <th>Part Number</th>
                                 <th>Available</th>
                                 <th>Ordered</th>
+                                <th>Blocked</th>
                                 <th>Booked</th>
                                 <th>Projected</th>
                             </tr>
@@ -60,6 +61,7 @@
                                 <th><input type="text" class="form-control"></th>
                                 <th><select class="form-control available-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
                                 <th><select class="form-control ordered-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
+                                <th><select class="form-control blocked-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
                                 <th><select class="form-control booked-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
                                 <th class="no-filter"><select disabled class="form-control projected-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
                             </tr>                            
@@ -103,6 +105,7 @@
                 "data": function ( d ) {[
                     d.filter_available = $(" .available-filter ").val(),
                     d.filter_ordered = $(" .ordered-filter ").val(),
+                    d.filter_blocked = $(" .blocked-filter ").val(),
                     d.filter_booked = $(" .booked-filter ").val(),
                     d.filter_projected = $(" .projected-filter ").val()
                 ]},
@@ -151,6 +154,10 @@
             },
             { 
                 'data': 'ordered',
+                'orderable': false
+            },
+            { 
+                'data': 'blocked',
                 'orderable': false
             },
             { 

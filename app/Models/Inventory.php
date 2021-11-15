@@ -13,7 +13,7 @@ class Inventory extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['warehouse_id', 'product_id', 'stock_available', 'stock_booked', 'stock_ordered', 'average_buying_price', 'average_selling_price'];
+    protected $fillable = ['warehouse_id', 'product_id', 'stock_available', 'stock_booked', 'stock_ordered', 'stock_blocked', 'average_buying_price', 'average_selling_price'];
 
     public function warehouse()
     {
@@ -54,6 +54,7 @@ class Inventory extends Model
                 "stock_available" => $this->stock_available,
                 "stock_booked" => 0,
                 "stock_ordered" => 0,
+                "stock_blocked" => 0,
                 "average_buying_price" => $product->purchase_price,
                 "average_selling_price" => 0
             ]);
@@ -90,6 +91,7 @@ class Inventory extends Model
             "stock_available" => 0,
             "stock_booked" => 0,
             "stock_ordered" => 0,
+            "stock_blocked" => 0,
             "average_buying_price" => $product->purchase_price,
             "average_selling_price" => 0
         ]);
@@ -201,9 +203,27 @@ class Inventory extends Model
 
                     $booked = $inventory->stock_booked;
                     $available = $inventory->stock_available;
+                    $blocked = $inventory->stock_blocked;
 
-                    if ($model->status == SaleOrder::CONFIRMED)
+                    if ($model->status == SaleOrder::DRAFT)
                     {
+                        /*
+                        *    update Blocked Stock (add)
+                        */
+                        $blocked += $product->quantity_ordered;
+
+                        /*
+                            the average buying price stays the same
+                        */
+                        $avg_price = $inventory->average_buying_price;
+                    }
+                    elseif ($model->status == SaleOrder::CONFIRMED)
+                    {
+                        /*
+                        *    update Blocked Stock (deduct)
+                        */
+                        $blocked -= $product->quantity_ordered;
+
                         /*
                         *    update Booked Stock (add)
                         */
@@ -245,6 +265,7 @@ class Inventory extends Model
                     $result = $inventory->update([
                         "stock_available" => $available,
                         "stock_booked" => $booked,
+                        "stock_blocked" => $blocked,
                         "average_selling_price" => $avg_price
                     ]);
 
