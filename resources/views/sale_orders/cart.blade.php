@@ -298,14 +298,36 @@
         }
     });
 
+    function formatProduct(el){
+            var item = "<div><h5>" + el.text + "</h5>";
+            var sa = sb = so = 0;
+                if (el.stock_available != undefined)
+                    sa = el.stock_available;
+                if (el.stock_booked != undefined)
+                    sb = el.stock_booked;
+                if (el.stock_ordered != undefined)
+                    so = el.stock_ordered;
+                item += "<small><strong>Available:</strong> "+ sa + "</small>"
+                item += "<small><strong> / Booked:</strong> "+ sb + "</small>"
+                item += "<small><strong> / Ordered:</strong> "+ so + "</small>"
+            item += "</div>";
+        return $(item);
+    }
+
     var productSelect = $(".product-select").select2();
     var product_route = '{{ route("ajax.products.warehouse", [":warehouse_id"]) }}';
     product_route = product_route.replace(':warehouse_id', $('#warehouse-id').val());
     productSelect.select2({
         ajax: {
             url: product_route,
-            dataType: 'json'
-        }
+            dataType: 'json',
+        },
+        templateResult : formatProduct,
+        // templateSelection : formatProduct,
+        //   escapeMarkup: function(m) {
+        //       // Do not escape HTML in the select options text
+        //       return m;
+        //    },
     });
 
     productSelect.on("change", function (e) { 
