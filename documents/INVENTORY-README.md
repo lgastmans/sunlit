@@ -33,18 +33,32 @@ Purchase Order (PO)
 -------------------
 1 Draft			
 2 Ordered			
-3 Confirmed		- trigger stock ordered, update Ordered Stock (add)
+3 Confirmed		
 4 Shipped			
 5 Customs			
 6 Cleared			
-7 Received		- trigger stock in, update Available Stock (add), update Ordered Stock (deduct), create a RECEIVED Inventory Movement 
+7 Received		
+
+Purchase Order Invoices
+-----------------------
+4, 5, 6 and 
+7 from PO moves here
+
+DRAFT = 1;
+ORDERED = 2;
+CONFIRMED = 3;
+SHIPPED = 4;		- trigger stock ordered, update Ordered Stock (add)
+CUSTOMS = 5;
+CLEARED = 6;
+RECEIVED = 7;	- trigger stock in, update Available Stock (add), update Ordered Stock (deduct), create a RECEIVED Inventory Movement 
 				- update the average buying price
+
 
 
 Sales Order (SO)
 ----------------
-Draft
-Ordered
+Draft			- NEW: BLOCKED INVENTORY COLUMN
+Ordered			- 
 Confirmed		- trigger stock out, update Booked Stock (add)
 Shipped			
 Delivered		- trigger stock out, update Available Stock (deduct), update Booked Stock (deduct), create a DELIVERED Inventory Movement 
