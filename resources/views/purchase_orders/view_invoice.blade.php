@@ -9,7 +9,5 @@
 @endsection
 
 @section('content')
-
-    @include('purchase_orders.invoice')
-
+    @include('purchase_orders.invoice_template')
 @endsection

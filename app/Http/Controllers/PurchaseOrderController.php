@@ -551,7 +551,7 @@ class PurchaseOrderController extends Controller
     {
         $order = PurchaseOrder::where('order_number', '=', $order_number)->first();
         view()->share('order', $order);
-        $pdf = PDF::loadView('purchase_orders.invoice', $order);
+        $pdf = PDF::loadView('purchase_orders.invoice_template', $order);
 
         // download PDF file with download method
         return $pdf->download($order_number.'.pdf');
