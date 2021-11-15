@@ -409,10 +409,40 @@ class ProductController extends Controller
 
             $dataArr[$i]['tax_id'] = $taxes->id;
 
+            /*
+                as the 'stock' array key is not a column in Product
+                it needs to be removed
+            */
+            $stock = $dataArr[$i]['stock'];
+            unset($dataArr[$i]['stock']);
+
+            /*
+                save the product
+            */
             $product = Product::firstOrCreate($dataArr[$i]);
 
+            /*
+                register initial stock
+            */
             $inventory = new Inventory();
-            $inventory->initStock($product->id); 
+            $inventory->stock_available = $stock;
+            $warehouse_id = $inventory->initStock($product->id); 
+
+            /*
+                inventory movement as RECEIVED
+            */
+            $data = array(
+                "warehouse_id" => $warehouse_id,
+                "product_id" => $product->id,
+                "purchase_order_id" => null,
+                "sales_order_id" => null,
+                "quantity" => $stock,
+                "user_id" => Auth::user()->id,
+                "movement_type" => InventoryMovement::RECEIVED,
+                "price" => 0
+            );
+            $movement = new InventoryMovement();
+            $movement->updateMovement($data);            
         }
 
         return true;    
@@ -445,18 +475,46 @@ class ProductController extends Controller
                     // ditto column "supplier_id"
                     $data[$i]['supplier_id'] = $row[4];
                     $data[$i]['model'] = $row[5];
+                    
                     if ((empty($row[6])) || (is_null($row[6])))
                         $data[$i]['minimum_quantity'] = 0;
                     else
                         $data[$i]['minimum_quantity'] = $row[6];
-                    $data[$i]['cable_length_input'] = $row[7];
-                    $data[$i]['cable_length_output'] = $row[8];
+
+                    if ((empty($row[7])) || (is_null($row[7])))
+                        $data[$i]['cable_length_input'] = 0;
+                    else
+                        $data[$i]['cable_length_input'] = $row[7];
+
+                    if ((empty($row[8])) || (is_null($row[8])))
+                        $data[$i]['cable_length_output'] = 0;
+                    else
+                        $data[$i]['cable_length_output'] = $row[8];
+
                     $data[$i]['kw_rating'] = $row[9];
-                    $data[$i]['weight_actual'] = $row[10];
-                    $data[$i]['weight_volume'] = $row[11];
-                    $data[$i]['weight_calculated'] = $row[12];
-                    $data[$i]['warranty'] = $row[13];
+
+                    if ((empty($row[10])) || (is_null($row[10])))
+                        $data[$i]['weight_actual'] = 0;
+                    else
+                        $data[$i]['weight_actual'] = $row[10];
+
+                    if ((empty($row[11])) || (is_null($row[11])))
+                        $data[$i]['weight_volume'] = 0;
+                    else
+                        $data[$i]['weight_volume'] = $row[11];
+
+                    if ((empty($row[12])) || (is_null($row[12])))
+                        $data[$i]['weight_calculated'] = 0;
+                    else
+                        $data[$i]['weight_calculated'] = $row[12];
+
+                    if ((empty($row[13])) || (is_null($row[13])))
+                        $data[$i]['warranty'] = 0;
+                    else
+                        $data[$i]['warranty'] = $row[13];
+
                     $data[$i]['notes'] = $row[2];
+                    $data[$i]['stock'] = intval($row[15]);
                     // as tax is not given in the csv file
                     // the tax_id is initialized in the importCSV function
                     $data[$i]['tax_id'] = 0;

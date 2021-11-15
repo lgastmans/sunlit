@@ -51,13 +51,15 @@ class Inventory extends Model
             $inventory = $this->create([
                 "warehouse_id" => $warehouse_id,
                 "product_id" => $product_id,
-                "stock_available" => 0,
+                "stock_available" => $this->stock_available,
                 "stock_booked" => 0,
                 "stock_ordered" => 0,
                 "average_buying_price" => $product->purchase_price,
                 "average_selling_price" => 0
             ]);
         }
+
+        return $warehouses->first();
     }
 
 
