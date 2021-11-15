@@ -71,7 +71,7 @@ class InventoryMovementController extends Controller
 
             if ($request->has('source') && $request->source == "warehouses"){
                 if ($column_index==1)
-                    $order_column = "products.name";
+                    $order_column = "products.part_number";
                 if ($column_index==3)
                     $order_column = "inventory_movements.movement_type";
                 if ($column_index==5)
@@ -149,7 +149,7 @@ class InventoryMovementController extends Controller
                 $query->where('order_number', 'like', '%'.$column_arr[0]['search']['value'].'%');
 
             if (!empty($column_arr[1]['search']['value'])){
-                $query->where('products.name', 'LIKE', $column_arr[1]['search']['value'].'%');
+                $query->where('products.part_number', 'LIKE', $column_arr[1]['search']['value'].'%');
             }
             if (!empty($column_arr[2]['search']['value']))
                 $query->where('quantity', '=', $column_arr[2]['search']['value']);
@@ -204,7 +204,7 @@ class InventoryMovementController extends Controller
                 "quantity" => $record->quantity,
                 "entry_type" => $record->display_movement_type,
                 "warehouse" => $record->warehouse->name,
-                "product" => $record->product->name,
+                "product" => $record->product->part_number,
                 "user" => $record->user->display_name,
             );
         }
