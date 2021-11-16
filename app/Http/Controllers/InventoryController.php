@@ -57,10 +57,7 @@ class InventoryController extends Controller
                     $order_column = "suppliers.company";
                     break;
                 case '3':
-                    $order_column = "products.code";
-                    break;
-                case '4':
-                    $order_column = "products.name";
+                    $order_column = "products.part_number";
                     break;
                 default:
                 $order_column = $column_arr[$column_index]['data'];    
