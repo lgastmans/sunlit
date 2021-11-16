@@ -72,7 +72,7 @@ class ProductController extends Controller
             elseif ($column_index==1)
                 $order_column = "suppliers.company";
             elseif ($column_index==2)
-                $order_column = "taxes.name";
+                $order_column = "products.part_number";
             else
                 $order_column = $column_arr[$column_index]['data'];
             $order_dir = $order_arr[0]['dir'];
