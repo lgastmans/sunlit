@@ -374,13 +374,15 @@ class SaleOrderController extends Controller
             'shipped_at' => 'required|date',
             'due_at' => 'required|date',
             'tracking_number' => 'required',
-            'courier' => 'required'
+            'courier' => 'required',
+            'transport_charges' => 'required'
         ]);
         $order = SaleOrder::find($id);
         $order->shipped_at = $request->get('shipped_at');
         $order->due_at = $request->get('due_at');
         $order->tracking_number = $request->get('tracking_number');
         $order->courier = $request->get('courier');
+        $order->transport_charges = $request->get('transport_charges');
         $order->status = SaleOrder::SHIPPED;
         $order->update();
         return redirect(route('sale-orders.show', $order->order_number))->with('success', 'order shipped'); 
