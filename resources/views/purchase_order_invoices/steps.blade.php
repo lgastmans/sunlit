@@ -28,6 +28,10 @@
                             <span data-bs-container="#tooltip-container" data-bs-toggle="tooltip"
                                 data-bs-placement="bottom" title="{{ $invoice->display_received_at }}">Received</span>
                         </div>
+                        <div class="step-item @if ($invoice->status == 8) current @endif">
+                            <span data-bs-container="#tooltip-container" data-bs-toggle="tooltip"
+                                data-bs-placement="bottom" title="{{ $invoice->display_paid_at }}">Paid</span>
+                        </div>
                     </div>
                     <div class="process-line"
                     @switch($invoice->status)
@@ -39,10 +43,13 @@
                             style="width:0%;"
                             @break
                         @case(5)
-                            style="width:33%;"
+                            style="width:25%;"
                             @break
                         @case(6)
-                            style="width:66%;"
+                            style="width:50%;"
+                            @break
+                        @case(7)
+                            style="width:75%;"
                             @break
                         @case(7)
                             style="width:100%;"

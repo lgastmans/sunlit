@@ -10,6 +10,11 @@
                         <th>Status</th>
                     </thead>
                     <tbody>
+                        @if ($invoice->status >= 8)
+                        <tr>
+                            <td>{{ $invoice->display_paid_at }}</td><td>The invoice has been paid, <b>#{{ $invoice->payment_reference }} / <b>{{ __('app.currency_symbol_inr')}}{{ $invoice->paid_exchange_rate }}</b></b></td>
+                        </tr>
+                        @endif
                         @if ($invoice->status >= 7)
                         <tr>
                             <td>{{ $invoice->display_received_at }}</td><td>The order has been received</td>

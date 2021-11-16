@@ -146,6 +146,24 @@ class PurchaseOrderInvoice extends Model
     }
 
     /**
+     * Returns the paid_at date for display Month Day, Year
+     */
+    public function getDisplayPaidAtAttribute()
+    {
+        if ($this->paid_at){
+            $dt = Carbon::parse($this->paid_at);
+            return $dt->toFormattedDateString(); 
+        } 
+        return "";    
+    }
+
+    public function setPaidAtAttribute($value)
+    {
+        $dt = Carbon::parse($value);
+        $this->attributes['paid_at'] = $dt->toDateTimeString();  
+    }
+
+    /**
      * Returns the amount paid with customs exchange rate
      */
     public function getAmountInrCustomsAttribute()

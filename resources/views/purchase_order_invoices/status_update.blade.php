@@ -116,3 +116,43 @@
         </div>
     </div>
 </div>
+
+{{-- received --}}
+<div class="mt-lg-0 rounded @if ($invoice->status != 7) d-none @endif">
+    <div class="card border">
+        <div class="card-body">
+            <form name="receive-order-form"  class="needs-validation" novalidate
+                action="{{ route('purchase-order-invoices.paid', $invoice->id) }}" method="POST">
+                @csrf()
+                @method('PUT')
+                <div class="row mb-3">
+                    <div class="col-xl-6" id="paid_at">
+                        <label class="form-label">Paid date</label>
+                        <input type="text" class="form-control" name="paid_at"
+                            value="{{ $invoice->display_paid_at }}" data-provide="datepicker" data-date-autoclose="true"
+                            data-date-container="#paid_at" data-date-format="M d, yyyy" required>
+                    </div>
+                    <div class="col-xl-6">
+                        <label class="form-label">Paid Exchange Rate</label>
+                        <div class="input-group">
+                            <span class="input-group-text" id="paid__currency">{{ __('app.currency_symbol_inr')}}</span>
+                            <input class="form-control" id="paid_exchange_rate" name="paid_exchange_rate" value="{{ old('paid_exchange_rate', $invoice->paid_exchange_rate) }}" required >
+                            <div class="invalid-feedback">
+                                {{ __('error.form_invalid_field', ['field' => 'paid exchange rate']) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-xl-6" id="payment_reference">
+                        <label class="form-label">Payment Reference</label>
+                        <input type="text" class="form-control" name="payment_reference" required>
+                    </div>
+                </div>
+                <button class="col-lg-12 text-center btn btn-warning" type="submit"
+                    name="pay_order">Pay order</button>
+            </form>
+
+        </div>
+    </div>
+</div>

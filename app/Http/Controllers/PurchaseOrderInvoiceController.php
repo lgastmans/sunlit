@@ -319,6 +319,31 @@ class PurchaseOrderInvoiceController extends Controller
         return redirect(route('purchase-order-invoices.show', $invoice_number))->with('success', 'order received'); 
     }
 
+    /**
+     * Update the paid_at and status of an order
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function paid(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'paid_at' => 'required|date',
+            'paid_exchange_rate' => 'required',
+        ]);
+
+        $invoice = PurchaseOrderInvoice::find($id);
+        $invoice_number = $invoice->invoice_number;
+        $invoice->paid_at = $request->get('paid_at');
+        $invoice->paid_exchange_rate = $request->get('paid_exchange_rate');
+        $invoice->payment_reference = $request->get('payment_reference');
+        $invoice->status = PurchaseOrderInvoice::PAID;
+        $invoice->update();
+
+        return redirect(route('purchase-order-invoices.show', $invoice_number))->with('success', 'order received'); 
+    }
+
 
 
 
