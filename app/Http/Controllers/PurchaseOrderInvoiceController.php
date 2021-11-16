@@ -108,7 +108,7 @@ class PurchaseOrderInvoiceController extends Controller
             $search = $request->get('search')['value'];
             $query->where( function ($q) use ($search){
                 $q->where('purchase_orders.order_number', 'like', $search.'%')
-                    ->orWhere('purchase_orders.amount_inr', 'like', $search.'%')
+                    ->orWhere('purchase_order_invoices.amount_inr', 'like', $search.'%')
                     ->orWhere('purchase_order_invoices.invoice_number', 'like', $search.'%');
             });    
         }
@@ -120,7 +120,7 @@ class PurchaseOrderInvoiceController extends Controller
             $query->skip($start)->take($length);
 
         $query->orderBy($order_column, $order_dir);
-        $invoices = $query->get();
+        $invoices = $query->select('purchase_order_invoices.*', 'purchase_orders.order_number')->get();
 
         $arr = array();
         foreach($invoices as $invoice)
