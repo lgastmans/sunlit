@@ -19,6 +19,7 @@ class PurchaseOrder extends Model
     const CUSTOMS = 5;
     const CLEARED = 6;
     const RECEIVED = 7;
+    const PAID = 7;
 
     protected $dates = ['ordered_at', 'confirmed_at', 'received_at', 'paid_at', 'due_at', 'shipped_at', 'customs_at', 'cleared_at'];
 
@@ -236,6 +237,9 @@ class PurchaseOrder extends Model
             case PurchaseOrder::RECEIVED:
                 $status = '<span class="badge badge-success-lighten">Received</span>';
                 break;
+            case PurchaseOrder::PAID:
+                $status = '<span class="badge badge-success-lighten">Paid</span>';
+                break;
             default:
                 $status = '<span class="badge badge-error-lighten">Unknown</span>';
         }
@@ -251,7 +255,8 @@ class PurchaseOrder extends Model
             PurchaseOrder::SHIPPED => 'Shipped', 
             PurchaseOrder::CUSTOMS => 'Customs', 
             PurchaseOrder::CLEARED => 'Cleared',
-            PurchaseOrder::RECEIVED => 'Received'
+            PurchaseOrder::RECEIVED => 'Received',
+            PurchaseOrder::PAID => 'Paid'
         ];
     }
 

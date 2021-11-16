@@ -20,6 +20,7 @@ class PurchaseOrderInvoice extends Model
     const CUSTOMS = 5;
     const CLEARED = 6;
     const RECEIVED = 7;
+    const PAID = 8;
 
     protected $dates = ['due_at', 'shipped_at', 'customs_at', 'cleared_at',  'received_at', 'paid_at'];
     protected $with = ['user'];
@@ -186,6 +187,9 @@ class PurchaseOrderInvoice extends Model
             case PurchaseOrderInvoice::RECEIVED:
                 $status = '<span class="badge badge-success-lighten">Received</span>';
                 break;
+            case PurchaseOrderInvoice::PAID:
+                $status = '<span class="badge badge-success-lighten">Paid</span>';
+                break;
             default:
                 $status = '<span class="badge badge-error-lighten">Unknown</span>';
         }
@@ -201,7 +205,8 @@ class PurchaseOrderInvoice extends Model
             PurchaseOrderInvoice::SHIPPED => 'Shipped', 
             PurchaseOrderInvoice::CUSTOMS => 'Customs', 
             PurchaseOrderInvoice::CLEARED => 'Cleared',
-            PurchaseOrderInvoice::RECEIVED => 'Received'
+            PurchaseOrderInvoice::RECEIVED => 'Received',
+            PurchaseOrderInvoice::PAID => 'Paid'
         ];
     }
 }
