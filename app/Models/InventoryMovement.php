@@ -97,7 +97,6 @@ class InventoryMovement extends Model
             FROM `inventory_movements` 
             WHERE warehouse_id = 1 AND product_id = 311 AND sales_order_id IS NOT NULL  
         */
-
         $query = InventoryMovement::selectRaw('(SUM(price * quantity) / SUM(quantity)) AS average_price ')
             ->where('warehouse_id', $warehouse_id)
             ->where('product_id', $product_id)

@@ -161,7 +161,7 @@ class PurchaseOrderInvoiceController extends Controller
 
         $purchase_order = PurchaseOrder::find($request->purchase_order_id);
         $purchase_order->status = PurchaseOrder::SHIPPED;
-        $purchase_order->save();
+        //$purchase_order->save();
 
         $invoice = new PurchaseOrderInvoice;
         $invoice->purchase_order_id = $purchase_order->id;
@@ -178,9 +178,6 @@ class PurchaseOrderInvoiceController extends Controller
         $invoice_id = $invoice->id;
         $invoice_number = $invoice->invoice_number;
         
-        $inventory = new Inventory();
-        $inventory->updateStock($order);        
-
         $amount_usd = 0;
         foreach($request->products as $product_id => $quantity_shipped){
             $invoice_item = new PurchaseOrderInvoiceItem;
@@ -193,6 +190,9 @@ class PurchaseOrderInvoiceController extends Controller
 
             $amount_usd += $invoice_item->quantity_shipped * $invoice_item->selling_price;
         }
+
+        $inventory = new Inventory();
+        $inventory->updateStock($invoice);        
 
         $invoice->amount_usd = $amount_usd;
         $invoice->amount_inr = $invoice->amount_usd * $invoice->order_exchange_rate;

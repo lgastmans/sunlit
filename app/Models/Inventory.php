@@ -127,14 +127,17 @@ class Inventory extends Model
         */
         if ($class_name == 'PurchaseOrderInvoice')
         {
+
+            $order = PurchaseOrder::find($model->purchase_order_id);
+
             foreach($model->items as $product)
             {
-                $inventory = $this->initProductStock($this->warehouse_id, $product->product_id);
+                $inventory = $this->initProductStock($order->warehouse_id, $product->product_id);
 
                 if ($inventory){
                     // $inventory->first();
 
-                    $inventory->warehouse_id = $model->warehouse_id;
+                    $inventory->warehouse_id = $order->warehouse_id;
                     $inventory->product_id = $product->product_id;
 
                     $ordered = $inventory->stock_ordered;
@@ -158,19 +161,19 @@ class Inventory extends Model
                         /*
                         *    update Available Stock (add), update Ordered Stock (deduct)
                         */
-                        $ordered -= $product->quantity_confirmed;
-                        $available += $product->quantity_confirmed;
+                        $ordered -= $product->quantity_shipped;
+                        $available += $product->quantity_shipped;
 
                         /*
                         *   register stock received in the Inventory Movement model
                         *   status RECEIVED
                         */
                         $data = array(
-                            "warehouse_id" => $model->warehouse_id,
+                            "warehouse_id" => $order->warehouse_id,
                             "product_id" => $product->product_id,
-                            "purchase_order_id" => $model->id,
+                            "purchase_order_id" => $model->purchase_order_id,
                             "sales_order_id" => null,
-                            "quantity" => $product->quantity_confirmed,
+                            "quantity" => $product->quantity_shipped,
                             "user_id" => Auth::user()->id,
                             "movement_type" => InventoryMovement::RECEIVED,
                             "price" => $product->selling_price
