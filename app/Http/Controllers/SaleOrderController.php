@@ -419,6 +419,10 @@ class SaleOrderController extends Controller
         $user = Auth::user();
         if ($user->can('delete sale orders')){
             $order = SaleOrder::find($id);
+
+            $inventory = new Inventory();
+            $inventory->deleteStock($order);
+
             $order->items()->delete();
             $order->delete();
             return redirect(route('sale-orders'))->with('success', trans('app.record_deleted', ['field' => 'Sale Order']));

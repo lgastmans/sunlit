@@ -268,7 +268,7 @@ class Inventory extends Model
 
     /**
      * Update the blocked stock quantity in the inventory 
-     * The model passed is assumed SaleOrder
+     * The model passed is assumed SaleOrderItem
      *
      * @param  Illuminate\Database\Eloquent\Model $model
      * @param  int $update_quantity
@@ -288,6 +288,33 @@ class Inventory extends Model
             $result = $inventory->update([
                 "stock_blocked" => $blocked,
             ]);
+        }
+    }
+
+
+    /**
+     * Update the inventory
+     * The related items 
+     *
+     * @param  Illuminate\Database\Eloquent\Model $model
+     * @return boolean
+     */    
+    public function deleteStock(Model $model)
+    {
+        if ($model->status == SaleOrder::DRAFT)
+        {
+            foreach($model->items as $product)
+            {
+                $inventory = Inventory::where('warehouse_id', '=', $model->warehouse_id)
+                    ->where('product_id', '=', $product->product_id)->first();
+
+                if ($inventory)
+                {
+                    $result = $inventory->update([
+                        "stock_blocked" => ($inventory->stock_blocked - $product->quantity_ordered)
+                    ]);
+                }
+            }            
         }
     }
 
