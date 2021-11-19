@@ -208,19 +208,7 @@ class Inventory extends Model
                     $available = $inventory->stock_available;
                     $blocked = $inventory->stock_blocked;
 
-                    if ($model->status == SaleOrder::DRAFT)
-                    {
-                        /*
-                        *    update Blocked Stock (add)
-                        */
-                        $blocked += $product->quantity_ordered;
-
-                        /*
-                            the average buying price stays the same
-                        */
-                        $avg_price = $inventory->average_buying_price;
-                    }
-                    elseif ($model->status == SaleOrder::CONFIRMED)
+                    if ($model->status == SaleOrder::CONFIRMED)
                     {
                         /*
                         *    update Blocked Stock (deduct)
@@ -276,8 +264,33 @@ class Inventory extends Model
             }
 
         }
-
     }
+
+    /**
+     * Update the blocked stock quantity in the inventory 
+     * The model passed is assumed SaleOrder
+     *
+     * @param  Illuminate\Database\Eloquent\Model $model
+     * @param  int $update_quantity
+     * @return boolean
+     */    
+    public function updateStockBlocked(Model $model, $update_quantity)
+    {
+        $inventory = $this->initProductStock($model->sale_order->warehouse_id, $model->product_id);
+
+        if ($model->sale_order->status == SaleOrder::DRAFT)
+        {
+            /*
+            *    update Blocked Stock (add)
+            */
+            $blocked = $model->quantity_ordered + $update_quantity;
+
+            $result = $inventory->update([
+                "stock_blocked" => $blocked,
+            ]);
+        }
+    }
+
 
     public static function getStockFilterList()
     {

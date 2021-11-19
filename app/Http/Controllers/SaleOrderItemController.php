@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\SaleOrder;
+use App\Models\Inventory;
 use Illuminate\Http\Request;
 use App\Models\SaleOrderItem;
 
@@ -168,7 +169,12 @@ class SaleOrderItemController extends Controller
                 $item->quantity_ordered = $request->quantity_ordered;
                 $item->selling_price = $request->selling_price;
                 $item->save();
+        
+                $inventory = new Inventory();
+                $inventory->updateStockBlocked($item, $request->value);
             }
+
+
             return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'item' => $item, 'product' => $product]);
         }
     }
@@ -205,13 +211,22 @@ class SaleOrderItemController extends Controller
     public function update(Request $request, $id)
     {
         $item = SaleOrderItem::find($id);
-        if ($request->field == "quantity")
+
+        $update_quantity = 0;
+
+        if ($request->field == "quantity") {
+            $update_quantity = $request->value - $item->quantity_ordered;
+            $inventory = new Inventory();
+            $inventory->updateStockBlocked($item, $update_quantity);
+
             $item->quantity_ordered = $request->value;
+        }
 
         if ($request->field == "price")
             $item->selling_price = $request->value;
 
         $item->update();
+
         return response()->json(['success'=>'true', 'code'=>200, 'message'=>'OK']);
     }
 
@@ -224,7 +239,15 @@ class SaleOrderItemController extends Controller
     public function destroy($id)
     {
         $item = SaleOrderItem::find($id);
+
+        /*
+            update the blocked status of the item
+        */
+        $inventory = new Inventory();
+        $inventory->updateStockBlocked($item, ($item->quantity_ordered*-1));
+
         SaleOrderItem::destroy($id);
+
 
         $order = SaleOrder::find($item->sale_order_id);
         $order->amount = 0;

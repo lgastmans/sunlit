@@ -215,9 +215,6 @@ class SaleOrderController extends Controller
         $validatedData = $request->validated();
         $order = SaleOrder::create($validatedData);
         if ($order) {
-            $inventory = new Inventory();
-            $inventory->updateStock($order);
-
             return redirect(route('sale-orders.cart', $order->order_number)); 
         }
         return back()->withInputs($request->input())->with('error', trans('error.record_added', ['field' => 'sale order']));        
