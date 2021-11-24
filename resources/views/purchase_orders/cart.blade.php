@@ -200,7 +200,7 @@
                             </div>
                         </div>
 
-                        <div class="place-order-form-container mt-4 mt-lg-0 rounded @if ($purchase_order->status < 2) d-none @endif">
+                        <div class="confirm-order-form-container mt-4 mt-lg-0 rounded @if ($purchase_order->status < 2) d-none @endif">
                             <div class="card mt-4 border">
                                 <div class="card-body">
                                     <form name="confirm-order-form" action="{{ route('purchase-orders.confirmed', $purchase_order->id) }}" method="POST" class="needs-validation" novalidate>
