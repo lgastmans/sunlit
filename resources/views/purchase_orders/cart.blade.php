@@ -527,7 +527,7 @@
                         item += '<p class="m-0 d-inline-block align-middle font-16">';
                             item += '<a href="javascript:void(0); class="text-body product-name">'+ data.product.part_number +'</a>';
                                 item += '<br>';
-                                item += '<small class="me-2"><b>Description:</b> <span class="product-description">'+ data.product.note +'</span> </small>';
+                                item += '<small class="me-2"><b>Description:</b> <span class="product-description">'+ data.product.notes +'</span> </small>';
                                 item += '</p>';
                                 item += '</td>';
                                 item += '<td>';
