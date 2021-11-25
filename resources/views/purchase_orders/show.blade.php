@@ -117,7 +117,7 @@
         <div class="mt-lg-0 rounded @if ($purchase_order->status != 3 && $purchase_order->status != 4) d-none @endif">
             <div class="card ">
                 <div class="card-body">
-                    <form name="ship-order-form" class="form-invoice needs-validatiodn" novalidate
+                    <form name="ship-order-form" class="form-invoice needs-validation" novalidate
                         action="{{ route('purchase-order-invoices.store') }}" method="POST">
                         @csrf()
                         <input type="hidden" name="purchase_order_id" value="{{ $purchase_order->id }}" />
@@ -194,6 +194,9 @@
         // add product_id and quantity shipped to form before submitting
         $('.form-invoice').on('submit', function(e){
             e.preventDefault();    
+
+            $(this).css('border-color','');
+
             $('.product_shipped').remove();
             $( ".quantity_shipped" ).each(function( index ) {
                 if ($(this).val() > 0){
@@ -201,19 +204,26 @@
                     $(field).appendTo('.form-invoice');
                 }
             });
-            $.ajax({
-                type: 'POST',
-                url: $(this).attr("action"),
-                dataType: 'json',
-                data: $( this ).serialize(),
-                success: function (data) {
-                    window.location.replace(data['redirect']);
-                },
-                error:function(xhr, textStatus, thrownError, data){
-                    console.log("Error: " + thrownError);
-                    console.log("Error: " + textStatus);
-                }
-            }); 
+            if ($(".product_shipped").length > 0){
+                $.ajax({
+                    type: 'POST',
+                    url: $(this).attr("action"),
+                    dataType: 'json',
+                    data: $( this ).serialize(),
+                    success: function (data) {
+                        window.location.replace(data['redirect']);
+                    },
+                    error:function(xhr, textStatus, thrownError, data){
+                        console.log("Error: " + thrownError);
+                        console.log("Error: " + textStatus);
+                    }
+                }); 
+            }
+            else{
+                $( ".quantity_shipped" ).each(function( index ) {
+                    $(this).css('border-color','#fa5c7c');
+                });
+            }
 
         });
 
