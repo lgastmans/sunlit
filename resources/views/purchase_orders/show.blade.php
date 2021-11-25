@@ -41,14 +41,12 @@
                                             <span class="badge bg-success">Nothing to receive</span>
                                         @else 
                                             <div class="input-group flex-nowrap">
-                                                <input class="form-control input-sm quantity_shipped" type="text" value="0" size="3" name="quantity_shipped" data-product="{{ $item->product_id }}">
-                                                <span class="input-group-text">{{ $item->quantity_confirmed -  $shipped[$item->product_id] }}</span>
+                                                <input class="form-control input-sm quantity_shipped" type="text" value="{{ $item->quantity_confirmed -  $shipped[$item->product_id] }}" size="3" name="quantity_shipped" data-product="{{ $item->product_id }}">
                                             </div>
                                         @endif
                                     @else
                                         <div class="input-group flex-nowrap">
-                                            <input class="form-control input-sm quantity_shipped" type="text" value="0" size="3" name="quantity_shipped" data-product="{{ $item->product_id }}">
-                                            <span class="input-group-text">{{ $item->quantity_confirmed }}</span>
+                                            <input class="form-control input-sm quantity_shipped" type="text" value="{{ $item->quantity_confirmed }}" size="3" name="quantity_shipped" data-product="{{ $item->product_id }}">
                                         </div>        
                                     @endif
                                 </td>
