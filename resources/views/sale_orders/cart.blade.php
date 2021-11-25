@@ -477,7 +477,7 @@
                             item += '<span>{{ __('app.currency_symbol_inr')}}</span><span id="item-total-'+ data.item.id +'" class="item-total">'+((data.item.selling_price * getTaxValue(data.item.tax)) * parseInt(data.item.quantity_ordered)).toFixed(2) +'</span>';
                             item += '</td>';
                             item += '<td>';
-                            item += '<a href="javascript:void(0);" class="action-icon" id="1" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>';
+                            item += '<a href="javascript:void(0);" class="action-icon" id="'+data.item.id+'" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>';
                             item += '</td>';
                             item += '</tr> ';
                     $('#sale-order-items-table > tbody:last-child').append(item);
