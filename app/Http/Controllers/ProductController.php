@@ -467,7 +467,7 @@ class ProductController extends Controller
                     continue;
                 else {
                     $data[$i]['code'] = $row[1];
-                    $data[$i]['part_number'] = $row[1];
+                    $data[$i]['part_number'] = ($row[1] != "") ? $row[1] : "no-part-number".time();
                     $data[$i]['name'] = $row[1];
                     // the column "category_id" is set to its corresponding
                     // id in the importCSV function
