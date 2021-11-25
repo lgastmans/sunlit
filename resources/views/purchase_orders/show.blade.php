@@ -114,7 +114,7 @@
         @include('purchase_orders.info_cards')
     </div>
     <div class="col-lg-4">
-        <div class="mt-lg-0 rounded @if ($purchase_order->status != 3) d-none @endif">
+        <div class="mt-lg-0 rounded @if ($purchase_order->status != 3 && $purchase_order->status != 4) d-none @endif">
             <div class="card ">
                 <div class="card-body">
                     <form name="ship-order-form" class="form-invoice needs-validatiodn" novalidate
