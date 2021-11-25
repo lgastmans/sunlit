@@ -53,6 +53,33 @@ class PurchaseOrderInvoice extends Model
     }
 
 
+    public function getLandedCost()
+    {
+        $landed_cost = $this->amount_inr_customs + $this->customs_duty + $this->social_welfare_surcharge + $this->bank_and_transport_charges;
+        return $landed_cost;
+    }
+
+
+    public function updateItemsSellingPrice($invoice_id)
+    {
+        $invoice = PurchaseOrderInvoice::with('items')->find($invoice_id);
+        $fx_rate = $invoice->landed_cost / $invoice->amount_usd;
+        foreach($invoice->items as $item){
+            $item->selling_price_inr = $item->selling_price * $fx_rate;
+            $item->update();
+        }
+    }
+
+    public function updateItemsPaidPrice($invoice_id)
+    {
+        $invoice = PurchaseOrderInvoice::with('items')->find($invoice_id);
+        foreach($invoice->items as $item){
+            $item->paid_price_inr = $item->selling_price * $invoice->paid_exchange_rate;
+            $item->update();
+        }
+    }
+
+
 
     /**
      * Returns the shipped_at date for display Month Day, Year

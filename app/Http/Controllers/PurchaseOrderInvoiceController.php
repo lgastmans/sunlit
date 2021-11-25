@@ -298,6 +298,11 @@ class PurchaseOrderInvoiceController extends Controller
         $invoice->charges = json_encode($charges);
         $invoice->status = PurchaseOrderInvoice::CLEARED;
         $invoice->update();
+
+        
+        $invoice->updateItemsSellingPrice($id);
+
+
         return redirect(route('purchase-order-invoices.show', $invoice->invoice_number))->with('success', 'order cleared'); 
     }
 
@@ -344,12 +349,10 @@ class PurchaseOrderInvoiceController extends Controller
         $invoice->status = PurchaseOrderInvoice::PAID;
         $invoice->update();
 
+        $invoice->updateItemsPaidPrice($id);
+
         return redirect(route('purchase-order-invoices.show', $invoice_number))->with('success', 'order received'); 
     }
-
-
-
-
 
     /**
      * Remove the specified resource from storage.
