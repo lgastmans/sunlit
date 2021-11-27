@@ -176,7 +176,7 @@ class Inventory extends Model
                             "quantity" => $product->quantity_shipped,
                             "user_id" => Auth::user()->id,
                             "movement_type" => InventoryMovement::RECEIVED,
-                            "price" => $product->selling_price
+                            "price" => $product->selling_price_inr
                         );
                         $movement = new InventoryMovement();
                         $movement->updateMovement($data);

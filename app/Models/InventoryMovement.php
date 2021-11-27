@@ -77,7 +77,7 @@ class InventoryMovement extends Model
         $query = InventoryMovement::selectRaw('(SUM(price * quantity) / SUM(quantity)) AS average_price ')
             ->where('warehouse_id', $warehouse_id)
             ->where('product_id', $product_id)
-            ->whereNotNull('purchase_order_id')
+            ->whereNotNull('purchase_order_invoice_id')
             ->first();
 
         return $query->average_price;
