@@ -39,7 +39,7 @@
                             <tr>
                                 <td>{{ $item->product->part_number }}</td>
                                 <td>{{ $item->quantity_shipped }}</td>
-                                <td>{{ __('app.currency_symbol_usd')}}{{ number_format($item->selling_price,2) }}</td>
+                                <td>{{ __('app.currency_symbol_usd')}}{{ number_format($item->buying_price,2) }}</td>
                                 <td class="d-none">{{ number_format($item->tax,2) }}%</td>
                                 <td>{{ __('app.currency_symbol_usd')}}{{ number_format($item->total_price,2) }}</td>
                             </tr>

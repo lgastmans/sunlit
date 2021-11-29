@@ -127,9 +127,7 @@ class Inventory extends Model
         */
         if ($class_name == 'PurchaseOrderInvoice')
         {
-
             $order = PurchaseOrder::find($model->purchase_order_id);
-
             foreach($model->items as $product)
             {
                 $inventory = $this->initProductStock($order->warehouse_id, $product->product_id);
@@ -177,7 +175,7 @@ class Inventory extends Model
                             "quantity" => $product->quantity_shipped,
                             "user_id" => Auth::user()->id,
                             "movement_type" => InventoryMovement::RECEIVED,
-                            "price" => $product->selling_price_inr
+                            "price" => $product->buying_price_inr
                         );
                         $movement = new InventoryMovement();
                         $movement->updateMovement($data);

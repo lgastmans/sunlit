@@ -188,10 +188,10 @@ class PurchaseOrderInvoiceController extends Controller
             $invoice_item->product_id = $product_id;
             $invoice_item->quantity_shipped = $quantity_shipped;
             $purchase_order_item = PurchaseOrderItem::where('purchase_order_id', $purchase_order->id)->where('product_id', $product_id)->first();
-            $invoice_item->selling_price = $purchase_order_item->selling_price;
+            $invoice_item->buying_price = $purchase_order_item->buying_price;
             $invoice_item->save();
 
-            $amount_usd += $invoice_item->quantity_shipped * $invoice_item->selling_price;
+            $amount_usd += $invoice_item->quantity_shipped * $invoice_item->buying_price;
         }
 
         $inventory = new Inventory();
@@ -301,7 +301,7 @@ class PurchaseOrderInvoiceController extends Controller
         $invoice->update();
 
         
-        $invoice->updateItemsSellingPrice($id);
+        $invoice->updateItemsBuyingPrice($id);
 
 
         return redirect(route('purchase-order-invoices.show', $invoice->invoice_number))->with('success', 'order cleared'); 

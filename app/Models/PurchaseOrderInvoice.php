@@ -60,12 +60,12 @@ class PurchaseOrderInvoice extends Model
     }
 
 
-    public function updateItemsSellingPrice($invoice_id)
+    public function updateItemsBuyingPrice($invoice_id)
     {
         $invoice = PurchaseOrderInvoice::with('items')->find($invoice_id);
         $fx_rate = $invoice->landed_cost / $invoice->amount_usd;
         foreach($invoice->items as $item){
-            $item->selling_price_inr = $item->selling_price * $fx_rate;
+            $item->buying_price_inr = $item->buying_price * $fx_rate;
             $item->update();
         }
     }
@@ -74,7 +74,7 @@ class PurchaseOrderInvoice extends Model
     {
         $invoice = PurchaseOrderInvoice::with('items')->find($invoice_id);
         foreach($invoice->items as $item){
-            $item->paid_price_inr = $item->selling_price * $invoice->paid_exchange_rate;
+            $item->paid_price_inr = $item->buying_price * $invoice->paid_exchange_rate;
             $item->update();
         }
     }
