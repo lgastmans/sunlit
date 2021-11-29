@@ -165,7 +165,7 @@ class PurchaseOrderItemController extends Controller
                 $item->product_id = $request->product_id;
                 $item->tax = $product->tax->amount;
                 $item->quantity_confirmed = $request->quantity_confirmed;
-                $item->selling_price = $request->selling_price;
+                $item->buying_price = $request->buying_price;
                 $item->save();
             }
             return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'item' => $item, 'product' => $product]);

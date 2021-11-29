@@ -36,7 +36,7 @@
                             <label class="form-label" for="product-select">Price</label>
                             <div class="input-group flex-nowrap">
                                 <span class="input-group-text">{{ __('app.currency_symbol_usd')}}</span>
-                                <input type="selling_price" class="form-control" name="selling_price"  id="selling_price" value="">
+                                <input type="buying_price" class="form-control" name="buying_price"  id="buying_price" value="">
                                 <input type="hidden" name="tax" id="tax">
                             </div>
                         </div>
@@ -84,7 +84,7 @@
                                             <td>
                                                 <div class="input-group flex-nowrap">
                                                     <span class="input-group-text">{{ __('app.currency_symbol_usd')}}</span>
-                                                    <input id="item-price-{{ $item->id }}" type="text" class="editable-field form-control" data-value="{{ $item->selling_price }}" data-field="price" data-item="{{ $item->id }}" placeholder="" value="{{ $item->selling_price }}">
+                                                    <input id="item-price-{{ $item->id }}" type="text" class="editable-field form-control" data-value="{{ $item->buying_price }}" data-field="price" data-item="{{ $item->id }}" placeholder="" value="{{ $item->buying_price }}">
                                                 </div>
                                             </td>
                                             <td>
@@ -409,7 +409,7 @@
             url: route,
             dataType: 'json',
             success : function(data){
-                $('#selling_price').val(data.purchase_price);
+                $('#buying_price').val(data.purchase_price);
                 $('#tax').val(data.tax.amount);
             }
         })
@@ -515,7 +515,7 @@
                             var existing_item_id = $(this).attr('data-id');
                             var existing_item_quantity = $('#item-quantity-'+existing_item_id).val();
                             $('#item-quantity-'+existing_item_id).val(parseInt(data.item.quantity_confirmed));
-                            var new_total = (data.item.selling_price * getTaxValue(data.item.tax)) * parseInt($('#item-quantity-'+existing_item_id).val()).toFixed(2);
+                            var new_total = (data.item.buying_price * getTaxValue(data.item.tax)) * parseInt($('#item-quantity-'+existing_item_id).val()).toFixed(2);
                             $('#item-total-'+existing_item_id).html(new_total.toFixed(2))
                             new_product = false;
                         } 
@@ -533,7 +533,7 @@
                                 item += '<td>';
                                     item += '<div class="input-group flex-nowrap">';
                                         item += '<span class="input-group-text">$</span>';
-                                        item += '<input id="item-price-'+ data.item.id +'" type="text" class="editable-field form-control" data-value="'+ data.item.selling_price +'" data-field="price" data-item="'+ data.item.id +'" placeholder="" value="'+ data.item.selling_price  +'">';
+                                        item += '<input id="item-price-'+ data.item.id +'" type="text" class="editable-field form-control" data-value="'+ data.item.buying_price +'" data-field="price" data-item="'+ data.item.id +'" placeholder="" value="'+ data.item.buying_price  +'">';
                                         item += '</div>';
                                         item += '</td>';
                                         item += '<td>';
@@ -543,7 +543,7 @@
                             item += '<span id="item-tax-'+ data.item.id +'" class="item-tax">'+ 0 +'%</span>';
                             item += '</td>';
                             item += '<td>';
-                            item += '<span>{{ __('app.currency_symbol_usd')}}</span><span id="item-total-'+ data.item.id +'" class="item-total">'+((data.item.selling_price * getTaxValue(data.item.tax)) * parseInt(data.item.quantity_confirmed)).toFixed(2) +'</span>';
+                            item += '<span>{{ __('app.currency_symbol_usd')}}</span><span id="item-total-'+ data.item.id +'" class="item-total">'+((data.item.buying_price * getTaxValue(data.item.tax)) * parseInt(data.item.quantity_confirmed)).toFixed(2) +'</span>';
                             item += '</td>';
                             item += '<td>';
                             item += '<a href="javascript:void(0);" class="action-icon" id="1" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>';
