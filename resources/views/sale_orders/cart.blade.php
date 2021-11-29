@@ -299,6 +299,7 @@
     });
 
     function formatProduct(el){
+            console.log(el);
             var item = "<div><h5>" + el.text + "</h5>";
             var sa = sb = so = 0;
                 if (el.stock_available != undefined)
@@ -458,7 +459,7 @@
                         item += '<p class="m-0 d-inline-block align-middle font-16">';
                             item += '<a href="javascript:void(0); class="text-body product-name">'+ data.product.part_number +'</a>';
                                 item += '<br>';
-                                item += '<small class="me-2"><b>Description:</b> <span class="product-note">'+ data.product.note +'</span> </small>';
+                                item += '<small class="me-2"><b>Description:</b> <span class="product-note">'+ data.product.notes +'</span> </small>';
                                 item += '</p>';
                                 item += '</td>';
                                 item += '<td>';
