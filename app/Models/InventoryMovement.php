@@ -10,7 +10,7 @@ class InventoryMovement extends Model
 {
     use HasFactory;
 
-    protected $fillable = ["warehouse_id", "product_id", "purchase_order_id", "sales_order_id", "quantity", "user_id", "movement_type", "price"];
+    protected $fillable = ["warehouse_id", "product_id", "purchase_order_id", "purchase_order_invoice_id", "sales_order_id", "quantity", "user_id", "movement_type", "price"];
 
     const RECEIVED = 1;
     const DELIVERED = 2;
@@ -50,6 +50,7 @@ class InventoryMovement extends Model
             "warehouse_id" => $data['warehouse_id'],
             "product_id" => $data['product_id'],
             "purchase_order_id" => $data['purchase_order_id'],
+            "purchase_order_invoice_id" => $data['purchase_order_invoice_id'],
             "sales_order_id" => $data['sales_order_id'],
             "quantity" => $data['quantity'],
             "user_id" => $data['user_id'],
