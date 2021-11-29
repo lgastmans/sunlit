@@ -51,7 +51,7 @@
                                     @endif
                                 </td>
                                 <td>@if (!empty($shipped[$item->product_id]) ) {{ $shipped[$item->product_id] }} @else 0 @endif</td>
-                                <td>{{ __('app.currency_symbol_usd')}}{{ number_format($item->selling_price,2) }}</td>
+                                <td>{{ __('app.currency_symbol_usd')}}{{ number_format($item->buying_price,2) }}</td>
                                 <td class="d-none">{{ number_format($item->tax,2) }}%</td>
                                 <td>{{ __('app.currency_symbol_usd')}}{{ number_format($item->total_price,2) }}</td>
                             </tr>
