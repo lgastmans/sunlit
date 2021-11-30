@@ -115,7 +115,7 @@ class importDealers extends Command
                     else
                         $data[$i]['phone'] = $row[5];
 
-                    $data[$i]['email'] = $row[6];
+                    $data[$i]['email'] = trim($row[6]);
 
                     $data[$i]['gstin'] = $row[7];
 
