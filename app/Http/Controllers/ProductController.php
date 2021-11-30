@@ -435,6 +435,7 @@ class ProductController extends Controller
                 "warehouse_id" => $warehouse_id,
                 "product_id" => $product->id,
                 "purchase_order_id" => null,
+                "purchase_order_invoice_id" => null,
                 "sales_order_id" => null,
                 "quantity" => $stock,
                 "user_id" => Auth::user()->id,
