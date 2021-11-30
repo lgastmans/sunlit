@@ -14,7 +14,7 @@ class AllowNullFroPoInvoiceId extends Migration
     public function up()
     {
         Schema::table('inventory_movements', function (Blueprint $table) {
-            //
+            $table->string('purchase_order_invoice_id')->nullable()->change();
         });
     }
 
@@ -26,7 +26,7 @@ class AllowNullFroPoInvoiceId extends Migration
     public function down()
     {
         Schema::table('inventory_movements', function (Blueprint $table) {
-            //
+            $table->string('purchase_order_invoice_id')->nullable(false);
         });
     }
 }
