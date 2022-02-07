@@ -200,6 +200,7 @@ class ProductController extends Controller
                 create initial stock inventory entries
             */
             $inventory = new Inventory();
+            $inventory->stock_available = 0;
             $inventory->initStock($product->id);            
 
             return redirect(route('products'))->with('success', trans('app.record_added', ['field' => 'product']));
