@@ -96,7 +96,7 @@
                                                 <span id="item-tax-{{ $item->id }}">@if ($item->tax){{ $item->tax }}@else 0.00 @endif%</span>
                                             </td>
                                             <td>
-                                                <span>{{ __('app.currency_symbol_usd')}}</span>
+                                                <span>{{ __('app.currency_symbol_inr')}}</span>
                                                 <span id="item-total-{{ $item->id }}" class="item-total">{{ $item->total_price }}</span>
                                             </td>
                                             <td>
