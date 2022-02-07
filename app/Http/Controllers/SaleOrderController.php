@@ -167,6 +167,7 @@ class SaleOrderController extends Controller
             $arr[] = array(
                 "id" => $order->id,
                 "order_number" => $order->order_number,
+                "order_number_slug" => $order->order_number_slug,
                 "warehouse" => $order->warehouse->name,
                 "dealer" => $order->dealer->company,
                 "ordered_at" => $order->display_ordered_at,
@@ -215,7 +216,7 @@ class SaleOrderController extends Controller
         $validatedData = $request->validated();
         $order = SaleOrder::create($validatedData);
         if ($order) {
-            return redirect(route('sale-orders.cart', $order->order_number)); 
+            return redirect(route('sale-orders.cart', $order->order_number_slug)); 
         }
         return back()->withInputs($request->input())->with('error', trans('error.record_added', ['field' => 'sale order']));        
     }
@@ -227,14 +228,14 @@ class SaleOrderController extends Controller
      * @param  string  $order_number
      * @return \Illuminate\Http\Response
      */
-    public function cart($order_number)
+    public function cart($order_number_slug)
     {
-        $order = SaleOrder::where('order_number', '=', $order_number)->first();
+        $order = SaleOrder::where('order_number_slug', '=', $order_number_slug)->first();
         if ($order){
             if ($order->status == SaleOrder::DRAFT)
                 return view('sale_orders.cart', ['order' => $order ]);
 
-            return redirect(route('sale-orders.show', $order->order_number)); 
+            return redirect(route('sale-orders.show', $order->order_number_slug)); 
         }
         
     }
@@ -246,11 +247,11 @@ class SaleOrderController extends Controller
      * @param  string  $order_number
      * @return \Illuminate\Http\Response
      */
-    public function show($order_number)
+    public function show($order_number_slug)
     {
         $user = Auth::user();
         if ($user->can('view sale orders')){
-            $order = SaleOrder::where('order_number', '=', $order_number)->first();
+            $order = SaleOrder::where('order_number_slug', '=', $order_number_slug)->first();
             if ($order)
                 return view('sale_orders.show', ['order' => $order ]);
 
@@ -330,7 +331,7 @@ class SaleOrderController extends Controller
         }
     
         $order->update();
-        return redirect(route('sale-orders.show', $order->order_number))->with('success', 'order placed'); 
+        return redirect(route('sale-orders.show', $order->order_number_slug))->with('success', 'order placed'); 
     }
 
 
@@ -354,7 +355,7 @@ class SaleOrderController extends Controller
         $inventory = new Inventory();
         $inventory->updateStock($order);
         
-        return redirect(route('sale-orders.show', $order->order_number))->with('success', 'order confirmed'); 
+        return redirect(route('sale-orders.show', $order->order_number_slug))->with('success', 'order confirmed'); 
     }
 
 
@@ -382,7 +383,7 @@ class SaleOrderController extends Controller
         $order->transport_charges = $request->get('transport_charges');
         $order->status = SaleOrder::SHIPPED;
         $order->update();
-        return redirect(route('sale-orders.show', $order->order_number))->with('success', 'order shipped'); 
+        return redirect(route('sale-orders.show', $order->order_number_slug))->with('success', 'order shipped'); 
     }
 
 
@@ -403,7 +404,7 @@ class SaleOrderController extends Controller
         $inventory = new Inventory();
         $inventory->updateStock($order);
 
-        return redirect(route('sale-orders.show', $order->order_number))->with('success', 'order delivered'); 
+        return redirect(route('sale-orders.show', $order->order_number_slug))->with('success', 'order delivered'); 
     }
 
 

@@ -16,6 +16,7 @@
             <div class="card-body">
                 <form action="{{ route('sale-orders-items.store') }}" method="POST" class="form-product row">
                     <input type="hidden" name="sale_order_id" id="sale-order-id" value="{{ $order->id }}">
+                    <input type="hidden" name="order_number_slug" id="order_number_slug" value="{{ $order->order_number_slug }}">
                     <input type="hidden" name="dealer_id" id="dealer-id" value="{{ $order->dealer->id }}">
                     <input type="hidden" name="warehouse_id" id="warehouse-id" value="{{ $order->warehouse  ->id }}">
                     
@@ -526,7 +527,7 @@
             data: $( this ).serialize(),
             success: function (data) {
                 var new_url = "{{ route('sale-orders.cart', ':order_number') }}";
-                new_url = new_url.replace(':order_number', $('#order_number').val());
+                new_url = new_url.replace(':order_number', $('#order_number_slug').val());
                 $('.invalid-feedback').hide();
                 $('.edit-order-number-form').slideUp();
                 $('#sale-order-number').show();
