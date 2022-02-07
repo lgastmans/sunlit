@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\SaleOrder;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -27,7 +28,8 @@ class StoreSaleOrderRequest extends FormRequest
     {
         $this->merge([
             'status' => SaleOrder::DRAFT,
-            'user_id' => Auth::user()->id
+            'user_id' => Auth::user()->id,
+            'order_number_slug' => str_replace(array(' ', '/'), '-', $this->order_number) //Str::of($this->order_number)->slug('-')
         ]);
     }
 
@@ -41,6 +43,7 @@ class StoreSaleOrderRequest extends FormRequest
     {
         return [
             'order_number' => 'required',
+            'order_number_slug' => 'required',
             'dealer_id' => 'required|integer',
             'warehouse_id' => 'required|integer',
             'status' => 'required|integer',
