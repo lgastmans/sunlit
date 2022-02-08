@@ -282,12 +282,10 @@ class PurchaseOrderInvoiceController extends Controller
         $invoice->customs_duty = $invoice->amount_inr_customs * \Setting::get('purchase_order.customs_duty') / 100;
         $invoice->social_welfare_surcharge = $invoice->customs_duty * \Setting::get('purchase_order.social_welfare_surcharge') / 100;
         $invoice->igst = ($invoice->amount_inr + $invoice->customs_duty + $invoice->social_welfare_surcharge )* \Setting::get('purchase_order.igst') / 100;
-        $invoice->bank_and_transport_charges = $invoice->amount_inr * \Setting::get('purchase_order.transport') / 100;
         $charges = [
             'customs_duty'=> \Setting::get('purchase_order.customs_duty'),
             'social_welfare_surcharge'=> \Setting::get('purchase_order.social_welfare_surcharge'),
             'igst'=> \Setting::get('purchase_order.igst'),
-            'transport'=> \Setting::get('purchase_order.transport'),
         ];
         $invoice->charges = json_encode($charges);
         $invoice->status = PurchaseOrderInvoice::CLEARED;

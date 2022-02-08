@@ -112,13 +112,6 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Bank & Transport : </td>
-                                    <td>
-                                        <span>{{ __('app.currency_symbol_inr')}}</span>
-                                        <span id="bank-transport">{{ $invoice->bank_and_transport_charges }}</span>
-                                    </td>
-                                </tr>
-                                <tr>
                                     <th>Landed Cost :</th>
                                     <th>
                                         <span>{{ __('app.currency_symbol_inr')}}</span>
@@ -156,7 +149,6 @@
         settings['customs_duty'] = {{ Setting::get('purchase_order.customs_duty')/100 }};
         settings['igst'] = {{ Setting::get('purchase_order.igst')/100 }};
         settings['social_welfare_surcharge'] = {{ Setting::get('purchase_order.social_welfare_surcharge')/100 }};
-        settings['bank_transport'] = {{ Setting::get('purchase_order.transport')/100 }};
 
 
         if (from == "rate"){
@@ -175,15 +167,13 @@
         var customs_duty = total_order_customs * settings['customs_duty'];
         var social_welfare_surchage = customs_duty * settings['social_welfare_surcharge'];
         var igst = (order_amount_inr + customs_duty + social_welfare_surchage) * settings['igst'];
-        var bank_transport = order_amount_inr * settings['bank_transport'];
-        var landed_cost = order_amount_inr + customs_duty + social_welfare_surchage + bank_transport;
+        var landed_cost = order_amount_inr + customs_duty + social_welfare_surchage;
 
 
         $('#customs-echange-rate').html(customs_exchange_rate.toFixed(2));
         $('#customs-duty').html(customs_duty.toFixed(2));
         $('#social-welfare-surcharge').html(social_welfare_surchage.toFixed(2));
         $('#igst').html(igst.toFixed(2));
-        $('#bank-transport').html(bank_transport.toFixed(2));
         $('#landed-cost').html(landed_cost.toFixed(2));
 
     }
