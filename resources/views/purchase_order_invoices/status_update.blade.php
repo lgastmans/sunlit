@@ -8,7 +8,7 @@
                 @method('PUT')
                 <div class="row mb-3">
                     <div class="col-xl-4" id="customs_at">
-                        <label class="form-label">Due date</label>
+                        <label class="form-label">BOE date</label>
                         <input type="text" class="form-control" name="customs_at" value="{{ $invoice->display_customs_at }}"
                         data-provide="datepicker" 
                         data-date-container="#customs_at"
@@ -16,7 +16,7 @@
                         data-date-format="M d, yyyy"
                         required>
                         <div class="invalid-feedback">
-                            Customs date is required
+                            BOE date is required
                         </div>
                     </div>
                     <div class="col-xl-8" id="boe_number">
