@@ -557,6 +557,10 @@
                 }
                 $('.place-order-form-container').removeClass('d-none');
                 recalculateGrandTotal()
+                // clear the form
+                $('#quantity_confirmed').val('');
+                $('#buying_price').val('');
+                $('#product_id').val(null).trigger('change');
 
             },
             error:function(xhr, textStatus, thrownError, data)
