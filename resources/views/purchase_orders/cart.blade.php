@@ -173,59 +173,62 @@
                             </div>
                             <!-- end table-responsive -->
                         </div>
-                        <div class="place-order-form-container mt-4 mt-lg-0 rounded @if (count($purchase_order->items) == 0 || $purchase_order->status == 2) d-none @endif">
-                            <div class="card mt-4 border">
-                                <div class="card-body">
-                                    <form name="place-order-form" action="{{ route('purchase-orders.ordered', $purchase_order->id) }}" method="POST" class="needs-validation" novalidate>
-                                        @csrf()
-                                        @method('PUT')
-                                        <div class="mb-3 position-relative" id="ordered_at">
-                                            <label class="form-label">Ordered date</label>
-                                            <input type="hidden" id="order_exchange_rate_hidden" name="order_exchange_rate" value="">
-                                            <input type="text" class="form-control" name="ordered_at" value="{{ $purchase_order->display_ordered_at }}"
-                                            data-provide="datepicker" 
-                                            data-date-container="#ordered_at"
-                                            data-date-autoclose="true"
-                                            data-date-format="M d, yyyy"
-                                            required>
-                                            <div class="invalid-feedback">
-                                                Ordered date is required
+                        @if ($purchase_order->status < 2 )
+                            <div class="place-order-form-container mt-4 mt-lg-0 rounded @if (count($purchase_order->items) == 0 || $purchase_order->status == 2) d-none @endif">
+                                <div class="card mt-4 border">
+                                    <div class="card-body">
+                                        <form name="place-order-form" action="{{ route('purchase-orders.ordered', $purchase_order->id) }}" method="POST" class="needs-validation" novalidate>
+                                            @csrf()
+                                            @method('PUT')
+                                            <div class="mb-3 position-relative" id="ordered_at">
+                                                <label class="form-label">Ordered date</label>
+                                                <input type="hidden" id="order_exchange_rate_hidden" name="order_exchange_rate" value="">
+                                                <input type="text" class="form-control" name="ordered_at" value="{{ $purchase_order->display_ordered_at }}"
+                                                data-provide="datepicker" 
+                                                data-date-container="#ordered_at"
+                                                data-date-autoclose="true"
+                                                data-date-format="M d, yyyy"
+                                                required>
+                                                <div class="invalid-feedback">
+                                                    Ordered date is required
+                                                </div>
                                             </div>
-                                        </div>
-                                        
-                                        <button class="col-lg-12 text-center btn btn-warning" type="submit" name="place_order"><i class="mdi mdi-cart-plus me-1"></i> Place order</button>
-                                    </form>
+                                            
+                                            <button class="col-lg-12 text-center btn btn-warning" type="submit" name="place_order"><i class="mdi mdi-cart-plus me-1"></i> Place order</button>
+                                        </form>
 
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="confirm-order-form-container mt-4 mt-lg-0 rounded @if ($purchase_order->status < 2) d-none @endif">
-                            <div class="card mt-4 border">
-                                <div class="card-body">
-                                    <form name="confirm-order-form" action="{{ route('purchase-orders.confirmed', $purchase_order->id) }}" method="POST" class="needs-validation" novalidate>
-                                        @csrf()
-                                        @method('PUT')
-                                        <div class="mb-3 position-relative" id="confirmed_at">
-                                            <label class="form-label">Confirmed date</label>
-                                            <input type="hidden" id="order_exchange_rate_hidden" name="order_exchange_rate" value="">
-                                            <input type="text" class="form-control" name="confirmed_at" value="{{ $purchase_order->display_confirmed_at }}"
-                                            data-provide="datepicker" 
-                                            data-date-container="#confirmed_at"
-                                            data-date-autoclose="true"
-                                            data-date-format="M d, yyyy"
-                                            required>
-                                            <div class="invalid-feedback">
-                                                Confirmed date is required
+                        @endif
+                        @if ($purchase_order->status == 2)
+                            <div class="confirm-order-form-container mt-4 mt-lg-0 rounded">
+                                <div class="card mt-4 border">
+                                    <div class="card-body">
+                                        <form name="confirm-order-form" action="{{ route('purchase-orders.confirmed', $purchase_order->id) }}" method="POST" class="needs-validation" novalidate>
+                                            @csrf()
+                                            @method('PUT')
+                                            <div class="mb-3 position-relative" id="confirmed_at">
+                                                <label class="form-label">Confirmed date</label>
+                                                <input type="hidden" id="order_exchange_rate_hidden" name="order_exchange_rate" value="">
+                                                <input type="text" class="form-control" name="confirmed_at" value="{{ $purchase_order->display_confirmed_at }}"
+                                                data-provide="datepicker" 
+                                                data-date-container="#confirmed_at"
+                                                data-date-autoclose="true"
+                                                data-date-format="M d, yyyy"
+                                                required>
+                                                <div class="invalid-feedback">
+                                                    Confirmed date is required
+                                                </div>
                                             </div>
-                                        </div>
-                                        
-                                        <button class="col-lg-12 text-center btn btn-warning" type="submit" name="confirm_order"><i class="mdi mdi-cart-plus me-1"></i> Confirm order</button>
-                                    </form>
+                                            
+                                            <button class="col-lg-12 text-center btn btn-warning" type="submit" name="confirm_order"><i class="mdi mdi-cart-plus me-1"></i> Confirm order</button>
+                                        </form>
 
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
 
                         <div class="mt-4 mt-lg-0 rounded @if ($purchase_order->status > 1) d-none @endif">
                             <div class="card mt-4 border">
