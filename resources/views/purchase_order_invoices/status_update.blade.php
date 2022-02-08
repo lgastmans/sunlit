@@ -1,8 +1,3 @@
-
-
-
-
-
 {{-- customs --}}
 <div class="mt-lg-0 rounded @if ($invoice->status != 4) d-none @endif">
     <div class="card border">

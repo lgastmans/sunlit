@@ -32,7 +32,7 @@
                         @endif
                         @if ($invoice->status >= 4)
                         <tr>
-                            <td>{{ $invoice->display_shipped_at }}</td><td>The order has been shipped via <b>{{ $invoice->courier }}</b>, <b>#{{ $invoice->tracking_number }}</b>, and is expected on <b>{{ $invoice->display_due_at }}</b></td>
+                            <td>{{ $invoice->display_shipped_at }}</td><td>The order has been shipped</b></td>
                         </tr>
                         @endif
                     </tbody>

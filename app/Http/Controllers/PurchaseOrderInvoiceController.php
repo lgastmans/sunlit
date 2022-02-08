@@ -93,16 +93,13 @@ class PurchaseOrderInvoiceController extends Controller
             $query->where('purchase_order_invoices.shipped_at', 'like', convertDateToMysql($column_arr[2]['search']['value']));
         }
         if (!empty($column_arr[3]['search']['value'])){
-            $query->where('purchase_order_invoices.due_at', 'like', convertDateToMysql($column_arr[3]['search']['value']));
+            $query->where('purchase_order_invoices.amount_inr', 'like', $column_arr[3]['search']['value'].'%');
         }
-        if (!empty($column_arr[4]['search']['value'])){
-            $query->where('purchase_order_invoices.amount_inr', 'like', $column_arr[4]['search']['value'].'%');
+        if (!empty($column_arr[4]['search']['value']) && $column_arr[4]['search']['value'] != "all"){
+            $query->where('purchase_order_invoices.status', 'like', $column_arr[4]['search']['value']);
         }
-        if (!empty($column_arr[5]['search']['value']) && $column_arr[5]['search']['value'] != "all"){
-            $query->where('purchase_order_invoices.status', 'like', $column_arr[5]['search']['value']);
-        }
-        if (!empty($column_arr[6]['search']['value'])){
-            $query->where('users.name', 'like', $column_arr[6]['search']['value'].'%');
+        if (!empty($column_arr[5]['search']['value'])){
+            $query->where('users.name', 'like', $column_arr[5]['search']['value'].'%');
         }
         
         if ($request->has('search')){
@@ -131,7 +128,6 @@ class PurchaseOrderInvoiceController extends Controller
                 "invoice_number" => $invoice->invoice_number,
                 "order_number" => $invoice->purchase_order->order_number,
                 "shipped_at" => $invoice->display_shipped_at,
-                "due_at" => $invoice->display_due_at,
                 "amount" => (isset($invoice->amount_inr)) ? trans('app.currency_symbol_inr')." ".$invoice->amount_inr : "",
                 "status" => $invoice->display_status,
                 "user" => $invoice->user->display_name
@@ -170,11 +166,8 @@ class PurchaseOrderInvoiceController extends Controller
         $invoice->purchase_order_id = $purchase_order->id;
         $invoice->order_exchange_rate = $purchase_order->order_exchange_rate;
         $invoice->status = PurchaseOrderInvoice::SHIPPED;
-        $invoice->due_at = $validatedData['due_at'];
         $invoice->invoice_number = $validatedData['invoice_number'];
         $invoice->shipped_at = $validatedData['shipped_at'];
-        $invoice->tracking_number = $validatedData['tracking_number'];
-        $invoice->courier = $validatedData['courier'];
         $invoice->user_id = $validatedData['user_id'];
         $invoice->save();
 

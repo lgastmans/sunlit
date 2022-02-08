@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-lg-3">
+    <div class="col-lg-4">
         <div class="card">
             <div class="card-body">
                 <h4 class="header-title mb-3">Supplier Information</h4>
@@ -14,7 +14,7 @@
         </div>
     </div> <!-- end col -->
 
-    <div class="col-lg-3">
+    <div class="col-lg-4">
         <div class="card">
             <div class="card-body">
                 <h4 class="header-title mb-3">Warehouse Information</h4>
@@ -29,23 +29,8 @@
         </div>
     </div> <!-- end col -->
 
-    
 
-    <div class="col-lg-3  @if (!$invoice->shipped_at) d-none @endif">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="header-title mb-3">Delivery Info</h4>
-                <div class="text-center">
-                    <i class="mdi mdi-truck-fast h2 text-muted"></i>
-                    <h5><b>{{ $invoice->courier }}</b></h5>
-                    <p class="mb-1"><b>Tracking # :</b> {{ $invoice->tracking_number }}</p>
-                    <p class="mb-0"><b>ETA :</b> {{ $invoice->display_due_at }}</p>
-                </div>
-            </div>
-        </div>
-    </div> <!-- end col -->
-
-    <div class="col-lg-3  @if (!$invoice->paid_at) d-none @endif">
+    <div class="col-lg-4  @if (!$invoice->paid_at) d-none @endif">
         <div class="card">
             <div class="card-body">
                 <h4 class="header-title mb-3">Payment Information</h4>

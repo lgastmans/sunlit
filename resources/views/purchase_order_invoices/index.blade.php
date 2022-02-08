@@ -32,7 +32,6 @@
                                 <th>Invoice #</th>
                                 <th>Order #</th>
                                 <th>Shipped On</th> 
-                                <th>Expected On</th> 
                                 <th>Amount</th> 
                                 <th style="width:100px;">Status</th> 
                                 <th>Created By</th> 
@@ -44,14 +43,6 @@
                                     <input type="text" class="form-control" name="shipped_at" 
                                     data-provide="datepicker" 
                                     data-date-container="#shipped_at"
-                                    data-date-autoclose="true"
-                                    data-date-format="M d, yyyy"
-                                    required>
-                                </th>
-                                <th id="due_at" class="position-relative">
-                                    <input type="text" class="form-control" name="due_at" 
-                                    data-provide="datepicker" 
-                                    data-date-container="#due_at"
                                     data-date-autoclose="true"
                                     data-date-format="M d, yyyy"
                                     required>
@@ -125,10 +116,6 @@
             },
             { 
                 'data': 'shipped_at',
-                'orderable': true 
-            },
-            { 
-                'data': 'due_at',
                 'orderable': true 
             },
             { 

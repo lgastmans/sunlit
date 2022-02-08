@@ -43,10 +43,7 @@ class StorePurchaseOrderInvoiceRequest extends FormRequest
             'invoice_number' => 'required|unique:purchase_order_invoices|max:255',
             'status' => 'required|integer',
             'user_id' => 'required|integer',
-            'shipped_at' => 'required|date',
-            'due_at' => 'required|date',
-            'tracking_number' => 'required',
-            'courier' => 'required'
+            'shipped_at' => 'required|date'
         ];
     }
 }
