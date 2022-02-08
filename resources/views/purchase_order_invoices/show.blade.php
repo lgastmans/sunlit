@@ -37,7 +37,13 @@
                         <tbody>
                             @foreach($invoice->items as $item)
                             <tr>
-                                <td>{{ $item->product->part_number }}</td>
+                                <td>{{ $item->product->part_number }}<br>
+                                    <small class="me-2">
+                                        <b>Customs duty:</b> <span class="customs-duty">{{  $item->product->category->customs_duty }}%</span>
+                                         - <b>Surcharge:</b> <span class="social-welfare">{{  $item->product->category->social_welfare_surcharge }}%</span>
+                                         - <b>IGST:</b> <span class="igst">{{  $item->product->category->igst }}%</span>
+                                    </small>
+                                </td>
                                 <td>{{ $item->quantity_shipped }}</td>
                                 <td>{{ __('app.currency_symbol_usd')}}{{ number_format($item->buying_price,2) }}</td>
                                 <td class="d-none">{{ number_format($item->tax,2) }}%</td>
