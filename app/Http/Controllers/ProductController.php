@@ -334,7 +334,7 @@ class ProductController extends Controller
         if ($request->has('q')){
             $query->where('part_number', 'like', '%'.$request->get('q').'%');
         }
-        $products = $query->select('products.id', 'products.part_number as text', 'inventories.stock_available as stock_availabe', 'inventories.stock_booked as stock_booked', 'inventories.stock_ordered as stock_ordered')->get();
+        $products = $query->select('products.id', 'products.part_number as text', 'inventories.stock_available as stock_available', 'inventories.stock_booked as stock_booked', 'inventories.stock_ordered as stock_ordered')->get();
         return ['results' => $products];  
     }
 
