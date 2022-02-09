@@ -300,7 +300,6 @@
     });
 
     function formatProduct(el){
-            console.log(el);
             var item = "<div><h5>" + el.text + "</h5>";
             var sa = sb = so = 0;
                 if (el.stock_available != undefined)
@@ -487,6 +486,10 @@
                 }
                 $('.place-order-form-container').removeClass('d-none');
                 recalculateGrandTotal()
+                // clear the form
+                $('#quantity_ordered').val('');
+                $('#selling_price').val('');
+                $('#product_id').val(null).trigger('change');
 
             },
             error:function(xhr, textStatus, thrownError, data)
