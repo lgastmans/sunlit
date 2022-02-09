@@ -346,6 +346,7 @@ class PurchaseOrderInvoiceController extends Controller
         $invoice_number = $invoice->invoice_number;
         $invoice->paid_at = $request->get('paid_at');
         $invoice->paid_exchange_rate = $request->get('paid_exchange_rate');
+        $invoice->paid_cost = $invoice->amount_usd * $request->get('paid_exchange_rate');
         $invoice->payment_reference = $request->get('payment_reference');
         $invoice->status = PurchaseOrderInvoice::PAID;
         $invoice->update();
