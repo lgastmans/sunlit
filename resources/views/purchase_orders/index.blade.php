@@ -151,6 +151,10 @@
             { 
                 'data': 'user',
                 'orderable': true 
+            },
+            { 
+                'data': 'order_number_slug',
+                'visible': false,
             }
             
         ],
@@ -210,7 +214,7 @@
         else{
             var route = '{{  route("purchase-orders.show", ":id") }}';
         }
-        route = route.replace(':id', table.row( this ).data().order_number);
+        route = route.replace(':id', table.row( this ).data().order_number_slug);
         window.location.href = route;
     });
 

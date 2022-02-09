@@ -611,8 +611,8 @@
             dataType: 'json',
             data: $( this ).serialize(),
             success: function (data) {
-                var new_url = "{{ route('purchase-orders.cart', ':order_number') }}";
-                new_url = new_url.replace(':order_number', $('#order_number').val());
+                var new_url = "{{ route('purchase-orders.cart', ':order_number_slug') }}";
+                new_url = new_url.replace(':order_number_slug', $('#order_number_slug').val());
                 $('.invalid-feedback').hide();
                 $('.edit-order-number-form').slideUp();
                 $('#purchase-order-number').show();

@@ -199,6 +199,7 @@ class PurchaseOrderController extends Controller
             $arr[] = array(
                 "id" => $order->id,
                 "order_number" => $order->order_number,
+                "order_number_slug" => $order->order_number_slug,
                 "warehouse" => $order->warehouse->name,
                 "supplier" => $order->supplier->company,
                 "ordered_at" => $order->display_ordered_at,
@@ -245,7 +246,7 @@ class PurchaseOrderController extends Controller
         $validatedData = $request->validated();
         $order = PurchaseOrder::create($validatedData);
         if ($order) {
-            return redirect(route('purchase-orders.cart', $order->order_number)); 
+            return redirect(route('purchase-orders.cart', $order->order_number_slug)); 
         }
         return back()->withInputs($request->input())->with('error', trans('error.record_added', ['field' => 'purchase order']));        
     }
@@ -256,14 +257,14 @@ class PurchaseOrderController extends Controller
      * @param  string  $order_number
      * @return \Illuminate\Http\Response
      */
-    public function cart($order_number)
+    public function cart($order_number_slug)
     {
-        $order = PurchaseOrder::with(['supplier','warehouse','items', 'items.product', 'items.product.tax'])->where('order_number', '=', $order_number)->first();
+        $order = PurchaseOrder::with(['supplier','warehouse','items', 'items.product', 'items.product.tax'])->where('order_number_slug', '=', $order_number_slug)->first();
         if ($order){
             if ($order->status == PurchaseOrder::DRAFT || $order->status == PurchaseOrder::ORDERED)
                 return view('purchase_orders.cart', ['purchase_order' => $order ]);
 
-            return redirect(route('purchase-orders.show', $order->order_number)); 
+            return redirect(route('purchase-orders.show', $order->order_number_slug)); 
         }
         
     }
@@ -274,11 +275,11 @@ class PurchaseOrderController extends Controller
      * @param  string  $order_number
      * @return \Illuminate\Http\Response
      */
-    public function show($order_number)
+    public function show($order_number_slug)
     {
         $user = Auth::user();
         if ($user->can('view purchase orders')){
-            $purchase_order = PurchaseOrder::with(['supplier', 'warehouse', 'items', 'items.product'])->where('order_number', '=', $order_number)->first();
+            $purchase_order = PurchaseOrder::with(['supplier', 'warehouse', 'items', 'items.product'])->where('order_number_slug', '=', $order_number_slug)->first();
             $invoices = $purchase_order->invoices->pluck('id');
             $shipped = [];
             if (!empty($invoices)) {
@@ -380,7 +381,7 @@ class PurchaseOrderController extends Controller
 
         $order->update();
 
-        return redirect(route('purchase-orders.cart', $order->order_number))->with('success', 'order placed'); 
+        return redirect(route('purchase-orders.cart', $order->order_number_slug))->with('success', 'order placed'); 
     }
 
     /**
@@ -416,7 +417,7 @@ class PurchaseOrderController extends Controller
         // $inventory = new Inventory();
         // $inventory->updateStock($order);
         
-        return redirect(route('purchase-orders.show', $order->order_number))->with('success', 'order confirmed'); 
+        return redirect(route('purchase-orders.show', $order->order_number_slug))->with('success', 'order confirmed'); 
     }
 
     /**
@@ -516,7 +517,7 @@ class PurchaseOrderController extends Controller
         // $inventory = new Inventory();
         // $inventory->updateStock($order);
 
-        return redirect(route('purchase-orders.show', $order->order_number))->with('success', 'order received'); 
+        return redirect(route('purchase-orders.show', $order->order_number_slug))->with('success', 'order received'); 
     }
 
 

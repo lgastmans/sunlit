@@ -31,7 +31,8 @@ class StorePurchaseOrderRequest extends FormRequest
     {
         $this->merge([
             'status' => PurchaseOrder::DRAFT,
-            'user_id' => Auth::user()->id
+            'user_id' => Auth::user()->id,
+            'order_number_slug' => str_replace(array(' ', '/'), '-', $this->order_number) //Str::of($this->order_number)->slug('-')
         ]);
     }
 
@@ -46,6 +47,7 @@ class StorePurchaseOrderRequest extends FormRequest
             'warehouse_id' => 'required|integer',
             'supplier_id' => 'required|integer',
             'order_number' => 'required|unique:purchase_orders|max:255',
+            'order_number_slug' => 'required',
             'status' => 'required|integer',
             'user_id' => 'required|integer'
         ];
