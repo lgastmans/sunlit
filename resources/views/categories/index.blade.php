@@ -34,6 +34,9 @@
 
                                 <th>Name</th>
                                 <th>HSN</th>
+                                <th>Customs Duty</th>
+                                <th>Social Welfare</th>
+                                <th>IGST</th>
                                 <th style="width:10%">
                                     @if (Auth::user()->can('edit categories'))
                                     {{ __('app.dt_actions') }}
@@ -90,6 +93,36 @@
             { 
                 'data': 'hsn_code',
                 'orderable': true 
+            },
+            { 
+                'data': 'customs_duty',
+                'orderable': true,
+                'render' : function(data, type, row, meta){
+                    if (type === 'display'){
+                        data = data + "%";
+                    }
+                    return data;
+                }
+            },
+            { 
+                'data': 'social_welfare_surcharge',
+                'orderable': true,
+                'render' : function(data, type, row, meta){
+                    if (type === 'display'){
+                        data = data + "%";
+                    }
+                    return data;
+                }
+            },
+            { 
+                'data': 'igst',
+                'orderable': true,
+                'render' : function(data, type, row, meta){
+                    if (type === 'display'){
+                        data = data + "%";
+                    }
+                    return data;
+                }
             },
             {
                 'data': 'id',
