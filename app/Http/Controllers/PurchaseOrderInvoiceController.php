@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\Inventory;
 use Illuminate\Http\Request;
 use App\Models\PurchaseOrder;
@@ -173,15 +174,27 @@ class PurchaseOrderInvoiceController extends Controller
 
         $invoice_id = $invoice->id;
         $invoice_number = $invoice->invoice_number;
-        
         $amount_usd = 0;
         foreach($request->products as $product_id => $quantity_shipped){
+            $product = Product::find($product_id);
             $invoice_item = new PurchaseOrderInvoiceItem;
             $invoice_item->purchase_order_invoice_id = $invoice_id;
             $invoice_item->product_id = $product_id;
             $invoice_item->quantity_shipped = $quantity_shipped;
             $purchase_order_item = PurchaseOrderItem::where('purchase_order_id', $purchase_order->id)->where('product_id', $product_id)->first();
             $invoice_item->buying_price = $purchase_order_item->buying_price;
+
+            $invoice_item->customs_duty = $invoice_item->buying_price * $invoice_item->quantity_shipped * ($product->category->customs_duty /100);
+            $invoice_item->social_welfare_surcharge = $invoice_item->customs_duty * ($product->category->social_welfare_surcharge /100);
+            $invoice_item->igst = ($invoice_item->buying_price * $quantity_shipped + $invoice_item->customs_duty + $invoice_item->social_welfare_surcharge) * ($product->category->igst /100);
+         
+            $charges = [
+                'customs_duty'=> $product->category->customs_duty,
+                'social_welfare_surcharge'=> $product->category->social_welfare_surcharge,
+                'igst'=> $product->category->igst,
+            ];
+            $invoice_item->charges = json_encode($charges);
+
             $invoice_item->save();
 
             $amount_usd += $invoice_item->quantity_shipped * $invoice_item->buying_price;
@@ -279,15 +292,11 @@ class PurchaseOrderInvoiceController extends Controller
         $invoice = PurchaseOrderInvoice::find($id);
         $invoice->cleared_at = $request->get('cleared_at');
         $invoice->customs_exchange_rate = $request->get('customs_exchange_rate');
-        $invoice->customs_duty = $invoice->amount_inr_customs * \Setting::get('purchase_order.customs_duty') / 100;
-        $invoice->social_welfare_surcharge = $invoice->customs_duty * \Setting::get('purchase_order.social_welfare_surcharge') / 100;
-        $invoice->igst = ($invoice->amount_inr + $invoice->customs_duty + $invoice->social_welfare_surcharge )* \Setting::get('purchase_order.igst') / 100;
-        $charges = [
-            'customs_duty'=> \Setting::get('purchase_order.customs_duty'),
-            'social_welfare_surcharge'=> \Setting::get('purchase_order.social_welfare_surcharge'),
-            'igst'=> \Setting::get('purchase_order.igst'),
-        ];
-        $invoice->charges = json_encode($charges);
+
+        // $invoice->customs_duty = $invoice->amount_inr_customs * \Setting::get('purchase_order.customs_duty') / 100;
+        // $invoice->social_welfare_surcharge = $invoice->customs_duty * \Setting::get('purchase_order.social_welfare_surcharge') / 100;
+        // $invoice->igst = ($invoice->amount_inr + $invoice->customs_duty + $invoice->social_welfare_surcharge )* \Setting::get('purchase_order.igst') / 100;
+
         $invoice->status = PurchaseOrderInvoice::CLEARED;
         $invoice->update();
 

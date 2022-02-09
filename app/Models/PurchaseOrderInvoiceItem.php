@@ -32,4 +32,6 @@ class PurchaseOrderInvoiceItem extends Model
         $total = $this->buying_price * $this->quantity_shipped;
         return  $total;
     }
+
+
 }

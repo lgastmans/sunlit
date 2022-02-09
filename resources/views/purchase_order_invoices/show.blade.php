@@ -30,7 +30,7 @@
                                 <th>Product</th>
                                 <th>Quantity Shipped</th>
                                 <th>Price</th>
-                                <th class="d-none">Tax</th>
+                                <th class="d-none">CD/SWS/IGST</th>
                                 <th>Total</th>
                             </tr>
                         </thead>
@@ -46,7 +46,11 @@
                                 </td>
                                 <td>{{ $item->quantity_shipped }}</td>
                                 <td>{{ __('app.currency_symbol_usd')}}{{ number_format($item->buying_price,2) }}</td>
-                                <td class="d-none">{{ number_format($item->tax,2) }}%</td>
+                                <td class="d-none">
+                                    <span class="product-customs-duty-usd" data-value="{{ $item->customs_duty }}">{{  number_format($item->customs_duty,2) }}</span>
+                                    <span class="product-social-welfare-surcharge-usd" data-value="{{ $item->social_welfare_surcharge }}">{{  number_format($item->social_welfare_surcharge,2) }}</span>
+                                    <span class="product-igst-usd" data-value="{{ $item->igst }}">{{  number_format($item->igst,2) }}</span>
+                                </td>
                                 <td>{{ __('app.currency_symbol_usd')}}{{ number_format($item->total_price,2) }}</td>
                             </tr>
                             @endforeach
@@ -74,7 +78,7 @@
                                 <td>Invoice Total :</td>
                                 <td>
                                     <span>{{ __('app.currency_symbol_usd')}}</span>
-                                    <span id="grand-total">{{ $invoice->amount_usd }}</span>
+                                    <span id="amount-usd">{{ $invoice->amount_usd }}</span>
                                 </td>
                             </tr>
                           
@@ -95,16 +99,23 @@
                                     <span id="amount-inr">{{ $invoice->amount_inr }}</span>
                                 </td>
                             </tr>
+                            <tr>
+                                <td>Customs Amount : </td>
+                                <td>
+                                    <span>{{ __('app.currency_symbol_inr')}}</span>
+                                    <span id="customs-amount-inr"></span>
+                                </td>
+                            </tr>
                             @if ($invoice->status >= "5")
                                 <tr>
-                                    <td>Customs Duty : </td>
+                                    <td>Total Customs Duty : </td>
                                     <td>
                                         <span>{{ __('app.currency_symbol_inr')}}</span>
                                         <span id="customs-duty">{{ $invoice->customs_duty }}</span>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Social Welfare Surcharge : </td>
+                                    <td>Total Social Welfare Surcharge : </td>
                                     <td>
                                         <span>{{ __('app.currency_symbol_inr')}}</span>
                                         <span id="social-welfare-surcharge">{{ $invoice->social_welfare_surcharge }}</span>
@@ -151,35 +162,53 @@
  <script>
        
     function calculateCharges(from){
-        var settings = Array;
-        settings['customs_duty'] = {{ Setting::get('purchase_order.customs_duty')/100 }};
-        settings['igst'] = {{ Setting::get('purchase_order.igst')/100 }};
-        settings['social_welfare_surcharge'] = {{ Setting::get('purchase_order.social_welfare_surcharge')/100 }};
+        // var settings = Array;
+        // settings['customs_duty'] = {{ Setting::get('purchase_order.customs_duty')/100 }};
+        // settings['igst'] = {{ Setting::get('purchase_order.igst')/100 }};
+        // settings['social_welfare_surcharge'] = {{ Setting::get('purchase_order.social_welfare_surcharge')/100 }};
 
 
         if (from == "rate"){
             var customs_exchange_rate = parseFloat($('#customs_exchange_rate').val());
-            var total_order_customs = $('#grand-total').html() * customs_exchange_rate;
+            var total_order_customs = $('#amount-usd').html() * customs_exchange_rate;
             $('#customs_amount').val(total_order_customs.toFixed(2));
         }
         
-        if (from == "amount"){
-            var total_order_customs = parseFloat($('#customs_amount').val());
-            var customs_exchange_rate = total_order_customs / parseFloat($('#grand-total').html());
-            $('#customs_exchange_rate').val(customs_exchange_rate.toFixed(2));
-        }
+        // if (from == "amount"){
+        //     var total_order_customs = parseFloat($('#customs_amount').val());
+        //     var customs_exchange_rate = total_order_customs / parseFloat($('#amount-usd').html());
+        //     $('#customs_exchange_rate').val(customs_exchange_rate.toFixed(2));
+        // }
 
-        var order_amount_inr = parseFloat($('#amount-inr').html());            
-        var customs_duty = total_order_customs * settings['customs_duty'];
-        var social_welfare_surchage = customs_duty * settings['social_welfare_surcharge'];
-        var igst = (order_amount_inr + customs_duty + social_welfare_surchage) * settings['igst'];
-        var landed_cost = order_amount_inr + customs_duty + social_welfare_surchage;
+        var order_amount_inr = parseFloat($('#amount-inr').html());
+        var customs_amount_inr = parseFloat($('#amount-usd').html()) * customs_exchange_rate;
+        var customs_duty_usd = 0;
+        var social_welfare_surchage_usd = 0;
+        var igst_usd = 0;
+
+        $( ".product-customs-duty-usd" ).each(function( index ) {
+            customs_duty_usd = customs_duty_usd + parseFloat($(this).attr('data-value'));
+        });
+        customs_duty_inr = customs_exchange_rate * customs_duty_usd;
+
+        $( ".product-social-welfare-surcharge-usd" ).each(function( index ) {
+            social_welfare_surchage_usd = social_welfare_surchage_usd + parseFloat($(this).attr('data-value'));
+        });
+        social_welfare_surcharge_inr = customs_exchange_rate * social_welfare_surchage_usd;
+
+        $( ".product-igst-usd" ).each(function( index ) {
+            igst_usd = igst_usd + parseFloat($(this).attr('data-value'));
+        });
+        igst_inr = customs_exchange_rate * igst_usd;
+        
+        var landed_cost = customs_amount_inr + customs_duty_inr + social_welfare_surcharge_inr + igst_inr;
 
 
         $('#customs-echange-rate').html(customs_exchange_rate.toFixed(2));
-        $('#customs-duty').html(customs_duty.toFixed(2));
-        $('#social-welfare-surcharge').html(social_welfare_surchage.toFixed(2));
-        $('#igst').html(igst.toFixed(2));
+        $('#customs-amount-inr').html(customs_amount_inr.toFixed(2));
+        $('#customs-duty').html(customs_duty_inr.toFixed(2));
+        $('#social-welfare-surcharge').html(social_welfare_surcharge_inr.toFixed(2));
+        $('#igst').html(igst_inr.toFixed(2));
         $('#landed-cost').html(landed_cost.toFixed(2));
 
     }
@@ -192,9 +221,9 @@
             calculateCharges('rate');            
         });
 
-        $('#customs_amount').on('change', function(e){
-            calculateCharges('amount');            
-        });
+        // $('#customs_amount').on('change', function(e){
+        //     calculateCharges('amount');            
+        // });
     }); 
 </script>
 

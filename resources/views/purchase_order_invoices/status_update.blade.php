@@ -66,7 +66,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mb-3">
+                {{-- <div class="row mb-3">
                     <div class="col-xl-10">
                         <label class="form-label">Amount at Customs</label>
                         <div class="input-group">
@@ -77,7 +77,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
 
                 <button class="col-lg-12 text-center btn btn-warning" type="submit"
                     name="cleared_order">Clear order</button>
