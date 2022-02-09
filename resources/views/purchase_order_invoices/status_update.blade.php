@@ -66,6 +66,11 @@
                         </div>
                     </div>
                 </div>
+                <input type="hidden" id="total_customs_duty_inr" name="total_customs_duty_inr">
+                <input type="hidden" id="total_social_welfare_surcharge_inr" name="total_social_welfare_surcharge_inr">
+                <input type="hidden" id="total_igst_inr" name="total_igst_inr">
+                <input type="hidden" id="landed_cost_inr" name="landed_cost_inr">
+
                 {{-- <div class="row mb-3">
                     <div class="col-xl-10">
                         <label class="form-label">Amount at Customs</label>

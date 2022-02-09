@@ -103,7 +103,7 @@
                                 <td>Customs Amount : </td>
                                 <td>
                                     <span>{{ __('app.currency_symbol_inr')}}</span>
-                                    <span id="customs-amount-inr"></span>
+                                    <span id="customs-amount-inr">@if ($invoice->customs_exchange_rate) {{ $invoice->amount_usd * $invoice->customs_exchange_rate }}@endif</span>
                                 </td>
                             </tr>
                             @if ($invoice->status >= "5")
@@ -210,6 +210,13 @@
         $('#social-welfare-surcharge').html(social_welfare_surcharge_inr.toFixed(2));
         $('#igst').html(igst_inr.toFixed(2));
         $('#landed-cost').html(landed_cost.toFixed(2));
+
+
+        $('#total_customs_duty_inr').val(customs_duty_inr);
+        $('#total_social_welfare_surcharge_inr').val(social_welfare_surcharge_inr);
+        $('#total_igst_inr').val(igst_inr);
+        $('#landed_cost_inr').val(landed_cost);
+
 
     }
  

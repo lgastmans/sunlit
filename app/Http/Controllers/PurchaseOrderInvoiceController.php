@@ -293,9 +293,11 @@ class PurchaseOrderInvoiceController extends Controller
         $invoice->cleared_at = $request->get('cleared_at');
         $invoice->customs_exchange_rate = $request->get('customs_exchange_rate');
 
-        // $invoice->customs_duty = $invoice->amount_inr_customs * \Setting::get('purchase_order.customs_duty') / 100;
-        // $invoice->social_welfare_surcharge = $invoice->customs_duty * \Setting::get('purchase_order.social_welfare_surcharge') / 100;
-        // $invoice->igst = ($invoice->amount_inr + $invoice->customs_duty + $invoice->social_welfare_surcharge )* \Setting::get('purchase_order.igst') / 100;
+        $invoice->customs_duty = $request->get('total_customs_duty_inr');
+        $invoice->social_welfare_surcharge = $request->get('total_social_welfare_surcharge_inr');
+        $invoice->igst = $request->get('total_igst_inr');
+        $invoice->landed_cost = $request->get('landed_cost_inr');
+
 
         $invoice->status = PurchaseOrderInvoice::CLEARED;
         $invoice->update();
