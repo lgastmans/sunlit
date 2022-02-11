@@ -43,13 +43,13 @@
                         <thead class="table-light">
                             <tr>
 
-                                <th>Warehousesss</th>
+                                <th>Warehouses</th>
                                 <th>Category</th>
                                 <th>Supplier</th>
                                 <th>Part Number</th>
                                 <th>Available</th>
-                                <th>Blocked</th>
                                 <th>Ordered</th>
+                                <th>Blocked</th>
                                 <th>Booked</th>
                                 <th>Projected</th>
                             </tr>
@@ -125,7 +125,7 @@
         "pageLength": {{ Setting::get('general.grid_rows') }},
         "createdRow": function( row, data, dataIndex, cells ) {
             if (data.available.scalar <= data.minimum_quantity.scalar) {
-                $('td', row).eq(5).html('<span class="badge badge-danger-lighten">'+data.available.scalar +'</span>');
+                $('td', row).eq(4).html('<span class="badge badge-danger-lighten">'+data.available.scalar +'</span>');
             }
         },
         "columns": [
@@ -153,11 +153,11 @@
                 },
             },
             { 
-                'data': 'blocked',
+                'data': 'ordered',
                 'orderable': false
             },
             { 
-                'data': 'ordered',
+                'data': 'blocked',
                 'orderable': false
             },
             { 
