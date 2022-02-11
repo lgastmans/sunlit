@@ -19,7 +19,7 @@ class PurchaseOrder extends Model
     const CUSTOMS = 5;
     const CLEARED = 6;
     const RECEIVED = 7;
-    const PAID = 7;
+    const PAID = 8;
 
     protected $dates = ['ordered_at', 'confirmed_at', 'received_at', 'paid_at', 'due_at', 'shipped_at', 'customs_at', 'cleared_at'];
 
