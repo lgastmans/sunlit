@@ -43,13 +43,13 @@
                         <thead class="table-light">
                             <tr>
 
-                                <th>Warehouse</th>
+                                <th>Warehousesss</th>
                                 <th>Category</th>
                                 <th>Supplier</th>
                                 <th>Part Number</th>
                                 <th>Available</th>
-                                <th>Ordered</th>
                                 <th>Blocked</th>
+                                <th>Ordered</th>
                                 <th>Booked</th>
                                 <th>Projected</th>
                             </tr>
@@ -153,11 +153,11 @@
                 },
             },
             { 
-                'data': 'ordered',
+                'data': 'blocked',
                 'orderable': false
             },
             { 
-                'data': 'blocked',
+                'data': 'ordered',
                 'orderable': false
             },
             { 
