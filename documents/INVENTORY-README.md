@@ -31,13 +31,13 @@ movement_type 		1 - RECEIVED | 2 - DELIVERED | (RETURNED | CANCELLED | CORRECTED
 
 Purchase Order (PO)
 -------------------
-1 Draft			
-2 Ordered			
-3 Confirmed		
-4 Shipped			
-5 Customs			
-6 Cleared			
-7 Received		
+1 Draft
+2 Ordered
+3 Confirmed
+4 Shipped
+5 Customs
+6 Cleared
+7 Received
 
 Purchase Order Invoices
 -----------------------
@@ -49,16 +49,16 @@ CUSTOMS = 5;
 CLEARED = 6;
 RECEIVED = 7;		- trigger stock in, update Available Stock (add), update Ordered Stock (deduct), create a RECEIVED Inventory Movement 
 					- update the average buying price
+PAID = 8;
 
 
 
 Sales Order (SO)
 ----------------
-Draft				- trigger stock out, update Blocked Stock (add)
-Ordered				
-Confirmed			- trigger stock out, update Booked Stock (add), update Blocked Stock (deduct)
-Shipped			
-Delivered			- trigger stock out, update Available Stock (deduct), update Booked Stock (deduct), create a DELIVERED Inventory Movement 
+Draft				
+Blocked				- trigger stock out, update Blocked Stock (add)
+Booked				- trigger stock out, update Booked Stock (add), update Blocked Stock (deduct)
+Dispatched			- trigger stock out, update Available Stock (deduct), update Booked Stock (deduct), create a DELIVERED Inventory Movement 
 					- update the average selling price
 
 
