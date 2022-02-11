@@ -56,8 +56,13 @@ PAID = 8;
 Sales Order (SO)
 ----------------
 Draft				
-Blocked				- trigger stock out, update Blocked Stock (add)
+
+Blocked				- trigger stock out, update Blocked Stock (add) 
+(verbally confirmed)
+
 Booked				- trigger stock out, update Booked Stock (add), update Blocked Stock (deduct)
+(payment received)
+
 Dispatched			- trigger stock out, update Available Stock (deduct), update Booked Stock (deduct), create a DELIVERED Inventory Movement 
 					- update the average selling price
 
