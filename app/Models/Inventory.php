@@ -188,6 +188,7 @@ class Inventory extends Model
                         "stock_ordered" => $ordered,
                         "average_buying_price" => $avg_price
                     ]);
+                    //log price here
 
                 }
             }
@@ -206,8 +207,15 @@ class Inventory extends Model
                     $booked = $inventory->stock_booked;
                     $available = $inventory->stock_available;
                     $blocked = $inventory->stock_blocked;
+                    $avg_price = $inventory->average_selling_price;
 
-                    if ($model->status == SaleOrder::CONFIRMED)
+                    if ($model->status == SaleOrder::BLOCKED)
+                    {
+
+                        $blocked += $product->quantity_ordered;
+
+                    }
+                    elseif ($model->status == SaleOrder::CONFIRMED)
                     {
                         /*
                         *    update Blocked Stock (deduct)
@@ -219,10 +227,6 @@ class Inventory extends Model
                         */
                         $booked += $product->quantity_ordered;
 
-                        /*
-                            the average buying price stays the same
-                        */
-                        $avg_price = $inventory->average_buying_price;
                     }
                     elseif ($model->status == SaleOrder::DELIVERED) 
                     {

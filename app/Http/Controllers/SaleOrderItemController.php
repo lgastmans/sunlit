@@ -170,8 +170,8 @@ class SaleOrderItemController extends Controller
                 $item->selling_price = $request->selling_price;
                 $item->save();
         
-                $inventory = new Inventory();
-                $inventory->updateStockBlocked($item, $request->value);
+                // $inventory = new Inventory();
+                // $inventory->updateStockBlocked($item, $request->value);
             }
 
 
@@ -216,8 +216,9 @@ class SaleOrderItemController extends Controller
 
         if ($request->field == "quantity") {
             $update_quantity = $request->value - $item->quantity_ordered;
-            $inventory = new Inventory();
-            $inventory->updateStockBlocked($item, $update_quantity);
+            
+            // $inventory = new Inventory();
+            // $inventory->updateStockBlocked($item, $update_quantity);
 
             $item->quantity_ordered = $request->value;
         }
@@ -242,9 +243,10 @@ class SaleOrderItemController extends Controller
 
         /*
             update the blocked status of the item
+            (this got changed - see the INVENTORY-README file)
         */
-        $inventory = new Inventory();
-        $inventory->updateStockBlocked($item, ($item->quantity_ordered*-1));
+        // $inventory = new Inventory();
+        // $inventory->updateStockBlocked($item, ($item->quantity_ordered*-1));
 
         SaleOrderItem::destroy($id);
 

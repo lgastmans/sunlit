@@ -17,12 +17,12 @@ class SaleOrder extends Model
     protected $with = ['dealer', 'warehouse', 'user', 'items'];
 
     const DRAFT = 1;
-    const ORDERED = 2;
-    const CONFIRMED = 3;
-    const SHIPPED = 4;
+    const BLOCKED = 2;      // change to Blocked, was Ordered
+    const CONFIRMED = 3;    // change to Booked, was Confirmed
+    const SHIPPED = 4;      // change to Dispatched, was Shipped
     // const CUSTOMS = 5;
     // const CLEARED = 6;
-    const DELIVERED = 7;
+    const DELIVERED = 7;    // remove 
 
     /**
      * Get the items associated with the sale order.
@@ -155,8 +155,8 @@ class SaleOrder extends Model
             case SaleOrder::DRAFT:
                 $status =  '<span class="badge badge-secondary-lighten">Draft</span>';
                 break;
-            case SaleOrder::ORDERED:
-                $status = '<span class="badge badge-info-lighten">Ordered</span>';
+            case SaleOrder::BLOCKED:
+                $status = '<span class="badge badge-info-lighten">Blocked</span>';
                 break;
             case SaleOrder::CONFIRMED:
                 $status = '<span class="badge badge-primary-lighten">Confirmed</span>';
@@ -177,7 +177,7 @@ class SaleOrder extends Model
     {
         return [
             SaleOrder::DRAFT => 'Draft', 
-            SaleOrder::ORDERED => 'Ordered', 
+            SaleOrder::BLOCKED => 'Blocked', 
             SaleOrder::CONFIRMED => 'Confirmed',
             SaleOrder::SHIPPED => 'Shipped', 
             SaleOrder::DELIVERED => 'Delivered'
@@ -201,7 +201,7 @@ class SaleOrder extends Model
 
     public function scopeOrdered($query)
     {
-        return $query->where('status', '>=', SaleOrder::ORDERED);
+        return $query->where('status', '>=', SaleOrder::BLOCKED);
     }
 
     /* * Retrieve orders with status DELIVERED

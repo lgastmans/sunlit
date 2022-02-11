@@ -315,6 +315,7 @@ class SaleOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    //              blocked     this function should eventually be renamed "blocked"
     public function ordered(Request $request, $id)
     {
         $validated = $request->validate([
@@ -323,7 +324,7 @@ class SaleOrderController extends Controller
 
         $order = SaleOrder::find($id);
         $order->ordered_at = $request->get('ordered_at');
-        $order->status = SaleOrder::ORDERED;
+        $order->status = SaleOrder::BLOCKED;
         $items = SaleOrderItem::where('sale_order_id', "=", $id)->select('quantity_ordered', 'selling_price', 'tax')->get();
         $order->amount = 0;
         foreach($items as $item){
@@ -331,6 +332,13 @@ class SaleOrderController extends Controller
         }
     
         $order->update();
+
+        /*
+            - trigger stock out, update Blocked Stock (add) 
+        */  
+        $inventory = new Inventory();
+        $inventory->updateStock($order);
+
         return redirect(route('sale-orders.show', $order->order_number_slug))->with('success', 'order placed'); 
     }
 

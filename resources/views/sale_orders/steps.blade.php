@@ -6,7 +6,7 @@
                     <div class="horizontal-steps-content">
                         <div class="step-item @if ($order->status == 2) current @endif">
                             <span data-bs-container="#tooltip-container" data-bs-toggle="tooltip"
-                                data-bs-placement="bottom" title="{{ $order->display_ordered_at }}">Ordered</span>
+                                data-bs-placement="bottom" title="{{ $order->display_ordered_at }}">Blocked</span>
                         </div>
                         <div class="step-item @if ($order->status == 3) current @endif">
                             <span data-bs-container="#tooltip-container" data-bs-toggle="tooltip"

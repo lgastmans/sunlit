@@ -162,7 +162,7 @@
                                         @csrf()
                                         @method('PUT')
                                         <div class="mb-3 position-relative" id="ordered_at">
-                                            <label class="form-label">Ordered date</label>
+                                            <label class="form-label">Blocked date</label>
                                             <input type="text" class="form-control" name="ordered_at" value="{{ $order->display_ordered_at }}"
                                             data-provide="datepicker" 
                                             data-date-container="#ordered_at"
