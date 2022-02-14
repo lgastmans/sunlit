@@ -13,7 +13,7 @@ class SaleOrder extends Model
     use SoftDeletes;
 
     protected $fillable = ['dealer_id', 'warehouse_id', 'order_number', 'order_number_slug', 'status', 'user_id'];
-    protected $dates = ['ordered_at', 'confirmed_at', 'delivered_at', 'paid_at', 'due_at', 'shipped_at'];
+    protected $dates = ['blocked_at', 'booked_at', 'dispatched_at', 'paid_at', 'due_at', 'shipped_at'];
     protected $with = ['dealer', 'warehouse', 'user', 'items'];
 
     const DRAFT = 1;
