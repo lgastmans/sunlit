@@ -31,7 +31,7 @@
                                 <th>Order #</th>
                                 <th>Warehouse</th>
                                 <th>Dealer</th>
-                                <th>Ordered On</th> 
+                                <th>Blocked On</th> 
                                 <th>Expected On</th> 
                                 <th>Amount</th>
                                 <th style="width:100px;">Status</th> 
@@ -41,10 +41,10 @@
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
-                                <th id="ordered_at" class="position-relative">
-                                    <input type="text" class="form-control" name="ordered_at" 
+                                <th id="blocked_at" class="position-relative">
+                                    <input type="text" class="form-control" name="blocked_at" 
                                     data-provide="datepicker" 
-                                    data-date-container="#ordered_at"
+                                    data-date-container="#blocked_at"
                                     data-date-autoclose="true"
                                     data-date-format="M d, yyyy"
                                     required>
@@ -128,7 +128,7 @@
                 'orderable': true 
             },
             { 
-                'data': 'ordered_at',
+                'data': 'blocked_at',
                 'orderable': true 
             },
             { 

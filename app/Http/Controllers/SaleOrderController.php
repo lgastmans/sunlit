@@ -111,7 +111,7 @@ class SaleOrderController extends Controller
                 $query->where('sale_orders.status', 'like', $column_arr[2]['search']['value']);
             }
             if (!empty($column_arr[3]['search']['value'])){
-                $query->where('sale_orders.ordered_at', 'like', convertDateToMysql($column_arr[3]['search']['value']));
+                $query->where('sale_orders.blocked_at', 'like', convertDateToMysql($column_arr[3]['search']['value']));
             }
             if (!empty($column_arr[4]['search']['value'])){
                 $query->where('users.name', 'like', $column_arr[4]['search']['value'].'%');
@@ -127,7 +127,7 @@ class SaleOrderController extends Controller
                 $query->where('dealers.company', 'like', $column_arr[2]['search']['value'].'%');
             }
             if (!empty($column_arr[3]['search']['value'])){
-                $query->where('sale_orders.ordered_at', 'like', convertDateToMysql($column_arr[3]['search']['value']));
+                $query->where('sale_orders.blocked_at', 'like', convertDateToMysql($column_arr[3]['search']['value']));
             }
             if (!empty($column_arr[4]['search']['value'])){
                 $query->where('sale_orders.due_at', 'like', convertDateToMysql($column_arr[4]['search']['value']));
@@ -170,7 +170,7 @@ class SaleOrderController extends Controller
                 "order_number_slug" => $order->order_number_slug,
                 "warehouse" => $order->warehouse->name,
                 "dealer" => $order->dealer->company,
-                "ordered_at" => $order->display_ordered_at,
+                "blocked_at" => $order->display_blocked_at,
                 "due_at" => $order->display_due_at,
                 "amount" => (isset($order->amount)) ? trans('app.currency_symbol_inr')." ".$order->amount : "",
                 "status" => $order->display_status,
@@ -309,7 +309,7 @@ class SaleOrderController extends Controller
 
 
         /**
-     * Update the ordered_at and status of an order
+     * Update the blocked_at and status of an order
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -319,11 +319,11 @@ class SaleOrderController extends Controller
     public function ordered(Request $request, $id)
     {
         $validated = $request->validate([
-            'ordered_at' => 'required|date'
+            'blocked_at' => 'required|date'
         ]);
 
         $order = SaleOrder::find($id);
-        $order->ordered_at = $request->get('ordered_at');
+        $order->blocked_at = $request->get('blocked_at');
         $order->status = SaleOrder::BLOCKED;
         $items = SaleOrderItem::where('sale_order_id', "=", $id)->select('quantity_ordered', 'selling_price', 'tax')->get();
         $order->amount = 0;
@@ -344,20 +344,21 @@ class SaleOrderController extends Controller
 
 
      /**
-     * Update the confirmed_at and status of an order
+     * Update the booked_at and status of an order
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+     //             booked      this function should eventually be renamed "booked"
     public function confirmed(Request $request, $id)
     {
         $validated = $request->validate([
-            'confirmed_at' => 'required|date'
+            'booked_at' => 'required|date'
         ]);
         $order = SaleOrder::with('items')->find($id);
-        $order->confirmed_at = $request->get('confirmed_at');
-        $order->status = SaleOrder::CONFIRMED;
+        $order->booked_at = $request->get('booked_at');
+        $order->status = SaleOrder::BOOKED;
         $order->update();
 
         $inventory = new Inventory();
@@ -368,23 +369,24 @@ class SaleOrderController extends Controller
 
 
     /**
-     * Update the shipped_at and status of an order
+     * Update the dispatched_at and status of an order
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    //              dispatched      this function should eventually be renamed "dispatched"
     public function shipped(Request $request, $id)
     {
         $validated = $request->validate([
-            'shipped_at' => 'required|date',
+            'dispatched_at' => 'required|date',
             'due_at' => 'required|date',
             'tracking_number' => 'required',
             'courier' => 'required',
             'transport_charges' => 'required'
         ]);
         $order = SaleOrder::find($id);
-        $order->shipped_at = $request->get('shipped_at');
+        $order->dispatched_at = $request->get('dispatched_at');
         $order->due_at = $request->get('due_at');
         $order->tracking_number = $request->get('tracking_number');
         $order->courier = $request->get('courier');

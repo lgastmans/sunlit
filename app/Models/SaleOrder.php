@@ -17,9 +17,9 @@ class SaleOrder extends Model
     protected $with = ['dealer', 'warehouse', 'user', 'items'];
 
     const DRAFT = 1;
-    const BLOCKED = 2;      // change to Blocked, was Ordered
-    const CONFIRMED = 3;    // change to Booked, was Confirmed
-    const SHIPPED = 4;      // change to Dispatched, was Shipped
+    const BLOCKED = 2;      // changed to Blocked, was Ordered
+    const BOOKED = 3;       // changed to Booked, was Confirmed
+    const DISPATCHED = 4;   // changed to Dispatched, was Shipped
     // const CUSTOMS = 5;
     // const CLEARED = 6;
     const DELIVERED = 7;    // remove 
@@ -60,55 +60,55 @@ class SaleOrder extends Model
     /**
      * Returns the ordered_at date for display Month Day, Year
      */
-    public function getDisplayOrderedAtAttribute()
+    public function getDisplayBlockedAtAttribute()
     {
-        if ($this->ordered_at){
-            $dt = Carbon::parse($this->ordered_at);
+        if ($this->blocked_at){
+            $dt = Carbon::parse($this->blocked_at);
             return $dt->toFormattedDateString(); 
         } 
         return "";
     }
 
-    public function setOrderedAtAttribute($value)
+    public function setBlockedAtAttribute($value)
     {
         $dt = Carbon::parse($value);
-        $this->attributes['ordered_at'] = $dt->toDateTimeString();  
+        $this->attributes['blocked_at'] = $dt->toDateTimeString();  
     }
 
     /**
      * Returns the confirmed_at date for display Month Day, Year
      */
-    public function getDisplayConfirmedAtAttribute()
+    public function getDisplayBookedAtAttribute()
     {
-        if ($this->confirmed_at){
-            $dt = Carbon::parse($this->confirmed_at);
+        if ($this->booked_at){
+            $dt = Carbon::parse($this->booked_at);
             return $dt->toFormattedDateString();  
         }
         return "";
     }
 
-    public function setConfirmedAtAttribute($value)
+    public function setBookedAtAttribute($value)
     {
         $dt = Carbon::parse($value);
-        $this->attributes['confirmed_at'] = $dt->toDateTimeString();  
+        $this->attributes['booked_at'] = $dt->toDateTimeString();  
     }
 
     /**
      * Returns the shipped_at date for display Month Day, Year
      */
-    public function getDisplayShippedAtAttribute()
+    public function getDisplayDispatchedAtAttribute()
     {
-        if ($this->shipped_at){
-            $dt = Carbon::parse($this->shipped_at);
+        if ($this->dispatched_at){
+            $dt = Carbon::parse($this->dispatched_at);
             return $dt->toFormattedDateString(); 
         } 
         return ""; 
     }
 
-    public function setShippedAtAttribute($value)
+    public function setDispatchedAtAttribute($value)
     {
         $dt = Carbon::parse($value);
-        $this->attributes['shipped_at'] = $dt->toDateTimeString();  
+        $this->attributes['dispatched_at'] = $dt->toDateTimeString();  
     }
 
     /**
@@ -158,11 +158,11 @@ class SaleOrder extends Model
             case SaleOrder::BLOCKED:
                 $status = '<span class="badge badge-info-lighten">Blocked</span>';
                 break;
-            case SaleOrder::CONFIRMED:
-                $status = '<span class="badge badge-primary-lighten">Confirmed</span>';
+            case SaleOrder::BOOKED:
+                $status = '<span class="badge badge-primary-lighten">Booked</span>';
                 break;
-            case SaleOrder::SHIPPED:
-                $status = '<span class="badge badge-dark-lighten">Shipped</span>';
+            case SaleOrder::DISPATCHED:
+                $status = '<span class="badge badge-dark-lighten">Dispatched</span>';
                 break;
             case SaleOrder::DELIVERED:
                 $status = '<span class="badge badge-success-lighten">Delivered</span>';
@@ -178,8 +178,8 @@ class SaleOrder extends Model
         return [
             SaleOrder::DRAFT => 'Draft', 
             SaleOrder::BLOCKED => 'Blocked', 
-            SaleOrder::CONFIRMED => 'Confirmed',
-            SaleOrder::SHIPPED => 'Shipped', 
+            SaleOrder::BOOKED => 'Booked',
+            SaleOrder::DISPATCHED => 'Dispatched', 
             SaleOrder::DELIVERED => 'Delivered'
         ];
     }
