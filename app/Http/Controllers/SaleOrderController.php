@@ -391,8 +391,12 @@ class SaleOrderController extends Controller
         $order->tracking_number = $request->get('tracking_number');
         $order->courier = $request->get('courier');
         $order->transport_charges = $request->get('transport_charges');
-        $order->status = SaleOrder::SHIPPED;
+        $order->status = SaleOrder::DISPATCHED;
         $order->update();
+
+        $inventory = new Inventory();
+        $inventory->updateStock($order);
+
         return redirect(route('sale-orders.show', $order->order_number_slug))->with('success', 'order shipped'); 
     }
 
@@ -410,9 +414,6 @@ class SaleOrderController extends Controller
         $order->delivered_at = $request->get('delivered_at');
         $order->status = SaleOrder::DELIVERED;
         $order->update();
-
-        $inventory = new Inventory();
-        $inventory->updateStock($order);
 
         return redirect(route('sale-orders.show', $order->order_number_slug))->with('success', 'order delivered'); 
     }

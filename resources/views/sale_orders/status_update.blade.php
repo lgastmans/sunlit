@@ -7,20 +7,20 @@
                 action="{{ route('sale-orders.confirmed', $order->id) }}" method="POST" >
                 @csrf()
                 @method('PUT')
-                <div class="mb-3 position-relative" id="confirmed_at">
-                    <label class="form-label">Confirmation date</label>
-                    <input type="text" class="form-control" name="confirmed_at" value="{{ $order->display_confirmed_at }}"
+                <div class="mb-3 position-relative" id="booked_at">
+                    <label class="form-label">Booked date</label>
+                    <input type="text" class="form-control" name="booked_at" value="{{ $order->display_booked_at }}"
                     data-provide="datepicker" 
-                    data-date-container="#confirmed_at"
+                    data-date-container="#booked_at"
                     data-date-autoclose="true"
                     data-date-format="M d, yyyy"
                     required>
                     <div class="invalid-feedback">
-                        Confirmation date is required
+                        Booked date is required
                     </div>
                 </div>
                 <button class="col-lg-12 text-center btn btn-warning" type="submit"
-                    name="confirm_order">Confirm order</button>
+                    name="confirm_order">Book order</button>
             </form>
 
         </div>
@@ -36,16 +36,16 @@
                 @csrf()
                 @method('PUT')
                 <div class="row mb-3">
-                    <div class="col-xl-4" id="shipped_at">
-                        <label class="form-label">Shipping date</label>
-                        <input type="text" class="form-control" name="shipped_at" value="{{ $order->display_shipped_at }}"
+                    <div class="col-xl-4" id="dispatched_at">
+                        <label class="form-label">Dispatched date</label>
+                        <input type="text" class="form-control" name="dispatched_at" value="{{ $order->display_dispatched_at }}"
                         data-provide="datepicker" 
-                        data-date-container="#shipped_at"
+                        data-date-container="#dispatched_at"
                         data-date-autoclose="true"
                         data-date-format="M d, yyyy"
                         required>
                         <div class="invalid-feedback">
-                            Shipping date is required
+                            Dispatched date is required
                         </div>
                     </div>
                     <div class="col-xl-4 offset-xl-2" id="due_at">
@@ -92,7 +92,7 @@
                   
                 </div>
                 <button class="col-lg-12 text-center btn btn-warning" type="submit"
-                    name="ship_order">Ship order</button>
+                    name="ship_order">Dispatch order</button>
             </form>
 
         </div>

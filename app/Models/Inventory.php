@@ -215,7 +215,7 @@ class Inventory extends Model
                         $blocked += $product->quantity_ordered;
 
                     }
-                    elseif ($model->status == SaleOrder::CONFIRMED)
+                    elseif ($model->status == SaleOrder::BOOKED)
                     {
                         /*
                         *    update Blocked Stock (deduct)
@@ -228,7 +228,7 @@ class Inventory extends Model
                         $booked += $product->quantity_ordered;
 
                     }
-                    elseif ($model->status == SaleOrder::DELIVERED) 
+                    elseif ($model->status == SaleOrder::DISPATCHED) 
                     {
                         /*
                         *    update Available Stock (deduct), update Booked Stock (deduct)
