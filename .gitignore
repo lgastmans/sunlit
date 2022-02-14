@@ -25,3 +25,7 @@ signal-desktop-keyring.gpg
 public/products-import.xlsx
 
 public/dealers-2021.xlsx
+
+.id_rsa.pub.swp
+
+*.swp
