@@ -130,12 +130,14 @@ class InventoryMovementController extends Controller
 
         $query->with(['product','warehouse'])
                 ->join('users', 'users.id', '=', 'user_id')
-                ->leftJoin('purchase_orders', 'purchase_orders.id', '=', 'purchase_order_id')
+                //->leftJoin('purchase_orders', 'purchase_orders.id', '=', 'purchase_order_id')
+                ->leftJoin('purchase_order_invoices', 'purchase_order_invoices.id', '=', 'purchase_order_invoice_id')
                 ->leftJoin('sale_orders', 'sale_orders.id', '=', 'sales_order_id')
                 ->join('warehouses', 'warehouses.id', '=', 'inventory_movements.warehouse_id')
                 ->join('products', 'products.id', '=', 'inventory_movements.product_id')
                 ->select('inventory_movements.*')
-                ->selectRaw('IF(purchase_order_id IS NULL, sale_orders.order_number, purchase_orders.order_number) AS order_number');
+                ->selectRaw('IF(ISNULL(purchase_order_invoice_id), sale_orders.order_number, purchase_order_invoices.invoice_number) AS invoice_number');
+                //->selectRaw('purchase_order_invoices.invoice_number AS invoice_number');
 
         if ($request->has('filter_product_id'))
             $query->where('inventory_movements.product_id', '=', $request->filter_product_id);
@@ -200,7 +202,7 @@ class InventoryMovementController extends Controller
             $arr[] = array(
                 "id" => $record->id,
                 "created_at" => $record->display_created_at,
-                "order_number" => $record->order_number,
+                "order_number" => $record->invoice_number,
                 "quantity" => $record->quantity,
                 "entry_type" => $record->display_movement_type,
                 "warehouse" => $record->warehouse->name,
