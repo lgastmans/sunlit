@@ -111,10 +111,18 @@ class SaleOrderItemController extends Controller
 
         $arr = array();
         foreach($orders as $order)
-        {           
+        {
+
+            if ($order->sale_order->status == SaleOrder::BLOCKED)
+                $sales_order_date = $order->sale_order->display_blocked_at;
+            elseif ($order->sale_order->status == SaleOrder::BOOKED)
+                $sales_order_date = $order->sale_order->display_booked_at;
+            elseif ($order->sale_order->status == SaleOrder::DISPATCHED)
+                $sales_order_date = $order->sale_order->display_dispatched_at;
+
             $arr[] = array(
                 "id" => $order->id,
-                "ordered_at" => $order->sale_order->display_ordered_at,
+                "ordered_at" => $sales_order_date,
                 "order_number" => $order->sale_order->order_number,
                 "quantity_ordered" => $order->quantity_ordered,
                 "status" => $order->sale_order->display_status,

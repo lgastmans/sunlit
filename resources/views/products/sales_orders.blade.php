@@ -21,7 +21,7 @@
                                 <th>Dealer</th>
                                 <th>Quantity</th>
                                 <th>Status</th>
-                                <th>Ordered on</th>
+                                <th>On</th>
                                 <th>Created by</th>
                             </tr>
                             <tr class="sale-orders-filters" style="display:none;">
