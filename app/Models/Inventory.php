@@ -103,6 +103,34 @@ class Inventory extends Model
 
 
     /**
+     * Update the Purchase Order stock ordered column in the inventory 
+     *
+     * @param  Illuminate\Database\Eloquent\Model $model
+     * @return boolean
+     */
+    public function updateOrderedStock(Model $model)
+    {
+        $order = PurchaseOrder::find($model->id);
+
+        foreach($model->items as $product)
+        {
+            $inventory = $this->initProductStock($order->warehouse_id, $product->product_id);
+
+            if ($inventory) {
+
+                $inventory->warehouse_id = $order->warehouse_id;
+                $inventory->product_id = $product->product_id;
+
+                $inventory->stock_ordered = $product->quantity_confirmed;
+
+                $result = $inventory->update();
+            }
+        }
+
+    }
+
+
+    /**
      * Update the stock values in the inventory based on the model and related status
      * initializing the stock values to zero
      *
@@ -128,6 +156,7 @@ class Inventory extends Model
         if ($class_name == 'PurchaseOrderInvoice')
         {
             $order = PurchaseOrder::find($model->purchase_order_id);
+
             foreach($model->items as $product)
             {
                 $inventory = $this->initProductStock($order->warehouse_id, $product->product_id);
@@ -138,15 +167,15 @@ class Inventory extends Model
                     $inventory->warehouse_id = $order->warehouse_id;
                     $inventory->product_id = $product->product_id;
 
-                    $ordered = $inventory->stock_ordered;
+                    //$ordered = $inventory->stock_ordered;
                     $available = $inventory->stock_available;
 
                     if ($model->status == PurchaseOrderInvoice::SHIPPED)
                     {
                         /*
-                        *    update Ordered Stock (add)
+                        *    update Ordered (add)
                         */
-                        $ordered += $product->quantity_shipped;
+                        //$ordered += $product->quantity_shipped;
 
                         /*
                             the average buying price stays the same
@@ -159,7 +188,8 @@ class Inventory extends Model
                         /*
                         *    update Available Stock (add), update Ordered Stock (deduct)
                         */
-                        $ordered -= $product->quantity_shipped;
+                        //$ordered -= $product->quantity_shipped;
+
                         $available += $product->quantity_shipped;
 
                         /*
@@ -185,7 +215,6 @@ class Inventory extends Model
 
                     $result = $inventory->update([
                         "stock_available" => $available,
-                        "stock_ordered" => $ordered,
                         "average_buying_price" => $avg_price
                     ]);
                     //log price here

@@ -316,7 +316,7 @@ class SaleOrderController extends Controller
      * @return \Illuminate\Http\Response
      */
     //              blocked     this function should eventually be renamed "blocked"
-    public function ordered(Request $request, $id)
+    public function blocked(Request $request, $id)
     {
         $validated = $request->validate([
             'blocked_at' => 'required|date'
@@ -339,7 +339,7 @@ class SaleOrderController extends Controller
         $inventory = new Inventory();
         $inventory->updateStock($order);
 
-        return redirect(route('sale-orders.show', $order->order_number_slug))->with('success', 'order placed'); 
+        return redirect(route('sale-orders.show', $order->order_number_slug))->with('success', 'order blocked'); 
     }
 
 
@@ -351,7 +351,7 @@ class SaleOrderController extends Controller
      * @return \Illuminate\Http\Response
      */
      //             booked      this function should eventually be renamed "booked"
-    public function confirmed(Request $request, $id)
+    public function booked(Request $request, $id)
     {
         $validated = $request->validate([
             'booked_at' => 'required|date'
@@ -364,7 +364,7 @@ class SaleOrderController extends Controller
         $inventory = new Inventory();
         $inventory->updateStock($order);
         
-        return redirect(route('sale-orders.show', $order->order_number_slug))->with('success', 'order confirmed'); 
+        return redirect(route('sale-orders.show', $order->order_number_slug))->with('success', 'order booked'); 
     }
 
 
@@ -376,7 +376,7 @@ class SaleOrderController extends Controller
      * @return \Illuminate\Http\Response
      */
     //              dispatched      this function should eventually be renamed "dispatched"
-    public function shipped(Request $request, $id)
+    public function dispatched(Request $request, $id)
     {
         $validated = $request->validate([
             'dispatched_at' => 'required|date',
@@ -397,7 +397,7 @@ class SaleOrderController extends Controller
         $inventory = new Inventory();
         $inventory->updateStock($order);
 
-        return redirect(route('sale-orders.show', $order->order_number_slug))->with('success', 'order shipped'); 
+        return redirect(route('sale-orders.show', $order->order_number_slug))->with('success', 'order dispatched'); 
     }
 
 

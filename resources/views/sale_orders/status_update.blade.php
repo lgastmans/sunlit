@@ -4,7 +4,7 @@
     <div class="card border">
         <div class="card-body">
             <form name="confirm-order-form" class="needs-validation" novalidate
-                action="{{ route('sale-orders.confirmed', $order->id) }}" method="POST" >
+                action="{{ route('sale-orders.booked', $order->id) }}" method="POST" >
                 @csrf()
                 @method('PUT')
                 <div class="mb-3 position-relative" id="booked_at">
@@ -32,7 +32,7 @@
     <div class="card border">
         <div class="card-body">
             <form name="ship-order-form" class="needs-validation" novalidate
-                action="{{ route('sale-orders.shipped', $order->id) }}" method="POST">
+                action="{{ route('sale-orders.dispatched', $order->id) }}" method="POST">
                 @csrf()
                 @method('PUT')
                 <div class="row mb-3">

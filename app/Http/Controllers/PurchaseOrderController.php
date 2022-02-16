@@ -414,8 +414,8 @@ class PurchaseOrderController extends Controller
 
         $order->update();
 
-        // $inventory = new Inventory();
-        // $inventory->updateStock($order);
+        $inventory = new Inventory();
+        $inventory->updateOrderedStock($order);
         
         return redirect(route('purchase-orders.show', $order->order_number_slug))->with('success', 'order confirmed'); 
     }

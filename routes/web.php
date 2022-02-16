@@ -56,9 +56,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/sale-orders/{order_number}/cart', [SaleOrderController::class, 'cart'])->name('sale-orders.cart');
     // Route::get('/sale-orders/{id}/edit', [SaleOrderController::class, 'edit'])->name('sale-orders.edit');
     Route::post('/sale-orders', [SaleOrderController::class, 'store'])->name('sale-orders.store');
-    Route::put('/sale-orders/{id}/ordered', [SaleOrderController::class, 'ordered'])->name('sale-orders.ordered');
-    Route::put('/sale-orders/{id}/confirmed', [SaleOrderController::class, 'confirmed'])->name('sale-orders.confirmed');
-    Route::put('/sale-orders/{id}/shipped', [SaleOrderController::class, 'shipped'])->name('sale-orders.shipped');
+    Route::put('/sale-orders/{id}/blocked', [SaleOrderController::class, 'blocked'])->name('sale-orders.blocked');
+    Route::put('/sale-orders/{id}/booked', [SaleOrderController::class, 'booked'])->name('sale-orders.booked');
+    Route::put('/sale-orders/{id}/dispatched', [SaleOrderController::class, 'dispatched'])->name('sale-orders.dispatched');
     Route::put('/sale-orders/{id}/delivered', [SaleOrderController::class, 'delivered'])->name('sale-orders.delivered');
     Route::put('/sale-orders/{id}', [SaleOrderController::class, 'update'])->name('sale-orders.update');
     Route::delete('/sale-orders/{id}', [SaleOrderController::class, 'destroy'])->name('sale-orders.delete');

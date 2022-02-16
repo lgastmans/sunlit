@@ -223,7 +223,7 @@ class InventoryController extends Controller
                 "ordered" => $record->stock_ordered,
                 "blocked" => $record->stock_blocked,
                 "booked" => $record->stock_booked,
-                "projected" => $record->projected, //($record->stock_available + $record->stock_ordered - $record->stock_booked),
+                "projected" => $record->projected, // projected column is calculated in the SQL above 
                 "minimum_quantity" => (object)$record->minimum_quantity,
                 "product_id" => $record->product->id
             );

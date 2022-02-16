@@ -158,23 +158,23 @@
                         <div class="place-order-form-container mt-4 mt-lg-0 rounded @if (count($order->items)==0) d-none @endif">
                             <div class="card mt-4 border">
                                 <div class="card-body">
-                                    <form name="place-order-form" action="{{ route('sale-orders.ordered', $order->id) }}" method="POST" class="needs-validation" novalidate>
+                                    <form name="place-order-form" action="{{ route('sale-orders.blocked', $order->id) }}" method="POST" class="needs-validation" novalidate>
                                         @csrf()
                                         @method('PUT')
-                                        <div class="mb-3 position-relative" id="ordered_at">
+                                        <div class="mb-3 position-relative" id="blocked_at">
                                             <label class="form-label">Blocked date</label>
-                                            <input type="text" class="form-control" name="ordered_at" value="{{ $order->display_ordered_at }}"
+                                            <input type="text" class="form-control" name="blocked_at" value="{{ $order->display_blocked_at }}"
                                             data-provide="datepicker" 
-                                            data-date-container="#ordered_at"
+                                            data-date-container="#blocked_at"
                                             data-date-autoclose="true"
                                             data-date-format="M d, yyyy"
                                             required>
                                             <div class="invalid-feedback">
-                                                Ordered date is required
+                                                Blocked date is required
                                             </div>
                                         </div>
                                         
-                                        <button class="col-lg-12 text-center btn btn-warning" type="submit" name="place_order"><i class="mdi mdi-cart-plus me-1"></i> Place order</button>
+                                        <button class="col-lg-12 text-center btn btn-warning" type="submit" name="place_order"><i class="mdi mdi-cart-plus me-1"></i>Block order</button>
                                     </form>
 
                                 </div>
