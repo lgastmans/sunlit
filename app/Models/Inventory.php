@@ -216,6 +216,7 @@ class Inventory extends Model
 
                     $result = $inventory->update([
                         "stock_available" => $available,
+                        "stock_ordered" => $ordered,
                         "average_buying_price" => $avg_price
                     ]);
                     //log price here
