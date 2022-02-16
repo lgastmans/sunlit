@@ -167,13 +167,14 @@ class Inventory extends Model
                     $inventory->warehouse_id = $order->warehouse_id;
                     $inventory->product_id = $product->product_id;
 
-                    //$ordered = $inventory->stock_ordered;
+                    $ordered = $inventory->stock_ordered;
                     $available = $inventory->stock_available;
 
                     if ($model->status == PurchaseOrderInvoice::SHIPPED)
                     {
                         /*
                         *    update Ordered (add)
+                        *    the Ordered quantity is set when the Purchase Order is Confirmed
                         */
                         //$ordered += $product->quantity_shipped;
 
@@ -188,7 +189,7 @@ class Inventory extends Model
                         /*
                         *    update Available Stock (add), update Ordered Stock (deduct)
                         */
-                        //$ordered -= $product->quantity_shipped;
+                        $ordered -= $product->quantity_shipped;
 
                         $available += $product->quantity_shipped;
 
