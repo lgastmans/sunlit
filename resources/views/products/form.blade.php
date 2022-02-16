@@ -121,7 +121,7 @@
 
                         <div class="mb-3 row">
                             <div class="col-xl-12">
-                                <label for="notes" class="form-label">Notes</label>
+                                <label for="notes" class="form-label">Description</label>
                                 <textarea class="form-control" name="notes" rows="5">{{ old('notes', $product->notes) }}</textarea>
                             </div>
                         </div>
