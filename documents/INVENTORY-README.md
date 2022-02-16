@@ -66,22 +66,3 @@ Booked				- trigger stock out, update Booked Stock (add), update Blocked Stock (
 Dispatched			- trigger stock out, update Available Stock (deduct), update Booked Stock (deduct), create a DELIVERED Inventory Movement 
 					- update the average selling price
 
-
-To reset/recalculate the current stock:
----------------------------------------
-
-Available Stock: PO.Received - (SO.Dispatched + SO.Delivered)
-
-Ordered Stock: PO.Ordered + PO.Confirmed + PO.Shipped + PO.Customs + PO.Cleared
-
-Booked Stock: SO.Processing
-
-Projected Stock: Available Stock + Ordered stock - Booked Stock (calculated field)
-
-
-
-
-Triggers
---------
-
-
