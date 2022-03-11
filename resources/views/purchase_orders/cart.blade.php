@@ -155,7 +155,7 @@
                                                 <div class="input-group flex-nowrap">
                                                     <span class="input-group-text">{{ __('app.currency_symbol_inr')}}</span>
                                                     <input class="form-control" type="text" id="order-exchange-rate"
-                                                    value="@if ($purchase_order->order_exchange_rate) {{ $purchase_order->order_exchange_rate }} @else {{ Setting::get('purchase_order.exchange_rate') }} @endif">
+                                                    value="@if ($purchase_order->order_exchange_rate) {{ $purchase_order->order_exchange_rate }} @else {{ number_format(Setting::get('purchase_order.exchange_rate'),2) }} @endif">
                                                 </div>
                                             </td>
                                         </tr>
