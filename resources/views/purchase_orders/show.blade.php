@@ -124,9 +124,12 @@
                         <div class="row mb-3">
                             <div class="col-xl-4" id="invoice_number">
                                 <label class="form-label">Invoice #</label>
-                                <input type="text" class="form-control" name="invoice_number" required>
+                                <input type="text" class="form-control invoice_number" name="invoice_number" required>
                                 <div class="invalid-feedback">
                                     Invoice number is required
+                                </div>
+                                <div class="invalid-feedback invoice_number_taken">
+                                    Invoice number is already taken
                                 </div>
                             </div>
                             <div class="col-xl-4" id="shipped_at">
@@ -141,10 +144,9 @@
                                     Shipping date is required
                                 </div>
                             </div>
-               
+    
                         </div>
-                        
-
+                    
                         <button class="col-lg-12 text-center btn btn-warning" type="submit"
                             name="ship_order">Add invoice</button>
                     </form>
@@ -188,6 +190,8 @@
                         window.location.replace(data['redirect']);
                     },
                     error:function(xhr, textStatus, thrownError, data){
+                        $('.invoice_number_taken').show();
+                        $('.form-invoice').removeClass('was-validated');
                         console.log("Error: " + thrownError);
                         console.log("Error: " + textStatus);
                     }
