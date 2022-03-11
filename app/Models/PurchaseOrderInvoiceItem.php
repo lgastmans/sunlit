@@ -12,6 +12,9 @@ class PurchaseOrderInvoiceItem extends Model
     use SoftDeletes;
 
     protected $fillable = ['purchase_order_id', 'product_id','quantity_shipped', 'selling_price'];
+    protected $casts = [
+        'charges' => 'array',
+    ];
 
 
     /**

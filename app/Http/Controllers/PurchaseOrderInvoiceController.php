@@ -193,7 +193,7 @@ class PurchaseOrderInvoiceController extends Controller
                 'social_welfare_surcharge'=> $product->category->social_welfare_surcharge,
                 'igst'=> $product->category->igst,
             ];
-            $invoice_item->charges = json_encode($charges);
+            $invoice_item->charges = $charges;
 
             $invoice_item->save();
 

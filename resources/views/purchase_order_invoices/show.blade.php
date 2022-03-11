@@ -39,9 +39,9 @@
                             <tr>
                                 <td>{{ $item->product->part_number }}<br>
                                     <small class="me-2">
-                                        <b>Customs duty:</b> <span class="customs-duty">{{  $item->product->category->customs_duty }}%</span>
-                                         - <b>Surcharge:</b> <span class="social-welfare">{{  $item->product->category->social_welfare_surcharge }}%</span>
-                                         - <b>IGST:</b> <span class="igst">{{  $item->product->category->igst }}%</span>
+                                        <b>Customs duty:</b> <span class="customs-duty">{{  $item->charges['customs_duty'] }}%</span>
+                                         - <b>Surcharge:</b> <span class="social-welfare">{{  $item->charges['social_welfare_surcharge'] }}%</span>
+                                         - <b>IGST:</b> <span class="igst">{{  $item->charges['igst'] }}%</span>
                                     </small>
                                 </td>
                                 <td>{{ $item->quantity_shipped }}</td>
