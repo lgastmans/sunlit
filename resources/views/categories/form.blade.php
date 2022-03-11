@@ -28,13 +28,37 @@
                         </div>   
                         <div class="row mt-3 mb-6">
                             <div class="col-xl-4">
-                                <x-forms.input label="Customs Duty" name="customs_duty" value="{{ old('customs_duty', $category->customs_duty) }}" required="true"/>
+                                <label class="form-label" for="customs_duty">Customs Duty</label>
+                                <div class="input-group">
+                                    <input class="form-control" id="customs_duty" name="customs_duty" value="{{ old('customs_duty', $category->customs_duty) }}" required="true" />
+                                    <span class="input-group-text" id="inputGroupAppend">%</span>
+
+                                    <div class="invalid-feedback">
+                                        {{ __('error.form_invalid_field', ['field' => 'percentage']) }}
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-xl-4">
-                                <x-forms.input label="Social Welfare Surcharge" name="social_welfare_surcharge" value="{{ old('social_welfare_surcharge', $category->social_welfare_surcharge) }}" required="true"/>
+                                <label class="form-label" for="igst">Social Welfare Surcharge</label>
+                                <div class="input-group">
+                                    <input class="form-control" id="social_welfare_surcharge" name="social_welfare_surcharge" value="{{ old('social_welfare_surcharge', $category->social_welfare_surcharge) }}" required="true" />
+                                    <span class="input-group-text" id="inputGroupAppend">%</span>
+
+                                    <div class="invalid-feedback">
+                                        {{ __('error.form_invalid_field', ['field' => 'percentage']) }}
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-xl-4">
-                                <x-forms.input label="IGST" name="igst" value="{{ old('igst', $category->igst) }}" required="true"/>
+                                <label class="form-label" for="igst">IGST</label>
+                                <div class="input-group">
+                                    <input class="form-control" id="igst" name="igst" value="{{ old('igst', $category->igst) }}" required="true" />
+                                    <span class="input-group-text" id="inputGroupAppend">%</span>
+
+                                    <div class="invalid-feedback">
+                                        {{ __('error.form_invalid_field', ['field' => 'percentage']) }}
+                                    </div>
+                                </div>
                             </div>
                         </div>                      
                         <button class="mt-4 btn btn-primary" type="submit">@if ($category->id) {{ __('app.edit_title', ['field' => 'category']) }} @else {{ __('app.add_title', ['field' => 'category']) }} @endif</button>
