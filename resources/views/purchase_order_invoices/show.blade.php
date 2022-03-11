@@ -5,7 +5,7 @@
 @endsection
 
 @section('page-title')
-    Invoice #{{ $invoice->invoice_number}} 
+    Invoice #{{ $invoice->invoice_number}}  / <a href="{{ route("purchase-orders.show", $invoice->purchase_order->order_number_slug) }}">{{ $invoice->purchase_order->order_number }}</a>
 @endsection
 
 @section('content')
