@@ -464,7 +464,7 @@
                                 item += '</td>';
                                 item += '<td>';
                                     item += '<div class="input-group flex-nowrap">';
-                                        item += '<span class="input-group-text">$</span>';
+                                        item += '<span class="input-group-text">{{ __('app.currency_symbol_inr')}}</span>';
                                         item += '<input id="item-price-'+ data.item.id +'" type="text" class="editable-field form-control" data-value="'+ data.item.selling_price +'" data-field="price" data-item="'+ data.item.id +'" placeholder="" value="'+ data.item.selling_price  +'">';
                                         item += '</div>';
                                         item += '</td>';
