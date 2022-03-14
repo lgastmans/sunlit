@@ -32,6 +32,9 @@
                                     data-date-container="#ordered_at"
                                     data-date-autoclose="true"
                                     data-date-format="M d, yyyy"
+                                    data-date-start-date="-1d"
+                                    data-date-end-date="+6m"
+                                    data-date-today-highlight="true"
                                     required>
                                 </th>
                                 <th><input type="text" class="form-control"></th>

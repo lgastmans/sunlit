@@ -14,6 +14,9 @@
                         data-date-container="#customs_at"
                         data-date-autoclose="true"
                         data-date-format="M d, yyyy"
+                        data-date-start-date="-1d"
+                        data-date-end-date="+6m"
+                        data-date-today-highlight="true"
                         required>
                         <div class="invalid-feedback">
                             BOE date is required
@@ -50,6 +53,9 @@
                         data-date-container="#cleared_at"
                         data-date-autoclose="true"
                         data-date-format="M d, yyyy"
+                        data-date-start-date="-1d"
+                        data-date-end-date="+6m"
+                        data-date-today-highlight="true"
                         required>
                         <div class="invalid-feedback">
                             Cleared date is required
@@ -105,7 +111,8 @@
                         <label class="form-label">Received date</label>
                         <input type="text" class="form-control" name="received_at"
                             value="{{ $invoice->display_received_at }}" data-provide="datepicker" data-date-autoclose="true"
-                            data-date-container="#received_at" data-date-format="M d, yyyy" required>
+                            data-date-container="#received_at" data-date-format="M d, yyyy" required data-date-start-date="-1d"
+                            data-date-end-date="+6m" data-date-today-highlight="true">
                     </div>
                 </div>
             
@@ -130,7 +137,8 @@
                         <label class="form-label">Paid date</label>
                         <input type="text" class="form-control" name="paid_at"
                             value="{{ $invoice->display_paid_at }}" data-provide="datepicker" data-date-autoclose="true"
-                            data-date-container="#paid_at" data-date-format="M d, yyyy" required>
+                            data-date-container="#paid_at" data-date-format="M d, yyyy" required data-date-start-date="-1d"
+                            data-date-end-date="+6m" data-date-today-highlight="true">
                     </div>
                     <div class="col-xl-6">
                         <label class="form-label">Paid Exchange Rate</label>

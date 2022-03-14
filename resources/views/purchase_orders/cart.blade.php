@@ -188,6 +188,9 @@
                                                 data-date-container="#ordered_at"
                                                 data-date-autoclose="true"
                                                 data-date-format="M d, yyyy"
+                                                data-date-start-date="-1d"
+                                                data-date-end-date="+6m"
+                                                data-date-today-highlight="true"
                                                 required>
                                                 <div class="invalid-feedback">
                                                     Ordered date is required
@@ -216,6 +219,9 @@
                                                 data-date-container="#confirmed_at"
                                                 data-date-autoclose="true"
                                                 data-date-format="M d, yyyy"
+                                                data-date-start-date="-1d"
+                                                data-date-end-date="+6m"
+                                                data-date-today-highlight="true"
                                                 required>
                                                 <div class="invalid-feedback">
                                                     Confirmed date is required
@@ -340,6 +346,8 @@
 @section('page-scripts')
 
     <script>
+
+
 
     function recalculateGrandTotal(type=false){
         var grand_total = 0;

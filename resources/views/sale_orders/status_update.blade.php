@@ -14,6 +14,9 @@
                     data-date-container="#booked_at"
                     data-date-autoclose="true"
                     data-date-format="M d, yyyy"
+                    data-date-start-date="-1d"
+                    data-date-end-date="+6m"
+                    data-date-today-highlight="true"
                     required>
                     <div class="invalid-feedback">
                         Booked date is required
@@ -43,6 +46,9 @@
                         data-date-container="#dispatched_at"
                         data-date-autoclose="true"
                         data-date-format="M d, yyyy"
+                        data-date-start-date="-1d"
+                        data-date-end-date="+6m"
+                        data-date-today-highlight="true"
                         required>
                         <div class="invalid-feedback">
                             Dispatched date is required
@@ -66,6 +72,9 @@
                         data-date-container="#due_at"
                         data-date-autoclose="true"
                         data-date-format="M d, yyyy"
+                        data-date-start-date="-1d"
+                        data-date-end-date="+6m"
+                        data-date-today-highlight="true"
                         >
                         <div class="invalid-feedback">
                             Due date is required
@@ -114,7 +123,9 @@
                         <label class="form-label">Delivery date</label>
                         <input type="text" class="form-control" name="delivered_at"
                             value="{{ $order->display_delivered_at }}" data-provide="datepicker" data-date-autoclose="true"
-                            data-date-container="#delivered_at" data-date-format="M d, yyyy" required>
+                            data-date-container="#delivered_at" data-date-format="M d, yyyy" required data-date-start-date="-1d"
+                            data-date-end-date="+6m"
+                            data-date-today-highlight="true">
                     </div>
                 </div>
             
