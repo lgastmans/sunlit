@@ -79,6 +79,7 @@ class InventoryMovement extends Model
             ->where('warehouse_id', $warehouse_id)
             ->where('product_id', $product_id)
             ->whereNotNull('purchase_order_invoice_id')
+            //->where('purchase_order_invoice_id', '>', 0)
             ->first();
 
         return $query->average_price;
