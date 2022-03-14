@@ -55,6 +55,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/sale-orders/{order_number}', [SaleOrderController::class, 'show'])->name('sale-orders.show');
     Route::get('/sale-orders/{order_number}/cart', [SaleOrderController::class, 'cart'])->name('sale-orders.cart');
     // Route::get('/sale-orders/{id}/edit', [SaleOrderController::class, 'edit'])->name('sale-orders.edit');
+    Route::get('/sale-orders/{order_number}/proforma/pdf', [SaleOrderController::class, 'exportProformaToPdf'])->name('sale-orders.proforma-pdf');
+    Route::get('/sale-orders/{order_number}/proforma/', [SaleOrderController::class, 'proforma'])->name('sale-orders.proforma');
     Route::post('/sale-orders', [SaleOrderController::class, 'store'])->name('sale-orders.store');
     Route::put('/sale-orders/{id}/blocked', [SaleOrderController::class, 'blocked'])->name('sale-orders.blocked');
     Route::put('/sale-orders/{id}/booked', [SaleOrderController::class, 'booked'])->name('sale-orders.booked');

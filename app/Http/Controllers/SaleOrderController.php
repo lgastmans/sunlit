@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use PDF;
+use App\Models\Inventory;
 use App\Models\SaleOrder;
 use Illuminate\Http\Request;
 use App\Models\SaleOrderItem;
-use App\Models\Inventory;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreSaleOrderRequest;
 
@@ -441,5 +442,23 @@ class SaleOrderController extends Controller
         }
         return abort(403, trans('error.unauthorized'));
 
+    }
+
+
+    public function proforma($order_number)
+    {
+        $order = SaleOrder::where('order_number', '=', $order_number)->first();
+        return view('sale_orders.view_proforma', ['order' => $order]);
+    }
+
+
+    public function exportProformaToPdf($order_number)
+    {
+        $order = SaleOrder::where('order_number', '=', $order_number)->first();
+        view()->share('order', $order);
+        $pdf = PDF::loadView('sale_orders.proforma', $order);
+
+        // download PDF file with download method
+        return $pdf->download('Proforma Invoice '.$order_number.'.pdf');
     }
 }
