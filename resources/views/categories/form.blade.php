@@ -9,7 +9,7 @@
 @section('content')
 
 <div class="row">
-    <div class="col-5">
+    <div class="col-xl-5">
         <div class="card">
             <div class="card-body">
                 <x-forms.errors class="mb-4" :errors="$errors" />
@@ -19,15 +19,15 @@
                             @method('PUT')
                         @endif
                         <div class="row mb-6">
-                            <div class="col-xl-5">
+                            <div class="col-sm-6 col-xl-5">
                                 <x-forms.input label="Name" name="name" value="{{ old('name', $category->name) }}" required="true"/>
                             </div>
-                            <div class="col-xl-5">
+                            <div class="col-sm-6 col-xl-5">
                                 <x-forms.input label="HSN" name="hsn_code" value="{{ old('hsn_code', $category->hsn_code) }}" required="true"/>
                             </div>
                         </div>   
                         <div class="row mt-3 mb-6">
-                            <div class="col-xl-4">
+                            <div class="col-4">
                                 <label class="form-label" for="customs_duty">Customs Duty</label>
                                 <div class="input-group">
                                     <input class="form-control" id="customs_duty" name="customs_duty" value="{{ old('customs_duty', $category->customs_duty) }}" required="true" />
@@ -38,7 +38,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-4">
+                            <div class="col-4">
                                 <label class="form-label" for="igst">Social Welfare Surcharge</label>
                                 <div class="input-group">
                                     <input class="form-control" id="social_welfare_surcharge" name="social_welfare_surcharge" value="{{ old('social_welfare_surcharge', $category->social_welfare_surcharge) }}" required="true" />
@@ -49,7 +49,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-4">
+                            <div class="col-4">
                                 <label class="form-label" for="igst">IGST</label>
                                 <div class="input-group">
                                     <input class="form-control" id="igst" name="igst" value="{{ old('igst', $category->igst) }}" required="true" />

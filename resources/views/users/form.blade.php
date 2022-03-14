@@ -11,7 +11,7 @@
 @section('content')
 
 <div class="row">
-    <div class="col-6">
+    <div class="col-xl-6">
         <div class="card">
             <div class="card-body">
 
@@ -22,10 +22,10 @@
                             @method('PUT')
                         @endif
                         <div class="row mb-3">
-                            <div class="col-xl-5">
+                            <div class="col-5">
                                 <x-forms.input label="Name" name="name" value="{{ old('name', $user->name) }}" required="true"/>
                             </div>
-                            <div class="col-xl-3">
+                            <div class="col-3">
                                 <label class="form-label" for="role-select">Role</label>
                                 <select class="role-select form-control" name="role-select" required>
                                     @if ($user->id)
@@ -39,7 +39,7 @@
                         </div>
                         
                         <div class="row mb-3">
-                            <div class="col-xl-8">
+                            <div class="col-8">
                                 <label class="form-label" for="email">Email</label>
                                 <div class="input-group">
                                     <span class="input-group-text" id="inputGroupPrepend">@</span>
