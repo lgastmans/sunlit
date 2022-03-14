@@ -41,14 +41,17 @@
                                             <span class="badge bg-success">Nothing to receive</span>
                                         @else 
                                             <div class="input-group flex-nowrap">
-                                                <input class="form-control input-sm quantity_shipped" type="text" placeholder="{{ $item->quantity_confirmed -  $shipped[$item->product_id] }}" size="3" name="quantity_shipped" data-product="{{ $item->product_id }}">
+                                                <input data-max="{{ $item->quantity_confirmed - $shipped[$item->product_id] }}" class="form-control input-sm quantity_shipped" type="text" placeholder="{{ $item->quantity_confirmed -  $shipped[$item->product_id] }}" size="3" name="quantity_shipped" data-product="{{ $item->product_id }}">
                                             </div>
                                         @endif
                                     @else
                                         <div class="input-group flex-nowrap">
-                                            <input class="form-control input-sm quantity_shipped" type="text" placeholder="{{ $item->quantity_confirmed }} max" value="" size="3" name="quantity_shipped" data-product="{{ $item->product_id }}">
+                                            <input data-max="{{ $item->quantity_confirmed - $shipped[$item->product_id] }}" class="form-control input-sm quantity_shipped" type="text" placeholder="{{ $item->quantity_confirmed }} max" value="" size="3" name="quantity_shipped" data-product="{{ $item->product_id }}">
                                         </div>        
                                     @endif
+                                    <div class="invalid-feedback">
+                                        Max quantity is {{ $item->quantity_confirmed - $shipped[$item->product_id] }}
+                                    </div>
                                 </td>
                                 <td>@if (!empty($shipped[$item->product_id]) ) {{ $shipped[$item->product_id] }} @else 0 @endif</td>
                                 <td>{{ __('app.currency_symbol_usd')}}{{ number_format($item->buying_price,2) }}</td>
@@ -166,21 +169,30 @@
        
     $(document).ready(function () {
         "use strict";
-        
-        // add product_id and quantity shipped to form before submitting
         $('.form-invoice').on('submit', function(e){
-            e.preventDefault();    
+            e.preventDefault();   
+         
+            $('.invalid-feedback').hide();
+            $('.quantity_shipped').css('border-color','');
 
-            $(this).css('border-color','');
-
+            var qty_error = false;
             $('.product_shipped').remove();
             $( ".quantity_shipped" ).each(function( index ) {
                 if ($(this).val() > 0){
-                    var field = "<input type=\"hidden\" class=\"product_shipped\" name=\"products[" + $( this ).attr('data-product') + "]\" value=\"" + $(this).val() + "\" />";
-                    $(field).appendTo('.form-invoice');
+                    if (parseInt($(this).val()) <= parseInt($(this).attr('data-max'))){
+                        var field = "<input type=\"hidden\" class=\"product_shipped\" name=\"products[" + $( this ).attr('data-product') + "]\" value=\"" + $(this).val() + "\" />";
+                        $(field).appendTo('.form-invoice');
+                    }
+                    else{
+                        qty_error = true;
+                        $(this).css('border-color','#fa5c7c');
+                        $(this).parent().next().show();
+                    
+                    }
                 }
             });
-            if ($(".product_shipped").length > 0){
+
+            if ($(".product_shipped").length > 0 && qty_error == false){
                 $.ajax({
                     type: 'POST',
                     url: $(this).attr("action"),
