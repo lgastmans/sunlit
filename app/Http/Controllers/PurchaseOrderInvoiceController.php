@@ -127,6 +127,7 @@ class PurchaseOrderInvoiceController extends Controller
             $arr[] = array(
                 "id" => $invoice->id,
                 "invoice_number" => $invoice->invoice_number,
+                "invoice_number_slug" => $invoice->invoice_number_slug,
                 "order_number" => $invoice->purchase_order->order_number,
                 "shipped_at" => $invoice->display_shipped_at,
                 "amount" => (isset($invoice->amount_inr)) ? trans('app.currency_symbol_inr')." ".$invoice->amount_inr : "",
@@ -155,8 +156,6 @@ class PurchaseOrderInvoiceController extends Controller
     public function store(StorePurchaseOrderInvoiceRequest $request)
     {
         $validatedData = $request->validated();
-        
-        
         $purchase_order = PurchaseOrder::find($request->purchase_order_id);
         /*
         $purchase_order->status = PurchaseOrder::SHIPPED;
@@ -170,10 +169,13 @@ class PurchaseOrderInvoiceController extends Controller
         $invoice->invoice_number = $validatedData['invoice_number'];
         $invoice->shipped_at = $validatedData['shipped_at'];
         $invoice->user_id = $validatedData['user_id'];
+        $invoice->invoice_number_slug =  $validatedData['invoice_number_slug'];
         $invoice->save();
 
         $invoice_id = $invoice->id;
         $invoice_number = $invoice->invoice_number;
+        $invoice_number_slug = $invoice->invoice_number_slug;
+
         $amount_usd = 0;
         foreach($request->products as $product_id => $quantity_shipped){
             $product = Product::find($product_id);
@@ -207,7 +209,7 @@ class PurchaseOrderInvoiceController extends Controller
         $invoice->amount_inr = $invoice->amount_usd * $invoice->order_exchange_rate;
         $invoice->update();
         
-        return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'redirect' => route('purchase-order-invoices.show', $invoice_number)]);
+        return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'redirect' => route('purchase-order-invoices.show', $invoice_number_slug)]);
     }
 
     /**
@@ -216,13 +218,13 @@ class PurchaseOrderInvoiceController extends Controller
      * @param  string  $invoice_number
      * @return \Illuminate\Http\Response
      */
-    public function show($invoice_number)
+    public function show($invoice_number_slug)
     {
         $user = Auth::user();
         if ($user->can('view purchase orders')){
-            $po = PurchaseOrderInvoice::with('purchase_order')->where('invoice_number', '=', $invoice_number)->first();
+            $po = PurchaseOrderInvoice::with('purchase_order')->where('invoice_number_slug', '=', $invoice_number_slug)->first();
             $purchase_order = $po->purchase_order;
-            $invoice = PurchaseOrderInvoice::with(['items', 'items.product'])->where('invoice_number', '=', $invoice_number)->first();
+            $invoice = PurchaseOrderInvoice::with(['items', 'items.product'])->where('invoice_number_slug', '=', $invoice_number_slug)->first();
             if ($invoice)
                 return view('purchase_order_invoices.show', ['invoice' => $invoice, 'purchase_order' => $purchase_order ]);
 
@@ -273,7 +275,7 @@ class PurchaseOrderInvoiceController extends Controller
         $invoice->boe_number = $request->get('boe_number');
         $invoice->status = PurchaseOrderInvoice::CUSTOMS;
         $invoice->update();
-        return redirect(route('purchase-order-invoices.show', $invoice->invoice_number))->with('success', 'order at customs'); 
+        return redirect(route('purchase-order-invoices.show', $invoice->invoice_number_slug))->with('success', 'order at customs'); 
     }
 
     /**

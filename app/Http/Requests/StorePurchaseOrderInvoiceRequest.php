@@ -28,7 +28,8 @@ class StorePurchaseOrderInvoiceRequest extends FormRequest
     {
         $this->merge([
             'status' => PurchaseOrderInvoice::DRAFT,
-            'user_id' => Auth::user()->id
+            'user_id' => Auth::user()->id,
+            'invoice_number_slug' => str_replace(array(' ', '/'), '-', $this->invoice_number)
         ]);
     }
 
@@ -43,7 +44,8 @@ class StorePurchaseOrderInvoiceRequest extends FormRequest
             'invoice_number' => 'required|unique:purchase_order_invoices|max:255',
             'status' => 'required|integer',
             'user_id' => 'required|integer',
-            'shipped_at' => 'required|date'
+            'shipped_at' => 'required|date',
+            'invoice_number_slug' => 'required',
         ];
     }
 }

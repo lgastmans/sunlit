@@ -104,7 +104,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/purchase-order-invoices', [PurchaseOrderInvoiceController::class, 'index'])->name('purchase-order-invoices');
     Route::get('/purchase-order-invoices/list', [PurchaseOrderInvoiceController::class, 'getListForDatatables'])->name('purchase-order-invoices.datatables');
-    Route::get('/purchase-order-invoices/{invoice_number}', [PurchaseOrderInvoiceController::class, 'show'])->name('purchase-order-invoices.show');
+    Route::get('/purchase-order-invoices/{invoice_number_slug}', [PurchaseOrderInvoiceController::class, 'show'])->name('purchase-order-invoices.show');
     Route::post('/purchase-order-invoices', [PurchaseOrderInvoiceController::class, 'store'])->name('purchase-order-invoices.store');
     Route::put('/purchase-order-invoices/{id}/customs', [PurchaseOrderInvoiceController::class, 'customs'])->name('purchase-order-invoices.customs');
     Route::put('/purchase-order-invoices/{id}/cleared', [PurchaseOrderInvoiceController::class, 'cleared'])->name('purchase-order-invoices.cleared');

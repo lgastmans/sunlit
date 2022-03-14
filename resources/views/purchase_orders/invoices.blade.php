@@ -16,7 +16,7 @@
                                 <tr>
                                     <td>{{ $invoice->display_shipped_at }}</td>
                                     <td>
-                                        <a href="{{ route('purchase-order-invoices.show', $invoice->invoice_number) }}">
+                                        <a href="{{ route('purchase-order-invoices.show', $invoice->invoice_number_slug) }}">
                                             <strong>{!! $invoice->display_status !!}  #{{ $invoice->invoice_number }}</strong> {{ $invoice->user->display_name }}
                                         </a>
                                     </td>

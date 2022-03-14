@@ -130,6 +130,11 @@
                 'data': 'user',
                 'orderable': true 
             }
+            ,
+            { 
+                'data': 'invoice_number_slug',
+                'visible': false,
+            }
             
         ],
         "select": {
@@ -183,7 +188,7 @@
 
     $('#purchase-order-invoices-datatable').on('dblclick', 'tr', function () {
         var route = '{{  route("purchase-order-invoices.show", ":id") }}';
-        route = route.replace(':id', table.row( this ).data().invoice_number);
+        route = route.replace(':id', table.row( this ).data().invoice_number_slug);
         window.location.href = route;
     });
 

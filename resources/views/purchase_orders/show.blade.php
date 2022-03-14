@@ -43,15 +43,19 @@
                                             <div class="input-group flex-nowrap">
                                                 <input data-max="{{ $item->quantity_confirmed - $shipped[$item->product_id] }}" class="form-control input-sm quantity_shipped" type="text" placeholder="{{ $item->quantity_confirmed -  $shipped[$item->product_id] }}" size="3" name="quantity_shipped" data-product="{{ $item->product_id }}">
                                             </div>
+                                            <div class="invalid-feedback">
+                                                Max quantity is {{ $item->quantity_confirmed - $shipped[$item->product_id] }}
+                                            </div>
                                         @endif
                                     @else
                                         <div class="input-group flex-nowrap">
-                                            <input data-max="{{ $item->quantity_confirmed - $shipped[$item->product_id] }}" class="form-control input-sm quantity_shipped" type="text" placeholder="{{ $item->quantity_confirmed }} max" value="" size="3" name="quantity_shipped" data-product="{{ $item->product_id }}">
-                                        </div>        
+                                            <input data-max="{{ $item->quantity_confirmed }}" class="form-control input-sm quantity_shipped" type="text" placeholder="{{ $item->quantity_confirmed }} max" value="" size="3" name="quantity_shipped" data-product="{{ $item->product_id }}">
+                                        </div>   
+                                        <div class="invalid-feedback">
+                                            Max quantity is {{ $item->quantity_confirmed }}
+                                        </div>     
                                     @endif
-                                    <div class="invalid-feedback">
-                                        Max quantity is {{ $item->quantity_confirmed - $shipped[$item->product_id] }}
-                                    </div>
+                                    
                                 </td>
                                 <td>@if (!empty($shipped[$item->product_id]) ) {{ $shipped[$item->product_id] }} @else 0 @endif</td>
                                 <td>{{ __('app.currency_symbol_usd')}}{{ number_format($item->buying_price,2) }}</td>
