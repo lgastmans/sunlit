@@ -39,7 +39,7 @@ class InventoryController extends Controller
             $length = $request->get("length");
         }
 
-        $order_column = 'products.code';
+        $order_column = 'products.part_number';
         $order_dir = 'ASC';
         $order_arr = array();
         if ($request->has('order')) {
