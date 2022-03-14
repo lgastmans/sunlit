@@ -380,8 +380,8 @@ class SaleOrderController extends Controller
     {
         $validated = $request->validate([
             'dispatched_at' => 'required|date',
-            'due_at' => 'required|date',
-            'tracking_number' => 'required',
+            // 'due_at' => 'required|date',
+            // 'tracking_number' => 'required',
             'courier' => 'required',
             'transport_charges' => 'required'
         ]);

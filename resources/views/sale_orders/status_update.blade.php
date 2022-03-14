@@ -48,6 +48,17 @@
                             Dispatched date is required
                         </div>
                     </div>
+                    <div class="col-xl-6 " id="courier">
+                        <label class="form-label">Courier</label>
+                        <input type="text" class="form-control" name="courier" required>
+                        <div class="invalid-feedback">
+                            Courier is required
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <div class="row mb-3 d-none" >
                     <div class="col-xl-4 offset-xl-2" id="due_at">
                         <label class="form-label">Due date</label>
                         <input type="text" class="form-control" name="due_at" value="{{ $order->display_due_at }}"
@@ -55,24 +66,14 @@
                         data-date-container="#due_at"
                         data-date-autoclose="true"
                         data-date-format="M d, yyyy"
-                        required>
+                        >
                         <div class="invalid-feedback">
                             Due date is required
                         </div>
                     </div>
-                </div>
-                
-                <div class="row mb-3" >
-                    <div class="col-xl-6" id="courier">
-                        <label class="form-label">Courier</label>
-                        <input type="text" class="form-control" name="courier" required>
-                        <div class="invalid-feedback">
-                            Courier is required
-                        </div>
-                    </div>
-                    <div class="col-xl-6" id="tracking_number">
+                    <div class="col-xl-6 id="tracking_number">
                         <label class="form-label">Tracking number</label>
-                        <input type="text" class="form-control" name="tracking_number" required>
+                        <input type="text" class="form-control" name="tracking_number" >
                         <div class="invalid-feedback">
                            Tracking number is required
                         </div>
