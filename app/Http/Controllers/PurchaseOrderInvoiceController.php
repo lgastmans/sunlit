@@ -85,10 +85,10 @@ class PurchaseOrderInvoiceController extends Controller
         $query->join('purchase_orders', 'purchase_orders.id', '=', 'purchase_order_id');
 
         if (!empty($column_arr[0]['search']['value'])){
-            $query->where('purchase_order_invoices.invoice_number', 'like', $column_arr[0]['search']['value'].'%');
+            $query->where('purchase_order_invoices.invoice_number', 'like', '%'.$column_arr[0]['search']['value'].'%');
         }
         if (!empty($column_arr[1]['search']['value'])){
-            $query->where('purchase_orders.order_number', 'like', $column_arr[1]['search']['value'].'%');
+            $query->where('purchase_orders.order_number', 'like', '%'.$column_arr[1]['search']['value'].'%');
         }
         if (!empty($column_arr[2]['search']['value'])){
             $query->where('purchase_order_invoices.shipped_at', 'like', convertDateToMysql($column_arr[2]['search']['value']));
@@ -106,9 +106,9 @@ class PurchaseOrderInvoiceController extends Controller
         if ($request->has('search')){
             $search = $request->get('search')['value'];
             $query->where( function ($q) use ($search){
-                $q->where('purchase_orders.order_number', 'like', $search.'%')
+                $q->where('purchase_orders.order_number', 'like', '%'.$search.'%')
                     ->orWhere('purchase_order_invoices.amount_inr', 'like', $search.'%')
-                    ->orWhere('purchase_order_invoices.invoice_number', 'like', $search.'%');
+                    ->orWhere('purchase_order_invoices.invoice_number', 'like', '%'.$search.'%');
             });    
         }
 

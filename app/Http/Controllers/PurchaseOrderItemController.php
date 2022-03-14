@@ -80,10 +80,10 @@ class PurchaseOrderItemController extends Controller
 
 
         if (!empty($column_arr[0]['search']['value'])){
-            $query->where('purchase_orders.order_number', 'like', $column_arr[0]['search']['value'].'%');
+            $query->where('purchase_orders.order_number', 'like', '%'.$column_arr[0]['search']['value'].'%');
         }
         if (!empty($column_arr[1]['search']['value'])){
-            $query->where('warehouses.name', 'like', $column_arr[1]['search']['value'].'%');
+            $query->where('warehouses.name', 'like', '%'.$column_arr[1]['search']['value'].'%');
         }
         if (!empty($column_arr[2]['search']['value'])){
             $query->where('purchase_orders.quantity_confirmed', '=', $column_arr[2]['search']['value']);

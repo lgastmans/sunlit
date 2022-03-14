@@ -103,10 +103,10 @@ class SaleOrderController extends Controller
 
         if ($request->has('source') && $request->source == "warehouses"){
             if (!empty($column_arr[0]['search']['value'])){
-                $query->where('sale_orders.order_number', 'like', $column_arr[0]['search']['value'].'%');
+                $query->where('sale_orders.order_number', 'like', '%'.$column_arr[0]['search']['value'].'%');
             }
             if (!empty($column_arr[1]['search']['value'])){
-                $query->where('dealers.company', 'like', $column_arr[1]['search']['value'].'%');
+                $query->where('dealers.company', 'like', '%'.$column_arr[1]['search']['value'].'%');
             }
             if (!empty($column_arr[2]['search']['value'])){
                 $query->where('sale_orders.status', 'like', $column_arr[2]['search']['value']);
@@ -119,13 +119,13 @@ class SaleOrderController extends Controller
             }
         }else{
             if (!empty($column_arr[0]['search']['value'])){
-                $query->where('sale_orders.order_number', 'like', $column_arr[0]['search']['value'].'%');
+                $query->where('sale_orders.order_number', 'like', '%'.$column_arr[0]['search']['value'].'%');
             }
             if (!empty($column_arr[1]['search']['value'])){
-                $query->where('warehouses.name', 'like', $column_arr[1]['search']['value'].'%');
+                $query->where('warehouses.name', 'like', '%'.$column_arr[1]['search']['value'].'%');
             }
             if (!empty($column_arr[2]['search']['value'])){
-                $query->where('dealers.company', 'like', $column_arr[2]['search']['value'].'%');
+                $query->where('dealers.company', 'like', '%'.$column_arr[2]['search']['value'].'%');
             }
             if (!empty($column_arr[3]['search']['value'])){
                 $query->where('sale_orders.blocked_at', 'like', convertDateToMysql($column_arr[3]['search']['value']));
@@ -147,9 +147,9 @@ class SaleOrderController extends Controller
         if ($request->has('search')){
             $search = $request->get('search')['value'];
             $query->where( function ($q) use ($search){
-                $q->where('sale_orders.order_number', 'like', $search.'%')
+                $q->where('sale_orders.order_number', 'like', '%'.$search.'%')
                     ->orWhere('sale_orders.amount', 'like', $search.'%')
-                    ->orWhere('dealers.company', 'like', $search.'%');
+                    ->orWhere('dealers.company', 'like', '%'.$search.'%');
             });    
         }
 

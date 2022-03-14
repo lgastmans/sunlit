@@ -119,13 +119,13 @@ class PurchaseOrderController extends Controller
 
         if ($request->has('source') && $request->source == "warehouses"){
             if (!empty($column_arr[0]['search']['value'])){
-                $query->where('purchase_orders.order_number', 'like', $column_arr[0]['search']['value'].'%');
+                $query->where('purchase_orders.order_number', 'like', '%'.$column_arr[0]['search']['value'].'%');
             }
             if (!empty($column_arr[1]['search']['value'])){
-                $query->where('suppliers.company', 'like', $column_arr[1]['search']['value'].'%');
+                $query->where('suppliers.company', 'like', '%'.$column_arr[1]['search']['value'].'%');
             }
             if (!empty($column_arr[2]['search']['value'])){
-                $query->where('purchase_orders.status', 'like', $column_arr[2]['search']['value']);
+                $query->where('purchase_orders.status', 'like', '%'.$column_arr[2]['search']['value']);
             }
             if (!empty($column_arr[3]['search']['value'])){
                 $query->where('purchase_orders.ordered_at', 'like', convertDateToMysql($column_arr[3]['search']['value']));
@@ -135,13 +135,13 @@ class PurchaseOrderController extends Controller
             }
         }else{
             if (!empty($column_arr[0]['search']['value'])){
-                $query->where('purchase_orders.order_number', 'like', $column_arr[0]['search']['value'].'%');
+                $query->where('purchase_orders.order_number', 'like', '%'.$column_arr[0]['search']['value'].'%');
             }
             if (!empty($column_arr[1]['search']['value'])){
-                $query->where('warehouses.name', 'like', $column_arr[1]['search']['value'].'%');
+                $query->where('warehouses.name', 'like', '%'.$column_arr[1]['search']['value'].'%');
             }
             if (!empty($column_arr[2]['search']['value'])){
-                $query->where('suppliers.company', 'like', $column_arr[2]['search']['value'].'%');
+                $query->where('suppliers.company', 'like', '%'.$column_arr[2]['search']['value'].'%');
             }
             if (!empty($column_arr[3]['search']['value'])){
                 $query->where('purchase_orders.ordered_at', 'like', convertDateToMysql($column_arr[3]['search']['value']));
@@ -178,9 +178,9 @@ class PurchaseOrderController extends Controller
         if ($request->has('search')){
             $search = $request->get('search')['value'];
             $query->where( function ($q) use ($search){
-                $q->where('purchase_orders.order_number', 'like', $search.'%')
+                $q->where('purchase_orders.order_number', 'like', '%'.$search.'%')
                     ->orWhere('purchase_orders.amount_inr', 'like', $search.'%')
-                    ->orWhere('suppliers.company', 'like', $search.'%');
+                    ->orWhere('suppliers.company', 'like', '%'.$search.'%');
             });    
         }
 

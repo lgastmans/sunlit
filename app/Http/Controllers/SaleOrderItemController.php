@@ -78,13 +78,13 @@ class SaleOrderItemController extends Controller
                 ->where('product_id', '=', $filter_product_id);
 
         if (!empty($column_arr[0]['search']['value'])){
-            $query->where('sale_orders.order_number', 'like', $column_arr[0]['search']['value'].'%');
+            $query->where('sale_orders.order_number', 'like', '%'.$column_arr[0]['search']['value'].'%');
         }
         if (!empty($column_arr[1]['search']['value'])){
-            $query->where('warehouses.name', 'like', $column_arr[1]['search']['value'].'%');
+            $query->where('warehouses.name', 'like', '%'.$column_arr[1]['search']['value'].'%');
         }
         if (!empty($column_arr[2]['search']['value'])){
-            $query->where('dealers.company', 'like', $column_arr[2]['search']['value'].'%');
+            $query->where('dealers.company', 'like', '%'.$column_arr[2]['search']['value'].'%');
         }
         if (!empty($column_arr[3]['search']['value'])){
             $query->where('sale_order_items.quantity_ordered', 'like', $column_arr[3]['search']['value'].'%');
