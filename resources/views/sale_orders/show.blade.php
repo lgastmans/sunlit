@@ -58,6 +58,11 @@
 
                 <h4 class="header-title mb-3">Order Summary #{{ $order->order_number }}</h4>
 
+                <a class="btn btn-success" href="{{ route('sale-orders.proforma-pdf', $order->order_number) }}" role="button" target="_blank">Export to PDF</a>
+
+                <a class="btn btn-success" href="{{ route('sale-orders.proforma', $order->order_number) }}" role="button" target="_blank">View Proforma</a>
+
+
                 <div class="table-responsive">
                     <table class="table mb-0">
                         <tbody>
