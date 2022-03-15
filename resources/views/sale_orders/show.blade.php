@@ -134,7 +134,7 @@
                 var route = '{{ route("sale-orders.update", ":id") }}';
                 route = route.replace(':id', $('#sale-order-id').val());
 
-                var freight = 123; //$("#freight").val();
+                var freight = $("#freight").val();
                 console.log('here ' + freight );
 
                 $.ajax({
