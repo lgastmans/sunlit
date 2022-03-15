@@ -19,6 +19,7 @@ mix.postCss('resources/css/icons.css', 'public/css').options({processCssUrls: fa
 mix.postCss('resources/css/vendor/dataTables.bootstrap4.css', 'public/css/vendor').options({processCssUrls: false});
 mix.postCss('resources/css/vendor/responsive.bootstrap4.css', 'public/css/vendor').options({processCssUrls: false});
 
+mix.copy('resources/css/proforma.css', 'public/css/');
 
 mix.js('resources/js/app.js', 'public/js/');
 mix.js('resources/js/pages/*', 'public/js/pages/');
@@ -32,4 +33,5 @@ mix.copy('resources/js/vendor/responsive.bootstrap4.min.js', 'public/js/vendor/'
 mix.copy('resources/js/vendor/dataTables.checkboxes.min.js', 'public/js/vendor/');
 mix.copy('resources/js/vendor/Chart.bundle.min.js', 'public/js/vendor/');
 mix.copy('resources/js/vendor/apexcharts.min.js', 'public/js/vendor/');
+
 
