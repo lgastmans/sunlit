@@ -64,6 +64,7 @@
 
     // Default Datatable
     var table = $('#taxes-datatable').DataTable({
+        stateSave: true,
         processing: true,
         serverSide: true,
         ajax: "{{ route('taxes.datatables') }}",

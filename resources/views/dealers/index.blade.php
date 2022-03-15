@@ -64,7 +64,7 @@
 
 
     var table = $('#dealers-datatable').DataTable({
-        
+        stateSave: true,
         processing: true,
         serverSide: true,
         ajax: "{{ route('dealers.datatables') }}",

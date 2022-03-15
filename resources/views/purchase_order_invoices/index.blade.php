@@ -87,6 +87,7 @@
 
     // Default Datatable
     var table = $('#purchase-order-invoices-datatable').DataTable({
+        stateSave: true,
         orderCellsTop: true,
         fixedHeader: true,
         processing: true,

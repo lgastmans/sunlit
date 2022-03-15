@@ -70,6 +70,7 @@
     "use strict";
 
     var table = $('#users-datatable').DataTable({
+        stateSave: true,
         processing: true,
         serverSide: true,
         ajax: "{{ route('users.datatables') }}",

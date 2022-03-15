@@ -96,6 +96,7 @@
     });
 
     var table = $('#inventory-datatable').DataTable({
+        stateSave: true,
         processing: true,
         serverSide: true,
         orderCellsTop: true,

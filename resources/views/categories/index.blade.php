@@ -68,6 +68,7 @@
     "use strict";
 
     var table = $('#categories-datatable').DataTable({
+        stateSave: true,
         processing: true,
         serverSide: true,
         ajax: "{{ route('categories.datatables') }}",

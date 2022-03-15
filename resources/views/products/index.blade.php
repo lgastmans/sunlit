@@ -75,6 +75,7 @@
 
     // Default Datatable
     var table = $('#products-datatable').DataTable({
+        stateSave: true,
         processing: true,
         serverSide: true,
         orderCellsTop: true,
