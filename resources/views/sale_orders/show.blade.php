@@ -5,7 +5,7 @@
 @endsection
 
 @section('page-title')
-    Sale Orders #{{ $order->order_number}}
+    Sale Order #{{ $order->order_number}}
 @endsection
 
 @section('content')
@@ -53,6 +53,9 @@
     <div class="col-lg-4">
         <div class="card">
             <div class="card-body">
+
+                <input type="hidden" name="sale_order_id" id="sale-order-id" value="{{ $order->id }}">
+
                 <h4 class="header-title mb-3">Order Summary #{{ $order->order_number }}</h4>
 
                 <div class="table-responsive">
@@ -107,9 +110,49 @@
 @endsection
 
 @section('page-scripts')
- <script>
-       
-    
-</script>
+
+    <script>
+
+         $(document).ready(function () {
+            "use strict";
+
+            $("#btn_transport_charges").on('click', function(e) {
+
+                e.preventDefault();
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                    }
+                }); 
+
+                var route = '{{ route("sale-orders.update", ":id") }}';
+                route = route.replace(':id', $('#sale-order-id').val());
+
+                var freight = 123; //$("#freight").val();
+                console.log('here ' + freight );
+
+                $.ajax({
+                        type: 'POST',
+                        url: route,
+                        dataType: 'json',
+                        data: { 
+                            'value' : freight, 
+                            'field': 'transport_charges', 
+                            'item': false,
+                            '_method': 'PUT'
+                        },
+                        success : function(result){
+                            console.log(result);
+
+                            $.NotificationApp.send("Success","Transport Charges saved","top-right","","success")
+
+                        }
+                });        
+
+            });
+        });
+
+    </script>
 
 @endsection

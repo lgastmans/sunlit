@@ -306,6 +306,16 @@ class SaleOrderController extends Controller
 
             return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'field' => $request->get('field')]);
         }
+
+        if ($request->get('field') == "transport_charges"){
+            $order = SaleOrder::find($id);
+            $items = SaleOrderItem::where('sale_order_id', "=", $id)->get();
+            $order->transport_charges = $request->get('value');
+            $order->update();
+
+            return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'field' => $request->get('field')]);
+        }
+
     }
 
 
