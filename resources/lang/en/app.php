@@ -13,7 +13,7 @@ return [
     'record_enabled' => ':Field has been enabled',
     'create_title' => 'Create :field',
     'add_title' => 'Add a new :field',
-    'edit_title' => 'Edit :field',
+    'edit_title' => 'Save :field',
     'delete_title' => 'Delete :field',
     'delete_confirm' => 'Are you sure you want to delete this :field?',
     'modal_close' => 'Close',
