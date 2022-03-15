@@ -100,6 +100,7 @@
 
     // Default Datatable
     var table = $('#sale-orders-datatable').DataTable({
+        stateSave: true,
         orderCellsTop: true,
         fixedHeader: true,
 
