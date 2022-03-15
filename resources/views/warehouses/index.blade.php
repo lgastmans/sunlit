@@ -66,7 +66,7 @@
 
 
     var table = $('#warehouses-datatable').DataTable({
-        
+        stateSave: true,
         processing: true,
         serverSide: true,
         ajax: "{{ route('warehouses.datatables') }}",
