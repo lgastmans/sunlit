@@ -64,7 +64,37 @@
 
     // Default Datatable
     var table = $('#taxes-datatable').DataTable({
+        dom: 'Bfrtip',
         stateSave: true,
+        buttons: [
+            {
+                text: '<i class="mdi mdi-plus-circle me-2"></i> {{ __('app.add_title', ['field' => 'tax']) }}',
+                className: 'btn btn-light   ',
+                action: function ( e, dt, node, config ) {
+                    window.location.href="{{ route('taxes.create') }}"
+                }
+            },
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: [ 0, 1]
+                },
+                className: 'btn btn-success'
+            },
+            {
+                extend: 'pdfHtml5',
+                exportOptions: {
+                    columns: [ 0, 1]
+                },
+                className: 'btn btn-warning',
+                download: 'open'
+            },
+            {
+                extend: 'colvis',
+                columns: ':not(.noVis)',
+                className: 'btn btn-info'
+            }
+        ],
         processing: true,
         serverSide: true,
         ajax: "{{ route('taxes.datatables') }}",
@@ -100,6 +130,8 @@
             },
             {
                 'data': 'id',
+                "width": "5%",
+                'className': 'noVis',
                 'render' : function(data, type, row, meta){
                     if (type === 'display'){
 
