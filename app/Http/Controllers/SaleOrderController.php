@@ -457,16 +457,21 @@ class SaleOrderController extends Controller
 
     public function proforma($order_number)
     {
+        $settings = \Setting::all();
+
         $order = SaleOrder::where('order_number', '=', $order_number)->first();
-        return view('sale_orders.view_proforma', ['order' => $order]);
+        return view('sale_orders.view_proforma', ['order' => $order, 'settings' => $settings]);
     }
 
 
     public function exportProformaToPdf($order_number)
     {
+        $settings = \Setting::all();
+
         $order = SaleOrder::where('order_number', '=', $order_number)->first();
         view()->share('order', $order);
-        $pdf = PDF::loadView('sale_orders.proforma', $order);
+        view()->share('settings', $settings);
+        $pdf = PDF::loadView('sale_orders.proforma',  $order);
 
         // download PDF file with download method
         return $pdf->download('Proforma Invoice '.$order_number.'.pdf');

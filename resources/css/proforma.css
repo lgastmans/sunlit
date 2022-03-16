@@ -16,7 +16,7 @@ menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
   margin: 0;
   padding: 0;
-  border: 0;
+  border: 1;
   font: inherit;
   font-size: 100%;
   vertical-align: baseline;
@@ -93,6 +93,8 @@ html, body {
   padding: 50px 65px;
   min-height: 1058px;
   position: relative;
+  border-style: solid;
+  border-color: grey;
 }
 
 #memo {
@@ -197,7 +199,7 @@ table th, table td {
   margin-top: 40px;
 }
 #items .first-cell, #items table th:first-child, #items table td:first-child {
-  width: 18px;
+  width: 42px;
   text-align: right;
 }
 #items table {

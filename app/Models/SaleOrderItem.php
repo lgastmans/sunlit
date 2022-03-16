@@ -35,4 +35,24 @@ class SaleOrderItem extends Model
         return  $total;
     }
 
+    /**
+     * Returns the Taxable Value
+     */
+    public function getTaxableValueAttribute()
+    {
+        return number_format($this->quantity_ordered * $this->selling_price, 2);
+    }
+
+    /**
+     * Returns the Tax Amount IGST
+     */
+    public function getTaxAmountIgstAttribute()
+    {
+        return number_format(($this->quantity_ordered * $this->selling_price) * ($this->tax/100), 2);
+    }
+
+    public function getTaxAmountCgstAttribute()
+    {
+        return number_format(($this->quantity_ordered * $this->selling_price) * ($this->tax/100) / 2, 2);
+    }
 }
