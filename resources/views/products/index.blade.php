@@ -12,22 +12,6 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <div class="row mb-2">
-                    <div class="col-sm-4">
-                        @if (Auth::user()->can('edit products'))
-                            <a href="{{ route('products.create') }}" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> {{ __('app.add_title', ['field' => 'product']) }}</a>
-                        @else
-                            &nbsp;
-                        @endif
-                    </div>
-                    <div class="col-sm-8">
-                        <div class="text-sm-end">
-                            <a class="btn toggle-filters" href="javascript:void(0);"><button type="button" class="btn btn-light mb-2"><i class="mdi mdi-filter"></i></button></a>
-                            <a class="btn" href="{{ route('export.products') }}"><button type="button" class="btn btn-light mb-2">{{ __('app.export') }}</button></a>
-                        </div>
-                    </div><!-- end col-->
-                </div>
-
                 <div class="table-responsive">
                     <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="products-datatable">
                         <thead class="table-light">
@@ -69,13 +53,47 @@
  $(document).ready(function () {
     "use strict";
 
-    $('.toggle-filters').on('click', function(e) {
-        $( ".filters" ).slideToggle('slow');
-    });
 
     // Default Datatable
     var table = $('#products-datatable').DataTable({
+        dom: 'Bfrtip',
         stateSave: true,
+        buttons: [
+            {
+                text: '<i class="mdi mdi-plus-circle me-2"></i> {{ __('app.add_title', ['field' => 'product']) }}',
+                className: 'btn btn-light',
+                action: function ( e, dt, node, config ) {
+                    window.location.href="{{ route('products.create') }}"
+                }
+            },
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: [ 0, 1, 2, 3, 4]
+                },
+                className: 'btn btn-success'
+            },
+            {
+                extend: 'pdfHtml5',
+                exportOptions: {
+                    columns: [ 0, 1, 2, 3, 4]
+                },
+                className: 'btn btn-warning',
+                download: 'open'
+            },
+            {
+                extend: 'colvis',
+                columns: ':not(.noVis)',
+                className: 'btn btn-info'
+            },
+            {
+                text: '<i class="mdi mdi-filter"></i>&nbsp;Filter',
+                // className: 'btn btn-light',
+                action: function ( e, dt, node, config ) {
+                    $( ".filters" ).slideToggle('slow');
+                }
+            }
+        ],
         processing: true,
         serverSide: true,
         orderCellsTop: true,
@@ -128,6 +146,8 @@
             },
             {
                 'data': 'id',
+                "width": "5%",
+                'className': 'noVis',
                 'orderable': false,
                 'render' : function(data, type, row, meta){
                     if (type === 'display'){
