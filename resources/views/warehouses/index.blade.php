@@ -14,23 +14,8 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <div class="row mb-2">
-                    <div class="col-sm-4">
-                        @if (Auth::user()->can('edit warehouses'))
-                            <a href="{{ route('warehouses.create') }}" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> {{ __('app.add_title', ['field' => 'warehouse']) }}</a>
-                        @else
-                            &nbsp;
-                        @endif
-                    </div>
-                    <div class="col-sm-8">
-                        <div class="text-sm-end">
-                            <!-- <button type="button" class="btn btn-light mb-2">Export</button> -->
-                        </div>
-                    </div><!-- end col-->
-                </div>
-
                 <div class="table-responsive">
-                    <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="warehouses-datatable">
+                    <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap table-has-dlb-click" id="warehouses-datatable">
                         <thead class="table-light">
                             <tr>
                                 <th>Name</th>
@@ -61,12 +46,39 @@
 
 
  $(document).ready(function () {
-
     "use strict";
-
-
     var table = $('#warehouses-datatable').DataTable({
+        dom: 'Bfrtip',
         stateSave: true,
+        buttons: [
+            {
+                text: '<i class="mdi mdi-plus-circle me-2"></i> {{ __('app.add_title', ['field' => 'warehouse']) }}',
+                className: 'btn btn-light   ',
+                action: function ( e, dt, node, config ) {
+                    window.location.href="{{ route('warehouses.create') }}"
+                }
+            },
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: [ 0, 1, 2, 3, 4, 5 ]
+                },
+                className: 'btn btn-success'
+            },
+            {
+                extend: 'pdfHtml5',
+                exportOptions: {
+                    columns: [ 0, 1, 2, 3, 4, 5 ]
+                },
+                className: 'btn btn-warning',
+                download: 'open'
+            },
+            {
+                extend: 'colvis',
+                columns: ':not(.noVis)',
+                className: 'btn btn-info'
+            }
+        ],
         processing: true,
         serverSide: true,
         ajax: "{{ route('warehouses.datatables') }}",
@@ -103,14 +115,16 @@
             },
             { 
                 'data': 'email',
-                'orderable': true 
+                'orderable': true,
             },
             { 
                 'data': 'phone',
-                'orderable': true 
+                'orderable': true,
             },
             {
                 'data': 'id',
+                "width": "5%",
+                'className': 'noVis',
                 'render' : function(data, type, row, meta){
                     if (type === 'display'){
 
@@ -144,6 +158,8 @@
             
         },
     });
+
+
 
 
     $('#warehouses-datatable').on('dblclick', 'tr', function () {

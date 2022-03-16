@@ -5,3 +5,7 @@
 .side-nav{
     padding-top: 15px;
 }
+
+.table-has-dlb-click{
+    cursor: pointer;
+}
