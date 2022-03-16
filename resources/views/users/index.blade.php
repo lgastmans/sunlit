@@ -14,21 +14,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <div class="row mb-2">
-                    <div class="col-sm-4">
-                        @if (Auth::user()->can('edit users'))
-                            <a href="{{ route('users.create') }}" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> {{ __('app.add_title', ['field' => 'user']) }}</a>
-                        @else
-                            &nbsp;
-                        @endif
-                    </div>
-                    <div class="col-sm-8">
-                        <div class="text-sm-end">
-                            <!-- <button type="button" class="btn btn-light mb-2">{{ __('app.export') }}</button> -->
-                        </div>
-                    </div><!-- end col-->
-                </div>
-
+            
                 <div class="table-responsive">
                     <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="users-datatable">
                         <thead class="table-light">
@@ -70,7 +56,37 @@
     "use strict";
 
     var table = $('#users-datatable').DataTable({
+        dom: 'Bfrtip',
         stateSave: true,
+        buttons: [
+            {
+                text: '<i class="mdi mdi-plus-circle me-2"></i> {{ __('app.add_title', ['field' => 'user']) }}',
+                className: 'btn btn-light   ',
+                action: function ( e, dt, node, config ) {
+                    window.location.href="{{ route('users.create') }}"
+                }
+            },
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: [ 0, 1, 2, 3 ]
+                },
+                className: 'btn btn-success'
+            },
+            {
+                extend: 'pdfHtml5',
+                exportOptions: {
+                    columns: [ 0, 1, 2, 3]
+                },
+                className: 'btn btn-warning',
+                download: 'open'
+            },
+            {
+                extend: 'colvis',
+                columns: ':not(.noVis)',
+                className: 'btn btn-info'
+            }
+        ],
         processing: true,
         serverSide: true,
         ajax: "{{ route('users.datatables') }}",
@@ -102,7 +118,8 @@
                 'orderable': false 
             },
             {
-                'data': 'status',
+                'data': 'status',"width": "5%",
+                'className': 'noVis',
                 'render' : function(data, type, row, meta){
                     if (type === 'display'){
                         if (data == 'disabled'){
@@ -118,6 +135,8 @@
             },
             {
                 'data': 'id',
+                "width": "5%",
+                'className': 'noVis',
                 'render' : function(data, type, row, meta){
                     if (type === 'display'){
 
