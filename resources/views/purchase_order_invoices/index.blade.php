@@ -26,7 +26,7 @@
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="purchase-order-invoices-datatable">
+                    <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap table-has-dlb-click" id="purchase-order-invoices-datatable">
                         <thead class="table-light">
                             <tr>
                                 <th>Invoice #</th>
@@ -87,7 +87,30 @@
 
     // Default Datatable
     var table = $('#purchase-order-invoices-datatable').DataTable({
+        dom: 'Bfrtip',
         stateSave: true,
+        buttons: [
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: [ 0, 1, 2, 3, 4, 5 ]
+                },
+                className: 'btn btn-success'
+            },
+            {
+                extend: 'pdfHtml5',
+                exportOptions: {
+                    columns: [ 0, 1, 2, 3, 4, 5 ]
+                },
+                className: 'btn btn-warning',
+                download: 'open'
+            },
+            {
+                extend: 'colvis',
+                columns: ':not(.noVis)',
+                className: 'btn btn-info'
+            }
+        ],
         orderCellsTop: true,
         fixedHeader: true,
         processing: true,
