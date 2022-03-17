@@ -14,21 +14,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <div class="row mb-2">
-                    <div class="col-sm-4">
-                        @if (Auth::user()->can('edit taxes'))
-                            <a href="{{ route('taxes.create') }}" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> {{ __('app.add_title', ['field' => 'tax']) }}</a>
-                        @else
-                            &nbsp;
-                        @endif
-                    </div>
-                    <div class="col-sm-8">
-                        <div class="text-sm-end">
-                            <!-- <button type="button" class="btn btn-light mb-2">Export</button> -->
-                        </div>
-                    </div><!-- end col-->
-                </div>
-
+            
                 <div class="table-responsive">
                     <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="taxes-datatable">
                         <thead class="table-light">
