@@ -13,7 +13,7 @@
 
 
 <div class="row">
-    <div class="col-xxl-8 col-lg-6">
+    <div class="col-xxl-8 col-lg-8">
         <!-- project card -->
         <div class="card d-block">
             <div class="card-body">
