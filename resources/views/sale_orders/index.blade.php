@@ -12,20 +12,8 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <div class="row mb-2">
-                    <div class="col-sm-4">
-                        <a href="{{ route('sale-orders.create') }}" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> Create Sale Order</a>
-                    </div>
-                    <div class="col-sm-8">
-                        <div class="text-sm-end">
-                            <a class="btn toggle-filters" href="javascript:void(0);"><button type="button" class="btn btn-light mb-2"><i class="mdi mdi-filter"></i></button></a>
-                            {{-- <a class="btn" href="{{ route('export.products') }}"><button type="button" class="btn btn-light mb-2">{{ __('app.export') }}</button></a> --}}
-                        </div>
-                    </div><!-- end col-->
-                </div>
-
                 <div class="table-responsive">
-                    <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap" id="sale-orders-datatable">
+                    <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap table-has-dlb-click" id="sale-orders-datatable">
                         <thead class="table-light">
                             <tr>
                                 <th>Order #</th>
@@ -100,7 +88,44 @@
 
     // Default Datatable
     var table = $('#sale-orders-datatable').DataTable({
+        dom: 'Bfrtip',
         stateSave: true,
+        buttons: [
+            {
+                text: '<i class="mdi mdi-plus-circle me-2"></i> {{ __('app.add_title', ['field' => 'sale order']) }}',
+                className: 'btn btn-light   ',
+                action: function ( e, dt, node, config ) {
+                    window.location.href="{{ route('sale-orders.create') }}"
+                }
+            },
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+                },
+                className: 'btn btn-success'
+            },
+            {
+                extend: 'pdfHtml5',
+                exportOptions: {
+                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+                },
+                className: 'btn btn-warning',
+                download: 'open'
+            },
+            {
+                extend: 'colvis',
+                columns: ':not(.noVis)',
+                className: 'btn btn-info'
+            },
+            {
+                text: '<i class="mdi mdi-filter"></i>&nbsp;Filter',
+                // className: 'btn btn-light',
+                action: function ( e, dt, node, config ) {
+                    $( ".filters" ).slideToggle('slow');
+                }
+            }
+        ],
         orderCellsTop: true,
         fixedHeader: true,
 
