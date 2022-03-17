@@ -12,19 +12,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <div class="row mb-2">
-                    {{-- <div class="col-sm-4">
-                        <a href="{{ route('purchase-orders.create') }}" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> Create Purchase Order</a>
-                    </div> --}}
-                    <div class="col-sm-12">
-                        <div class="text-sm-end">
-                            <a class="btn toggle-filters" href="javascript:void(0);"><button type="button" class="btn btn-light mb-2"><i class="mdi mdi-filter"></i></button></a>
-                            {{-- <a class="btn" href="{{ route('export.products') }}"><button type="button" class="btn btn-light mb-2">{{ __('app.export') }}</button></a> --}}
-                        </div>
-                    </div> 
-                    <!-- end col-->
-                </div>
-
+               
                 <div class="table-responsive">
                     <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap table-has-dlb-click" id="purchase-order-invoices-datatable">
                         <thead class="table-light">
@@ -109,6 +97,13 @@
                 extend: 'colvis',
                 columns: ':not(.noVis)',
                 className: 'btn btn-info'
+            },
+            {
+                text: '<i class="mdi mdi-filter"></i>&nbsp;Filter',
+                // className: 'btn btn-light',
+                action: function ( e, dt, node, config ) {
+                    $( ".filters" ).slideToggle('slow');
+                }
             }
         ],
         orderCellsTop: true,
