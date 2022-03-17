@@ -195,6 +195,21 @@ table th, table td {
   word-wrap: break-word;
 }
 
+
+#signatory {
+  margin-top: 10px;
+  border-style: solid;
+}
+#signatory table {
+  border-collapse: separate;
+  width: 100%;
+}
+#signatory table td {
+  /*border-bottom: 1px solid #C4C4C4;*/
+  padding: 10px;
+  text-align: left;
+}
+
 #items {
   margin-top: 40px;
 }
@@ -267,7 +282,7 @@ table th, table td {
 }
 
 #terms {
-  margin-top: 80px;
+  margin-top: 50px;
   page-break-inside: avoid;
 }
 #terms > span {
@@ -276,9 +291,9 @@ table th, table td {
 #terms > div {
   color: #396E00;
   font-size: 16px;
-  min-height: 70px;
+  min-height: 45px;
   width: 100%;
-  max-width: 500px;
+  /*max-width: 500px;*/
 }
 
 .payment-info {
@@ -286,7 +301,7 @@ table th, table td {
   font-size: 12px;
   margin-top: 20px;
   width: 100%;
-  max-width: 440px;
+  /*max-width: 440px;*/
 }
 .payment-info div {
   display: inline-block;

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use NumberFormatter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,6 +24,14 @@ class SaleOrder extends Model
     // const CUSTOMS = 5;
     // const CLEARED = 6;
     const DELIVERED = 7;    // remove 
+
+    /**
+     * calculated fields for Sales Order
+     */
+    var $sub_total = 0;
+    var $tax_total = 0;
+    var $total = 0;
+    var $total_spellout = '';
 
     /**
      * Get the items associated with the sale order.
@@ -56,6 +65,67 @@ class SaleOrder extends Model
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * 
+     */
+    public function calculateTotals()
+    {
+        $tax = 0;
+
+        $this->sub_total = 0;
+        $this->tax_total = 0;
+        $this->total = 0;
+
+        /**
+         * calculate the totals
+         */
+        foreach ($this->items as $item)
+        {
+            $this->sub_total += $item->quantity_ordered * $item->selling_price;
+            $this->tax_total += $this->sub_total * $item->tax / 100;
+
+            $tax = $item->tax;
+        }
+
+        /**
+         * add the Transport Charges to the totals
+         */
+        $this->sub_total += $this->transport_charges;
+        $this->tax_total += $this->transport_charges * $tax / 100;
+
+        $this->total = $this->sub_total + $this->tax_total;
+
+        $this->total_spellout = $this->expandAmount($this->total);
+
+        $this->sub_total = number_format($this->sub_total, 2);
+        $this->tax_total = number_format($this->tax_total, 2);
+        $this->total = number_format($this->total, 2);
+
+        return true;
+
+    }
+
+
+    static function expandAmount($amount) {
+
+        $fmt = new NumberFormatter("en", NumberFormatter::SPELLOUT);
+
+        if (strpos($amount,'.') !== false) {
+
+            $numwords = explode('.',$amount);
+
+            if (intval($numwords[1]) > 0)
+                $res = $fmt->format($numwords[0]).' and paise '.$nw->format($numwords[1]).' only';
+            else
+                $res = $fmt->format((int)$numwords[0]).' only';
+        }
+        else  {
+            $res = $fmt->format($amount).' only';
+        }
+        $res = 'INR '.$res;
+
+        return ucfirst($res);
+    }
 
     /**
      * Returns the ordered_at date for display Month Day, Year

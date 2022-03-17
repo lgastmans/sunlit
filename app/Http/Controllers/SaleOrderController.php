@@ -460,6 +460,8 @@ class SaleOrderController extends Controller
         $settings = \Setting::all();
 
         $order = SaleOrder::where('order_number', '=', $order_number)->first();
+        $order->calculateTotals();
+        
         return view('sale_orders.view_proforma', ['order' => $order, 'settings' => $settings]);
     }
 

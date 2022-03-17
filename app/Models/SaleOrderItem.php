@@ -46,13 +46,9 @@ class SaleOrderItem extends Model
     /**
      * Returns the Tax Amount IGST
      */
-    public function getTaxAmountIgstAttribute()
+    public function getTaxAmountAttribute()
     {
         return number_format(($this->quantity_ordered * $this->selling_price) * ($this->tax/100), 2);
     }
 
-    public function getTaxAmountCgstAttribute()
-    {
-        return number_format(($this->quantity_ordered * $this->selling_price) * ($this->tax/100) / 2, 2);
-    }
 }

@@ -133,7 +133,7 @@
             {{-- <th>Value</th> --}}
             @if ($order->dealer->state->code==33)
               <th>Rate</th>
-              <th>Amt</th>
+              <th class="text-end">Amt</th>
               <th>Rate</th>
               <th>Amt</th>
             @else
@@ -143,6 +143,9 @@
           </tr>
           
 
+          {{-- 
+            The list of items of the sales order
+          --}}
           @foreach ($order->items as $item)
 
             <tr data-iterate="item">
@@ -157,25 +160,27 @@
               <td><span class="show-mobile">Tax</span> <span>{{ $item->taxable_value }}</span></td>
               @if ($order->dealer->state->code==33)
                 <td>{{ $item->tax/2 }}%</td>
-                <td>{{ $item->tax_amount_cgst }}</td>
+                <td>@php echo number_format($item->tax_amount/2, 2); @endphp</td>
                 <td>{{ $item->tax/2 }}%</td>
-                <td>{{ $item->tax_amount_cgst }}</td>
+                <td>@php echo number_format($item->tax_amount/2, 2); @endphp</td>
               @else
                 <td>{{ $item->tax }}%</td>
-                <td>{{ $item->tax_amount_igst }}</td>
+                <td>{{ $item->tax_amount }}</td>
               @endif
               
             </tr>
 
             @php
-              $i = $loop->count + 1;
+              $last_item = $loop->count + 1;
             @endphp
 
           @endforeach
 
-          {{-- The Transport Charges as a row --}}
+          {{-- 
+            The Transport Charges as a row 
+          --}}
           <tr>
-              <td>{{ $i }}</td> <!-- Don't remove this column as it's needed for the row commands -->
+              <td>{{ $last_item }}</td> <!-- Don't remove this column as it's needed for the row commands -->
               <td><span class="show-mobile">Part Number</span> <span> Transport charges </span></td>
               <td><span class="show-mobile">Quantity</span> <span> 1 </span></td>
               <td><span class="show-mobile">Unit</span> <span> Nos </span></td>
@@ -193,6 +198,29 @@
                 <td>{{ $order->transport_charges }}</td>
               @endif
           </tr>
+
+          {{-- 
+            The column totals 
+          --}}
+          <tr>
+            {{-- <th rowspan="2">Sr.<br>No.</th> Dummy cell for the row number and row commands --}}
+            {{-- <th rowspan="2">Part Number</th> --}}
+            {{-- <th rowspan="2">Qty</th> --}}
+            {{-- <th rowspan="2">Unit</th> --}}
+            <th colspan="5">Subtotals</th>
+            <th class="text-end">{{ $order->sub_total }}</th>
+            <th>&mdash;</th>
+            <th>{{ $order->sub_total }}</th>
+            @if ($order->dealer->state->code==33)
+              <th></th>
+              <th>@php echo number_format($order->tax_total/2, 2); @endphp</th>
+              <th></th>
+              <th>@php echo number_format($order->tax_total/2, 2); @endphp</th>
+            @else
+              <th></th>
+              <th>{{ $order->tax_total }}</th>
+            @endif
+          </tr>
           
         </table>
         
@@ -203,17 +231,17 @@
         <table cellpadding="0" cellspacing="0">
           <tr>
             <th>Subtotal</th>
-            <td>{amount_subtotal}</td>
+            <td>{{ $order->sub_total }}</td>
           </tr>
           
           <tr data-iterate="tax">
             <th>Tax</th>
-            <td>{tax_value}</td>
+            <td>{{ $order->tax_total }}</td>
           </tr>
           
           <tr class="amount-total">
             <th>Total</th>
-            <td>{amount_total}</td>
+            <td>{{ $order->total }}</td>
           </tr>
           
           <!-- You can use attribute data-hide-on-quote="true" to hide specific information on quotes.
@@ -236,18 +264,55 @@
       <div class="clearfix"></div>
       
       <section id="terms">
-      
+
+        <p>
+          <span class="text-danger">Note:</span><span> Material is readily available for dispatch</span><br>
+          <span class="text-danger">Note:</span><span> On receiving the goods and before signing LR copy, please open the box to check for any damage.</span><br>
+          <span class="text-danger">PI Validity</span><span> 7 Days</span><br>
+          <span class="text-danger">Payment Terms</span><span> 100% payment before Dispatch</span>
+        </p>
+                
         <span class="hidden">{terms_label}</span>
-        <div>{terms}</div>
+
+        <div>Total invoice value (in words): {{ $order->total_spellout }}</div>
+
+        Amount of tax subject to Reverse Charge (Yes or No):
         
       </section>
 
+
+      <div class="clearfix"></div>
+
+      
+      <section id="signatory">
+        
+        <table cellpadding="0" cellspacing="0">
+          <tr>
+            <td>Name of the Signatory:</td>
+            <td></td>
+            <td>For Sunlit Future</td>
+          </tr>
+          <tr>
+            <td>Designation / Status:</td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Date:</td>
+            <td></td>
+            <td>Authorized Signatory</td>
+          </tr>
+        </table>
+
+      </section>
+
       <div class="payment-info">
-        <div>{payment_info1}</div>
-        <div>{payment_info2}</div>
-        <div>{payment_info3}</div>
-        <div>{payment_info4}</div>
-        <div>{payment_info5}</div>
+        <div>Bank Details :
+            Name of the Bank : HDFC Bank Ltd
+            Bank Account No. : 04071450000340
+            IFSC Code
+            : HDFC0000407
+        </div>
       </div>
 
 {{--       <div class="bottom-circles">
