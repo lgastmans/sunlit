@@ -17,8 +17,8 @@
         <div class="card">
             <div class="card-body">
                 <div class="d-flex mb-3">
-                    <h4 class="col-lg-6 header-title mb-3">Items from Invoice #{{ $invoice->invoice_number }}</h4>
-                    <a href="{{ route("purchase-orders.show", $invoice->purchase_order->order_number_slug) }}" class="offset-lg-4 col-lg-2">
+                    <h4 class="col-lg-6 col-xxl-6 header-title mb-3">Items from Invoice #{{ $invoice->invoice_number }}</h4>
+                    <a href="{{ route("purchase-orders.show", $invoice->purchase_order->order_number_slug) }}" class="offset-lg-2 col-lg-4 offset-xxl-4 col-xxl-2">
                         <button class="text-center btn btn-sm btn-info" type="submit">View Purchase Order</button>
                     </a>
                 </div>
