@@ -38,6 +38,7 @@
                             <div class="input-group flex-nowrap">
                                 <span class="input-group-text">{{ __('app.currency_symbol_inr')}}</span>
                                 <input type="selling_price" class="form-control" name="selling_price"  id="selling_price" value="">
+                                <span class="input-group-text" display="none" id="suggested_selling_price"></span>
                                 <input type="hidden" name="tax" id="tax">
                             </div>
                         </div>
@@ -338,6 +339,7 @@
         var product_id = $(".product-select").find(':selected').val();
         var warehouse_id = $(".product-select").find(':selected').val();
         var route = '{{ route("product.json", [":id", ":warehouse_id"]) }}';
+
         route = route.replace(':id', product_id);
         route = route.replace(':warehouse_id', $('#warehouse-id').val());
         $.ajax({
@@ -345,8 +347,30 @@
             url: route,
             dataType: 'json',
             success : function(data){
-                $('#selling_price').val(data.average_selling_price);
+
+                // console.log(JSON.stringify(data)); 
+
+                /**
+                 * default quantity to 1
+                 */
+                $("#quantity_ordered").val("1");
+
+                /**
+                 * suggest price if average selling price not set
+                 */
+                if (parseInt(data.average_selling_price) > 0) {
+                    $('#selling_price').val(data.average_selling_price);
+                    $(" #suggested_selling_price ").hide();
+                    $(" #suggested_selling_price ").html('');
+                }
+                else {
+                    $('#selling_price').val('');
+                    $(" #suggested_selling_price ").show();
+                    $(" #suggested_selling_price ").html('BP: Rs ' + data.average_buying_price); //.toNumber().formatCurrency());
+                }
+
                 $('#tax').val(data.tax.amount);
+
             }
         })
     });
@@ -426,13 +450,61 @@
     
 
     $('.form-product').on('submit', function(e){
-        e.preventDefault();     
+        e.preventDefault();
+
+        var price = $("#selling_price").val();
+        var asked_quantity = $('#quantity_ordered').val();        
+        var product_id = $('#product_id').val();
+        
+
+        /**
+         * validate product 
+         */
+         if (product_id === null)
+         {
+            $.NotificationApp.send("Error","Product not defined","top-right","","error")
+            return false;
+        }
+
+        /**
+         * validate quantity
+         */
+        if (isNaN(parseFloat(asked_quantity)))
+        {
+            $.NotificationApp.send("Error","Invalid Quantity","top-right","","error")
+            return false;
+        }
+
+        if (parseFloat(asked_quantity) === 0)
+        {
+            $.NotificationApp.send("Error","Quantity cannot be zero","top-right","","error")
+            return false;
+        }
+
+        /**
+         * validate price
+         */
+        if (isNaN(parseFloat(price)))
+        {
+            $.NotificationApp.send("Error","Invalid Selling Price","top-right","","error")
+            return false;
+        }
+
+        if (parseFloat(price) === 0)
+        {
+            $.NotificationApp.send("Error","Selling Price cannot be zero","top-right","","error")
+            return false;
+        }
+
+        $(" #suggested_selling_price ").hide();
+        $(" #suggested_selling_price ").html('');
+
         var existing_item_id = is_existing_product($('#product_id').val());
         if (existing_item_id > 0){
-            var asked_quantity = $('#quantity_ordered').val();
             var new_quantity = parseInt(asked_quantity) + parseInt($('#item-quantity-'+existing_item_id).val())
             $('#quantity_ordered').val(new_quantity);
-        }          
+        }
+
         $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
