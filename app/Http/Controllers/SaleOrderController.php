@@ -471,6 +471,7 @@ class SaleOrderController extends Controller
         $settings = \Setting::all();
 
         $order = SaleOrder::where('order_number', '=', $order_number)->first();
+        $order->calculateTotals();
         view()->share('order', $order);
         view()->share('settings', $settings);
         $pdf = PDF::loadView('sale_orders.proforma',  $order);
