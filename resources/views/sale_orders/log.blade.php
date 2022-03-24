@@ -19,17 +19,18 @@
                           
                             @if ($order->status >= 4)
                             <tr>
-                                <td>{{ $order->display_shipped_at }}</td><td>The order has been shipped via <b>{{ $order->courier }}</b>, <b>#{{ $order->tracking_number }}</b>, and is expected on <b>{{ $order->display_due_at }}</b></td>
+                                {{-- <td>{{ $order->display_dispatched_at }}</td><td>The order has been dispatched via <b>{{ $order->courier }}</b>, <b>#{{ $order->tracking_number }}</b>, and is expected on <b>{{ $order->display_due_at }}</b></td> --}}
+                                <td>{{ $order->display_dispatched_at }}</td><td>The order has been dispatched via <b>{{ $order->courier }}</b></td>
                             </tr>
                             @endif
                             @if ($order->status >= 3)
                             <tr>
-                                <td>{{ $order->display_confirmed_at }}</td><td>The order has been confirmed by <b>{{ $order->dealer->company }}</b></td>
+                                <td>{{ $order->display_booked_at }}</td><td>The order has been booked by <b>{{ $order->dealer->company }}</b></td>
                             </tr>
                             @endif
                             @if ($order->status >= 2)
                             <tr>
-                                <td>{{ $order->display_ordered_at }}</td><td>The order has been placed by <b>{{ $order->user->display_name }}</b></td>
+                                <td>{{ $order->display_blocked_at }}</td><td>The order has been blocked by <b>{{ $order->user->display_name }}</b></td>
                             </tr>
                             @endif
                     </tbody>
