@@ -1,7 +1,7 @@
 # For more information: https://laravel.com/docs/sail
 version: '3'
 services:
-    laravel.test:
+    sunlit.test:
         build:
             context: ./vendor/laravel/sail/runtimes/8.0
             dockerfile: Dockerfile
@@ -23,7 +23,7 @@ services:
             - meilisearch
             - selenium
     mysql:
-        image: 'mysql:8.0'
+        image: 'mariadb:latest'
         ports:
             - '${FORWARD_DB_PORT:-3306}:3306'
         environment:
