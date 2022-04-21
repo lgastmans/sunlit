@@ -73,6 +73,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/sale-orders-items', [SaleOrderItemController::class, 'store'])->name('sale-orders-items.store');
     Route::put('/sale-orders-items/{id}', [SaleOrderItemController::class, 'update'])->name('sale-orders-items.update');
     Route::delete('/sale-orders-items/{id}', [SaleOrderItemController::class, 'destroy'])->name('sale-orders-items.delete');
+    Route::get('/sales-by-category/{range}', [SaleOrderItemController::class, 'getNumberAndTotalSaleByRange'])->name('sale-orders-items.sales-by-category');
+
 
 
     Route::get('/purchase-orders', [PurchaseOrderController::class, 'index'])->name('purchase-orders');

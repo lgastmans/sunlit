@@ -6,42 +6,34 @@
 
 
 <div class="row">
-    <div class="col-lg-2">
-        <div class="card widget-flat">
+    <div class="col-xl-3 col-lg-4">
+        <div class="card tilebox-one">
             <div class="card-body">
-                <div class="float-end">
-                    <i class="mdi mdi-cart-plus widget-icon"></i>
-                </div>
-                <h5 class="text-muted fw-normal mt-0" title="Number of Orders">Due Pending Orders</h5>
-                <a href="{{ route('purchase-orders.filtered', 'due') }}">
-                    <h3 class="mt-3 mb-3 @if (count($due_orders) < 5 ) text-success @elseif (count($due_orders) < 10) text-warning @else text-danger @endif">{{ count($due_orders) }}</h3>
-                </a>
+                <i class='uil uil-users-alt float-right'></i>
+                <h6 class="text-uppercase mt-0">Active Users</h6>
+                <h2 class="my-2" id="active-users-count">121</h2>
                 <p class="mb-0 text-muted">
-                    <span class="text-danger me-2"></span>
-                    <span class="text-nowrap"></span>
+                    <span class="text-success mr-2"><span class="mdi mdi-arrow-up-bold"></span> 5.27%</span>
+                    <span class="text-nowrap">Since last month</span>  
                 </p>
             </div> <!-- end card-body-->
-        </div> <!-- end card-->
-    </div> <!-- end col-->
-    <div class="col-lg-2">
-        <div class="card widget-flat">
+        </div>
+        <!--end card-->
+
+        <div class="card tilebox-one">
             <div class="card-body">
-                <div class="float-end">
-                    <i class="mdi mdi-cart-plus widget-icon"></i>
-                </div>
-                <h5 class="text-muted fw-normal mt-0" title="Number of Orders">Overdue Pending Orders</h5>
-                <a href="{{ route('purchase-orders.filtered', 'overdue') }}">
-                    <h3 class="mt-3 mb-3 @if ($overdue_orders < 5 ) text-success @elseif ($overdue_orders < 10) text-warning @else text-danger @endif">{{ $overdue_orders }}</h3>
-                </a>
+                <i class='uil uil-window-restore float-right'></i>
+                <h6 class="text-uppercase mt-0">Views per minute</h6>
+                <h2 class="my-2" id="active-views-count">560</h2>
                 <p class="mb-0 text-muted">
-                    <span class="text-danger me-2"></span>
-                    <span class="text-nowrap"></span>
+                    <span class="text-danger mr-2"><span class="mdi mdi-arrow-down-bold"></span> 1.08%</span>
+                    <span class="text-nowrap">Since previous week</span>
                 </p>
             </div> <!-- end card-body-->
-        </div> <!-- end card-->
-    </div> <!-- end col-->
-    <div class="col-lg-2 offset-lg-6">
-        <div class="card widget-flat">
+        </div>
+        <!--end card-->
+
+        <div class="card cta-box overflow-hidden">
             <div class="card-body">
                 <div class="float-end">
                     <i class="mdi mdi-currency-inr widget-icon"></i>
@@ -58,57 +50,89 @@
                     @endif
                     <span id="currency-rate" class="text-nowrap"><a href="#" data-bs-container="#currency-rate" data-bs-toggle="tooltip" title="{{ \Carbon\Carbon::parse( \Setting::get('exchange_rate_updated_at') )->toDayDateTimeString() }}">{{ $exchange_rate_update_ago }}</a></span>
                 </p>
+            </div>
+            <!-- end card-body -->
+        </div>
+    </div> <!-- end col -->
+
+    <div class="col-xl-9 col-lg-8">
+        <div class="card">
+            <div class="card-body">
+                <ul class="nav float-right d-none">
+                    <li class="nav-item">
+                        <a class="nav-link text-muted" href="#">Today</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-muted" href="#">7d</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">15d</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-muted" href="#">1m</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-muted" href="#">1y</a>
+                    </li>
+                </ul>
+                <h4 class="header-title mb-3">Sales Overview</h4>
+
+                <div id="sessions-overview" class="apex-charts mt-3" data-colors="#0acf97"></div>
             </div> <!-- end card-body-->
         </div> <!-- end card-->
-    </div> <!-- end col-->
+    </div>
 </div>
+
+
+
+
+
 
 <div class="row">
     <div class="col-12">
         <div class="card">
             <div class="card-body">
                 <div class="row mb-2">
-                    <h3 class="pb-1">Products with negative stock</h3>
-                <div class="table-responsive">
-                    <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap table-has-dlb-click" id="inventory-datatable">
-                        <thead class="table-light">
-                            <tr>
+                    <h4 class="header-title mb-3">Products with negative stock</h4>
+                    <div class="table-responsive">
+                        <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap table-has-dlb-click" id="inventory-datatable">
+                            <thead class="table-light">
+                                <tr>
 
-                                <th>Warehouses</th>
-                                <th>Category</th>
-                                <th>Supplier</th>
-                                <th>Part Number</th>
-                                <th>Available</th>
-                                <th>Ordered</th>
-                                <th>Blocked</th>
-                                <th>Booked</th>
-                                <th>Projected</th>
-                            </tr>
-                            <tr class="filters" style="display: none;">
-                                <th><input type="text" class="form-control"></th>
-                                <th><input type="text" class="form-control"></th>
-                                <th><input type="text" class="form-control"></th>
-                                <th><input type="text" class="form-control"></th>
-                                {{-- <th><input type="text" class="form-control"></th> --}}
-                                <th><select class="form-control available-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
-                                <th><select class="form-control ordered-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
-                                <th><select class="form-control blocked-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
-                                <th><select class="form-control booked-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
-                                <th><select class="form-control projected-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }} >{{ $v }}</option> @endforeach</select></th>
-                                {{-- <th class="no-filter"><select disabled class="form-control projected-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th> --}}
-                            </tr>                            
-                        </thead>
-                        <tbody>
+                                    <th>Warehouses</th>
+                                    <th>Category</th>
+                                    <th>Supplier</th>
+                                    <th>Part Number</th>
+                                    <th>Available</th>
+                                    <th>Ordered</th>
+                                    <th>Blocked</th>
+                                    <th>Booked</th>
+                                    <th>Projected</th>
+                                </tr>
+                                <tr class="filters" style="display: none;">
+                                    <th><input type="text" class="form-control"></th>
+                                    <th><input type="text" class="form-control"></th>
+                                    <th><input type="text" class="form-control"></th>
+                                    <th><input type="text" class="form-control"></th>
+                                    {{-- <th><input type="text" class="form-control"></th> --}}
+                                    <th><select class="form-control available-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
+                                    <th><select class="form-control ordered-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
+                                    <th><select class="form-control blocked-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
+                                    <th><select class="form-control booked-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
+                                    <th><select class="form-control projected-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }} >{{ $v }}</option> @endforeach</select></th>
+                                    {{-- <th class="no-filter"><select disabled class="form-control projected-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th> --}}
+                                </tr>                            
+                            </thead>
+                            <tbody>
 
-                        </tbody>
-                    </table>
-                </div>
+                            </tbody>
+                        </table>
+                    </div>
             </div> <!-- end card-body-->
         </div> <!-- end card-->
     </div> <!-- end col -->
 </div>
 <!-- end row -->
-
 
 @endsection
 
@@ -118,23 +142,12 @@
         
  $(document).ready(function () {
     "use strict";
-    var pre_filter_projected = true;
 
     $('.toggle-filters').on('click', function(e) {
         $( ".filters" ).slideToggle('slow');
     });
 
-    $('.projected-filter').on('change', function(e){
-        pre_filter_projected = false;
-    });
-
-    if (pre_filter_projected === false) {
-        var projected_filter = $(" .projected-filter ").val();
-    }
-    else{
-        $('.projected-filter').val('__ZERO_');
-        var projected_filter = "__ZERO_";
-    }
+    // datatables for negative stock
     var table = $('#inventory-datatable').DataTable({
         dom: 'Bfrtip',
         stateSave: true,
@@ -179,7 +192,7 @@
                     d.filter_ordered = $(" .ordered-filter ").val(),
                     d.filter_blocked = $(" .blocked-filter ").val(),
                     d.filter_booked = $(" .booked-filter ").val(),
-                    d.filter_projected = projected_filter
+                    d.filter_projected = $(" .projected-filter ").val()
                 ]},
             }, 
         "language": {
@@ -254,17 +267,6 @@
         
     });
 
-/*
-    $(" .available-filter, .ordered-filter, .booked-filter, .projected-filter ").on("change", function() {
-        table.ajax.reload();
-    });
-
-    $('.filters th input').on("keyup", function() {
-        console.log('here');
-        table.ajax.reload();
-    });
-*/
-
     table.columns().eq(0).each(function(colIdx) {
         var cell = $('.filters th').eq($(table.column(colIdx).header()).index());
         var title = $(cell).text();
@@ -316,6 +318,112 @@
     @if(Session::has('error'))
         $.NotificationApp.send("Error","{{ session('error') }}","top-right","","error")
     @endif
+
+
+
+    function getRandomData(number) {
+        var graphData = [];
+        for (var idx=0; idx < number; idx++) {
+            graphData.push(Math.floor(Math.random() * Math.floor(90)) + 30);
+        }
+        return graphData;
+    }
+
+    function getDaysInMonth(month, year) {
+        var date = new Date(year, month, 1);
+        var days = [];
+        var idx = 0;
+        while (date.getMonth() === month && idx < 15) {
+            var d = new Date(date);
+            days.push(d.getDate() + " " +  d.toLocaleString('en-us', { month: 'short' }));
+            date.setDate(date.getDate() + 1);
+            idx += 1;
+        }
+        return days;
+    }
+
+    // Sales overview
+    var now = new Date();
+    var labels = getDaysInMonth(now.getMonth() + 1, now.getFullYear());
+       var options = {
+            chart: {
+                height: 400,
+                type: 'area'
+            },
+            legend: {
+                show: true,
+                position: 'bottom',
+                horizontalAlign: 'center', 
+                floating: false,
+                fontSize: '14px',
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'smooth',
+                width: 3
+            },
+            series: [],
+            noData: {
+                text: 'Loading...'
+            },
+            zoom: {
+                enabled: true
+            },
+            colors: ["#e57373", "#7986cb", "#4db6ac", "#fff176", "#f06292", "#64b5f6", "#81c784", "#ffb74d", "#ba68c8", "#4dd0e1"],
+            xaxis: {
+                type: 'string',
+                categories: labels,
+                tooltip: {
+                    enabled: false
+                },
+                axisBorder: {
+                    show: false
+                },
+                labels: {
+                    
+                }
+            },
+            yaxis: {
+                labels: {
+                    formatter: function (val) {
+                        return val + "k"
+                    },
+                    offsetX: -15
+                }
+            },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    type: "vertical",
+                    shadeIntensity: 1,
+                    inverseColors: false,
+                    opacityFrom: 0.45,
+                    opacityTo: 0.05,
+                    stops: [45, 100]
+                  },
+            },
+        }
+
+        var chart = new ApexCharts(
+            document.querySelector("#sessions-overview"),
+            options
+        );
+
+        chart.render();
+
+        var url = "{{ route('sale-orders-items.sales-by-category', ['range' => 'monthly']) }}";
+
+        $.getJSON(url, function(response) {
+            $.each(response.series, function(k, v) {
+                console.log(k+'==='+ v);
+                chart.updateSeries([{
+                    name: v.name,
+                    data: v.data
+                }]) 
+            });
+        });
 
 });
 

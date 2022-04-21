@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Inventory;
 use Illuminate\Http\Request;
 use App\Models\PurchaseOrder;
+use App\Models\SaleOrderItem;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -25,6 +26,9 @@ class DashboardController extends Controller
             
             $exchange_rate_update_ago = Carbon::parse( \Setting::get('exchange_rate_updated_at'))->diffForHumans();
 
+           // $sale_overview = SaleOrderItem::getNumberAndTotalSaleByRange('monthly');
+            // There's an issue with the json format returned by the call
+            
             return view('dashboard', ['stock_filter' => $stock_filter,'due_orders' => $due_orders, 'overdue_orders' => $overdue_orders, 'exchange_rate_update_ago' => $exchange_rate_update_ago]);
         }
         return abort(403, trans('error.unauthorized'));

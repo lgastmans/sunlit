@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use App\Models\SaleOrder;
 use App\Models\Inventory;
+use App\Models\SaleOrder;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\SaleOrderItem;
+use Illuminate\Support\Facades\DB;
 
 class SaleOrderItemController extends Controller
 {
@@ -267,5 +269,46 @@ class SaleOrderItemController extends Controller
         $order->update();
         return redirect(route('sale-orders.cart', $order->order_number))->with('success', trans('app.record_deleted', ['field' => 'item']));
 
+    }
+
+    public static function getNumberAndTotalSaleByRange($range)
+    {
+        $query = DB::table('sale_order_items')
+                ->join('products', 'products.id', '=', 'sale_order_items.product_id')
+                ->join('categories', 'categories.id', '=', 'products.category_id')
+                ->select('categories.name as category', 'sale_order_items.created_at', DB::raw('count(DISTINCT (sale_order_items.sale_order_id)) as number_sale'), DB::raw('sum((sale_order_items.quantity_ordered * sale_order_items.selling_price)) as total_sale'));
+          
+        if ( $range == 'daily'){
+            $query->addSelect(DB::raw("DATE_FORMAT(sale_order_items.created_at, '%Y-%m-%d') date_range"),  DB::raw('YEAR(sale_order_items.created_at) year, MONTH(sale_order_items.created_at) month, DAY(sale_order_items.created_at) day'))
+                ->groupByRaw('products.category_id, year, month, day')
+                ->OrderByRaw('year, month, day, products.category_id');
+        }
+
+        if ( $range == 'monthly'){
+            $query->addSelect(DB::raw("DATE_FORMAT(sale_order_items.created_at, '%Y-%m') date_range"),  DB::raw('YEAR(sale_order_items.created_at) year, MONTH(sale_order_items.created_at) month'))
+                ->groupByRaw('products.category_id, year, month')
+                ->OrderByRaw('year, month,products.category_id');
+        }
+        if ( $range == 'yearly'){
+            $query->addSelect(DB::raw("DATE_FORMAT(sale_order_items.created_at, '%Y') date_range"),  DB::raw('YEAR(sale_order_items.created_at) year'))
+                ->groupByRaw('products.category_id, year')
+                ->OrderByRaw('year, products.category_id');
+        }
+                    
+        $sales = $query->get();
+        $categories = $sales->pluck('category')->unique();
+        $series = [];
+        foreach($categories as $cat){
+            $series[Str::lower(Str::replace(' ','-',$cat))]['name'] = $cat;
+            $series[Str::lower(Str::replace(' ','-',$cat))]['data'] = [] ;
+        }
+        // dd($series);
+        foreach($sales as $sale){
+           $data_point['x']= \Carbon\Carbon::parse($sale->created_at)->timestamp;
+           $data_point['y']= $sale->total_sale;
+           array_push($series[Str::lower(Str::replace(' ','-',$sale->category))]['data'], $data_point);
+        }
+        // dd($series);
+        return response()->json(['series' => $series]);
     }
 }
