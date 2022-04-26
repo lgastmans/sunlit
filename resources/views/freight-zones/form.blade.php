@@ -27,7 +27,7 @@
                                 <x-forms.input label="name" name="name" value="{{ old('name', $zone->name) }}" required="true"/>
                             </div>
                             <div class="col-xl-3">
-                                <x-forms.input label="rate_per_kg" name="rate_per_kg" value="{{ old('rate_per_kg', $zone->rate_per_kg) }}" required="true"/>
+                                <x-forms.input label="rate per kg" name="rate_per_kg" value="{{ old('rate_per_kg', $zone->rate_per_kg) }}" required="true"/>
                             </div>
                         </div>
                     
