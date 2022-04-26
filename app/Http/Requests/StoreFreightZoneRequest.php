@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 use Illuminate\Auth\Access\AuthorizationException;
 
-class StoreFreightZonesRequest extends FormRequest
+class StoreFreightZoneRequest extends FormRequest
 {
     protected function failedAuthorization()
     {
