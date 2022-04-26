@@ -17,28 +17,28 @@ class FreightZonesSeeder extends Seeder
         //
         DB::table('freight_zones')->insert([
             [
-                'zone' => 'SOUTH',
-                'states' => 'KARNATAKA,TAMIL NADU,KERALA,ANDHRA PRADESH,TELANGANA,PONDICHERRY',
+                'name' => 'SOUTH',
+                'rate_per_kg' => 8,
             ],
             [
-                'zone' => 'WEST',
-                'states' => 'MAHARASHTRA,MADHYA PRADESH,GUJARAT,CHHATTISGARH,GOA,DIU & DAMAN',
+                'name' => 'WEST',
+                'rate_per_kg' => 8,
             ],
             [
-                'zone' => 'NORTH',
-                'states' => 'HIMACHAL PRADESH,PUNJAB,HARYANA,UTTARKHAND,UTTAR PRADESH,RAJASTHAN,DELHI',
+                'name' => 'NORTH',
+                'rate_per_kg' => 8,
             ],
             [
-                'zone' => 'EAST',
-                'states' => 'BIHAR,ORISSA,WEST BENGAL,JHARKHAND,ASSAM',
+                'name' => 'EAST',
+                'rate_per_kg' => 8,
             ],
             [
-                'zone' => 'NORTHEAST',
-                'states' => 'NAGALAND,MIZORAM,MANIPUR,MEGHALAYA,ANDHRA PRADESH, TRIPURA, SIKKIM',
+                'name' => 'NORTHEAST',
+                'rate_per_kg' => 8,
             ],
             [
-                'zone' => 'JK',
-                'states' => 'JAMMU,KASHMIR,LADAKH',
+                'name' => 'JK',
+                'rate_per_kg' => 8,
             ]
         ]);
     }

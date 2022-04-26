@@ -15,6 +15,7 @@ use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\SaleOrderController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\FreightZoneController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\SaleOrderItemController;
 use App\Http\Controllers\InventoryMovementController;
@@ -176,6 +177,16 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('/categories/{id}', [CategoryController::class, 'update'])->name('categories.update');
     Route::delete('/categories/{id}', [CategoryController::class, 'destroy'])->name('categories.delete');
     
+
+    Route::get('/freight-zones', [FreightZoneController::class, 'index'])->name('freight-zones');
+    Route::get('/freight-zones/create', [FreightZoneController::class, 'create'])->name('freight-zones.create');
+    Route::get('/freight-zones/list', [FreightZoneController::class, 'getListForDatatables'])->name('freight-zones.datatables');
+    Route::get('/freight-zones/{id}', [FreightZoneController::class, 'show'])->name('freight-zones.show');
+    Route::get('/freight-zones/{id}/edit', [FreightZoneController::class, 'edit'])->name('freight-zones.edit');
+    Route::post('/freight-zones', [FreightZoneController::class, 'store'])->name('freight-zones.store');
+    Route::put('/freight-zones/{id}', [FreightZoneController::class, 'update'])->name('freight-zones.update');
+    Route::delete('/freight-zones/{id}', [FreightZoneController::class, 'destroy'])->name('freight-zones.delete');
+
     Route::get('/users', [UserController::class, 'index'])->name('users');
     Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
     Route::get('/users/list', [UserController::class, 'getListForDatatables'])->name('users.datatables');
