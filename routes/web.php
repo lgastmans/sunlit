@@ -187,6 +187,15 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('/freight-zones/{id}', [FreightZoneController::class, 'update'])->name('freight-zones.update');
     Route::delete('/freight-zones/{id}', [FreightZoneController::class, 'destroy'])->name('freight-zones.delete');
 
+    Route::get('/states', [StateController::class, 'index'])->name('states');
+    Route::get('/states/create', [StateController::class, 'create'])->name('states.create');
+    Route::get('/states/list', [StateController::class, 'getListForDatatables'])->name('states.datatables');
+    Route::get('/states/{id}', [StateController::class, 'show'])->name('states.show');
+    Route::get('/states/{id}/edit', [StateController::class, 'edit'])->name('states.edit');
+    Route::post('/states', [StateController::class, 'store'])->name('states.store');
+    Route::put('/states/{id}', [StateController::class, 'update'])->name('states.update');
+    Route::delete('/states/{id}', [StateController::class, 'destroy'])->name('states.delete');
+
     Route::get('/users', [UserController::class, 'index'])->name('users');
     Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
     Route::get('/users/list', [UserController::class, 'getListForDatatables'])->name('users.datatables');

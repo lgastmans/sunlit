@@ -12,7 +12,7 @@ class State extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['name', 'code', 'abbreviation'];
+    protected $fillable = ['freight_zone_id', 'name', 'code', 'abbreviation'];
 
     public $timestamps = false;
 
