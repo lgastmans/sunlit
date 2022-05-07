@@ -8,11 +8,11 @@
 
 @section('content')
 
-<div class="row">
+<div class="row col-12">
     <form action="{{ route('settings.update') }}" method="POST" class="row">
         @csrf()
         @method('PUT')
-        <div class="col-lg-6 col-xl-4">
+        <div class="col-lg-6 ">
             <div class="card">
                 <div class="card-body">
                     <div class="row">
@@ -63,7 +63,7 @@
                 </div> <!-- end card-body-->
             </div> <!-- end card-->
         </div>
-        <div class="col-lg-6 col-xl-4">
+        <div class="col-lg-6">
             <div class="card">
                 <div class="card-body">
                     <div class="row">
@@ -136,7 +136,7 @@
             </div> <!-- end col -->
         @endforeach --}}
         <div class="row">
-            <div class="col-lg-4 col-xl-1">
+            <div class="col-lg-4 col-xl-3">
                 <button class="btn btn-primary" type="submit">Save settings</button>
             </div>
         </div>
