@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\State;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -15,6 +16,98 @@ class StateController extends Controller
     public function index()
     {
         //
+        // $user = Auth::user();
+        // if ($user->can('list states'))
+            return view('states.index');
+    
+        return abort(403, trans('error.unauthorized'));        
+    }
+
+    public function getListForDatatables(Request $request)
+    {
+       
+        $draw = 1;
+        if ($request->has('draw'))
+            $draw = $request->get('draw');
+
+        $start = 0;
+        if ($request->has('start'))
+            $start = $request->get("start");
+
+        $length = 10;
+        if ($request->has('length')) {
+            $length = $request->get("length");
+        }
+
+        $order_column = 'name';
+        $order_dir = 'ASC';
+        $order_arr = array();
+        if ($request->has('order')) {
+            $order_arr = $request->get('order');
+            $column_arr = $request->get('columns');
+            $column_index = $order_arr[0]['column'];
+            $order_column = $column_arr[$column_index]['data'];
+            // if ($column_index==3)
+            //     $order_column = "states.name";
+            
+            
+            $order_dir = $order_arr[0]['dir'];
+        }
+
+        $search = '';
+        if ($request->has('search')) {
+            $search_arr = $request->get('search');
+            $search = $search_arr['value'];
+        }
+
+        // Total records
+        $totalRecords = State::count();
+        $totalRecordswithFilter = State::where('name', 'like', '%'.$search.'%')
+            ->count();
+        
+
+        // Fetch records
+        if ($length < 0)
+            $states = State::where('states.name', 'like', '%'.$search.'%')
+                //->select('states.id', 'states.name', 'states.code', 'freight_zones.name AS freight_zone')
+                ->select('states.*', 'freight_zones.name AS freight_zone')
+                ->leftJoin('freight_zones', 'freight_zones.id', '=', 'states.freight_zone_id')
+                ->orderBy($order_column, $order_dir)
+                ->get();
+        else
+            $states = State::where('states.name', 'like', '%'.$search.'%')
+                ->select('states.*', 'freight_zones.name AS freight_zone')
+                ->leftJoin('freight_zones', 'freight_zones.id', '=', 'states.freight_zone_id')
+                ->orderBy($order_column, $order_dir)
+                ->skip($start)
+                ->take($length)
+                ->get();
+
+        $arr = array();
+
+        foreach($states as $record)
+        {
+
+            $arr[] = array(
+                "id" => $record->id,
+                "name" => $record->name,
+                "code" => $record->code,
+                "abbr" => $record->abbreviation,
+                "freight_zone" => $record->freight_zone
+
+            );
+        }
+
+        $response = array(
+            "draw" => $draw,
+            "recordsTotal" => $totalRecords,
+            "recordsFiltered" => $totalRecordswithFilter,
+            "data" => $arr,
+            'error' => null
+        );
+                
+        return response()->json($response);
+
     }
 
     /**
