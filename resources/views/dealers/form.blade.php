@@ -20,6 +20,8 @@
                                 <input type="hidden" name="id" value="{{ old('id', $dealer->id) }}" />
                         @endif
 
+                        {{-- ADDRESS --}}
+
                         <div class="mb-3 row">
                             <div class="col-xl-5">
                                 <x-forms.input label="company" name="company" value="{{ old('company', $dealer->company) }}" required="true"/>
@@ -63,6 +65,62 @@
                             </div>
                             
                         </div>
+
+                        <hr>
+
+                        {{-- SHIPPING ADDRESS --}}
+                        <h4> Shipping Address </h4><br>
+                        <div class="mb-3 row">
+                            <div class="col-xl-5">
+                                <x-forms.input label="same address" name="has_shipping_address" value="{{ old('has_shipping_address', $dealer->has_shipping_address) }}" required="true"/>
+                            </div>
+                        </div>
+
+                        <div class="mb-3 row">
+                            <div class="col-xl-5">
+                                <x-forms.input label="company" name="shipping_company" value="{{ old('shipping_company', $dealer->shipping_company) }}" required="false"/>
+                            </div>
+                            <div class="col-xl-3">
+                                <x-forms.input label="GSTIN" name="shipping_gstin" value="{{ old('shipping_gstin', $dealer->shipping_gstin) }}" required="false"/>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <div class="col-xl-5">
+                                <x-forms.input label="contact person" name="shipping_contact_person" value="{{ old('shipping_contact_person', $dealer->shipping_contact_person) }}" required="false"/>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <div class="col-xl-12">
+                                <x-forms.input label="address" name="shipping_address" value="{{ old('shipping_address', $dealer->shipping_address) }}" required="false"/>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <div class="col-xl-12">
+                                <x-forms.input label="address 2" name="shipping_address2" value="{{ old('shipping_address2', $dealer->shipping_address2) }}" required="false"/>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <div class="col-xl-3">
+                                <label class="form-label" for="shipping-state-select">State</label>
+                                <select class="shipping-state-select form-control" name="shipping_state_id">
+                                    @if ($dealer->state)
+                                        <option value="{{$dealer->state->id}}" selected="selected">{{$dealer->state->name}}</option>
+                                    @endif
+                                </select>
+                                <div class="invalid-feedback">
+                                    {{ __('error.form_invalid_field', ['field' => 'state' ]) }}
+                                </div>
+                            </div>
+                            <div class="col-xl-3">
+                                <x-forms.input label="city" name="shipping_city" value="{{ old('shipping_city', $dealer->shipping_city) }}" required="false"/>
+                            </div>
+                            <div class="col-xl-2">
+                                <x-forms.input label="zip code" name="shipping_zip_code" value="{{ old('shipping_zip_code', $dealer->shipping_zip_code) }}" required="false"/>
+                            </div>
+                        </div>
+
+                        <hr>
+
                         <div class="mb-3 row">
                             <div class="col-xl-2">
                                 <x-forms.input label="phone" name="phone" value="{{ old('phone', $dealer->phone) }}" required="true"/>
@@ -93,6 +151,14 @@
     <script>
         var stateSelect = $(".state-select").select2();
         stateSelect.select2({
+            ajax: {
+                url: '{{route('ajax.states')}}',
+                dataType: 'json'
+            }
+        });
+
+        var shippingStateSelect = $(".shipping-state-select").select2();
+        shippingStateSelect.select2({
             ajax: {
                 url: '{{route('ajax.states')}}',
                 dataType: 'json'

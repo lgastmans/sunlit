@@ -42,7 +42,20 @@ class StoreDealerRequest extends FormRequest
             'contact_person' => 'required|string',
             'phone' => 'required|string',
             'phone2' => 'required|string',
-            'email' => 'required|email|unique:dealers,email,'.$this->id
+            'email' => 'required|email|unique:dealers,email,'.$this->id,
+
+            'has_shipping_address' => 'boolean',
+            'shipping_company' => 'nullable|string|max:255',
+            'shipping_state_id' => 'nullable|integer',
+            'shipping_address' => 'nullable|string|max:255',
+            'shipping_address2' => 'nullable|string|max:255',
+            'shipping_city' => 'nullable|string',
+            'shipping_zip_code' => 'nullable|numeric',
+            'shipping_gstin' => 'nullable|string',
+            'shipping_contact_person' => 'nullable|string',
+            'shipping_phone' => 'nullable|string',
+            'shipping_phone2' => 'nullable|string',
+            'shipping_email' => 'nullable|email'
         ];
     }
 }
