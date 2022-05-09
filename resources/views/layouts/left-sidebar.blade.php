@@ -130,6 +130,19 @@
                             </a>
                         </li>
                         @endcan
+
+                        <li>
+                            <a href="{{ route('freight-zones')}}" {{ (Request::is('freight-zones*') ? 'class=" active"' : '') }}>
+                                <span> Freight Zones </span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('states')}}" {{ (Request::is('states*') ? 'class=" active"' : '') }}>
+                                <span> States </span>
+                            </a>
+                        </li>
+
                         @can('edit settings')
                         <li>
                             <a href="{{ route('settings')}}" {{ (Request::is('settings*') ? 'class=" active"' : '') }}>
