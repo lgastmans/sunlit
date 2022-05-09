@@ -16,6 +16,7 @@ class DealersShippingAddressColumns extends Migration
         //
         Schema::table('dealers', function (Blueprint $table) {
             $table->boolean('has_shipping_address')->after('email')->default(true);
+            $table->foreignId('shipping_state_id')->after('email')->nullable();
             $table->string('shipping_company')->after('email')->nullable();
             $table->string('shipping_address')->after('email')->nullable();
             $table->string('shipping_address2')->after('email')->nullable();
@@ -26,7 +27,12 @@ class DealersShippingAddressColumns extends Migration
             $table->string('shipping_phone')->after('email')->nullable();
             $table->string('shipping_phone2')->after('email')->nullable();
             $table->string('shipping_email')->after('email')->nullable();
-        });         
+        });
+
+        Schema::table('dealers', function (Blueprint $table) {
+            $table->foreign('shipping_state_id')->references('id')->on('states');
+        });
+
     }
 
     /**
@@ -38,7 +44,12 @@ class DealersShippingAddressColumns extends Migration
     {
         //
         Schema::table('dealers', function (Blueprint $table) {
+            $table->dropForeign('dealers_shipping_state_id_foreign');
+        });
+
+        Schema::table('dealers', function (Blueprint $table) {
             $table->dropColumn('has_shipping_address');
+            $table->dropColumn('shipping_state_id');
             $table->dropColumn('shipping_company');
             $table->dropColumn('shipping_address');
             $table->dropColumn('shipping_address2');
