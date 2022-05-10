@@ -66,13 +66,14 @@ class StoreDealerRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-        $has_shipping_address = 0;
-        if (isset($this->has_shipping_address))
+        if ($this->has_shipping_address == null){
+            $has_shipping_address = 0;
+        }
+        else{
             $has_shipping_address = 1;
-dd($has_shipping_address);
+        }
         $this->merge([
-            'has_shipping_address' => (isset($this->has_shipping_address) ? 1 : 0)
-            //$this->toBoolean($this->has_shipping_address),
+            'has_shipping_address' => $has_shipping_address
         ]);
     }
 

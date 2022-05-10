@@ -87,7 +87,7 @@
                         <div class="mb-3 row">
                             <div class="col-xl-5">
                                 <div class="form-check">
-                                  <input class="form-check-input" type="checkbox" value="" name="has_shipping_address" id="flexCheckShippingAddress" {{ ($dealer->has_shipping_address == 1) ? 'checked' : ''}}>
+                                  <input class="form-check-input" type="checkbox" name="has_shipping_address" id="flexCheckShippingAddress" {{ ($dealer->has_shipping_address == 1) ? 'checked' : ''}}>
                                   <label class="form-check-label" for="flexCheckShippingAddress">
                                     same address
                                   </label>
