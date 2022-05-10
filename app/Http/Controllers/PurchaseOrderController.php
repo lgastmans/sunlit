@@ -90,6 +90,9 @@ class PurchaseOrderController extends Controller
                     case 2:
                         $order_column = "suppliers.company";
                         break;
+                        case 7:
+                            $order_column = "users.name";
+                            break;
                     default:
                         $order_column = $column_arr[$column_index]['data'];
                 }
