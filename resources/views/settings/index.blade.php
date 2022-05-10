@@ -64,9 +64,9 @@
             </div> <!-- end card-->
         </div>
         <div class="col-lg-6">
-            <div class="card">
+            <div class="card  d-none">
                 <div class="card-body">
-                    <div class="row">
+                    <div class="row ">
                         <div class="col-sm-12">
                             <h4 class="mb-4">Purchase Order</h4>
                                 <div class="mb-3 row">
