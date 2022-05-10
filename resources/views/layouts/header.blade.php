@@ -16,9 +16,9 @@
     <link href="{{ asset("/css/vendor/dataTables.bootstrap4.css") }}" rel="stylesheet" type="text/css" /> 
     <link href="{{ asset("/css/vendor/responsive.bootstrap4.css") }}" rel="stylesheet" type="text/css" /> 
 
-    @if (Request::segment(3) == "proforma")
+{{--     @if (Request::segment(3) == "proforma")
         <link href="{{ asset("/css/proforma.css") }}" rel="stylesheet" type="text/css" /> 
-    @endif
+    @endif --}}
     
     <!-- third party css end -->
 
