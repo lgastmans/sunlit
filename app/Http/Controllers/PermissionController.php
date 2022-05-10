@@ -36,24 +36,24 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
-        $permission = Permission::create(['name' => 'list sale orders']);
+        $permission = Permission::create(['name' => 'list tranport zones']);
         $permission->assignRole('user');
         $permission->assignRole('staff');
         $permission->assignRole('admin');
         $permission->assignRole('super-admin');
 
-        $permission = Permission::create(['name' => 'view sale orders']);
+        $permission = Permission::create(['name' => 'view tranport zones']);
         $permission->assignRole('user');
         $permission->assignRole('staff');
         $permission->assignRole('admin');
         $permission->assignRole('super-admin');
 
-        $permission = Permission::create(['name' => 'edit sale orders']);
+        $permission = Permission::create(['name' => 'edit tranport zones']);
         $permission->assignRole('staff');
         $permission->assignRole('admin');
         $permission->assignRole('super-admin');
 
-        $permission = Permission::create(['name' => 'delete sale orders']);
+        $permission = Permission::create(['name' => 'delete tranport zones']);
         $permission->assignRole('admin');
         $permission->assignRole('super-admin');
     }
