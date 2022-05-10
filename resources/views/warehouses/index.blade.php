@@ -15,7 +15,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap table-has-dlb-click" id="warehouses-datatable">
+                    <table class="table table-centered table-striped table-bordered table-hover w-100 dt-responsive nowrap table-has-dlb-click" id="warehouses-datatable">
                         <thead class="table-light">
                             <tr>
                                 <th>Name</th>

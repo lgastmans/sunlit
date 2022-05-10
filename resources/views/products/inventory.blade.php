@@ -1,4 +1,4 @@
-<table class="table table-centered mb-0">
+<table class="table table-centered  table-striped table-bordered mb-0">
     <thead class="thead-dark">
         <tr>
             <th>Warehouse</th>

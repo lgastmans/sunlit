@@ -14,7 +14,7 @@
             <div class="card-body">
 
                 <div class="table-responsive">
-                    <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap table-has-dlb-click" id="purchase-orders-datatable">
+                    <table class="table table-centered table-striped table-bordered table-hover w-100 dt-responsive nowrap table-has-dlb-click" id="purchase-orders-datatable">
                         <thead class="table-light">
                             <tr>
                                 <th>Order #</th>
