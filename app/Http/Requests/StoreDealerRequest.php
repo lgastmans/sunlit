@@ -58,4 +58,33 @@ class StoreDealerRequest extends FormRequest
             'shipping_email' => 'nullable|email'
         ];
     }
+
+    /**
+     * Prepare inputs for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        $has_shipping_address = 0;
+        if (isset($this->has_shipping_address))
+            $has_shipping_address = 1;
+dd($has_shipping_address);
+        $this->merge([
+            'has_shipping_address' => (isset($this->has_shipping_address) ? 1 : 0)
+            //$this->toBoolean($this->has_shipping_address),
+        ]);
+    }
+
+    /**
+     * Convert to boolean
+     *
+     * @param $booleable
+     * @return boolean
+     */
+    private function toBoolean($booleable)
+    {
+        return filter_var($booleable, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+    }
+
 }

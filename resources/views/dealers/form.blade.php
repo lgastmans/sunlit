@@ -66,13 +66,33 @@
                             
                         </div>
 
+                        <div class="mb-3 row">
+                            <div class="col-xl-2">
+                                <x-forms.input label="phone" name="phone" value="{{ old('phone', $dealer->phone) }}" required="true"/>
+                            </div>
+                            <div class="col-xl-2">
+                                <x-forms.input label="phone 2" name="phone2" value="{{ old('phone2', $dealer->phone2) }}"  required="true"/>
+                            </div>
+                           <div class="col-xl-4">
+                                <x-forms.inputGroup label="email address" name="email" value="{{ old('email', $dealer->email) }}"  required="true" position="before" symbol="@"/>
+                            </div>
+                        </div>
+                        
+
                         <hr>
+
 
                         {{-- SHIPPING ADDRESS --}}
                         <h4> Shipping Address </h4><br>
                         <div class="mb-3 row">
                             <div class="col-xl-5">
-                                <x-forms.input label="same address" name="has_shipping_address" value="{{ old('has_shipping_address', $dealer->has_shipping_address) }}" required="true"/>
+                                <div class="form-check">
+                                  <input class="form-check-input" type="checkbox" value="" name="has_shipping_address" id="flexCheckShippingAddress" {{ ($dealer->has_shipping_address == 1) ? 'checked' : ''}}>
+                                  <label class="form-check-label" for="flexCheckShippingAddress">
+                                    same address
+                                  </label>
+                                </div>
+                                {{-- <x-forms.input label="same address" name="has_shipping_address" value="{{ old('has_shipping_address', $dealer->has_shipping_address) }}" required="true"/> --}}
                             </div>
                         </div>
 
@@ -119,20 +139,7 @@
                             </div>
                         </div>
 
-                        <hr>
 
-                        <div class="mb-3 row">
-                            <div class="col-xl-2">
-                                <x-forms.input label="phone" name="phone" value="{{ old('phone', $dealer->phone) }}" required="true"/>
-                            </div>
-                            <div class="col-xl-2">
-                                <x-forms.input label="phone 2" name="phone2" value="{{ old('phone2', $dealer->phone2) }}"  required="true"/>
-                            </div>
-                           <div class="col-xl-4">
-                                <x-forms.inputGroup label="email address" name="email" value="{{ old('email', $dealer->email) }}"  required="true" position="before" symbol="@"/>
-                            </div>
-                        </div>
-                        
                         
                        
                         
