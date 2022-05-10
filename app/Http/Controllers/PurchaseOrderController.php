@@ -405,8 +405,6 @@ class PurchaseOrderController extends Controller
         $order->status = PurchaseOrder::CONFIRMED;
         if ($request->order_exchange_rate) 
             $order->order_exchange_rate = $request->order_exchange_rate;
-        else
-            $order->order_exchange_rate = \Setting::get('purchase_order.exchange_rate');
 
         $items = PurchaseOrderItem::where('purchase_order_id', "=", $id)->select('quantity_confirmed', 'buying_price', 'tax')->get();
         $order->amount_usd = 0;
