@@ -25,6 +25,7 @@
                                 <th>Amount</th>
                                 <th style="width:100px;">Status</th> 
                                 <th>Created By</th> 
+                                <th>Order Slug</th> 
                             </tr>
                             <tr class="filters" style="display: none;" >
                                 <th><input type="text" class="form-control"></th>
@@ -54,6 +55,7 @@
                                 </th>
                                 <th><input type="text" class="form-control"></th>
                                 <th><select class="form-control status-select"><option value="all">All</option>@foreach($status as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
+                                <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
                             </tr>
                         </thead>
@@ -187,7 +189,7 @@
             },
             { 
                 'data': 'order_number_slug',
-                'visible': false,
+                'visible': true,
             }
             
         ],

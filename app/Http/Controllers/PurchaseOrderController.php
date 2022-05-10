@@ -79,6 +79,7 @@ class PurchaseOrderController extends Controller
                     case 4:
                             $order_column = "users.name";
                             break;
+                            
                     default:
                         $order_column = $column_arr[$column_index]['data'];
                 }
@@ -90,9 +91,9 @@ class PurchaseOrderController extends Controller
                     case 2:
                         $order_column = "suppliers.company";
                         break;
-                        case 7:
-                            $order_column = "users.name";
-                            break;
+                    case 7:
+                        $order_column = "users.name";
+                        break;
                     default:
                         $order_column = $column_arr[$column_index]['data'];
                 }
@@ -119,7 +120,6 @@ class PurchaseOrderController extends Controller
         if ($request->has('filter_warehouse_id')){
             $query->where('purchase_orders.warehouse_id', '=', $request->filter_warehouse_id);
         }
-
         if ($request->has('source') && $request->source == "warehouses"){
             if (!empty($column_arr[0]['search']['value'])){
                 $query->where('purchase_orders.order_number', 'like', '%'.$column_arr[0]['search']['value'].'%');
@@ -194,7 +194,9 @@ class PurchaseOrderController extends Controller
             $query->skip($start)->take($length);
 
         $query->orderBy($order_column, $order_dir);
+        \DB::enableQueryLog();
         $orders = $query->get();
+        \Debugbar::info(\DB::getQueryLog());
 
         $arr = array();
         foreach($orders as $order)
