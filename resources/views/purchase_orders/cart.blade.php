@@ -19,13 +19,13 @@
                     <input type="hidden" name="supplier_id" id="supplier-id" value="{{ $purchase_order->supplier->id }}">
                     <input type="hidden" name="warehouse_id" id="warehouse-id" value="{{ $purchase_order->warehouse->id }}">
                     
-                    <div class="col-lg-3">
+                    <div class="col-lg-5">
                         <div class="mb-3">
                             <label class="form-label" for="product-select">Product</label>
                             <select class="product-select form-control" name="product_id" id="product_id"></select>
                         </div>
                     </div>
-                    <div class="col-lg-1">
+                    <div class="col-lg-2">
                         <div class="mb-3">
                             <label class="form-label" for="product-select">Quantity</label>
                             <input type="text" class="form-control" name="quantity_confirmed" id="quantity_confirmed"  value="1">
@@ -401,6 +401,22 @@
         }
     });
 
+    function formatProduct(el){
+            var item = "<div><h5>" + el.text + "</h5>";
+            var in_l = out_l = kw = "0";
+                if (el.cable_length_input != undefined)
+                    in_l = el.cable_length_input;
+                if (el.cable_length_output != undefined)
+                    out_l = el.cable_length_output;
+                if (el.kw_rating != undefined)
+                    kw = el.kw_rating;
+                item += "<small><strong>Input:</strong> "+ in_l + "m</small>"
+                item += "<small><strong> / Output:</strong> "+ out_l + "m</small>"
+                item += "<small><strong> / KW:</strong> "+ kw + "KW</small>"
+            item += "</div>";
+        return $(item);
+    }
+
     var productSelect = $(".product-select").select2();
     var product_route = '{{ route("ajax.products.supplier", [":supplier_id"]) }}';
     product_route = product_route.replace(':supplier_id', $('#supplier-id').val());
@@ -408,7 +424,8 @@
         ajax: {
             url: product_route,
             dataType: 'json'
-        }
+        },
+        templateResult : formatProduct,
     });
 
     productSelect.on("change", function (e) { 

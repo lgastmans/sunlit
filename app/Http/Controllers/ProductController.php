@@ -320,7 +320,7 @@ class ProductController extends Controller
         if ($request->has('q')){
             $query->where('part_number', 'like', '%'.$request->get('q').'%');
         }
-        $products = $query->select('products.id', 'products.part_number as text')->get();
+        $products = $query->select('products.id', 'products.part_number as text', 'products.cable_length_input', 'products.cable_length_output', 'products.kw_rating')->get();
         return ['results' => $products];  
     }
 
