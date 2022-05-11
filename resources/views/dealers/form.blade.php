@@ -24,7 +24,7 @@
 
                         <div class="mb-3 row">
                             <div class="col-xl-5">
-                                <x-forms.input label="company" name="company" value="{{ old('company', $dealer->company) }}" required="true"/>
+                                <x-forms.input label="company" name="company" value="{!! old('company', $dealer->company) !!}" required="true"/>
                             </div>
                             <div class="col-xl-3">
                                 <x-forms.input label="GSTIN" name="gstin" value="{{ old('gstin', $dealer->gstin) }}" required="true"/>
@@ -37,12 +37,12 @@
                         </div>
                         <div class="mb-3 row">
                             <div class="col-xl-12">
-                                <x-forms.input label="address" name="address" value="{{ old('address', $dealer->address) }}" required="true"/>
+                                <x-forms.input label="address" name="address" value="{!! old('address', $dealer->address) !!}" required="true"/>
                             </div>
                         </div>
                         <div class="mb-3 row">
                             <div class="col-xl-12">
-                                <x-forms.input label="address 2" name="address2" value="{{ old('address2', $dealer->address2) }}" required="false"/>
+                                <x-forms.input label="address 2" name="address2" value="{!! old('address2', $dealer->address2) !!}" required="false"/>
                             </div>
                         </div>
                         <div class="mb-3 row">
@@ -123,7 +123,7 @@
                             <div class="col-xl-3">
                                 <label class="form-label" for="shipping-state-select">State</label>
                                 <select class="shipping-state-select form-control" name="shipping_state_id">
-                                    @if ($dealer->state)
+                                    @if ($dealer->shipping_state)
                                         <option value="{{$dealer->shipping_state->id}}" selected="selected">{{$dealer->shipping_state->name}}</option>
                                     @endif
                                 </select>
