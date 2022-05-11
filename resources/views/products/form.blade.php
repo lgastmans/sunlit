@@ -9,7 +9,7 @@
 @section('content')
 
 <div class="row">
-    <div class="col-9">
+    <div class="col-10">
         <div class="card">
             <div class="card-body">
                 <x-forms.errors class="mb-4" :errors="$errors" />
@@ -19,7 +19,7 @@
                             @method('PUT')
                         @endif
                         <div class="mb-3 row">
-                            <div class="col-xl-3">
+                            <div class="col-xl-4">
                                 <label class="form-label" for="category-select">Category</label>
                                 <select class="category-select form-control" name="category_id">
                                     @if ($product->category)
@@ -31,7 +31,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-xl-3">
+                            <div class="col-xl-4">
                                 <label class="form-label" for="supplier-select">Supplier</label>
                                 @if ($product->purchase_order_item_count == 0)
                                 <select class="supplier-select form-control" name="supplier_id">
@@ -48,7 +48,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-xl-2">
+                            <div class="col-xl-4">
                                 <label class="form-label" for="tax-select">Tax</label>
                                 <select class="tax-select form-control" name="tax_id">
                                     @if ($product->tax)
@@ -75,45 +75,45 @@
                             <div class="col-xl-4">
                                 <x-forms.input label="Part number" name="part_number" value="{{ old('part_number', $product->part_number) }}" message="Please provide a part number" required="false"/>
                             </div>
-                            <div class="col-xl-2">
+                            <div class="col-xl-3">
                                 <label class="form-label" for="purchase_price">Amount</label>
                                 <div class="input-group">
-                                    <span class="input-group-text" id="inputGroupPrepend">{{ __('app.currency_symbol_inr')}}</span>
+                                    <span class="input-group-text" id="inputGroupPrepend">{{ __('app.currency_symbol_usd')}}</span>
                                     <input class="form-control" id="purchase_price" name="purchase_price" value="{{ old('purchase_price', $product->purchase_price) }}" required="true" data-toggle="input-mask" />
                                     <div class="invalid-feedback">
                                         {{ __('error.form_invalid_field', ['field' => 'percentage']) }}
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-2">
+                            <div class="col-xl-3">
                                 <x-forms.input label="Warranty" name="warranty" value="{{ old('warranty', $product->warranty) }}" message="Please provide Warranty" required="false"/>
                             </div>
                         </div>
                         <div class="mb-3 row">
 
-                            <div class="col-xl-2">
+                            <div class="col-xl-3">
                                 <x-forms.input label="Minimum Quantity" name="minimum_quantity" value="{{ old('minimum_quantity', $product->minimum_quantity) }}" message="Please provide a minimum quantity" required="false"/>
                             </div>
-                            <div class="col-xl-2">
+                            <div class="col-xl-3">
                                 <x-forms.input label="KW rating" name="kw_rating" value="{{ old('kw_rating', $product->kw_rating) }}" message="Please provide a KW rating" required="false"/>
                             </div>
-                            <div class="col-xl-2">
+                            <div class="col-xl-3">
                                 <x-forms.input label="Cable Length Input" name="cable_length_input" value="{{ old('cable_length_input', $product->cable_length_input) }}" message="Please provide cable length input" required="false"/>
                             </div>
-                            <div class="col-xl-2">
+                            <div class="col-xl-3">
                                 <x-forms.input label="Cable Length Output" name="cable_length_output" value="{{ old('cable_length_output', $product->cable_length_output) }}" message="Please provide cable length output" required="false"/>
                             </div>
 
                         </div>
                         <div class="mb-3 row">
                             
-                            <div class="col-xl-2">
+                            <div class="col-xl-3">
                                 <x-forms.input label="Actual Weight" name="weight_actual" value="{{ old('weight_actual', $product->weight_actual) }}" message="Please provide Actual Weight" required="false"/>
                             </div>
-                            <div class="col-xl-2">
+                            <div class="col-xl-3">
                                 <x-forms.input label="Volume Weight" name="weight_volume" value="{{ old('weight_volume', $product->weight_volume) }}" message="Please provide Volume Weight" required="false"/>
                             </div>
-                            <div class="col-xl-2">
+                            <div class="col-xl-3">
                                 <x-forms.input label="Calculated Weight" name="weight_calculated" value="{{ old('weight_calculated', $product->weight_calculated) }}" message="Please provide Calculated Weight" required="false"/>
                             </div>
                             
