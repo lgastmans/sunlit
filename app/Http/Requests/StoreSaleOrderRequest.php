@@ -42,7 +42,7 @@ class StoreSaleOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'order_number' => 'required',
+            'order_number' => 'required|unique:sale_orders|max:255',
             'order_number_slug' => 'required',
             'dealer_id' => 'required|integer',
             'warehouse_id' => 'required|integer',
