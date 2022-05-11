@@ -75,7 +75,8 @@ class DealerController extends Controller
 
         // Fetch records
         if ($length < 0)
-            $dealers = Dealer::where('contact_person', 'like', '%'.$search.'%')
+            $dealers = Dealer::select('dealers.id AS dealer_id', 'company', 'contact_person', 'city', 'states.name as state_name', 'email', 'phone')
+                ->where('contact_person', 'like', '%'.$search.'%')
                 ->join('states', 'states.id', '=', 'dealers.state_id')
                 ->orWhere('company', 'like', '%'.$search.'%')
                 ->orWhere('city', 'like', '%'.$search.'%')
@@ -83,7 +84,8 @@ class DealerController extends Controller
                 ->orderBy($order_column, $order_dir)
                 ->get();
         else
-            $dealers = Dealer::where('contact_person', 'like', '%'.$search.'%')
+            $dealers = Dealer::select('dealers.id AS dealer_id', 'company', 'contact_person', 'city', 'states.name as state_name', 'email', 'phone')
+                ->where('contact_person', 'like', '%'.$search.'%')
                 ->join('states', 'states.id', '=', 'state_id')
                 ->orWhere('company', 'like', '%'.$search.'%')
                 ->orWhere('city', 'like', '%'.$search.'%')
@@ -93,12 +95,27 @@ class DealerController extends Controller
                 ->take($length)
                 ->get();
 
+        $arr = array();
+
+        foreach($dealers as $record)
+        {
+
+            $arr[] = array(
+                "id" => $record->dealer_id,
+                "company" => $record->company,
+                "contact_person" => $record->contact_person,
+                "city" => $record->city,
+                "state_name" => $record->state_name,
+                "email" => $record->email,
+                "phone" => $record->phone
+            );
+        }
 
         $response = array(
             "draw" => $draw,
             "recordsTotal" => $totalRecords,
             "recordsFiltered" => $totalRecordswithFilter,
-            "data" => $dealers,
+            "data" => $arr,
             'error' => null
         );
                 

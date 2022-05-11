@@ -124,7 +124,7 @@
                                 <label class="form-label" for="shipping-state-select">State</label>
                                 <select class="shipping-state-select form-control" name="shipping_state_id">
                                     @if ($dealer->state)
-                                        <option value="{{$dealer->state->id}}" selected="selected">{{$dealer->state->name}}</option>
+                                        <option value="{{$dealer->shipping_state->id}}" selected="selected">{{$dealer->shipping_state->name}}</option>
                                     @endif
                                 </select>
                                 <div class="invalid-feedback">

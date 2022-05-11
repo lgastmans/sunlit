@@ -28,7 +28,6 @@ class Dealer extends Model
     public function shipping_state()
     {
         return $this->belongsTo(State::class);
-        asdf
     }
 
 }

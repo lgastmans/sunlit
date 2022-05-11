@@ -110,7 +110,7 @@
                 'orderable': true 
             },
             { 
-                'data': 'state.name',
+                'data': 'state_name',
                 'orderable': true 
             },
             { 
@@ -134,7 +134,7 @@
                         @if (Auth::user()->can('edit dealers'))
                             var edit_route = '{{ route("dealers.edit", ":id") }}';
                             edit_route = edit_route.replace(':id', data);
-                            edit_btn = '<a href="' + edit_route + '" class="action-icon"> <i class="mdi mdi-pencil"></i></a>'                       
+                            edit_btn = '<a href="' + edit_route + '" class="action-icon"> <i class="mdi mdi-pencil"></i></a>' 
                         @endif
                         @if (Auth::user()->can('delete dealers'))
                             delete_btn = '<a href="" class="action-icon" id="' + data + '" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>'
