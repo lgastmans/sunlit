@@ -211,7 +211,7 @@ class PurchaseOrderItemController extends Controller
             $item->quantity_confirmed = $request->value;
 
         if ($request->field == "price")
-            $item->quantity_confirmed = $request->value;
+            $item->buying_price = $request->value;
 
         $item->update();
         return response()->json(['success'=>'true', 'code'=>200, 'message'=>'OK']);
