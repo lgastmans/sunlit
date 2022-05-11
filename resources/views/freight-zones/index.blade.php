@@ -111,12 +111,12 @@
                         var edit_btn = '';
                         var delete_btn = '';
 
-                        @if (Auth::user()->can('edit zones'))
+                        @if (Auth::user()->can('edit tranport zones'))
                             var edit_route = '{{ route("freight-zones.edit", ":id") }}';
                             edit_route = edit_route.replace(':id', data);
                             edit_btn = '<a href="' + edit_route + '" class="action-icon"> <i class="mdi mdi-pencil"></i></a>'                       
                         @endif
-                        @if (Auth::user()->can('delete zones'))
+                        @if (Auth::user()->can('delete tranport zones'))
                             delete_btn = '<a href="" class="action-icon" id="' + data + '" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>'
                         @endif
 

@@ -17,8 +17,8 @@ class FreightZoneController extends Controller
     public function index()
     {
         //
-        // $user = Auth::user();
-        // if ($user->can('list zones'))
+        $user = Auth::user();
+        if ($user->can('list tranport zones'))
             return view('freight-zones.index');
     
         return abort(403, trans('error.unauthorized'));
@@ -143,14 +143,14 @@ class FreightZoneController extends Controller
     public function show($id)
     {
         //
-        // $user = Auth::user();
-        // if ($user->can('view zones')){
+        $user = Auth::user();
+        if ($user->can('view tranport zones')){
             $zone = FreightZone::find($id);
             if ($zone)
                 return view('freight-zones.show', ['zone' => $zone]);
 
             return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'zone']));
-        // }
+        }
 
         return abort(403, trans('error.unauthorized'));
     }
