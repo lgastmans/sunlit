@@ -1,21 +1,19 @@
 <!DOCTYPE html>
-<!--
-  Invoice template by invoicebus.com
-  To customize this template consider following this guide https://invoicebus.com/how-to-create-invoice-template/
-  This template is under Invoicebus Template License, see https://invoicebus.com/templates/license/
--->
 <html lang="en">
+
   <head>
+
     <meta charset="utf-8">
-    <title>Vip (tertia)</title>
+    <title>Sunlit Future - Sale Order</title>
     
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <meta name="description" content="Invoicebus Invoice Template">
-    <meta name="author" content="Invoicebus">
+    <meta name="description" content="Sunlit Invoice">
+    <meta name="author" content="Sunlit">
 
     <style type="text/css">
+
 /*! Invoice Templates @author: Invoicebus @email: info@invoicebus.com @web: https://invoicebus.com @version: 1.0.0 @updated: 2017-09-07 12:09:32 @license: Invoicebus */
 /* Reset styles */
 @import url("https://fonts.googleapis.com/css?family=PT+Sans:400,700&subset=latin,latin-ext,cyrillic,cyrillic-ext");
@@ -327,153 +325,229 @@ width: 100%;
 	min-width: 15px;
 }
 
+
+      
+      table {
+        font-family: Verdana, sans-serif;;
+        font-weight: normal;
+        font-style: normal;
+        font-size: 11px;
+
+        max-width: 2480px;
+        width:100%;
+      }
+
+      table td {
+        /*width: auto;*/
+        overflow: hidden;
+        word-wrap: normal;
+      }
+
+      .company-info {
+        font-size: 14px;
+      }
+
     </style>
-
-
   </head>
+
 <body>
 
   <div id="container">
 
-      <section id="memo">
-
-        <div class="logo">
-          <span class="logo-lg bg-sunlit">
-            <img src="/images/logo.png" alt="" height="48">
-          </span>
-        </div>
-
-        <div class="company-info">
-          <span>{{ $settings['company']['name'] }}</span>
-
-          <div class="separator less"></div>
-
-          <span>{{ $settings['company']['city'] }} {{ $settings['company']['zipcode'] }}</span><br>
-          <span>{{ $settings['company']['state'] }} {{ $settings['company']['country'] }}</span><br>
-          <span>GSTIN: {{ $settings['company']['gstin'] }}</span><br>
-
-          <span>Email: {{ $settings['company']['email'] }}</span>
-          <span>Phone: {{ $settings['company']['phone'] }}</span>
-        </div>
-
-        <div class="client-info">
-
-          <p class="p-3 text-end">Original for Recipient<br>
-            Duplicate for Transporter<br>
-            Triplicate for Supplier
-          </p>
-
-        </div>
-
-      </section>
+    {{-- HEADER --}}
+    <table style="width:100%">
+      <tr>
+        <td>
+          <img src="/images/logo.png" alt="" height="48">
+          {{-- <img src="{{ asset('/images/logo.png') }}" alt="" height="48"> --}}
+          
+        </td>
+        <td class="text-end">
+          Original for Recipient<br>
+          Duplicate for Transporter<br>
+          Triplicate for Supplier
+        </td>
+      </tr>
+    </table>
 
 
-      <section id="invoice-title-number">
+    {{-- COMPANY INFO --}}
+    <table>
+      <tr class="company-info">
+        <td><strong>{{ $settings['company']['name'] }}</strong></td>
+      </tr>
+      <tr class="company-info">
+        <td><span>{{ $settings['company']['city'] }} {{ $settings['company']['zipcode'] }}</span></td>
+      </tr>
+      <tr class="company-info">
+        <td><span>{{ $settings['company']['state'] }} {{ $settings['company']['country'] }}</span></td>
+      </tr>
+      <tr class="company-info">
+        <td><span>GSTIN: {{ $settings['company']['gstin'] }}</span></td>
+      </tr>
+      <tr class="company-info">
+        <td><span>Email: {{ $settings['company']['email'] }}</span></td>
+      </tr>
+      <tr class="company-info">
+        <td><span>Phone: {{ $settings['company']['phone'] }}</span></td>
+      </tr>
+    </table>
+
+
+    {{-- INVOICE DETAILS --}}
+    <table>
+      <tr class="invoice-title-number">
+        <td><span id="number">Proforma Invoice #{{ $order->order_number }}</span></td>
+      </tr>
+      <tr>
+        <td><span>Booked On: {{ $order->display_booked_at}}</span></td>
+      </tr>
+      <tr>
+        <td><span>Due On: {{ $order->display_due_at}} </span></td>
+      </tr>
+    </table>
+
+
+    {{-- DEALER DETAILS --}}
+    <table>
+      <tr>
+        <td colspan="2" width="50%"><span><strong>Details of Receiver (Billed to)</strong></span></td>
+        <td colspan="2" width="50%"><span><strong>Details of Consignee (Shipped to)</strong></span></td>
+      </tr>
+      <tr>
+        <td>Name</td>
+        <td>{{ $order->dealer->company}}</td>
+        <td>Name</td>
+        <td>{{ $order->dealer->shipping_company}}</td>
+      </tr>
+      <tr>
+        <td>Address</td>
+        <td class="text-break">{{ $order->dealer->address }}</td>
+        <td>Address</td>
+        <td class="text-break">{{ $order->dealer->shipping_address }}</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>{{ $order->dealer->address2 }}</td>
+        <td></td>
+        <td>{{ $order->dealer->shipping_address2 }}</td>
+      </tr>
+      <tr>
+        <td>City</td>
+        <td>{{ $order->dealer->city }} {{ $order->dealer->zip_code }}</td>
+        <td>City</td>
+        <td>{{ $order->dealer->shipping_city }} {{ $order->dealer->shipping_zip_code }}</td>
+      </tr>
+      <tr>
+        <td>State</td>
+        <td>{{ $order->dealer->state->name }}</td>
+        <td>State</td>
+        <td>{{ $order->dealer->shipping_state->name ?? '' }}</td>
+      </tr>
+      <tr>
+        <td>State Code</td>
+        <td>{{ $order->dealer->state->code }}</td>
+        <td>State Code</td>
+        <td>{{ $order->dealer->shipping_state->code ?? '' }}</td>
+      </tr>
+      <tr>
+        <td>GSTIN</td>
+        <td>{{ $order->dealer->gstin }}</td>
+        <td>GSTIN</td>
+        <td>{{ $order->dealer->shipping_gstin }}</td>
+      </tr>
+      <tr>
+        <td>Contact</td>
+        <td>{{ $order->dealer->contact_person}}</td>
+        <td>Contact</td>
+        <td>{{ $order->dealer->shipping_contact_person}}</td>
+      </tr>
+      <tr>
+        <td>Phone</td>
+        <td>{{ $order->dealer->phone }}</td>
+        <td>Phone</td>
+        <td>{{ $order->dealer->shipping_phone }}</td>
+      </tr>
+      <tr>
+        <td>Email</td>
+        <td>{{ $order->dealer->email }}</td>
+        <td>Email</td>
+        <td>{{ $order->dealer->shipping_email }}</td>
+      </tr>
+      <tr>
+        <td>Transport details</td>
+        <td colspan="3"></td>
+      </tr>
+    </table>
+
+
+    {{-- ITEM DETAILS --}}
+      <table cellpadding="0" cellspacing="0">
       
-{{--         <span id="title">{invoice_title}</span>
-        <div class="separator"></div> --}}
-        <span id="number">Proforma Invoice #{{ $order->order_number }}</span>
-        
-      </section>
+        <tr>
+          <th rowspan="2">Sr.<br>No.</th> {{-- Dummy cell for the row number and row commands --}}
+          <th rowspan="2">Part Number</th>
+          <th rowspan="2">Qty</th>
+          <th rowspan="2">Unit</th>
+          <th rowspan="2">Rate</th>
+          <th rowspan="2">Total</th>
+          <th rowspan="2">Discount</th>
+          <th rowspan="2">Taxable<br>Value</th>
+          @if ($order->dealer->state->code==33)
+            <th colspan="2" class="text-center">SGST</th>
+            <th colspan="2" class="text-center">CGST</th>
+          @else
+            <th colspan="2" class="text-center">IGST</th>
+          @endif
+        </tr>
 
-      
-      <div class="clearfix"></div>
+        <tr>
+          {{-- <th>Sr.<br>No.</th> Dummy cell for the row number and row commands --}}
+          {{-- <th>Part Number</th> --}}
+          {{-- <th>Qty</th> --}}
+          {{-- <th>Unit</th> --}}
+          {{-- <th>Rate</th> --}}
+          {{-- <th>Total</th> --}}
+          {{-- <th>Discount</th> --}}
+          {{-- <th>Value</th> --}}
+          @if ($order->dealer->state->code==33)
+            <th>Rate</th>
+            <th class="text-end">Amt</th>
+            <th>Rate</th>
+            <th>Amt</th>
+          @else
+            <th>Rate</th>
+            <th>Amt</th>
+          @endif
+        </tr>
+        
 
-      
-      <section id="invoice-info">
+        {{-- 
+          The list of items of the sales order
+        --}}
+        @foreach ($order->items as $item)
 
-        <div>
-          <span><strong>Booked On</strong></span>
-          <span><strong>Due On</strong></span>
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-        
-        <div>
-          <span>{{ $order->display_booked_at}}</span>
-          <span>{{ $order->display_due_at}}</span>
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
+          <tr data-iterate="item">
 
-      </section>
-      
+            <td>{{ $loop->iteration }}</td> <!-- Don't remove this column as it's needed for the row commands -->
 
-
-      <section id="client-info">
-        <div>
-          <span><h5>Details of Receiver (Billed to)</h5></span>
-          <span class="client-name">{{ $order->dealer->company}}</span>
-        </div>
-
-        <div>
-          <span class="client-name">{{ $order->dealer->contact_person}}</span>
-        </div>
-        
-        <div>
-          <span>{{ $order->dealer->address }}</span>
-        </div>
-        
-        <div>
-          <span>{{ $order->dealer->city }} {{ $order->dealer->zip_code }} {{ $order->dealer->state->name }}</span>
-        </div>
-        
-        <div>
-          <span><em>Phone:</em> {{ $order->dealer->phone }}</span>
-        </div>
-        
-        <div>
-          <span><em>Email:</em> {{ $order->dealer->email }}</span>
-        </div>
-        
-        <div>
-          <span><em>GSTIN:</em> {{ $order->dealer->gstin }}</span>
-        </div>
-      </section>
-      
-      <div class="clearfix"></div>
-      
-      <section id="items">
-        
-        <table cellpadding="0" cellspacing="0">
-        
-          <tr>
-            <th rowspan="2">Sr.<br>No.</th> {{-- Dummy cell for the row number and row commands --}}
-            <th rowspan="2">Part Number</th>
-            <th rowspan="2">Qty</th>
-            <th rowspan="2">Unit</th>
-            <th rowspan="2">Rate</th>
-            <th rowspan="2">Total</th>
-            <th rowspan="2">Discount</th>
-            <th rowspan="2">Taxable<br>Value</th>
+            <td><span class="text-end">{{ $item->product->part_number }} <br> {{ $item->product->notes }} </span></td>
+            <td><span>{{ $item->quantity_ordered }}</span></td>
+            <td><span>Nos</span></td>
+            <td><span>{{ $item->selling_price }}</span></td>
+            <td><span>{{ $item->taxable_value }}</span></td>
+            <td><span>&mdash;</span></td>
+            <td><span>{{ $item->taxable_value }}</span></td>
             @if ($order->dealer->state->code==33)
-              <th colspan="2" class="text-center">SGST</th>
-              <th colspan="2" class="text-center">CGST</th>
+              <td>{{ $item->tax/2 }}%</td>
+              <td>@php echo number_format($item->tax_amount/2, 2); @endphp</td>
+              <td>{{ $item->tax/2 }}%</td>
+              <td>@php echo number_format($item->tax_amount/2, 2); @endphp</td>
             @else
-              <th colspan="2" class="text-center">IGST</th>
+              <td>{{ $item->tax }}%</td>
+              <td>{{ $item->tax_amount }}</td>
             @endif
-          </tr>
 
-          <tr>
-            {{-- <th>Sr.<br>No.</th> Dummy cell for the row number and row commands --}}
-            {{-- <th>Part Number</th> --}}
-            {{-- <th>Qty</th> --}}
-            {{-- <th>Unit</th> --}}
-            {{-- <th>Rate</th> --}}
-            {{-- <th>Total</th> --}}
-            {{-- <th>Discount</th> --}}
-            {{-- <th>Value</th> --}}
-            @if ($order->dealer->state->code==33)
-              <th>Rate</th>
-              <th class="text-end">Amt</th>
-              <th>Rate</th>
-              <th>Amt</th>
-            @else
-              <th>Rate</th>
-              <th>Amt</th>
-            @endif
           </tr>
           
 
@@ -531,71 +605,82 @@ width: 100%;
                 <td>{{ $item->tax }}%</td>
                 <td>{{ $order->transport_charges }}</td>
               @endif
+
           </tr>
 
-          {{-- 
-            The column totals 
-          --}}
-          <tr>
-            {{-- <th rowspan="2">Sr.<br>No.</th> Dummy cell for the row number and row commands --}}
-            {{-- <th rowspan="2">Part Number</th> --}}
-            {{-- <th rowspan="2">Qty</th> --}}
-            {{-- <th rowspan="2">Unit</th> --}}
-            <th colspan="5">Subtotals</th>
-            <th class="text-end">{{ $order->sub_total }}</th>
-            <th>&mdash;</th>
-            <th>{{ $order->sub_total }}</th>
+          @php
+            $last_item = $loop->count + 1;
+          @endphp
+
+        @endforeach
+
+        {{-- 
+          The Transport Charges as a row 
+        --}}
+        <tr>
+            <td>{{ $last_item }}</td> <!-- Don't remove this column as it's needed for the row commands -->
+            <td><span> Transport charges </span></td>
+            <td><span> 1 </span></td>
+            <td><span> Nos </span></td>
+            <td><span>{{ $order->transport_charges }}</span></td>
+            <td><span>{{ $order->transport_charges }}</span></td>
+            <td><span>&mdash;</span></td>
+            <td><span>{{ $order->transport_charges }}</span></td>
             @if ($order->dealer->state->code==33)
-              <th></th>
-              <th>@php echo number_format($order->tax_total/2, 2); @endphp</th>
-              <th></th>
-              <th>@php echo number_format($order->tax_total/2, 2); @endphp</th>
+              <td>{{ $item->tax/2 }}%</td>
+              <td>@php echo number_format(($order->transport_charges/2) * ($item->tax)/100, 2); @endphp</td>
+              <td>{{ $item->tax/2 }}%</td>
+              <td>@php echo number_format(($order->transport_charges/2) * ($item->tax)/100, 2); @endphp</td>
             @else
-              <th></th>
-              <th>{{ $order->tax_total }}</th>
+              <td>{{ $item->tax }}%</td>
+              <td>{{ $order->transport_charges }}</td>
             @endif
-          </tr>
-          
-        </table>
+        </tr>
+
+        {{-- 
+          The column totals 
+        --}}
+        <tr>
+          {{-- <th rowspan="2">Sr.<br>No.</th> Dummy cell for the row number and row commands --}}
+          {{-- <th rowspan="2">Part Number</th> --}}
+          {{-- <th rowspan="2">Qty</th> --}}
+          {{-- <th rowspan="2">Unit</th> --}}
+          <th colspan="5">Subtotals</th>
+          <th class="text-end">{{ $order->sub_total }}</th>
+          <th>&mdash;</th>
+          <th>{{ $order->sub_total }}</th>
+          @if ($order->dealer->state->code==33)
+            <th></th>
+            <th>@php echo "test"; //number_format($order->tax_total/2, 2); @endphp</th>
+            <th></th>
+            <th>@php echo "test"; //number_format($order->tax_total/2, 2); @endphp</th>
+          @else
+            <th></th>
+            <th>{{ $order->tax_total }}</th>
+          @endif
+        </tr>
         
-      </section>
-      
-      <section id="sums">
-      
-        <table cellpadding="0" cellspacing="0">
-          <tr>
-            <th>Subtotal</th>
-            <td>{{ $order->sub_total }}</td>
-          </tr>
-          
-          <tr data-iterate="tax">
-            <th>Tax</th>
-            <td>{{ $order->tax_total }}</td>
-          </tr>
-          
-          <tr class="amount-total">
-            <th>Total</th>
-            <td>{{ $order->total }}</td>
-          </tr>
-          
-          <!-- You can use attribute data-hide-on-quote="true" to hide specific information on quotes.
-               For example Invoicebus doesn't need amount paid and amount due on quotes  -->
-{{--           
-          <tr data-hide-on-quote="true">
-            <th>{amount_paid_label}</th>
-            <td>{amount_paid}</td>
-          </tr>
-          
-          <tr data-hide-on-quote="true">
-            <th>{amount_due_label}</th>
-            <td>{amount_due}</td>
-          </tr>
- --}}          
-        </table>
+      </table>
         
-      </section>
-      
-      <div class="clearfix"></div>
+      {{-- TOTALS       --}}
+      <table cellpadding="0" cellspacing="0">
+        <tr>
+          <th>Subtotal</th>
+          <td>{{ $order->sub_total }}</td>
+        </tr>
+        
+        <tr data-iterate="tax">
+          <th>Tax</th>
+          <td>{{ $order->tax_total }}</td>
+        </tr>
+        
+        <tr class="amount-total">
+          <th>Total</th>
+          <td>{{ $order->total }}</td>
+        </tr>
+        
+      </table>
+        
       
       <section id="terms">
 
@@ -615,9 +700,6 @@ width: 100%;
       </section>
 
 
-      <div class="clearfix"></div>
-
-      
       <section id="signatory">
         
         <table cellpadding="0" cellspacing="0">
@@ -641,28 +723,12 @@ width: 100%;
       </section>
 
       <div class="payment-info">
-        <div>Bank Details :
+        <div>Bank Details
             Name of the Bank : HDFC Bank Ltd
             Bank Account No. : 04071450000340
-            IFSC Code
-            : HDFC0000407
+            IFSC Code        : HDFC0000407
         </div>
       </div>
-
-{{--       <div class="bottom-circles">
-        <section>
-          <div>
-            <div></div>
-          </div>
-          <div>
-            <div>
-              <div>
-                <div></div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div> --}}
 
     </div>
 
