@@ -16,7 +16,6 @@
     <meta name="author" content="Invoicebus">
 
     <style type="text/css">
-      
 /*! Invoice Templates @author: Invoicebus @email: info@invoicebus.com @web: https://invoicebus.com @version: 1.0.0 @updated: 2017-09-07 12:09:32 @license: Invoicebus */
 /* Reset styles */
 @import url("https://fonts.googleapis.com/css?family=PT+Sans:400,700&subset=latin,latin-ext,cyrillic,cyrillic-ext");
@@ -34,300 +33,299 @@ article, aside, canvas, details, embed,
 figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
-  margin: 0;
-  padding: 0;
-  border: 1;
-  font: inherit;
-  font-size: 100%;
-  vertical-align: baseline;
+	margin: 0;
+	padding: 0;
+	border: 1;
+	font: inherit;
+	font-size: 100%;
+	vertical-align: baseline;
 }
 
 html {
-  line-height: 1;
+	line-height: 1;
 }
 
 ol, ul {
-  list-style: none;
+	list-style: none;
 }
 
 table {
-  border-collapse: collapse;
-  border-spacing: 0;
+	border-collapse: collapse;
+	border-spacing: 0;
 }
 
 caption, th, td {
-  text-align: left;
-  font-weight: normal;
-  vertical-align: middle;
+	text-align: left;
+	font-weight: normal;
+	vertical-align: middle;
 }
 
 q, blockquote {
-  quotes: none;
+	quotes: none;
 }
 q:before, q:after, blockquote:before, blockquote:after {
-  content: "";
-  content: none;
+	content: "";
+	content: none;
 }
 
 a img {
-  border: none;
+	border: none;
 }
 
 article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
-  display: block;
+	display: block;
 }
 
 /* Invoice styles */
 /**
- * DON'T override any styles for the <html> and <body> tags, as this may break the layout.
- * Instead wrap everything in one main <div id="container"> element where you may change
- * something like the font or the background of the invoice
- */
+* DON'T override any styles for the <html> and <body> tags, as this may break the layout.
+	* Instead wrap everything in one main <div id="container"> element where you may change
+	* something like the font or the background of the invoice
+	*/
 html, body {
-  /* MOVE ALONG, NOTHING TO CHANGE HERE! */
+	/* MOVE ALONG, NOTHING TO CHANGE HERE! */
 }
 
 /** 
- * IMPORTANT NOTICE: DON'T USE '!important' otherwise this may lead to broken print layout.
- * Some browsers may require '!important' in oder to work properly but be careful with it.
- */
+	* IMPORTANT NOTICE: DON'T USE '!important' otherwise this may lead to broken print layout.
+* Some browsers may require '!important' in oder to work properly but be careful with it.
+*/
 .clearfix {
-  display: block;
-  clear: both;
+	display: block;
+	clear: both;
 }
 
 .hidden {
-  display: none;
+	display: none;
 }
 
 .separator {
-  height: 15px;
+	height: 15px;
 }
 .separator.less {
-  height: 10px !important;
+	height: 10px !important;
 }
 
 #container {
-  font: normal 14px/1.4em 'PT Sans', Sans-serif;
-  margin: 0 auto;
-  padding: 50px 65px;
-  min-height: 1058px;
-  position: relative;
-  border-style: solid;
-  border-color: grey;
+font: normal 14px/1.4em 'PT Sans', Sans-serif;
+margin: 0 auto;
+padding: 50px 65px;
+min-height: 1058px;
+position: relative;
+border-style: solid;
+border-color: grey;
 }
 
 #memo {
-  min-height: 100px;
+min-height: 100px;
 }
 #memo .logo {
-  float: left;
-  margin-right: 20px;
-  position: relative !important;
+float: left;
+margin-right: 20px;
+position: relative !important;
 }
 #memo .logo img {
-  width: 150px;
-  height: 100px;
+width: 150px;
+height: 100px;
 }
 #memo .company-info {
-  float: left;
-  margin-top: 8px;
-  max-width: 515px;
+float: left;
+margin-top: 8px;
+max-width: 515px;
 }
 #memo .company-info span {
-  color: #888;
-  display: inline-block;
-  min-width: 15px;
+color: #888;
+display: inline-block;
+min-width: 15px;
 }
 #memo .company-info > span:first-child {
-  color: black;
-  font-weight: bold;
-  font-size: 28px;
-  line-height: 1em;
+color: black;
+font-weight: bold;
+font-size: 28px;
+line-height: 1em;
 }
 #memo:after {
-  content: '';
-  display: block;
-  clear: both;
+content: '';
+display: block;
+clear: both;
 }
 
 #invoice-info {
-  float: left;
-  margin-top: 50px;
+float: left;
+margin-top: 50px;
 }
 #invoice-info > div {
-  float: left;
+float: left;
 }
 #invoice-info > div > span {
-  display: block;
-  min-width: 100px;
-  min-height: 18px;
-  margin-bottom: 3px;
+display: block;
+min-width: 100px;
+min-height: 18px;
+margin-bottom: 3px;
 }
 #invoice-info > div:last-child {
-  margin-left: 10px;
+margin-left: 10px;
 }
 #invoice-info:after {
-  content: '';
-  display: block;
-  clear: both;
+content: '';
+display: block;
+clear: both;
 }
 
 #client-info {
-  float: right;
-  margin-top: 9px;
-  margin-right: 30px;
-  min-width: 220px;
+float: right;
+margin-top: 9px;
+margin-right: 30px;
+min-width: 220px;
 }
 #client-info > div {
-  margin-bottom: 3px;
+margin-bottom: 3px;
 }
 #client-info span {
-  display: block;
+display: block;
 }
 #client-info .client-name {
-  font-weight: bold;
+font-weight: bold;
 }
 
 #invoice-title-number {
-  float: left;
-  margin: 60px 0 10px 0;
+float: left;
+margin: 60px 0 10px 0;
 }
 #invoice-title-number span {
-  display: inline-block;
-  min-width: 15px;
-  line-height: 1em;
+display: inline-block;
+min-width: 15px;
+line-height: 1em;
 }
 #invoice-title-number #title {
-  font-size: 50px;
-  color: #396E00;
+font-size: 50px;
+color: #396E00;
 }
 #invoice-title-number #number {
-  font-size: 22px;
+font-size: 22px;
 }
 
 table {
-  table-layout: fixed;
+	/* table-layout: fixed; */
 }
 table th, table td {
-  vertical-align: top;
-  word-break: keep-all;
-  word-wrap: break-word;
+	vertical-align: top;
+	word-break: keep-all;
+	word-wrap: break-word;
 }
 
 
 #signatory {
-  margin-top: 10px;
-  border-style: solid;
+margin-top: 10px;
+border-style: solid;
 }
 #signatory table {
-  border-collapse: separate;
-  width: 100%;
+border-collapse: separate;
+width: 100%;
 }
 #signatory table td {
-  /*border-bottom: 1px solid #C4C4C4;*/
-  padding: 10px;
-  text-align: left;
+/*border-bottom: 1px solid #C4C4C4;*/
+padding: 10px;
+text-align: left;
 }
 
 #items {
-  margin-top: 40px;
+margin-top: 40px;
 }
 #items .first-cell, #items table th:first-child, #items table td:first-child {
-  width: 42px;
-  text-align: right;
+width: 42px;
+text-align: right;
 }
 #items table {
-  border-collapse: separate;
-  width: 100%;
+border-collapse: separate;
+width: 100%;
 }
 #items table th span:empty, #items table td span:empty {
-  display: inline-block;
+display: inline-block;
 }
 #items table th {
-  font-weight: bold;
-  padding: 10px;
-  text-align: right;
-  border-bottom: 2px solid #898989;
+font-weight: bold;
+padding: 10px;
+text-align: right;
+border-bottom: 2px solid #898989;
 }
 #items table th:nth-child(2) {
-  width: 30%;
-  text-align: left;
+width: 30%;
+text-align: left;
 }
 #items table th:last-child {
-  text-align: right;
+text-align: right;
 }
 #items table td {
-  border-bottom: 1px solid #C4C4C4;
-  padding: 10px;
-  text-align: right;
+border-bottom: 1px solid #C4C4C4;
+padding: 10px;
+text-align: right;
 }
 #items table td:first-child {
-  text-align: left;
+text-align: left;
 }
 #items table td:nth-child(2) {
-  text-align: left;
+text-align: left;
 }
 
 #sums {
-  float: right;
-  margin-top: 10px;
-  page-break-inside: avoid;
+float: right;
+margin-top: 10px;
+page-break-inside: avoid;
 }
 #sums table tr th, #sums table tr td {
-  min-width: 100px;
-  padding: 10px;
-  text-align: right;
+min-width: 100px;
+padding: 10px;
+text-align: right;
 }
 #sums table tr th {
-  text-align: left;
-  padding-right: 25px;
+text-align: left;
+padding-right: 25px;
 }
 #sums table tr.amount-total th {
-  text-transform: uppercase;
-  color: #396E00;
+text-transform: uppercase;
+color: #396E00;
 }
 #sums table tr.amount-total th, #sums table tr.amount-total td {
-  font-weight: bold;
-  font-size: 16px;
-  border-top: 2px solid #898989;
+font-weight: bold;
+font-size: 16px;
+border-top: 2px solid #898989;
 }
 #sums table tr:last-child th {
-  text-transform: uppercase;
-  color: #396E00;
+text-transform: uppercase;
+color: #396E00;
 }
 #sums table tr:last-child th, #sums table tr:last-child td {
-  font-size: 16px;
-  font-weight: bold;
+font-size: 16px;
+font-weight: bold;
 }
 
 #terms {
-  margin-top: 50px;
-  page-break-inside: avoid;
+margin-top: 50px;
+page-break-inside: avoid;
 }
 #terms > span {
-  font-weight: bold;
+font-weight: bold;
 }
 #terms > div {
-  color: #396E00;
-  font-size: 16px;
-  min-height: 45px;
-  width: 100%;
-  /*max-width: 500px;*/
+color: #396E00;
+font-size: 16px;
+min-height: 45px;
+width: 100%;
+/*max-width: 500px;*/
 }
 
 .payment-info {
-  color: #888;
-  font-size: 12px;
-  margin-top: 20px;
-  width: 100%;
-  /*max-width: 440px;*/
+	color: #888;
+	font-size: 12px;
+	margin-top: 20px;
+	width: 100%;
+	/*max-width: 440px;*/
 }
 .payment-info div {
-  display: inline-block;
-  min-width: 15px;
+	display: inline-block;
+	min-width: 15px;
 }
-
 
     </style>
 
@@ -517,9 +515,9 @@ table th, table td {
           --}}
           <tr>
               <td>{{ $last_item }}</td> <!-- Don't remove this column as it's needed for the row commands -->
-              <td><span class="show-mobile">Part Number</span> <span> Transport charges </span></td>
-              <td><span class="show-mobile">Quantity</span> <span> 1 </span></td>
-              <td><span class="show-mobile">Unit</span> <span> Nos </span></td>
+              <td><span >Part Number</span> <span> Transport charges </span></td>
+              <td><span>Quantity</span> <span> 1 </span></td>
+              <td><span>Unit</span> <span> Nos </span></td>
               <td><span class="show-mobile">Rate</span> <span>{{ $order->transport_charges }}</span></td>
               <td><span class="show-mobile">Total</span> <span>{{ $order->transport_charges }}</span></td>
               <td><span class="show-mobile">Discount</span> <span>&mdash;</span></td>

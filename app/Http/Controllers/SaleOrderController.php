@@ -474,7 +474,7 @@ class SaleOrderController extends Controller
         $order->calculateTotals();
         view()->share('order', $order);
         view()->share('settings', $settings);
-        $pdf = PDF::loadView('sale_orders.proforma',  $order);
+        $pdf = PDF::loadView('sale_orders.proforma',  ['order'=> $order]);
 
         // download PDF file with download method
         return $pdf->download('Proforma Invoice '.$order_number.'.pdf');
