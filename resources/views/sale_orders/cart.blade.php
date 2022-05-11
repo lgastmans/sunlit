@@ -37,10 +37,11 @@
                             <label class="form-label" for="selling_price">Price</label>
                             <div class="input-group flex-nowrap">
                                 <span class="input-group-text">{{ __('app.currency_symbol_inr')}}</span>
-                                <input type="selling_price" class="form-control" name="selling_price"  id="selling_price" value="">
-                                <span class="input-group-text" display="none" id="suggested_selling_price"></span>
+                                <input type="selling_price" class="form-control" name="selling_price"  id="selling_price" value="" aria-describedby="sellingPriceHelp">
+                                {{-- <span class="input-group-text" display="none" id="suggested_selling_price"></span> --}}
                                 <input type="hidden" name="tax" id="tax">
                             </div>
+                            <div id="sellingPriceHelp" class="form-text"><span display="none" id="suggested_selling_price"></span></div>                            
                         </div>
                     </div>
                     <div class="col-lg-1">
