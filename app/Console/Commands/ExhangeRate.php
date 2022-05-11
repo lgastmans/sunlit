@@ -40,7 +40,8 @@ class ExhangeRate extends Command
      */
     public function handle()
     {
-        $response = Http::get(env('OPEN_EXCHANGE_API'), ['app_id' => env('OPEN_EXCHANGE_APP_ID'), 'base' => 'usd', 'symbols' => 'inr']);
+        $url = env('OPEN_EXCHANGE_API');
+        $response = Http::get($url, ['app_id' => env('OPEN_EXCHANGE_APP_ID'), 'base' => 'usd', 'symbols' => 'inr']);
         if ($response->successful()){
             $data = $response->json();
             $dt = Carbon::parse($data['timestamp']);
