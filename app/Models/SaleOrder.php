@@ -30,6 +30,7 @@ class SaleOrder extends Model
      */
     var $sub_total = 0;
     var $tax_total = 0;
+    var $tax_total_half = 0;
     var $total = 0;
     var $total_spellout = '';
 
@@ -95,10 +96,17 @@ class SaleOrder extends Model
 
         $this->total = $this->sub_total + $this->tax_total;
 
+        /**
+         * for SGST and CGST
+         */
+        $this->tax_total_half = $this->tax_total/2;
+
         $this->total_spellout = $this->expandAmount($this->total);
+
 
         $this->sub_total = number_format($this->sub_total, 2);
         $this->tax_total = number_format($this->tax_total, 2);
+        $this->tax_total_half = number_format($this->tax_total_half/2, 2);
         $this->total = number_format($this->total, 2);
 
         return true;

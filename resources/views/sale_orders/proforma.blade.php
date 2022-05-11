@@ -490,8 +490,8 @@ width: 100%;
           <th rowspan="2">Qty</th>
           <th rowspan="2">Unit</th>
           <th rowspan="2">Rate</th>
-          <th rowspan="2">Total</th>
-          <th rowspan="2">Discount</th>
+          {{-- <th rowspan="2">Total</th> --}}
+          {{-- <th rowspan="2">Discount</th> --}}
           <th rowspan="2">Taxable<br>Value</th>
           @if ($order->dealer->state->code==33)
             <th colspan="2" class="text-center">SGST</th>
@@ -535,8 +535,8 @@ width: 100%;
             <td><span>{{ $item->quantity_ordered }}</span></td>
             <td><span>Nos</span></td>
             <td><span>{{ $item->selling_price }}</span></td>
-            <td><span>{{ $item->taxable_value }}</span></td>
-            <td><span>&mdash;</span></td>
+            {{-- <td><span>{{ $item->taxable_value }}</span></td> --}}
+            {{-- <td><span>&mdash;</span></td> --}}
             <td><span>{{ $item->taxable_value }}</span></td>
             @if ($order->dealer->state->code==33)
               <td>{{ $item->tax/2 }}%</td>
@@ -550,64 +550,6 @@ width: 100%;
 
           </tr>
           
-
-          {{-- 
-            The list of items of the sales order
-          --}}
-          @foreach ($order->items as $item)
-
-            <tr data-iterate="item">
-
-              <td>{{ $loop->iteration }}</td> <!-- Don't remove this column as it's needed for the row commands -->
-              <td><span class="show-mobile">Part Number</span> <span>{{ $item->product->part_number }} <br> {{ $item->product->notes }} </span></td>
-              <td><span class="show-mobile">Quantity</span> <span>{{ $item->quantity_ordered }}</span></td>
-              <td><span class="show-mobile">Unit</span> <span>Nos</span></td>
-              <td><span class="show-mobile">Rate</span> <span>{{ $item->selling_price }}</span></td>
-              <td><span class="show-mobile">Total</span> <span>{{ $item->taxable_value }}</span></td>
-              <td><span class="show-mobile">Discount</span> <span>&mdash;</span></td>
-              <td><span class="show-mobile">Tax</span> <span>{{ $item->taxable_value }}</span></td>
-              @if ($order->dealer->state->code==33)
-                <td>{{ $item->tax/2 }}%</td>
-                <td>@php echo number_format($item->tax_amount/2, 2); @endphp</td>
-                <td>{{ $item->tax/2 }}%</td>
-                <td>@php echo number_format($item->tax_amount/2, 2); @endphp</td>
-              @else
-                <td>{{ $item->tax }}%</td>
-                <td>{{ $item->tax_amount }}</td>
-              @endif
-              
-            </tr>
-
-            @php
-              $last_item = $loop->count + 1;
-            @endphp
-
-          @endforeach
-
-          {{-- 
-            The Transport Charges as a row 
-          --}}
-          <tr>
-              <td>{{ $last_item }}</td> <!-- Don't remove this column as it's needed for the row commands -->
-              <td><span >Part Number</span> <span> Transport charges </span></td>
-              <td><span>Quantity</span> <span> 1 </span></td>
-              <td><span>Unit</span> <span> Nos </span></td>
-              <td><span class="show-mobile">Rate</span> <span>{{ $order->transport_charges }}</span></td>
-              <td><span class="show-mobile">Total</span> <span>{{ $order->transport_charges }}</span></td>
-              <td><span class="show-mobile">Discount</span> <span>&mdash;</span></td>
-              <td><span class="show-mobile">Tax</span> <span>{{ $order->transport_charges }}</span></td>
-              @if ($order->dealer->state->code==33)
-                <td>{{ $item->tax/2 }}%</td>
-                <td>@php echo number_format(($order->transport_charges/2) * ($item->tax)/100, 2); @endphp</td>
-                <td>{{ $item->tax/2 }}%</td>
-                <td>@php echo number_format(($order->transport_charges/2) * ($item->tax)/100, 2); @endphp</td>
-              @else
-                <td>{{ $item->tax }}%</td>
-                <td>{{ $order->transport_charges }}</td>
-              @endif
-
-          </tr>
-
           @php
             $last_item = $loop->count + 1;
           @endphp
@@ -622,9 +564,9 @@ width: 100%;
             <td><span> Transport charges </span></td>
             <td><span> 1 </span></td>
             <td><span> Nos </span></td>
+{{--             <td><span>{{ $order->transport_charges }}</span></td> --}}
             <td><span>{{ $order->transport_charges }}</span></td>
-            <td><span>{{ $order->transport_charges }}</span></td>
-            <td><span>&mdash;</span></td>
+            {{-- <td><span>&mdash;</span></td> --}}
             <td><span>{{ $order->transport_charges }}</span></td>
             @if ($order->dealer->state->code==33)
               <td>{{ $item->tax/2 }}%</td>
@@ -646,14 +588,14 @@ width: 100%;
           {{-- <th rowspan="2">Qty</th> --}}
           {{-- <th rowspan="2">Unit</th> --}}
           <th colspan="5">Subtotals</th>
+          {{-- <th >{{ $order->sub_total }}</th> --}}
+          {{-- <th>&mdash;</th> --}}
           <th class="text-end">{{ $order->sub_total }}</th>
-          <th>&mdash;</th>
-          <th>{{ $order->sub_total }}</th>
           @if ($order->dealer->state->code==33)
             <th></th>
-            <th>@php echo "test"; //number_format($order->tax_total/2, 2); @endphp</th>
+            <th>@php echo $order->tax_total_half; @endphp</th>
             <th></th>
-            <th>@php echo "test"; //number_format($order->tax_total/2, 2); @endphp</th>
+            <th>@php echo $order->tax_total_half; @endphp</th>
           @else
             <th></th>
             <th>{{ $order->tax_total }}</th>
