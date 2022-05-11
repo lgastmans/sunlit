@@ -54,12 +54,13 @@
         </div>
     </div>
 </div>
+
 <div class="row">
     <div class="col-12">
         <div class="card">
             <div class="card-body">
                 <div class="row">
-                    <div class="col-lg-8">
+                    <div class="col-lg-9">
                         <div class="table-responsive">
                             <table class="table table-borderless table-centered mb-0" id="sale-order-items-table">
                                 <thead class="table-light">
@@ -92,7 +93,7 @@
                                             </td>
                                             <td>
                                                 <input id="item-quantity-{{ $item->id }}" type="number" min="1" value="{{ $item->quantity_ordered }}" class="editable-field form-control" data-value="{{ $item->quantity_ordered }}" data-field="quantity" data-item="{{ $item->id }}"
-                                                    placeholder="Qty" style="width: 90px;">
+                                                    placeholder="Qty" style="width: 120px;">
                                             </td>
                                             <td>
                                                 <span id="item-tax-{{ $item->id }}">@if ($item->tax){{ $item->tax }}@else 0.00 @endif%</span>
@@ -116,7 +117,7 @@
                     </div>
                     <!-- end col -->
 
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                         <div class="border p-3 mt-4 mt-lg-0 rounded">
                             <h4 class="header-title mb-3">Order Summary <span class="order-number">#{{ $order->order_number }}</span><i class="mdi mdi-square-edit-outline ms-2 edit-order-number"></i>
                                 <form class="row mt-1 edit-order-number-form" style="display:none" method="POST" action="{{ route('sale-orders.update', $order->id) }}">
@@ -128,10 +129,10 @@
                                         
                                     </div>
                                     <div class="col-xl-2">
-                                        <button class="btn btn-secondary" type="submit">Update</button>
+                                        <button class="btn btn-secondary btn-sm" type="submit">Update</button>
                                     </div>
                                     <div class="col-xl-2">
-                                        <button class="btn btn-danger edit-order-number-cancel" type="button">Cancel</button>
+                                        <button class="btn btn-danger btn-sm edit-order-number-cancel" type="button">Cancel</button>
                                     </div>
                                     <div class="invalid-feedback">
                                         Order number already exist
