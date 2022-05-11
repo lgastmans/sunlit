@@ -117,7 +117,8 @@
 
 
 {{-- delivered --}}
-<div class="mt-lg-0 rounded @if ($order->status != 4) d-none @endif">
+
+{{-- <div class="mt-lg-0 rounded @if ($order->status != 4) d-none @endif">
     <div class="card border">
         <div class="card-body">
             <form name="receive-order-form"  class="needs-validation" novalidate
@@ -141,4 +142,4 @@
 
         </div>
     </div>
-</div>
+</div> --}}

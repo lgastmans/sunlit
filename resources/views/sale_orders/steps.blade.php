@@ -16,10 +16,12 @@
                             <span data-bs-container="#tooltip-container" data-bs-toggle="tooltip"
                                 data-bs-placement="bottom" title="{{ $order->display_dispatched_at }}">Dispatched</span>
                         </div>
-                        <div class="step-item @if ($order->status == 7) current @endif">
+
+{{--                         <div class="step-item @if ($order->status == 7) current @endif">
                             <span data-bs-container="#tooltip-container" data-bs-toggle="tooltip"
                                 data-bs-placement="bottom" title="{{ $order->display_received_at }}">Delivered</span>
-                        </div>
+                        </div> --}}
+
                     </div>
                     <div class="process-line"
                     @switch($order->status)
@@ -27,10 +29,10 @@
                             style="width:0%;"
                             @break
                         @case(3)
-                            style="width:33%;"
+                            style="width:50%;"
                             @break
                         @case(4)
-                            style="width:66%;"
+                            style="width:100%;"
                             @break
                         {{-- @case(5)
                             style="width:60%;"
@@ -38,9 +40,9 @@
                         @case(6)
                             style="width:80%;"
                             @break --}}
-                        @case(7)
+{{--                         @case(7)
                             style="width:100%;"
-                            @break
+                            @break --}}
                         @default
                         style="width:0%;"
                     @endswitch
