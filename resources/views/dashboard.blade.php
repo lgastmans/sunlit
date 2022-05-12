@@ -6,8 +6,8 @@
 
 
 <div class="row">
-    <div class="col-xl-3 col-lg-4">
-        <div class="card tilebox-one">
+    <div class="col-xl-3 col-lg-4 ">
+        <div class="card tilebox-one d-none">
             <div class="card-body">
                 <i class='uil uil-users-alt float-right'></i>
                 <h6 class="text-uppercase mt-0">Active Users</h6>
@@ -20,7 +20,7 @@
         </div>
         <!--end card-->
 
-        <div class="card tilebox-one">
+        <div class="card tilebox-one d-none">
             <div class="card-body">
                 <i class='uil uil-window-restore float-right'></i>
                 <h6 class="text-uppercase mt-0">Views per minute</h6>
@@ -36,7 +36,7 @@
         <div class="card cta-box overflow-hidden">
             <div class="card-body">
                 <div class="float-end">
-                    <i class="mdi mdi-currency-inr widget-icon"></i>
+                    <i class="mdi mdi-currency-usd widget-icon"></i>
                 </div>
                 <h5 class="text-muted fw-normal mt-0" title="Growth">Current exchange rate</h5>
                 <h3 class="mt-3 mb-3 text-warning">{{ __('app.currency_symbol_inr')}} {{ number_format(\Setting::get('purchase_order.exchange_rate'),2) }}</h3>
