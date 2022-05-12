@@ -83,7 +83,7 @@ class SaleOrder extends Model
         foreach ($this->items as $item)
         {
             $this->sub_total += $item->quantity_ordered * $item->selling_price;
-            $this->tax_total += $this->sub_total * $item->tax / 100;
+            $this->tax_total += ($item->quantity_ordered * $item->selling_price) * ($item->tax / 100);
 
             $tax = $item->tax;
         }
@@ -106,7 +106,7 @@ class SaleOrder extends Model
 
         $this->sub_total = number_format($this->sub_total, 2);
         $this->tax_total = number_format($this->tax_total, 2);
-        $this->tax_total_half = number_format($this->tax_total_half/2, 2);
+        $this->tax_total_half = number_format($this->tax_total_half, 2);
         $this->total = number_format($this->total, 2);
 
         return true;
