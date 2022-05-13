@@ -123,7 +123,7 @@ class SaleOrder extends Model
             $numwords = explode('.',$amount);
 
             if (intval($numwords[1]) > 0)
-                $res = $fmt->format($numwords[0]).' and paise '.$nw->format($numwords[1]).' only';
+                $res = $fmt->format($numwords[0]).' and paise '.$fmt->format($numwords[1]).' only';
             else
                 $res = $fmt->format((int)$numwords[0]).' only';
         }
