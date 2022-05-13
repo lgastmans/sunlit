@@ -112,7 +112,7 @@ html, body {
   border-style: none;
   border-color: grey;
   width: 210mm;
-  min-height: 297mm;
+  /*min-height: 297mm;*/
   /*min-height: 1058px;*/
 }
 
@@ -221,7 +221,6 @@ clear: both;
 }
 
 table {
-	/* table-layout: fixed; */
   font-weight: normal;
   font-style: normal;
   font-size: 11px;
@@ -236,6 +235,7 @@ table th, table td {
 
 #signatory {
   margin-top: 10px;
+  margin-right: 70px;
   border-style: solid;
 }
 #signatory table {
@@ -244,7 +244,6 @@ table th, table td {
 }
 #signatory table td {
   /*border-bottom: 1px solid #C4C4C4;*/
-  max-width: 60px;
   padding: 5px;
   text-align: left;
 }
@@ -564,7 +563,7 @@ font-weight: bold;
 
               <td>{{ $loop->iteration }}</td> <!-- Don't remove this column as it's needed for the row commands -->
 
-              <td><span class="text-end">{{ $item->product->part_number }} <br> {{ $item->product->notes }} </span></td>
+              <td><span>{{ $item->product->part_number }} <br> {{ $item->product->notes }} </span></td>
               <td><span>{{ $item->quantity_ordered }}</span></td>
               <td><span>Nos</span></td>
               <td><span>{{ $item->selling_price }}</span></td>
@@ -676,11 +675,11 @@ font-weight: bold;
 
 
     <section id="signatory">
-      <table width="25">
+      <table>
         <tr>
           <td>Name of the Signatory:</td>
           <td></td>
-          <td>For Sunlit Future</td>
+          <td style="text-align: right;">For Sunlit Future</td>
         </tr>
         <tr>
           <td>Designation / Status:</td>
@@ -690,7 +689,7 @@ font-weight: bold;
         <tr>
           <td>Date:</td>
           <td></td>
-          <td>Authorized Signatory</td>
+          <td style="text-align: right;vertical-align: bottom;">Authorized Signatory</td>
         </tr>
       </table>
     </section> {{-- signatory --}}
