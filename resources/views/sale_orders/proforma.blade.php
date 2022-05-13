@@ -235,24 +235,26 @@ table th, table td {
 
 #signatory {
   margin-top: 10px;
-  margin-right: 70px;
-  border-style: solid;
+  /*margin-right: 70px;*/
+  
 }
 #signatory table {
   border-collapse: separate;
+  border-style: solid;
   /*width: 100%;*/
 }
 #signatory table td {
   /*border-bottom: 1px solid #C4C4C4;*/
-  padding: 5px;
+  padding: 12px;
   text-align: left;
 }
+
 
 #items {
   margin-top: 10px;
 }
 #items .first-cell, #items table th:first-child, #items table td:first-child {
-  width: 42px;
+  width: 10px;
   text-align: right;
 }
 #items table {
@@ -268,11 +270,11 @@ table th, table td {
   text-align: right;
   border-bottom: 2px solid #898989;
 }
-#items table th:nth-child(2) {
-  width: 30%;
+/*#items table th:nth-child(2) {
+  width: 20%;
   text-align: left;
 }
-#items table th:last-child {
+*/#items table th:last-child {
   text-align: right;
 }
 #items table td {
@@ -283,10 +285,10 @@ table th, table td {
 #items table td:first-child {
   text-align: left;
 }
-#items table td:nth-child(2) {
+/*#items table td:nth-child(2) {
   text-align: left;
 }
-
+*/
 #sums {
 float: right;
 margin-top: 10px;
@@ -517,7 +519,7 @@ font-weight: bold;
         <thead>
           <tr>
             <th rowspan="2" style="vertical-align: bottom;">Sr.<br>No.</th> {{-- Dummy cell for the row number and row commands --}}
-            <th rowspan="2" style="vertical-align: bottom;">Part Number</th>
+            <th rowspan="2" style="vertical-align: bottom;text-align: left;width:35%;">Part Number</th>
             <th rowspan="2" style="vertical-align: bottom;">Qty</th>
             <th rowspan="2" style="vertical-align: bottom;">Unit</th>
             <th rowspan="2" style="vertical-align: bottom;">Rate</th>
@@ -563,13 +565,13 @@ font-weight: bold;
 
               <td>{{ $loop->iteration }}</td> <!-- Don't remove this column as it's needed for the row commands -->
 
-              <td><span>{{ $item->product->part_number }} <br> {{ $item->product->notes }} </span></td>
+              <td style="text-align: left;"><span>{{ $item->product->part_number }} <br> {{ $item->product->notes }} </span></td>
               <td><span>{{ $item->quantity_ordered }}</span></td>
               <td><span>Nos</span></td>
               <td><span>{{ $item->selling_price }}</span></td>
               {{-- <td><span>{{ $item->taxable_value }}</span></td> --}}
               {{-- <td><span>&mdash;</span></td> --}}
-              <td><span>{{ $item->taxable_value }}</span></td>
+              <td><span>@php echo number_format($item->taxable_value,2) @endphp</span></td>
               @if ($order->dealer->state->code==33)
                 <td>{{ $item->tax/2 }}%</td>
                 <td>@php echo number_format($item->tax_amount/2, 2); @endphp</td>
@@ -593,7 +595,7 @@ font-weight: bold;
           --}}
           <tr>
               <td>{{ $last_item }}</td> <!-- Don't remove this column as it's needed for the row commands -->
-              <td><span> Transport charges </span></td>
+              <td style="text-align: left;"><span> Transport charges </span></td>
               <td><span> 1 </span></td>
               <td><span> Nos </span></td>
   {{--             <td><span>{{ $order->transport_charges }}</span></td> --}}

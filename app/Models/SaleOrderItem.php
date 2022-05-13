@@ -40,7 +40,7 @@ class SaleOrderItem extends Model
      */
     public function getTaxableValueAttribute()
     {
-        return number_format($this->quantity_ordered * $this->selling_price, 2);
+        return $this->quantity_ordered * $this->selling_price;
     }
 
     /**
@@ -48,7 +48,7 @@ class SaleOrderItem extends Model
      */
     public function getTaxAmountAttribute()
     {
-        return number_format(($this->quantity_ordered * $this->selling_price) * ($this->tax/100), 2);
+        return ($this->quantity_ordered * $this->selling_price) * ($this->tax/100);
     }
 
 }
