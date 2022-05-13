@@ -579,7 +579,7 @@ font-weight: bold;
                 <td>@php echo number_format($item->tax_amount/2, 2); @endphp</td>
               @else
                 <td>{{ $item->tax }}%</td>
-                <td>{{ $item->tax_amount }}</td>
+                <td>@php echo number_format($item->tax_amount,2) @endphp</td>
               @endif
 
             </tr>
@@ -640,19 +640,19 @@ font-weight: bold;
           </tr>
 
           <tr class="subtotal">
-            <td colspan="7"></td>
+            <td colspan="{{ $order->dealer->state->code==33 ? 7 : 5}}"></td>
             <th style="text-align: right;">Subtotal</th>
             <th colspan="2">{{ $order->sub_total }}</th>
           </tr>
           
           <tr data-iterate="tax">
-            <td colspan="7"></td>
+            <td colspan="{{ $order->dealer->state->code==33 ? 7 : 5}}"></td>
             <th style="text-align: right;">Tax</th>
             <th colspan="2">{{ $order->tax_total }}</th>
           </tr>
           
           <tr class="amount-total">
-            <th colspan="7"></th>
+            <th colspan="{{ $order->dealer->state->code==33 ? 7 : 5}}"></th>
             <th style="text-align: right;">Total</th>
             <th colspan="2">{{ $order->total }}</th>
           </tr>
