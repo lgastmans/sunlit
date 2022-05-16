@@ -519,7 +519,52 @@
     
 
     $('.form-product').on('submit', function(e){
+
         e.preventDefault();     
+
+        var price = $("#buying_price").val();
+        var asked_quantity = $('#quantity_confirmed').val();        
+        var product_id = $('#product_id').val();
+
+        /**
+         * validate product 
+         */
+         if (product_id === null)
+         {
+            $.NotificationApp.send("Error","Product not defined","top-right","","error")
+            return false;
+        }
+
+        /**
+         * validate quantity
+         */
+        if (isNaN(parseFloat(asked_quantity)))
+        {
+            $.NotificationApp.send("Error","Invalid Quantity","top-right","","error")
+            return false;
+        }
+
+        if (parseFloat(asked_quantity) === 0)
+        {
+            $.NotificationApp.send("Error","Quantity cannot be zero","top-right","","error")
+            return false;
+        }
+
+        /**
+         * validate price
+         */
+        if (isNaN(parseFloat(price)))
+        {
+            $.NotificationApp.send("Error","Invalid Selling Price","top-right","","error")
+            return false;
+        }
+
+        if (parseFloat(price) === 0)
+        {
+            $.NotificationApp.send("Error","Selling Price cannot be zero","top-right","","error")
+            return false;
+        }        
+
         var existing_item_id = is_existing_product($('#product_id').val());
         if (existing_item_id > 0){
             var asked_quantity = $('#quantity_confirmed').val();
