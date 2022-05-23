@@ -336,7 +336,17 @@ class Inventory extends Model
      */    
     public function deleteStock(Model $model)
     {
-        if ($model->status == SaleOrder::DRAFT)
+        /*
+            const DRAFT = 1;
+            const BLOCKED = 2;
+            const BOOKED = 3;
+        */
+
+        if ($model->status == SaleOrder::DRAFT) // do nothing
+        {
+
+        }
+        elseif ($model->status == SaleOrder::BLOCKED) 
         {
             foreach($model->items as $product)
             {
@@ -347,6 +357,21 @@ class Inventory extends Model
                 {
                     $result = $inventory->update([
                         "stock_blocked" => ($inventory->stock_blocked - $product->quantity_ordered)
+                    ]);
+                }
+            }            
+        }
+        elseif ($model->status == SaleOrder::BOOKED) 
+        {
+            foreach($model->items as $product)
+            {
+                $inventory = Inventory::where('warehouse_id', '=', $model->warehouse_id)
+                    ->where('product_id', '=', $product->product_id)->first();
+
+                if ($inventory)
+                {
+                    $result = $inventory->update([
+                        "stock_booked" => ($inventory->stock_booked - $product->quantity_ordered)
                     ]);
                 }
             }            

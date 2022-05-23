@@ -98,9 +98,10 @@
                 </div>
                 <!-- end table-responsive -->
             </div>
-        </div>
+        </div> <!-- card -->
     </div> <!-- end col -->
 </div>
+
 <div class="row">
     <div class="col-lg-8">
         @include('sale_orders.info_cards')
@@ -109,9 +110,27 @@
         @include('sale_orders.status_update')
     </div>
 </div>
+
+@if ($order->status >= 2 && $order->status <= 3)
+    <div class="row">
+        <div class="col-lg-8">
+        </div>
+        <div class="col-lg-4">
+            <div class="mt-4 mt-lg-0 rounded">
+                <div class="card mt-4 border">
+                    <div class="card-body">
+                        <button id="btn_delete_order" class="col-lg-12 text-center btn btn-danger" type="submit" name="delete_order" data-bs-toggle="modal" data-bs-target="#delete-modal-order"><i class="mdi mdi-delete"></i> Delete order</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
+
 <div class="row">    
     @include('sale_orders.log')
 </div>
+
 @endsection
 
 @section('page-scripts')
@@ -157,8 +176,37 @@
                         }
                 });        
 
+            }); // transport charges
+
+
+            $("#btn_delete_order").on('click', function(e) {
+
+                e.preventDefault();
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                    }
+                }); 
+
+                var route = '{{ route("sale-orders.delete", ":id") }}';
+                route = route.replace(':id', $('#sale-order-id').val());
+
+                $.ajax({
+                        type: 'DELETE',
+                        url: route,
+                        dataType: 'json',
+                        success : function(result){
+                            console.log(result);
+
+                            window.location.href = '{{ route("sale-orders") }}';
+                        }
+                });        
+
             });
-        });
+
+
+        }); //document ready
 
     </script>
 

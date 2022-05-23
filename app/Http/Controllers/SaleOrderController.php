@@ -442,7 +442,7 @@ class SaleOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $user = Auth::user();
         if ($user->can('delete sale orders')){
@@ -453,10 +453,13 @@ class SaleOrderController extends Controller
 
             $order->items()->delete();
             $order->delete();
-            return redirect(route('sale-orders'))->with('success', trans('app.record_deleted', ['field' => 'Sale Order']));
+
+            if($request->ajax())
+                return response()->json(['deleted successfully '.$order->order_number_slug]);
+            else
+                return redirect(route('sale-orders'))->with('success', trans('app.record_deleted', ['field' => 'Sale Order']));
         }
         return abort(403, trans('error.unauthorized'));
-
     }
 
 
