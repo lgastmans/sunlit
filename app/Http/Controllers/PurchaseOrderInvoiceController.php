@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use PDF;
 use App\Models\Product;
 use App\Models\Inventory;
 use Illuminate\Http\Request;
@@ -370,4 +371,29 @@ class PurchaseOrderInvoiceController extends Controller
     {
         //
     }
+
+    public function proforma($invoice_number)
+    {
+        $settings = \Setting::all();
+
+        $order = PurchaseOrderInvoice::where('invoice_number', '=', $invoice_number)->first();
+        //$order->calculateTotals();
+        
+        return view('purchase_order_invoices.view_proforma', ['order' => $order, 'settings' => $settings]);
+    }
+
+
+    public function exportProformaToPdf($invoice_number)
+    {
+        $settings = \Setting::all();
+
+        $order = PurchaseOrderInvoice::where('invoice_number', '=', $invoice_number)->first();
+        //$order->calculateTotals();
+        view()->share('order', $order);
+        view()->share('settings', $settings);
+        $pdf = PDF::loadView('purchase_order_invoices.proforma',  ['order'=> $order]);
+
+        // download PDF file with download method
+        return $pdf->download('Purchase Order Invoice '.$invoice_number.'.pdf');
+    }    
 }
