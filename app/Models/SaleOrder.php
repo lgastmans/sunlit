@@ -30,6 +30,7 @@ class SaleOrder extends Model
      */
     var $sub_total = 0;
     var $tax_total = 0;
+    var $transport_total = 0;
     var $tax_total_half = 0;
     var $total = 0;
     var $total_spellout = '';
@@ -75,6 +76,7 @@ class SaleOrder extends Model
 
         $this->sub_total = 0;
         $this->tax_total = 0;
+        $this->transport_total = 0;
         $this->total = 0;
 
         /**
@@ -92,6 +94,7 @@ class SaleOrder extends Model
          * add the Transport Charges to the totals
          */
         $this->sub_total += $this->transport_charges;
+        $this->transport_total = $this->transport_charges + ($this->transport_charges * $tax / 100);
         $this->tax_total += $this->transport_charges * $tax / 100;
 
         $this->total = $this->sub_total + $this->tax_total;
@@ -106,6 +109,7 @@ class SaleOrder extends Model
 
         $this->sub_total = number_format($this->sub_total, 2);
         $this->tax_total = number_format($this->tax_total, 2);
+        $this->transport_total = number_format($this->transport_total, 2);
         $this->tax_total_half = number_format($this->tax_total_half, 2);
         $this->total = number_format($this->total, 2);
 

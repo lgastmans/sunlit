@@ -253,6 +253,7 @@ class SaleOrderController extends Controller
         $user = Auth::user();
         if ($user->can('view sale orders')){
             $order = SaleOrder::where('order_number_slug', '=', $order_number_slug)->first();
+            $order->calculateTotals();
             if ($order)
                 return view('sale_orders.show', ['order' => $order ]);
 
@@ -313,7 +314,11 @@ class SaleOrderController extends Controller
             $order->transport_charges = $request->get('value');
             $order->update();
 
-            return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'field' => $request->get('field')]);
+            $order->calculateTotals();
+
+
+
+            return response()->json(['success'=>'true', 'total'=>$order->total, 'tax_total'=>$order->tax_total, 'transport_charges'=>$order->transport_total, 'code'=>200, 'message'=> 'OK', 'field' => $request->get('field')]);
         }
 
     }

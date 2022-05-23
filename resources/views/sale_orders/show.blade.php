@@ -75,23 +75,23 @@
                             </tr>
                           
                          
-                            @if ($order->status >= "5")
-                                
+                            @if ($order->status >= 3)
                                 <tr>
                                     <td>Transport Charges: </td>
                                     <td>
                                         <span>{{ __('app.currency_symbol_inr')}}</span>
-                                        <span id="bank-transport">{{ $order->transport_charges }}</span>
+                                        <span id="transport-charges">{{ $order->transport_total ?? '0.00' }}</span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>Total Cost :</th>
                                     <th>
                                         <span>{{ __('app.currency_symbol_inr')}}</span>
-                                        <span id="landed-cost">{{ $order->amount + $order->transport_charges }}</span>
+                                        <span id="total-cost">{{ $order->total }}</span>
                                     </th>
                                 </tr>
                             @endif
+
                         </tbody>
                     </table>
                     
@@ -135,7 +135,6 @@
                 route = route.replace(':id', $('#sale-order-id').val());
 
                 var freight = $("#freight").val();
-                console.log('here ' + freight );
 
                 $.ajax({
                         type: 'POST',
@@ -149,6 +148,9 @@
                         },
                         success : function(result){
                             console.log(result);
+
+                            $(" #transport-charges ").html(result.transport_charges);
+                            $(" #total-cost ").html(result.total);
 
                             $.NotificationApp.send("Success","Transport Charges saved","top-right","","success")
 
