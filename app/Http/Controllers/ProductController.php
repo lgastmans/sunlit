@@ -377,6 +377,7 @@ class ProductController extends Controller
             Cal Wt
             Std Warranty(yrs)
             Notes
+            Stock
         */
 
         $file = public_path('products-import.csv');
