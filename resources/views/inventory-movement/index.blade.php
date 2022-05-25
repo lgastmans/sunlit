@@ -157,6 +157,8 @@
         // deferLoading: 0,
         searching: false,
         paging: false,
+        scrollY: "500px",
+        paging: false,
         ajax      : {
             url   : "{{ route('inventory-movement.datatables') }}",
             "data": function ( d ) {

@@ -53,6 +53,7 @@
         stateSave: true,
         fixedHeader: true,
         scrollY: "500px",
+        paging: false,
         buttons: [
             {
                 text: '<i class="mdi mdi-plus-circle me-2"></i> {{ __('app.add_title', ['field' => 'dealer']) }}',
@@ -150,7 +151,7 @@
 
             
         ],
-        "order": [[1, "desc"]],
+        "order": [[0, "desc"]],
         "drawCallback": function () {
             $('.dataTables_paginate > .pagination').addClass('pagination-rounded');
             $('#dealers-datatable_length label').addClass('form-label');

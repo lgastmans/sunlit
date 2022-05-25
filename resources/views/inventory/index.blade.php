@@ -82,6 +82,8 @@
     var table = $('#inventory-datatable').DataTable({
         dom: 'Bfrtip',
         stateSave: true,
+        scrollY: "500px",
+        paging: false,
         buttons: [
             {
                 extend: 'excelHtml5',
