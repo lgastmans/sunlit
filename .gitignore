@@ -31,3 +31,10 @@ public/dealers-2021.xlsx
 *.swp
 
 public/css/proforma.css
+
+public/js/app.js
+
+public/js/vendor/dataTables.fixedHeader.min.js
+
+
+public/css/vendor/fixedHeader.dataTables.min.css
