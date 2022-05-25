@@ -12,6 +12,19 @@
 
 /***/ }),
 
+/***/ "./resources/css/vendor/fixedHeader.dataTables.min.css":
+/*!*************************************************************!*\
+  !*** ./resources/css/vendor/fixedHeader.dataTables.min.css ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
 /***/ "./resources/css/app.css":
 /*!*******************************!*\
   !*** ./resources/css/app.css ***!
@@ -167,7 +180,8 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 			"css/vendor/dataTables.bootstrap4": 0,
 /******/ 			"css/icons": 0,
 /******/ 			"css/hyper-app": 0,
-/******/ 			"css/app": 0
+/******/ 			"css/app": 0,
+/******/ 			"css/vendor/fixedHeader.dataTables.min": 0
 /******/ 		};
 /******/ 		
 /******/ 		// no chunk on demand loading
@@ -215,12 +229,13 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	__webpack_require__.O(undefined, ["css/vendor/responsive.bootstrap4","css/vendor/dataTables.bootstrap4","css/icons","css/hyper-app","css/app"], () => (__webpack_require__("./resources/js/app.js")))
-/******/ 	__webpack_require__.O(undefined, ["css/vendor/responsive.bootstrap4","css/vendor/dataTables.bootstrap4","css/icons","css/hyper-app","css/app"], () => (__webpack_require__("./resources/css/app.css")))
-/******/ 	__webpack_require__.O(undefined, ["css/vendor/responsive.bootstrap4","css/vendor/dataTables.bootstrap4","css/icons","css/hyper-app","css/app"], () => (__webpack_require__("./resources/css/hyper-app.css")))
-/******/ 	__webpack_require__.O(undefined, ["css/vendor/responsive.bootstrap4","css/vendor/dataTables.bootstrap4","css/icons","css/hyper-app","css/app"], () => (__webpack_require__("./resources/css/icons.css")))
-/******/ 	__webpack_require__.O(undefined, ["css/vendor/responsive.bootstrap4","css/vendor/dataTables.bootstrap4","css/icons","css/hyper-app","css/app"], () => (__webpack_require__("./resources/css/vendor/dataTables.bootstrap4.css")))
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/vendor/responsive.bootstrap4","css/vendor/dataTables.bootstrap4","css/icons","css/hyper-app","css/app"], () => (__webpack_require__("./resources/css/vendor/responsive.bootstrap4.css")))
+/******/ 	__webpack_require__.O(undefined, ["css/vendor/responsive.bootstrap4","css/vendor/dataTables.bootstrap4","css/icons","css/hyper-app","css/app","css/vendor/fixedHeader.dataTables.min"], () => (__webpack_require__("./resources/js/app.js")))
+/******/ 	__webpack_require__.O(undefined, ["css/vendor/responsive.bootstrap4","css/vendor/dataTables.bootstrap4","css/icons","css/hyper-app","css/app","css/vendor/fixedHeader.dataTables.min"], () => (__webpack_require__("./resources/css/app.css")))
+/******/ 	__webpack_require__.O(undefined, ["css/vendor/responsive.bootstrap4","css/vendor/dataTables.bootstrap4","css/icons","css/hyper-app","css/app","css/vendor/fixedHeader.dataTables.min"], () => (__webpack_require__("./resources/css/hyper-app.css")))
+/******/ 	__webpack_require__.O(undefined, ["css/vendor/responsive.bootstrap4","css/vendor/dataTables.bootstrap4","css/icons","css/hyper-app","css/app","css/vendor/fixedHeader.dataTables.min"], () => (__webpack_require__("./resources/css/icons.css")))
+/******/ 	__webpack_require__.O(undefined, ["css/vendor/responsive.bootstrap4","css/vendor/dataTables.bootstrap4","css/icons","css/hyper-app","css/app","css/vendor/fixedHeader.dataTables.min"], () => (__webpack_require__("./resources/css/vendor/dataTables.bootstrap4.css")))
+/******/ 	__webpack_require__.O(undefined, ["css/vendor/responsive.bootstrap4","css/vendor/dataTables.bootstrap4","css/icons","css/hyper-app","css/app","css/vendor/fixedHeader.dataTables.min"], () => (__webpack_require__("./resources/css/vendor/responsive.bootstrap4.css")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/vendor/responsive.bootstrap4","css/vendor/dataTables.bootstrap4","css/icons","css/hyper-app","css/app","css/vendor/fixedHeader.dataTables.min"], () => (__webpack_require__("./resources/css/vendor/fixedHeader.dataTables.min.css")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

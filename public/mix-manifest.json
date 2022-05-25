@@ -7,6 +7,7 @@
     "/css/icons.css": "/css/icons.css",
     "/css/hyper-app.css": "/css/hyper-app.css",
     "/css/app.css": "/css/app.css",
+    "/css/vendor/fixedHeader.dataTables.min.css": "/css/vendor/fixedHeader.dataTables.min.css",
     "/css/proforma.css": "/css/proforma.css",
     "/js/vendor.js": "/js/vendor.js",
     "/js/vendor/jquery.dataTables.min.js": "/js/vendor/jquery.dataTables.min.js",
@@ -14,6 +15,7 @@
     "/js/vendor/dataTables.responsive.min.js": "/js/vendor/dataTables.responsive.min.js",
     "/js/vendor/responsive.bootstrap4.min.js": "/js/vendor/responsive.bootstrap4.min.js",
     "/js/vendor/dataTables.checkboxes.min.js": "/js/vendor/dataTables.checkboxes.min.js",
+    "/js/vendor/dataTables.fixedHeader.min.js": "/js/vendor/dataTables.fixedHeader.min.js",
     "/js/vendor/Chart.bundle.min.js": "/js/vendor/Chart.bundle.min.js",
     "/js/vendor/apexcharts.min.js": "/js/vendor/apexcharts.min.js"
 }
