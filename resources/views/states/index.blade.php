@@ -49,6 +49,8 @@
     var table = $('#states-datatable').DataTable({
         dom: 'Bfrtip',
         stateSave: true,
+        fixedHeader: true,
+        scrollY: "500px",
         buttons: [
             {
                 text: '<i class="mdi mdi-plus-circle me-2"></i> {{ __('app.add_title', ['field' => 'zone']) }}',

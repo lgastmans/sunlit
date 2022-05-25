@@ -18,6 +18,7 @@ mix.postCss('resources/css/hyper-app.css', 'public/css').options({processCssUrls
 mix.postCss('resources/css/icons.css', 'public/css').options({processCssUrls: false});
 mix.postCss('resources/css/vendor/dataTables.bootstrap4.css', 'public/css/vendor').options({processCssUrls: false});
 mix.postCss('resources/css/vendor/responsive.bootstrap4.css', 'public/css/vendor').options({processCssUrls: false});
+mix.postCss('resources/css/vendor/fixedHeader.dataTables.min.css', 'public/css/vendor').options({processCssUrls: false});
 
 mix.copy('resources/css/proforma.css', 'public/css/');
 
@@ -31,6 +32,7 @@ mix.copy('resources/js/vendor/dataTables.bootstrap4.js', 'public/js/vendor/');
 mix.copy('resources/js/vendor/dataTables.responsive.min.js', 'public/js/vendor/');
 mix.copy('resources/js/vendor/responsive.bootstrap4.min.js', 'public/js/vendor/');
 mix.copy('resources/js/vendor/dataTables.checkboxes.min.js', 'public/js/vendor/');
+mix.copy('resources/js/vendor/dataTables.fixedHeader.min.js', 'public/js/vendor/');
 mix.copy('resources/js/vendor/Chart.bundle.min.js', 'public/js/vendor/');
 mix.copy('resources/js/vendor/apexcharts.min.js', 'public/js/vendor/');
 

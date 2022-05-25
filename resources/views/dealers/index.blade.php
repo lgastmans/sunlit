@@ -51,6 +51,8 @@
     var table = $('#dealers-datatable').DataTable({
         dom: 'Bfrtip',
         stateSave: true,
+        fixedHeader: true,
+        headerOffset: 45,
         buttons: [
             {
                 text: '<i class="mdi mdi-plus-circle me-2"></i> {{ __('app.add_title', ['field' => 'dealer']) }}',
