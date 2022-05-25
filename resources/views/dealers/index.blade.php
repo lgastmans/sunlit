@@ -52,7 +52,7 @@
         dom: 'Bfrtip',
         stateSave: true,
         fixedHeader: true,
-        headerOffset: 45,
+        scrollY: "500px",
         buttons: [
             {
                 text: '<i class="mdi mdi-plus-circle me-2"></i> {{ __('app.add_title', ['field' => 'dealer']) }}',
@@ -150,7 +150,7 @@
 
             
         ],
-        "order": [[4, "desc"]],
+        "order": [[1, "desc"]],
         "drawCallback": function () {
             $('.dataTables_paginate > .pagination').addClass('pagination-rounded');
             $('#dealers-datatable_length label').addClass('form-label');
