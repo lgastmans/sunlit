@@ -183,7 +183,8 @@ class PurchaseOrderController extends Controller
             $query->where( function ($q) use ($search){
                 $q->where('purchase_orders.order_number', 'like', '%'.$search.'%')
                     ->orWhere('purchase_orders.amount_inr', 'like', $search.'%')
-                    ->orWhere('suppliers.company', 'like', '%'.$search.'%');
+                    ->orWhere('suppliers.company', 'like', '%'.$search.'%')
+                    ->orWhere('users.name', 'like', '%'.$search.'%');
             });    
         }
 

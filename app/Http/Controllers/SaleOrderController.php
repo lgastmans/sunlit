@@ -149,7 +149,8 @@ class SaleOrderController extends Controller
             $query->where( function ($q) use ($search){
                 $q->where('sale_orders.order_number', 'like', '%'.$search.'%')
                     ->orWhere('sale_orders.amount', 'like', $search.'%')
-                    ->orWhere('dealers.company', 'like', '%'.$search.'%');
+                    ->orWhere('dealers.company', 'like', '%'.$search.'%')
+                    ->orWhere('users.name', 'like', '%'.$search.'%');
             });    
         }
 
