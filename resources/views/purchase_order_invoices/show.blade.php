@@ -95,7 +95,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>Amount : </td>
+                                <td>Supplier Amount : </td>
                                 <td>
                                     <span>{{ __('app.currency_symbol_inr')}}</span>
                                     <span id="amount-inr">{{ $invoice->amount_inr }}</span>
@@ -131,10 +131,10 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>Landed Cost :</th>
+                                    <th>Landed Cost (rounded):</th>
                                     <th>
                                         <span>{{ __('app.currency_symbol_inr')}}</span>
-                                        <span id="landed-cost">{{ $invoice->landed_cost }}</span>
+                                        <span id="landed-cost">@php echo number_format($invoice->landed_cost,2); @endphp</span>
                                     </th>
                                 </tr>
                             @endif
@@ -203,7 +203,8 @@
         });
         igst_inr = customs_exchange_rate * igst_usd;
         
-        var landed_cost = customs_amount_inr + customs_duty_inr + social_welfare_surcharge_inr + igst_inr;
+        //var landed_cost = customs_amount_inr + customs_duty_inr + social_welfare_surcharge_inr + igst_inr;
+        var landed_cost = order_amount_inr + customs_duty_inr + social_welfare_surcharge_inr;
 
 
         $('#customs-echange-rate').html(customs_exchange_rate.toFixed(2));

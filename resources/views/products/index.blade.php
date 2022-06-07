@@ -99,7 +99,7 @@
         processing: true,
         serverSide: true,
         orderCellsTop: true,
-        fixedHeader: true,
+        //fixedHeader: true,
         search: true,
         
         ajax: "{{ route('products.datatables') }}",

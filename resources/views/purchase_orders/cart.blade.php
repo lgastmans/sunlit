@@ -163,7 +163,16 @@
                                             <td>Amount : </td>
                                             <td>
                                                 <span>{{ __('app.currency_symbol_inr')}}</span>
-                                                <span id="amount-inr">{{ $purchase_order->amount_inr }}</span>
+                                                {{-- <span id="amount-inr">{{ $purchase_order->amount_inr }}</span> --}}
+                                                <span id="amount-inr">
+                                                    @php 
+                                                        if ($purchase_order->amount_inr==null) {
+                                                            echo number_format(Setting::get('purchase_order.exchange_rate') * $purchase_order->amount_usd, 2);
+                                                        }
+                                                        else
+                                                            echo $purchase_order->amount_inr;
+                                                    @endphp
+                                                </span>
                                             </td>
                                         </tr>
                                     

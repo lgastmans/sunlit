@@ -61,7 +61,7 @@
                             Cleared date is required
                         </div>
                     </div>
-                     <div class="col-xl-6">
+                    <div class="col-xl-6">
                         <label class="form-label">Customs Exchange Rate</label>
                         <div class="input-group">
                             <span class="input-group-text" id="cleared__currency">{{ __('app.currency_symbol_inr')}}</span>
