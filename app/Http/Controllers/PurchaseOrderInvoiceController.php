@@ -186,11 +186,14 @@ class PurchaseOrderInvoiceController extends Controller
             $invoice_item->product_id = $product_id;
             $invoice_item->quantity_shipped = $quantity_shipped;
             $purchase_order_item = PurchaseOrderItem::where('purchase_order_id', $purchase_order->id)->where('product_id', $product_id)->first();
+            
             $invoice_item->buying_price = $purchase_order_item->buying_price;
 
             $invoice_item->customs_duty = $invoice_item->buying_price * $invoice_item->quantity_shipped * ($product->category->customs_duty /100);
+
             $invoice_item->social_welfare_surcharge = $invoice_item->customs_duty * ($product->category->social_welfare_surcharge /100);
-            $invoice_item->igst = ($invoice_item->buying_price * $quantity_shipped + $invoice_item->customs_duty + $invoice_item->social_welfare_surcharge) * ($product->category->igst /100);
+
+            $invoice_item->igst = (($invoice_item->buying_price * $quantity_shipped) + $invoice_item->customs_duty + $invoice_item->social_welfare_surcharge) * ($product->category->igst /100);
          
             $charges = [
                 'customs_duty'=> $product->category->customs_duty,
