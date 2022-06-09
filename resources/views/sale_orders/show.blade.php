@@ -22,22 +22,57 @@
                     <table class="table mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th>Productiiis</th>
-                                <th>Quantity</th>
-                                <th>Price</th>
-                                <th>Tax</th>
-                                <th>Total</th>
+                                <th class="col-5">Product</th>
+                                <th class="col-2">Price</th>
+                                <th class="col-1">Quantity</th>
+                                <th class="col-1">Tax</th>
+                                <th class="col-2">Total</th>
+                                <th class="col-1"></th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($order->items as $item)
-                            <tr>
+{{--                             <tr>
                                 <td>{{ $item->product->part_number }}</td>
                                 <td>{{ $item->quantity_ordered }}</td>
                                 <td>{{ __('app.currency_symbol_inr')}}{{ number_format($item->selling_price,2) }}</td>
                                 <td>{{ number_format($item->tax,2) }}%</td>
                                 <td>{{ __('app.currency_symbol_inr')}}{{ number_format($item->total_price,2) }}</td>
                             </tr>
+ --}}
+
+                                        <tr class="item" data-id="{{$item->id}}" data-product-id="{{ $item->product->id }}">
+
+                                            <td>
+                                                <p class="m-0 d-inline-block align-middle font-16">
+                                                    <a href="javascript:void(0);"
+                                                        class="text-body product-name">{{ $item->product->part_number }}</a>
+                                                    <br>
+                                                    <small class="me-2"><b>Description:</b> <span class="product-note">{{  $item->product->note }}</span> </small>
+                                                </p>
+                                            </td>
+                                            <td>
+                                                <div class="input-group flex-nowrap">
+                                                    <span class="input-group-text">{{ __('app.currency_symbol_inr')}}</span>
+                                                    <input id="item-price-{{ $item->id }}" type="text" class="editable-field form-control" data-value="{{ $item->selling_price }}" data-field="price" data-item="{{ $item->id }}" placeholder="" value="{{ $item->selling_price }}">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <input id="item-quantity-{{ $item->id }}" type="number" min="1" value="{{ $item->quantity_ordered }}" class="editable-field form-control" data-value="{{ $item->quantity_ordered }}" data-field="quantity" data-item="{{ $item->id }}"
+                                                    placeholder="Qty" style="width: 120px;">
+                                            </td>
+                                            <td>
+                                                <span id="item-tax-{{ $item->id }}">@if ($item->tax){{ $item->tax }}@else 0.00 @endif%</span>
+                                            </td>
+                                            <td>
+                                                <span>{{ __('app.currency_symbol_inr')}}</span>
+                                                <span id="item-total-{{ $item->id }}" class="item-total">{{ $item->total_price }}</span>
+                                            </td>
+                                            <td>
+                                                <a href="javascript:void(0);" class="action-icon" id="{{ $item->id }}" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>
+                                            </td>
+                                        </tr>
+
                             @endforeach
 
                         </tbody>
@@ -100,6 +135,7 @@
             </div>
         </div> <!-- card -->
     </div> <!-- end col -->
+
 </div>
 
 <div class="row">
@@ -136,8 +172,19 @@
 @section('page-scripts')
 
     <script>
+        let globalSettings = 
+        {
+            sale_order_update : '{{ route("sale-orders.update", ":id") }}',
+            ajax_dealers : '{{route("ajax.dealers")}}',
+            product_json : '{{ route("product.json", [":id", ":warehouse_id"]) }}',
+            sale_order_items_update : '{{ route("sale-orders-items.update", ":id") }}',
+            sale_order_items_delete : '{{ route("sale-orders-items.delete", ":id") }}',
+            sale_order_delete : '{{ route("sale-orders.delete", ":id") }}',
+            product_route : '{{ route("ajax.products.warehouse", [":warehouse_id"]) }}',
+            inr_symbol : '{{ __("app.currency_symbol_inr")}}'
+        };
 
-         $(document).ready(function () {
+        $(document).ready(function () {
             "use strict";
 
             $("#btn_transport_charges").on('click', function(e) {
@@ -201,13 +248,12 @@
 
                             window.location.href = '{{ route("sale-orders") }}';
                         }
-                });        
-
+                });
             });
-
-
         }); //document ready
 
     </script>
+
+    <script src="{{ asset('js/pages/sale_order_cart.js') }}"></script>
 
 @endsection

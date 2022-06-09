@@ -115,11 +115,18 @@ $(document).ready(function () {
     function getTaxValue(tax_percentage){
         if (tax_percentage == null)
             return 1;
-        return tax = 1 + (parseFloat(tax_percentage.replace('%','') / 100));
+        
+        var tax = 1 + (parseFloat(tax_percentage.replace('%','') / 100)); 
+
+        return tax;
     }
 
-    $('body').on('blur', '.editable-field', function(e){        
+    $('body').on('blur', '.editable-field', function(e){
+
+console.log('here ' + $(this).val() + ' >> ' + $(this).attr('data-value'));
+
         if ($(this).val() != $(this).attr('data-value')){
+
             if ($(this).attr('data-field') == "price"){
                 item_id = $(this).parent().parent().parent().attr('data-id');
             }
