@@ -1,6 +1,6 @@
 {
     "/js/app.js": "/js/app.js",
-    "/js/pages/suppliers.js": "/js/pages/suppliers.js",
+    "/js/pages/sale_order_cart.js": "/js/pages/sale_order_cart.js",
     "/js/hyper.js": "/js/hyper.js",
     "/css/vendor/responsive.bootstrap4.css": "/css/vendor/responsive.bootstrap4.css",
     "/css/vendor/dataTables.bootstrap4.css": "/css/vendor/dataTables.bootstrap4.css",

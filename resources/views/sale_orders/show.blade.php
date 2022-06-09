@@ -22,7 +22,7 @@
                     <table class="table mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th>Product</th>
+                                <th>Productiiis</th>
                                 <th>Quantity</th>
                                 <th>Price</th>
                                 <th>Tax</th>
