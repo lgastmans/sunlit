@@ -301,6 +301,31 @@ class Inventory extends Model
         }
     }
 
+
+    public function updateItemStock(Model $model, $product_id, $update_quantity)
+    {
+        //$class_name = class_basename($model);
+        //die($class_name.":".$model->warehouse_id.":".$product_id);
+
+        $inventory = $this->where('warehouse_id', '=', $model->warehouse_id)->where('product_id', '=', $product_id)->first();
+
+        if ($inventory) {
+            if ($model->status == SaleOrder::BLOCKED)
+            {
+                $inventory->stock_blocked += $update_quantity;
+
+                $inventory->update();
+            }
+            elseif ($model->status == SaleOrder::BOOKED)
+            {
+                $inventory->stock_booked += $update_quantity;
+
+                $inventory->update();
+            }
+        }
+    }
+
+
     /**
      * Update the blocked stock quantity in the inventory 
      * The model passed is assumed SaleOrderItem

@@ -222,15 +222,23 @@ class SaleOrderItemController extends Controller
     {
         $item = SaleOrderItem::find($id);
 
+        $order = SaleOrder::find($item->sale_order_id);
+
         $update_quantity = 0;
 
         if ($request->field == "quantity") {
-            $update_quantity = $request->value - $item->quantity_ordered;
-            
-            // $inventory = new Inventory();
-            // $inventory->updateStockBlocked($item, $update_quantity);
 
-            $item->quantity_ordered = $request->value;
+            if ($order->status == SaleOrder::DRAFT) {
+                $item->quantity_ordered = $request->value;
+            }
+            else {
+                $update_quantity = $request->value - $item->quantity_ordered;
+
+                $item->quantity_ordered = $request->value;
+            
+                $inventory = new Inventory();
+                $inventory->updateItemStock($order, $item->product_id, $update_quantity);
+            }
         }
 
         if ($request->field == "price")
