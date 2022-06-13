@@ -190,7 +190,7 @@
                         <div class="mt-4 mt-lg-0 rounded">
                             <div class="card mt-4 border">
                                 <div class="card-body">
-                                    <button id="{{ $order->id }}" class="col-lg-12 text-center btn btn-danger" type="submit" name="delete_order" data-bs-toggle="modal" data-bs-target="#delete-modal-order"><i class="mdi mdi-delete"></i> Delete order</button>
+                                    <button id="{{ $order->id }}" class="col-lg-12 text-center btn btn-danger" type="submit" name="delete_order" data-bs-toggle="modal" data-bs-target="#delete-modal-order"><i class="mdi mdi-delete"></i>Delete order</button>
                                 </div>
                             </div>
                         </div>

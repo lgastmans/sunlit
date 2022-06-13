@@ -71,6 +71,15 @@ $(document).ready(function () {
         //    },
     });
 
+    // productSelect.on("keyup", function (e) { 
+    //     console.log(e.keyCode);
+    //     if (( e.keyCode == 13 ) || ( e.keyCode == 9)) {
+    //         e.preventDefault();
+    //         $("#quantity_ordered").focus();
+    //     }
+    // });
+
+
     productSelect.on("change", function (e) { 
         var product_id = $(".product-select").find(':selected').val();
         var warehouse_id = $(".product-select").find(':selected').val();
@@ -123,8 +132,6 @@ $(document).ready(function () {
 
     $('body').on('blur', '.editable-field', function(e){
 
-console.log('here ' + $(this).val() + ' >> ' + $(this).attr('data-value'));
-
         if ($(this).val() != $(this).attr('data-value')){
 
             if ($(this).attr('data-field') == "price"){
@@ -149,7 +156,7 @@ console.log('here ' + $(this).val() + ' >> ' + $(this).attr('data-value'));
                 url: route,
                 dataType: 'json',
                 data: { 
-                    'value' : $(this).val() , 
+                    'value' : $(this).val(), 
                     'field': $(this).attr('data-field'), 
                     'item': $(this).attr('data-item'),
                     '_method': 'PUT'

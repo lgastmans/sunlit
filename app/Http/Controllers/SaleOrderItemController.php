@@ -165,11 +165,20 @@ class SaleOrderItemController extends Controller
     public function store(Request $request)
     {
         $product = Product::find($request->get('product_id'));
+
         if ($product){
+
             $item = SaleOrderItem::where('sale_order_id', '=', $request->sale_order_id)->where('product_id', '=', $request->product_id)->first();
+
+            $order = SaleOrder::find($request->sale_order_id);
+
+            $inventory = new Inventory();
+
             if ($item){
                 $item->quantity_ordered = $request->quantity_ordered;
                 $item->update();
+
+                $inventory->updateItemStock($order, $item->product_id, ($request->quantity_ordered - $item->quantity_ordered));
             }
             else{
                 $item = new SaleOrderItem();
@@ -179,11 +188,9 @@ class SaleOrderItemController extends Controller
                 $item->quantity_ordered = $request->quantity_ordered;
                 $item->selling_price = $request->selling_price;
                 $item->save();
-        
-                // $inventory = new Inventory();
-                // $inventory->updateStockBlocked($item, $request->value);
-            }
 
+                $inventory->updateItemStock($order, $item->product_id, $request->quantity_ordered);
+            }
 
             return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'item' => $item, 'product' => $product]);
         }

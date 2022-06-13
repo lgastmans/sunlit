@@ -71,7 +71,14 @@ $(document).ready(function () {
     //       return m;
     //    },
 
-  });
+  }); // productSelect.on("keyup", function (e) { 
+  //     console.log(e.keyCode);
+  //     if (( e.keyCode == 13 ) || ( e.keyCode == 9)) {
+  //         e.preventDefault();
+  //         $("#quantity_ordered").focus();
+  //     }
+  // });
+
   productSelect.on("change", function (e) {
     var product_id = $(".product-select").find(':selected').val();
     var warehouse_id = $(".product-select").find(':selected').val(); //var route = '{{ route("product.json", [":id", ":warehouse_id"]) }}';
@@ -116,8 +123,6 @@ $(document).ready(function () {
   }
 
   $('body').on('blur', '.editable-field', function (e) {
-    console.log('here ' + $(this).val() + ' >> ' + $(this).attr('data-value'));
-
     if ($(this).val() != $(this).attr('data-value')) {
       if ($(this).attr('data-field') == "price") {
         item_id = $(this).parent().parent().parent().attr('data-id');

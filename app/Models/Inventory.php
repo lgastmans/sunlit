@@ -307,7 +307,9 @@ class Inventory extends Model
         //$class_name = class_basename($model);
         //die($class_name.":".$model->warehouse_id.":".$product_id);
 
-        $inventory = $this->where('warehouse_id', '=', $model->warehouse_id)->where('product_id', '=', $product_id)->first();
+        // $inventory = $this->where('warehouse_id', '=', $model->warehouse_id)->where('product_id', '=', $product_id)->first();
+        
+        $inventory = $this->initProductStock($model->warehouse_id, $product_id);
 
         if ($inventory) {
             if ($model->status == SaleOrder::BLOCKED)

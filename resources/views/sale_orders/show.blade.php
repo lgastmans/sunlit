@@ -12,6 +12,54 @@
 
 @include('sale_orders.steps')
 
+@if ($order->status >= 2 && $order->status <= 3)
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <form action="{{ route('sale-orders-items.store') }}" method="POST" class="form-product row">
+                        <input type="hidden" name="sale_order_id" id="sale-order-id" value="{{ $order->id }}">
+                        <input type="hidden" name="order_number_slug" id="order_number_slug" value="{{ $order->order_number_slug }}">
+                        <input type="hidden" name="dealer_id" id="dealer-id" value="{{ $order->dealer->id }}">
+                        <input type="hidden" name="warehouse_id" id="warehouse-id" value="{{ $order->warehouse  ->id }}">
+                        
+                        <div class="col-lg-3">
+                            <div class="mb-3">
+                                <label class="form-label" for="product-select">Product</label>
+                                <select class="product-select form-control" name="product_id" id="product_id"></select>
+                            </div>
+                        </div>
+                        <div class="col-lg-1">
+                            <div class="mb-3">
+                                <label class="form-label" for="quantity_ordered">Quantity</label>
+                                <input type="text" class="form-control" name="quantity_ordered" id="quantity_ordered"  value="1">
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="mb-3">
+                                <label class="form-label" for="selling_price">Price</label>
+                                <div class="input-group flex-nowrap">
+                                    <span class="input-group-text">{{ __('app.currency_symbol_inr')}}</span>
+                                    <input type="selling_price" class="form-control" name="selling_price"  id="selling_price" value="" aria-describedby="sellingPriceHelp">
+                                    {{-- <span class="input-group-text" display="none" id="suggested_selling_price"></span> --}}
+                                    <input type="hidden" name="tax" id="tax">
+                                </div>
+                                <div id="sellingPriceHelp" class="form-text"><span display="none" id="suggested_selling_price"></span></div>                            
+                            </div>
+                        </div>
+                        <div class="col-lg-1">
+                            <div class="mb-3">
+                                <label class="form-label">&nbsp;</label>
+                                <button class="add-product btn btn-primary form-control" type="submit">Add</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
+
 <div class="row">
     <div class="col-lg-8">
         <div class="card">
@@ -19,7 +67,7 @@
                 <h4 class="header-title mb-3">Items from Order #{{ $order->order_number }}</h4>
 
                 <div class="table-responsive">
-                    <table class="table mb-0">
+                    <table class="table mb-0" id="sale-order-items-table">
                         <thead class="table-light">
                             <tr>
                                 <th class="col-5">Product</th>
@@ -32,7 +80,7 @@
                         </thead>
                         <tbody>
                             @foreach($order->items as $item)
-                                @if  ($order->status == 4)
+                                @if ($order->status == 4)
                                      <tr>
                                         <td>{{ $item->product->part_number }}</td>
                                         <td>{{ $item->quantity_ordered }}</td>
