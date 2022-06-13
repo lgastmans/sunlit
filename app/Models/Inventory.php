@@ -327,6 +327,8 @@ class Inventory extends Model
 
 
     /**
+     * THIS FUNCTION IS OBSOLETE 
+     * 
      * Update the blocked stock quantity in the inventory 
      * The model passed is assumed SaleOrderItem
      *
@@ -402,7 +404,6 @@ class Inventory extends Model
             }            
         }
     }
-
 
     public static function getStockFilterList()
     {

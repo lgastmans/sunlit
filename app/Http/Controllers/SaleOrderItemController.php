@@ -259,15 +259,12 @@ class SaleOrderItemController extends Controller
     {
         $item = SaleOrderItem::find($id);
 
-        /*
-            update the blocked status of the item
-            (this got changed - see the INVENTORY-README file)
-        */
-        // $inventory = new Inventory();
-        // $inventory->updateStockBlocked($item, ($item->quantity_ordered*-1));
+        $order = SaleOrder::find($item->sale_order_id);
+
+        $inventory = new Inventory();
+        $inventory->updateItemStock($order, $item->product_id, ($item->quantity_ordered*-1));
 
         SaleOrderItem::destroy($id);
-
 
         $order = SaleOrder::find($item->sale_order_id);
         $order->amount = 0;

@@ -169,6 +169,8 @@
     @include('sale_orders.log')
 </div>
 
+<x-modal-confirm type="danger" target="item"></x-modal-confirm>
+
 @endsection
 
 @section('page-scripts')
