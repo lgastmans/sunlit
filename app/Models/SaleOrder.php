@@ -99,6 +99,8 @@ class SaleOrder extends Model
 
         $this->total = $this->sub_total + $this->tax_total;
 
+        $this->total = round($this->total);
+
         /**
          * for SGST and CGST
          */
