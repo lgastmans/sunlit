@@ -251,8 +251,6 @@
 
             }); // transport charges
 
-
-
         }); //document ready
 
     </script>

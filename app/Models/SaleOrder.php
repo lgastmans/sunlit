@@ -261,8 +261,8 @@ class SaleOrder extends Model
             SaleOrder::DRAFT => 'Draft', 
             SaleOrder::BLOCKED => 'Blocked', 
             SaleOrder::BOOKED => 'Booked',
-            SaleOrder::DISPATCHED => 'Dispatched', 
-            SaleOrder::DELIVERED => 'Delivered'
+            SaleOrder::DISPATCHED => 'Dispatched'
+            //SaleOrder::DELIVERED => 'Delivered'
         ];
     }
 
