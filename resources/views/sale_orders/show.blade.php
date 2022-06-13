@@ -160,8 +160,8 @@
                             </tr>
                           
                          
-                            @if ($order->status >= 3)
-                                <tr>
+{{--                             @if ($order->status >= 2 && $order->status <= 3)
+ --}}                                <tr>
                                     <td>Transport Charges: </td>
                                     <td>
                                         <span>{{ __('app.currency_symbol_inr')}}</span>
@@ -175,14 +175,40 @@
                                         <span id="total-cost">{{ $order->total }}</span>
                                     </th>
                                 </tr>
-                            @endif
+                            {{-- @endif --}}
 
                         </tbody>
                     </table>
                     
                 </div>
                 <!-- end table-responsive -->
-            </div>
+
+            </div> {{-- card body --}}
+
+            @if ($order->status >= 2 && $order->status <= 3)
+                <div class="card-footer">
+                    <div class="row mb-3" >
+                        <div class="col-xl-6" id="transport_charges">
+                            <label class="form-label">Transport Charges</label>
+                            <div class="input-group">
+                                <span class="input-group-text" id="cleared__currency">{{ __('app.currency_symbol_inr')}}</span>
+                                <input type="text" class="form-control" name="transport_charges" id="freight" value="{{ $order->transport_charges}}" required>
+                                <div class="invalid-feedback">
+                                    Transport Charges is required
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6">
+                            <label class="form-label">&nbsp;</label>
+                            <div class="input-group">
+                                <a class="btn btn-success" href="#" role="button" id="btn_transport_charges">Save Transport Charges</a>
+                                {{-- <button class="col-lg-12 text-center btn btn-success" id="btn_transport_charges" name="transport_charges">Save Transport Charges</button> --}}
+                            </div>
+                        </div>
+                    </div>
+                </div> {{-- card footer --}}
+            @endif
+
         </div> <!-- card -->
     </div> <!-- end col -->
 

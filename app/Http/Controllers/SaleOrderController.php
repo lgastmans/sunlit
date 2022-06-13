@@ -400,14 +400,14 @@ class SaleOrderController extends Controller
             // 'due_at' => 'required|date',
             // 'tracking_number' => 'required',
             'courier' => 'required',
-            'transport_charges' => 'required'
+            //'transport_charges' => 'required'
         ]);
         $order = SaleOrder::find($id);
         $order->dispatched_at = $request->get('dispatched_at');
         $order->due_at = $request->get('due_at');
         $order->tracking_number = $request->get('tracking_number');
         $order->courier = $request->get('courier');
-        $order->transport_charges = $request->get('transport_charges');
+        //$order->transport_charges = $request->get('transport_charges');
         $order->status = SaleOrder::DISPATCHED;
         $order->update();
 

@@ -80,7 +80,7 @@
                             Due date is required
                         </div>
                     </div>
-                    <div class="col-xl-6 id="tracking_number">
+                    <div class="col-xl-6" id="tracking_number">
                         <label class="form-label">Tracking number</label>
                         <input type="text" class="form-control" name="tracking_number" >
                         <div class="invalid-feedback">
@@ -88,25 +88,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mb-3" >
-                    <div class="col-xl-6" id="transport_charges">
-                        <label class="form-label">Transport Charges</label>
-                        <div class="input-group">
-                            <span class="input-group-text" id="cleared__currency">{{ __('app.currency_symbol_inr')}}</span>
-                            <input type="text" class="form-control" name="transport_charges" id="freight" value="{{ $order->transport_charges}}" required>
-                            <div class="invalid-feedback">
-                                Transport Charges is required
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-6">
-                        <label class="form-label">&nbsp;</label>
-                        <div class="input-group">
-                            <a class="btn btn-success" href="#" role="button" id="btn_transport_charges">Save Transport Charges</a>
-                            {{-- <button class="col-lg-12 text-center btn btn-success" id="btn_transport_charges" name="transport_charges">Save Transport Charges</button> --}}
-                        </div>
-                    </div>
-                </div>
+
                 <button class="col-lg-12 text-center btn btn-warning" type="submit"
                     name="ship_order">Dispatch order</button>
             </form>
