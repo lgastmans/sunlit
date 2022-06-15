@@ -642,19 +642,19 @@ font-weight: bold;
           <tr class="subtotal">
             <td colspan="{{ $order->dealer->state->code==33 ? 7 : 5}}"></td>
             <th style="text-align: right;">Subtotal</th>
-            <th colspan="3">{{ $order->sub_total }}</th>
+            <th colspan="2">{{ $order->sub_total }}</th>
           </tr>
           
           <tr data-iterate="tax">
             <td colspan="{{ $order->dealer->state->code==33 ? 7 : 5}}"></td>
             <th style="text-align: right;">Tax</th>
-            <th colspan="3">{{ $order->tax_total }}</th>
+            <th colspan="2">{{ $order->tax_total }}</th>
           </tr>
           
           <tr class="amount-total">
             <th colspan="{{ $order->dealer->state->code==33 ? 7 : 5}}"></th>
             <th style="text-align: right;">Total (rounded)</th>
-            <th colspan="3">{{ $order->total }}</th>
+            <th colspan="2">{{ $order->total }}</th>
           </tr>
 
         </tfoot> 
