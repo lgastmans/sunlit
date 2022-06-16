@@ -13,9 +13,10 @@ class SaleOrder extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['dealer_id', 'warehouse_id', 'order_number', 'order_number_slug', 'status', 'user_id'];
+    protected $fillable = ['dealer_id', 'warehouse_id', 'order_number', 'order_number_slug', 'status', 'user_id',
+            'shipping_state_id', 'shipping_company', 'shipping_address', 'shipping_address2', 'shipping_city', 'shipping_zip_code', 'shipping_gstin', 'shipping_contact_person', 'shipping_phone'];
     protected $dates = ['blocked_at', 'booked_at', 'dispatched_at', 'paid_at', 'due_at', 'shipped_at'];
-    protected $with = ['dealer', 'warehouse', 'user', 'items'];
+    protected $with = ['dealer', 'warehouse', 'user', 'items', 'state'];
 
     const DRAFT = 1;
     const BLOCKED = 2;      // changed to Blocked, was Ordered
@@ -65,6 +66,14 @@ class SaleOrder extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the state associated with the dealer.
+     */
+    public function state()
+    {
+        return $this->belongsTo(State::class, 'shipping_state_id');
     }
 
     /**
@@ -164,7 +173,8 @@ class SaleOrder extends Model
      */
     public function getDisplayBookedAtAttribute()
     {
-        if ($this->booked_at){
+        if ($this->booked_at)
+        {
             $dt = Carbon::parse($this->booked_at);
             return $dt->toFormattedDateString();  
         }
@@ -182,7 +192,8 @@ class SaleOrder extends Model
      */
     public function getDisplayDispatchedAtAttribute()
     {
-        if ($this->dispatched_at){
+        if ($this->dispatched_at)
+        {
             $dt = Carbon::parse($this->dispatched_at);
             return $dt->toFormattedDateString(); 
         } 
@@ -200,7 +211,8 @@ class SaleOrder extends Model
      */
     public function getDisplayDueAtAttribute()
     {
-        if ($this->due_at){
+        if ($this->due_at)
+        {
             $dt = Carbon::parse($this->due_at);
             return $dt->toFormattedDateString(); 
         } 
@@ -218,7 +230,8 @@ class SaleOrder extends Model
      */
     public function getDisplayDeliveredAtAttribute()
     {
-        if ($this->delivered_at){
+        if ($this->delivered_at)
+        {
             $dt = Carbon::parse($this->delivered_at);
             return $dt->toFormattedDateString();  
         } 
@@ -271,7 +284,8 @@ class SaleOrder extends Model
 
     public function isOverdue()
     {
-        if (Carbon::now()->greaterThan(Carbon::parse( $this->due_at))){
+        if (Carbon::now()->greaterThan(Carbon::parse( $this->due_at)))
+        {
             return true;
         }
         return false;
@@ -297,6 +311,4 @@ class SaleOrder extends Model
     {
         return $query->where('status', SaleOrder::DELIVERED);
     }    
-
-
 }

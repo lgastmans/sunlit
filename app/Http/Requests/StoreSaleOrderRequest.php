@@ -47,7 +47,16 @@ class StoreSaleOrderRequest extends FormRequest
             'dealer_id' => 'required|integer',
             'warehouse_id' => 'required|integer',
             'status' => 'required|integer',
-            'user_id' => 'required|integer'
+            'user_id' => 'required|integer',
+            'shipping_state_id' => 'integer|nullable',
+            'shipping_company' => 'nullable|string|max:255',
+            'shipping_address' => 'nullable|string|max:255',
+            'shipping_address2' => 'nullable|string|max:255',
+            'shipping_city' => 'nullable|string|max:255',
+            'shipping_zip_code' => 'nullable|string|max:255',
+            'shipping_gstin' => 'nullable|string|max:255',
+            'shipping_contact_person' => 'nullable|string|max:255',
+            'shipping_phone' => 'nullable|string|max:255'
         ];
     }
 }

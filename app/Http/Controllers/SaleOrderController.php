@@ -253,7 +253,7 @@ class SaleOrderController extends Controller
     {
         $user = Auth::user();
         if ($user->can('view sale orders')){
-            $order = SaleOrder::where('order_number_slug', '=', $order_number_slug)->first();
+            $order = SaleOrder::with('state')->where('order_number_slug', '=', $order_number_slug)->first();
             $order->calculateTotals();
             if ($order)
                 return view('sale_orders.show', ['order' => $order ]);

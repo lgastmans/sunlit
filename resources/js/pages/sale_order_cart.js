@@ -1,6 +1,15 @@
 $(document).ready(function () {
     "use strict";
 
+    var shippingStateSelect = $(".shipping-state-select").select2();
+    var routeShippingState = globalSettings.sale_order_shipping_state;
+    shippingStateSelect.select2({
+        ajax: {
+            url: routeShippingState, //'{{route('ajax.states')}}',
+            dataType: 'json'
+        }
+    });
+
     function recalculateGrandTotal(){
         var grand_total = 0;
         $('.item-total').each(function( index ){

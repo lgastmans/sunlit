@@ -21,7 +21,7 @@
                         <input type="hidden" name="sale_order_id" id="sale-order-id" value="{{ $order->id }}">
                         <input type="hidden" name="order_number_slug" id="order_number_slug" value="{{ $order->order_number_slug }}">
                         <input type="hidden" name="dealer_id" id="dealer-id" value="{{ $order->dealer->id }}">
-                        <input type="hidden" name="warehouse_id" id="warehouse-id" value="{{ $order->warehouse  ->id }}">
+                        <input type="hidden" name="warehouse_id" id="warehouse-id" value="{{ $order->warehouse->id }}">
                         
                         <div class="col-lg-3">
                             <div class="mb-3">
@@ -281,7 +281,8 @@
             sale_order_items_delete : '{{ route("sale-orders-items.delete", ":id") }}',
             sale_order_delete : '{{ route("sale-orders.delete", ":id") }}',
             product_route : '{{ route("ajax.products.warehouse", [":warehouse_id"]) }}',
-            inr_symbol : '{{ __("app.currency_symbol_inr")}}'
+            inr_symbol : '{{ __("app.currency_symbol_inr")}}',
+            sale_order_shipping_state : '{{route('ajax.states')}}'
         };
 
         $(document).ready(function () {
