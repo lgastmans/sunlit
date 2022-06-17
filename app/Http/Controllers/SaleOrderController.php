@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use PDF;
+use App\Models\Dealer;
 use App\Models\Inventory;
 use App\Models\SaleOrder;
 use Illuminate\Http\Request;
@@ -202,6 +203,8 @@ class SaleOrderController extends Controller
         $user = Auth::user();
         if ($user->can('edit sale orders')){
             $order = new SaleOrder();
+
+
             return view('sale_orders.form', ['order' => $order]);
         }
         return abort(403, trans('error.unauthorized'));
@@ -218,6 +221,36 @@ class SaleOrderController extends Controller
         $validatedData = $request->validated();
         $order = SaleOrder::create($validatedData);
         if ($order) {
+            /**
+             * retrieve and store the "shipped to" address from the dealer
+             */
+            $dealer = Dealer::find($order->dealer_id);
+            if ($dealer){
+                if ($dealer->has_shipping_address){
+                    $order->shipping_company = $dealer->shipping_company;
+                    $order->shipping_gstin = $dealer->shipping_gstin;
+                    $order->shipping_contact_person =  $dealer->shipping_contact_person;
+                    $order->shipping_phone =  $dealer->shipping_phone;
+                    $order->shipping_address = $dealer->shipping_address;
+                    $order->shipping_address2 = $dealer->shipping_address2;
+                    $order->shipping_city = $dealer->shipping_city;
+                    $order->shipping_zip_code = $dealer->shipping_zip_code;
+                    $order->shipping_state_id = $dealer->shipping_state_id;
+                }
+                else {
+                    $order->shipping_company = $dealer->compamy;
+                    $order->shipping_gstin = $dealer->gstin;
+                    $order->shipping_contact_person = $dealer->contact_person;
+                    $order->shipping_phone =  $dealer->phone;
+                    $order->shipping_address = $dealer->address;
+                    $order->shipping_address2 = $dealer->address2;
+                    $order->shipping_city = $dealer->city;
+                    $order->shipping_zip_code = $dealer->zip_code;
+                    $order->shipping_state_id = $dealer->state_id;
+                }
+                $order->update();
+            }
+
             return redirect(route('sale-orders.cart', $order->order_number_slug)); 
         }
         return back()->withInputs($request->input())->with('error', trans('error.record_added', ['field' => 'sale order']));        
