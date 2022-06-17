@@ -288,9 +288,14 @@
         $(document).ready(function () {
             "use strict";
 
+
+            /*
+                This function could be moved to sale_order_cart.js
+                The code for the value for the State select is in the sale_order_cart.js
+            */
             $("#shipping_company, #shipping_gstin, #shipping_contact_person, #shipping_phone, #shipping_address, #shipping_address2, #shipping_city, #shipping_zip_code").blur(function() {
 
-                console.log('update shipping address ' + $(this).attr('id') +'::' + $(this).val());
+                //console.log('update shipping address ' + $(this).attr('id') +'::' + $(this).val());
 
                 $.ajaxSetup({
                     headers: {
@@ -315,7 +320,7 @@
                         '_method': 'PUT'
                     },
                     success : function(result){
-                        console.log(result);
+                        //console.log(result);
 
                         // $(" #transport-charges ").html(result.transport_charges);
                         // $(" #total-cost ").html(result.total);

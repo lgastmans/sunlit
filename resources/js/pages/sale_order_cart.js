@@ -5,10 +5,58 @@ $(document).ready(function () {
     var routeShippingState = globalSettings.sale_order_shipping_state;
     shippingStateSelect.select2({
         ajax: {
-            url: routeShippingState, //'{{route('ajax.states')}}',
+            url: routeShippingState,
             dataType: 'json'
+            // processResults: function (data) {
+            //     return {
+            //         //results: data
+            //     };
+            // }
         }
     });
+
+    shippingStateSelect.on("change", function(e) {
+
+        var lastValue = e.currentTarget.value;
+        var lastText = e.currentTarget.textContent;
+
+        //console.log(lastValue +' :: ' + lastText);
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+            }
+        }); 
+
+        var route = globalSettings.sale_order_update;
+        route = route.replace(':id', $('#sale-order-id').val());
+
+        var field_name = 'shipping_state_id'; //$(this).attr('id');
+        var field_value = lastValue;
+
+        $.ajax({
+            type: 'POST',
+            url: route,
+            dataType: 'json',
+            data: { 
+                'value': field_value,
+                'field': field_name, 
+                'item': false,
+                '_method': 'PUT'
+            },
+            success : function(result){
+                console.log(result);
+
+                // $(" #transport-charges ").html(result.transport_charges);
+                // $(" #total-cost ").html(result.total);
+
+                // $.NotificationApp.send("Success","Transport Charges saved","top-right","","success")
+
+            }
+        });
+
+     });
+
 
     function recalculateGrandTotal(){
         var grand_total = 0;
