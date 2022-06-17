@@ -28,7 +28,7 @@
 
                     <div class="input-group input-group-sm mb-3">
                       <span class="input-group-text">Contact & Phone</span>
-                      <input type="text" class="form-control" aria-label="Contact" value="{{$order->shipping_contact_person}}" id="shipping_contact">
+                      <input type="text" class="form-control" aria-label="Contact" value="{{$order->shipping_contact_person}}" id="shipping_contact_person">
                       <input type="text" class="form-control" aria-label="Contact" value="{{$order->shipping_phone}}" id="shipping_phone">
                     </div>
 

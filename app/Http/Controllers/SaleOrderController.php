@@ -317,10 +317,17 @@ class SaleOrderController extends Controller
 
             $order->calculateTotals();
 
-
-
             return response()->json(['success'=>'true', 'total'=>$order->total, 'tax_total'=>$order->tax_total, 'transport_charges'=>$order->transport_total, 'code'=>200, 'message'=> 'OK', 'field' => $request->get('field')]);
         }
+
+        if (str_starts_with($request->get('field'), 'shipping_') == "shipping_")
+        {
+            $order = SaleOrder::find($id);
+
+            $field_name = $request->get('field');
+            $order->$field_name = $request->get('value');
+            $order->update();
+        }        
 
     }
 

@@ -288,6 +288,45 @@
         $(document).ready(function () {
             "use strict";
 
+            $("#shipping_company, #shipping_gstin, #shipping_contact_person, #shipping_phone, #shipping_address, #shipping_address2, #shipping_city, #shipping_zip_code").blur(function() {
+
+                console.log('update shipping address ' + $(this).attr('id') +'::' + $(this).val());
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                    }
+                }); 
+
+                var route = globalSettings.sale_order_update;
+                route = route.replace(':id', $('#sale-order-id').val());
+
+                var field_name = $(this).attr('id');
+                var field_value = $(this).val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: route,
+                    dataType: 'json',
+                    data: { 
+                        'value': field_value,
+                        'field': field_name, 
+                        'item': false,
+                        '_method': 'PUT'
+                    },
+                    success : function(result){
+                        console.log(result);
+
+                        // $(" #transport-charges ").html(result.transport_charges);
+                        // $(" #total-cost ").html(result.total);
+
+                        // $.NotificationApp.send("Success","Transport Charges saved","top-right","","success")
+
+                    }
+                });
+            });
+
+
             $("#btn_transport_charges").on('click', function(e) {
 
                 e.preventDefault();
