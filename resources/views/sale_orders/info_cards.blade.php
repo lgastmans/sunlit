@@ -51,11 +51,11 @@
                     <div class="input-group input-group-sm mb-3">
                       {{-- <span class="input-group-text" id="inputGroup-state">State</span> --}}
 
-                                <select class="shipping-state-select form-select form-select-sm" name="shipping_state_id">
-                                    @if ($order->state)
-                                        <option value="{{$order->state->id}}" selected="selected">{{$order->state->name}}</option>
-                                    @endif
-                                </select>
+                        <select class="shipping-state-select form-select form-select-sm" name="shipping_state_id" id="shipping_state">
+                            @if ($order->state)
+                                <option value="{{$order->state->id}}" selected="selected">{{$order->state->name}}</option>
+                            @endif
+                        </select>
 
                       {{-- <input type="text" class="form-control" aria-label="State" aria-describedby="inputGroup-state" value="{{$order->shipping_state_id}}" id="shipping_state_id"> --}}
                     </div>
