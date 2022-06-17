@@ -447,61 +447,61 @@ font-weight: bold;
           <td width="15%" class="label">Name</td>
           <td class="client-name">{{ $order->dealer->company}}</td>
           <td width="15%" class="label">Name</td>
-          <td class="client-name">{{ $order->dealer->shipping_company}}</td>
+          <td class="client-name">{{ $order->shipping_company}}</td>
         </tr>
         <tr>
           <td class="label">Address</td>
           <td class="text-break">{{ $order->dealer->address }}</td>
           <td class="label">Address</td>
-          <td class="text-break">{{ $order->dealer->shipping_address }}</td>
+          <td class="text-break">{{ $order->shipping_address }}</td>
         </tr>
         <tr>
           <td></td>
           <td>{{ $order->dealer->address2 }}</td>
           <td></td>
-          <td>{{ $order->dealer->shipping_address2 }}</td>
+          <td>{{ $order->shipping_address2 }}</td>
         </tr>
         <tr>
           <td class="label">City</td>
           <td>{{ $order->dealer->city }} {{ $order->dealer->zip_code }}</td>
           <td class="label">City</td>
-          <td>{{ $order->dealer->shipping_city }} {{ $order->dealer->shipping_zip_code }}</td>
+          <td>{{ $order->shipping_city }} {{ $order->shipping_zip_code }}</td>
         </tr>
         <tr>
           <td class="label">State</td>
           <td>{{ $order->dealer->state->name }}</td>
           <td class="label">State</td>
-          <td>{{ $order->dealer->shipping_state->name ?? '' }}</td>
+          <td>{{ $order->state->name ?? '' }}</td>
         </tr>
         <tr>
           <td class="label">State Code</td>
           <td>{{ $order->dealer->state->code }}</td>
           <td class="label">State Code</td>
-          <td>{{ $order->dealer->shipping_state->code ?? '' }}</td>
+          <td>{{ $order->state->code ?? '' }}</td>
         </tr>
         <tr>
           <td class="label">GSTIN</td>
           <td>{{ $order->dealer->gstin }}</td>
           <td class="label">GSTIN</td>
-          <td>{{ $order->dealer->shipping_gstin }}</td>
+          <td>{{ $order->shipping_gstin }}</td>
         </tr>
         <tr>
           <td class="label">Contact</td>
           <td>{{ $order->dealer->contact_person}}</td>
           <td class="label">Contact</td>
-          <td>{{ $order->dealer->shipping_contact_person}}</td>
+          <td>{{ $order->shipping_contact_person}}</td>
         </tr>
         <tr>
           <td class="label">Phone</td>
           <td>{{ $order->dealer->phone }}</td>
           <td class="label">Phone</td>
-          <td>{{ $order->dealer->shipping_phone }}</td>
+          <td>{{ $order->shipping_phone }}</td>
         </tr>
         <tr>
           <td class="label">Email</td>
           <td>{{ $order->dealer->email }}</td>
-          <td class="label">Email</td>
-          <td>{{ $order->dealer->shipping_email }}</td>
+          <td class="label">&nbsp;</td>
+          <td></td>
         </tr>
         <tr>
           <td class="label">Transport details</td>
