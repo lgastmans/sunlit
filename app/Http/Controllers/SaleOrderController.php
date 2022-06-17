@@ -203,9 +203,8 @@ class SaleOrderController extends Controller
         $user = Auth::user();
         if ($user->can('edit sale orders')){
             $order = new SaleOrder();
-
-
-            return view('sale_orders.form', ['order' => $order]);
+            $order_number = \Setting::get('sale_order.order_number') +1;
+            return view('sale_orders.form', ['order' => $order, 'order_number' => $order_number ]);
         }
         return abort(403, trans('error.unauthorized'));
     }

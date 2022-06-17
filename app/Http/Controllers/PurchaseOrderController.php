@@ -236,7 +236,8 @@ class PurchaseOrderController extends Controller
         $user = Auth::user();
         if ($user->can('edit purchase orders')){
             $order = new PurchaseOrder();
-            return view('purchase_orders.form', ['purchase_order' => $order]);
+            $order_number = \Setting::get('purchase_order.order_number') +1;
+            return view('purchase_orders.form', ['purchase_order' => $order, 'order_number' => $order_number ]);
         }
         return abort(403, trans('error.unauthorized'));
     }

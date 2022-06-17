@@ -19,9 +19,11 @@
                     <form action="{{ route('sale-orders.store') }}" method="POST" class="needs-validation" novalidate>
                         @csrf()
                         <div class="mb-3">
-                            <div>
-                                <label class="form-label" for="order_number">Order #</label>
-                                <input type="text" class="form-control" name="order_number" id="order_number" placeholder="" value="{{ old('order_number') }}" required>
+                            <label class="form-label" for="order_number">Order #</label>
+                            <div class="input-group">
+                                <span class="input-group-text">{{ Setting::get('sale_order.prefix') }}</span>
+                                <input type="text" class="form-control" name="order_number" id="order_number" placeholder="" value="{{ $order_number }}" required>
+                                <span class="input-group-text">{{ Setting::get('sale_order.suffix') }}</span>
                                 <div class="invalid-feedback">
                                     {{ __('error.form_invalid_field', ['field' => strtolower('order #') ]) }}
                                 </div>
