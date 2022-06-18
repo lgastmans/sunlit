@@ -203,8 +203,11 @@ class SaleOrderController extends Controller
         $user = Auth::user();
         if ($user->can('edit sale orders')){
             $order = new SaleOrder();
-            $order_number = \Setting::get('sale_order.order_number') +1;
-            return view('sale_orders.form', ['order' => $order, 'order_number' => $order_number ]);
+            $order_number_count = \Setting::get('sale_order.order_number') +1;
+            $order_number = \Setting::get('sale_order.prefix').$order_number_count.\Setting::get('sale_order.suffix');
+            \Setting::set('sale_order.order_number', $order_number_count);
+            \Setting::save();
+            return view('sale_orders.form', ['order' => $order, 'order_number' => $order_number, 'order_number_count' => $order_number_count ]);
         }
         return abort(403, trans('error.unauthorized'));
     }
