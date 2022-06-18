@@ -24,7 +24,7 @@
                                 <th>Actions</th>
                             </tr>
                             <tr class="filters" style="display:none;">
-                                <th><th>
+                                <th></th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
@@ -99,7 +99,7 @@
         processing: true,
         serverSide: true,
         orderCellsTop: true,
-        //fixedHeader: true,
+        fixedHeader: true,
         search: true,
         
         ajax: "{{ route('products.datatables') }}",
