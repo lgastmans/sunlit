@@ -30,7 +30,7 @@ class StoreProductRequest extends FormRequest
         $this->merge([
             'code' => NULL,
             'name' => NULL,
-            'model' => NULL,
+            //'model' => NULL,
         ]);
     }
 

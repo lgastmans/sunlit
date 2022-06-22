@@ -67,10 +67,10 @@
                             <div class="col-xl-4">
                                 <x-forms.input label="Name" name="name" value="{{ old('name', $product->name) }}" message="Please provide a name"  required="false"/>
                             </div>
-                            <div class="col-xl-4">
+{{--                             <div class="col-xl-4">
                                 <x-forms.input label="Model" name="model" value="{{ old('model', $product->model) }}" message="Please provide a model" required="false" />
                             </div>
-                        </div>
+ --}}                        </div>
                         <div class="mb-3 row">
                             <div class="col-xl-4">
                                 <x-forms.input label="Part number" name="part_number" value="{{ old('part_number', $product->part_number) }}" message="Please provide a part number" required="false"/>
@@ -115,6 +115,9 @@
                             </div>
                             <div class="col-xl-3">
                                 <x-forms.input label="Calculated Weight" name="weight_calculated" value="{{ old('weight_calculated', $product->weight_calculated) }}" message="Please provide Calculated Weight" required="false"/>
+                            </div>
+                            <div class="col-xl-3">
+                                <x-forms.input label="Model" name="model" value="{{ old('model', $product->model) }}" message="Please provide a model" required="false" />
                             </div>
                             
                         </div>

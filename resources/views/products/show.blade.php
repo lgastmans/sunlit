@@ -88,6 +88,8 @@
                     </div>
                     <div class="col-md-3">
                         <div class="mb-4">
+                            <h5>Model</h5>
+                            <p>{{ empty($product->model) ? 'NS' : $product->model }}</p>
                         </div>
                     </div>
                 </div>
