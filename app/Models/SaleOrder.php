@@ -48,6 +48,7 @@ class SaleOrder extends Model
         ->dontLogIfAttributesChangedOnly(['updated_at','shipping_company','shipping_state_id','shipping_gstin','shipping_phone','shipping_city','shipping_address2','shipping_address','shipping_contact_person','shipping_zip_code']);
     }
     */
+    
     /**
      * Get the items associated with the sale order.
      */
