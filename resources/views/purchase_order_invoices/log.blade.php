@@ -10,7 +10,18 @@
                         <th>Status</th>
                     </thead>
                     <tbody>
-                        @if ($invoice->status >= 8)
+                        @foreach($activities as $activity)
+                            <tr>
+                                <td>
+                                    {{ \Carbon\Carbon::parse($activity->updated_at)->toFormattedDateString() }}
+                                </td>
+                                <td>
+                                    {!! $activity->description.' by <b>'.$activity->causer->name.'</b>' !!}
+                                </td>
+                            </tr>
+                        @endforeach
+                        
+{{--                         @if ($invoice->status >= 8)
                         <tr>
                             <td>{{ $invoice->display_paid_at }}</td><td>The invoice has been paid, <b>#{{ $invoice->payment_reference }} / <b>{{ __('app.currency_symbol_inr')}}{{ $invoice->paid_exchange_rate }}</b></b></td>
                         </tr>
@@ -35,6 +46,7 @@
                             <td>{{ $invoice->display_shipped_at }}</td><td>The order has been shipped</b></td>
                         </tr>
                         @endif
+ --}}                        
                     </tbody>
                 </table>
             </div>

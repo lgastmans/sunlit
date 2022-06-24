@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Models\Activity;
+
 use PDF;
 use App\Models\Product;
 use App\Models\Inventory;
@@ -174,6 +177,11 @@ class PurchaseOrderInvoiceController extends Controller
         $invoice->invoice_number_slug =  $validatedData['invoice_number_slug'];
         $invoice->save();
 
+        activity()
+           ->performedOn($invoice)
+           ->withProperties(['order_number' => $invoice->invoice_number, 'status' => $invoice->status])
+           ->log('Created Purchase Order Invoice');
+
         $invoice_id = $invoice->id;
         $invoice_number = $invoice->invoice_number;
         $invoice_number_slug = $invoice->invoice_number_slug;
@@ -230,8 +238,14 @@ class PurchaseOrderInvoiceController extends Controller
             $po = PurchaseOrderInvoice::with('purchase_order')->where('invoice_number_slug', '=', $invoice_number_slug)->first();
             $purchase_order = $po->purchase_order;
             $invoice = PurchaseOrderInvoice::with(['items', 'items.product'])->where('invoice_number_slug', '=', $invoice_number_slug)->first();
+
+            $activities = Activity::where('subject_id', $po->id)
+                ->where('subject_type', 'App\Models\PurchaseOrderInvoice')
+                ->orderBy('updated_at', 'desc')
+                ->get();            
+
             if ($invoice)
-                return view('purchase_order_invoices.show', ['invoice' => $invoice, 'purchase_order' => $purchase_order ]);
+                return view('purchase_order_invoices.show', ['invoice' => $invoice, 'purchase_order' => $purchase_order, 'activities' => $activities ]);
 
             return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'purchase order']));
         }
@@ -279,6 +293,12 @@ class PurchaseOrderInvoiceController extends Controller
         $invoice->customs_at = $request->get('customs_at');
         $invoice->boe_number = $request->get('boe_number');
         $invoice->status = PurchaseOrderInvoice::CUSTOMS;
+
+        activity()
+           ->performedOn($invoice)
+           ->withProperties(['order_number' => $invoice->invoice_number, 'status' => $invoice->status])
+           ->log('Status updated to <b>Customs</b>');
+
         $invoice->update();
         return redirect(route('purchase-order-invoices.show', $invoice->invoice_number_slug))->with('success', 'order at customs'); 
     }
@@ -305,8 +325,13 @@ class PurchaseOrderInvoiceController extends Controller
         $invoice->igst = $request->get('total_igst_inr');
         $invoice->landed_cost = $request->get('landed_cost_inr');
 
-
         $invoice->status = PurchaseOrderInvoice::CLEARED;
+
+        activity()
+           ->performedOn($invoice)
+           ->withProperties(['order_number' => $invoice->invoice_number, 'status' => $invoice->status])
+           ->log('Status updated to <b>Cleared</b>');
+
         $invoice->update();
 
         
@@ -332,6 +357,12 @@ class PurchaseOrderInvoiceController extends Controller
         $invoice->update();
 
         $inventory = new Inventory();
+
+        activity()
+           ->performedOn($invoice)
+           ->withProperties(['order_number' => $invoice->invoice_number, 'status' => $invoice->status])
+           ->log('Status updated to <b>Received</b>');
+
         $inventory->updateStock($invoice);
 
         return redirect(route('purchase-order-invoices.show', $invoice_number))->with('success', 'order received'); 
@@ -358,6 +389,12 @@ class PurchaseOrderInvoiceController extends Controller
         $invoice->paid_cost = $invoice->amount_usd * $request->get('paid_exchange_rate');
         $invoice->payment_reference = $request->get('payment_reference');
         $invoice->status = PurchaseOrderInvoice::PAID;
+
+        activity()
+           ->performedOn($invoice)
+           ->withProperties(['order_number' => $invoice->invoice_number, 'status' => $invoice->status])
+           ->log('Status updated to <b>Paid</b>');
+
         $invoice->update();
 
         $invoice->updateItemsPaidPrice($id);

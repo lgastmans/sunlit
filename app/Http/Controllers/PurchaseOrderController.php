@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Models\Activity;
+
 use PDF;
 use Carbon\Carbon;
 use App\Models\Inventory;
@@ -236,6 +239,7 @@ class PurchaseOrderController extends Controller
         $user = Auth::user();
         if ($user->can('edit purchase orders')){
             $order = new PurchaseOrder();
+
             $order_number_count = \Setting::get('purchase_order.order_number') +1;
             $order_number = \Setting::get('purchase_order.prefix').$order_number_count.\Setting::get('purchase_order.suffix');
             \Setting::set('purchase_order.order_number', $order_number_count);
@@ -258,6 +262,12 @@ class PurchaseOrderController extends Controller
         $validatedData = $request->validated();
         $order = PurchaseOrder::create($validatedData);
         if ($order) {
+
+            activity()
+               ->performedOn($order)
+               ->withProperties(['order_number' => $order->order_number, 'status' => $order->status])
+               ->log('Created Purchase Order');
+
             return redirect(route('purchase-orders.cart', $order->order_number_slug)); 
         }
         return back()->withInputs($request->input())->with('error', trans('error.record_added', ['field' => 'purchase order']));        
@@ -294,13 +304,19 @@ class PurchaseOrderController extends Controller
             $purchase_order = PurchaseOrder::with(['supplier', 'warehouse', 'items', 'items.product'])->where('order_number_slug', '=', $order_number_slug)->first();
             $invoices = $purchase_order->invoices->pluck('id');
             $shipped = [];
+
+            $activities = Activity::where('subject_id', $purchase_order->id)
+                ->where('subject_type', 'App\Models\PurchaseOrder')
+                ->orderBy('updated_at', 'desc')
+                ->get();
+
             if (!empty($invoices)) {
                 $shipped = PurchaseOrderInvoiceItem::groupBy('product_id')->whereIn('purchase_order_invoice_id', $invoices)
                                     ->selectRaw('sum(quantity_shipped) as total_quantity_shipped, product_id')
                                     ->pluck('total_quantity_shipped','product_id');
             }
             if ($purchase_order)
-                return view('purchase_orders.show', ['purchase_order' => $purchase_order, 'shipped' => $shipped ]);
+                return view('purchase_orders.show', ['purchase_order' => $purchase_order, 'shipped' => $shipped, 'activities' => $activities ]);
 
             return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'purchase order']));
         }
@@ -337,6 +353,12 @@ class PurchaseOrderController extends Controller
             }
             $order = PurchaseOrder::find($id);
             $order->order_number = $request->get('order_number');
+
+            activity()
+               ->performedOn($order)
+               ->withProperties(['order_number' => $order->order_number, 'status' => $order->status])
+               ->log('Order Number updated to '.$order->order_number);
+
             $order->update();
             return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'field' => $request->get('field')]);
         }
@@ -344,8 +366,16 @@ class PurchaseOrderController extends Controller
         if ($request->get('field') == "warehouse"){
             $order = PurchaseOrder::find($id);
             $order->warehouse_id = $request->get('warehouse_id');
+
             $order->update();
+
             $warehouse = Warehouse::find($request->get('warehouse_id'));
+
+            activity()
+               ->performedOn($order)
+               ->withProperties(['order_number' => $order->order_number, 'status' => $order->status])
+               ->log('Warehouse updated to '.$warehouse->name);
+
             return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'field' => $request->get('field'), 'warehouse'=> $warehouse]);
         }
 
@@ -391,6 +421,11 @@ class PurchaseOrderController extends Controller
         }
         $order->amount_inr = $order->amount_usd * $order->order_exchange_rate;
 
+        activity()
+           ->performedOn($order)
+           ->withProperties(['order_number' => $order->order_number, 'status' => $order->status])
+           ->log('Status updated to <b>Ordered</b>');
+
         $order->update();
 
         return redirect(route('purchase-orders.cart', $order->order_number_slug))->with('success', 'order placed'); 
@@ -421,6 +456,11 @@ class PurchaseOrderController extends Controller
             $order->amount_usd += $item->total_price; 
         }
         $order->amount_inr = $order->amount_usd * $order->order_exchange_rate;
+
+        activity()
+           ->performedOn($order)
+           ->withProperties(['order_number' => $order->order_number, 'status' => $order->status])
+           ->log('Status updated to <b>Confirmed</b>');
 
         $order->update();
 
@@ -522,6 +562,12 @@ class PurchaseOrderController extends Controller
         $order = PurchaseOrder::find($id);
         $order->received_at = $request->get('received_at');
         $order->status = PurchaseOrder::RECEIVED;
+
+        activity()
+           ->performedOn($order)
+           ->withProperties(['order_number' => $order->order_number, 'status' => $order->status])
+           ->log('Status updated to <b>Received</b>');
+
         $order->update();
 
         // $inventory = new Inventory();
@@ -542,6 +588,12 @@ class PurchaseOrderController extends Controller
         $user = Auth::user();
         if ($user->can('delete purchase orders')){
             $order = PurchaseOrder::find($id);
+
+            activity()
+               ->performedOn($order)
+               ->withProperties(['order_number' => $order->order_number, 'status' => $order->status])
+               ->log('Purchase Order deleted');
+
             $order->items()->delete();
             $order->delete();
             return redirect(route('purchase-orders'))->with('success', trans('app.record_deleted', ['field' => 'Purchase Order']));

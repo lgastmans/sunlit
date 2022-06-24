@@ -10,7 +10,18 @@
                         <th>Status</th>
                     </thead>
                     <tbody>
-                        @if ($purchase_order->status >= 7)
+                        @foreach($activities as $activity)
+                            <tr>
+                                <td>
+                                    {{ \Carbon\Carbon::parse($activity->updated_at)->toFormattedDateString() }}
+                                </td>
+                                <td>
+                                    {!! $activity->description.' by <b>'.$activity->causer->name.'</b>' !!}
+                                </td>
+                            </tr>
+                        @endforeach
+
+{{--                         @if ($purchase_order->status >= 7)
                         <tr>
                             <td>{{ $purchase_order->display_received_at }}</td><td>The order has been received</td>
                         </tr>
@@ -40,6 +51,7 @@
                             <td>{{ $purchase_order->display_ordered_at }}</td><td>The order has been placed by <b>{{ $purchase_order->user->display_name }}</b></td>
                         </tr>
                         @endif
+ --}}
                     </tbody>
                 </table>
             </div>
