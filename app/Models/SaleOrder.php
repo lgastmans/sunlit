@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use NumberFormatter;
+//use Spatie\Activitylog\LogOptions;
+//use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,11 +14,13 @@ class SaleOrder extends Model
 {
     use HasFactory;
     use SoftDeletes;
+//    use LogsActivity;
 
     protected $fillable = ['dealer_id', 'warehouse_id', 'order_number', 'order_number_slug', 'status', 'user_id',
             'shipping_state_id', 'shipping_company', 'shipping_address', 'shipping_address2', 'shipping_city', 'shipping_zip_code', 'shipping_gstin', 'shipping_contact_person', 'shipping_phone'];
     protected $dates = ['blocked_at', 'booked_at', 'dispatched_at', 'paid_at', 'due_at', 'shipped_at'];
     protected $with = ['dealer', 'warehouse', 'user', 'items', 'state'];
+    //protected static $recordEvents = ['created','updated','deleted'];
 
     const DRAFT = 1;
     const BLOCKED = 2;      // changed to Blocked, was Ordered
@@ -36,6 +40,14 @@ class SaleOrder extends Model
     var $total = 0;
     var $total_spellout = '';
 
+    /*
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['dealer.company', 'warehouse.name,','order_number', 'status', 'user.name', 'blocked_at','booked_at','dispatched_at'])
+        ->dontLogIfAttributesChangedOnly(['updated_at','shipping_company','shipping_state_id','shipping_gstin','shipping_phone','shipping_city','shipping_address2','shipping_address','shipping_contact_person','shipping_zip_code']);
+    }
+    */
     /**
      * Get the items associated with the sale order.
      */

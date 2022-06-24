@@ -11,7 +11,19 @@
                             <th>&nbsp;</th>
                         </thead>
                         <tbody>
-                            @if ($order->status >= 7)
+                            @foreach($activities as $activity)
+                                <tr>
+                                    <td>
+                                        {{ \Carbon\Carbon::parse($activity->updated_at)->toFormattedDateString() }}
+                                    </td>
+                                    <td>
+                                        {!! $activity->description.' by <b>'.$activity->causer->name.'</b>' !!}
+                                    </td>
+                                </tr>
+                            @endforeach
+
+
+{{--                             @if ($order->status >= 7)
                             <tr>
                                 <td>{{ $order->display_delivered_at }}</td><td>The order has been delivered</td>
                             </tr>
@@ -19,7 +31,6 @@
                           
                             @if ($order->status >= 4)
                             <tr>
-                                {{-- <td>{{ $order->display_dispatched_at }}</td><td>The order has been dispatched via <b>{{ $order->courier }}</b>, <b>#{{ $order->tracking_number }}</b>, and is expected on <b>{{ $order->display_due_at }}</b></td> --}}
                                 <td>{{ $order->display_dispatched_at }}</td><td>The order has been dispatched via <b>{{ $order->courier }}</b></td>
                             </tr>
                             @endif
@@ -33,8 +44,10 @@
                                 <td>{{ $order->display_blocked_at }}</td><td>The order has been blocked by <b>{{ $order->user->display_name }}</b></td>
                             </tr>
                             @endif
-                    </tbody>
-                </table>
+ --}}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

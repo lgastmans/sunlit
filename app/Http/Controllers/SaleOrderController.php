@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Models\Activity;
+
 use PDF;
 use App\Models\Dealer;
 use App\Models\Inventory;
@@ -203,10 +206,12 @@ class SaleOrderController extends Controller
         $user = Auth::user();
         if ($user->can('edit sale orders')){
             $order = new SaleOrder();
+
             $order_number_count = \Setting::get('sale_order.order_number') +1;
             $order_number = \Setting::get('sale_order.prefix').$order_number_count.\Setting::get('sale_order.suffix');
             \Setting::set('sale_order.order_number', $order_number_count);
             \Setting::save();
+
             return view('sale_orders.form', ['order' => $order, 'order_number' => $order_number, 'order_number_count' => $order_number_count ]);
         }
         return abort(403, trans('error.unauthorized'));
@@ -253,6 +258,11 @@ class SaleOrderController extends Controller
                 $order->update();
             }
 
+            activity()
+               ->performedOn($order)
+               ->withProperties(['order_number' => $order->order_number, 'status' => $order->status])
+               ->log('Created Sale Order');
+
             return redirect(route('sale-orders.cart', $order->order_number_slug)); 
         }
         return back()->withInputs($request->input())->with('error', trans('error.record_added', ['field' => 'sale order']));        
@@ -290,8 +300,14 @@ class SaleOrderController extends Controller
         if ($user->can('view sale orders')){
             $order = SaleOrder::with('state')->where('order_number_slug', '=', $order_number_slug)->first();
             $order->calculateTotals();
+
+            $activities = Activity::where('subject_id', $order->id)
+                ->where('subject_type', 'App\Models\SaleOrder')
+                ->orderBy('updated_at', 'desc')
+                ->get();
+
             if ($order)
-                return view('sale_orders.show', ['order' => $order ]);
+                return view('sale_orders.show', ['order' => $order , 'activities' => $activities]);
 
             return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'sale order']));
         }
@@ -328,6 +344,13 @@ class SaleOrderController extends Controller
             }
             $order = SaleOrder::find($id);
             $order->order_number = $request->get('order_number');
+
+            activity()
+               ->performedOn($order)
+               ->withProperties(['order_number' => $order->order_number, 'status' => $order->status])
+               ->log('Order Number updated to '.$order->order_number);
+
+
             $order->update();
             return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'field' => $request->get('field')]);
         }
@@ -339,6 +362,14 @@ class SaleOrderController extends Controller
             foreach($items as $item){
                 $order->amount += $item->total_price;
             }
+
+            /*
+            activity()
+               ->performedOn($order)
+               ->withProperties(['order_number' => $order->order_number, 'status' => $order->status])
+               ->log('Updated Sale Order Amount to '.$order->amount);
+            */
+
             $order->update();
 
             return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'field' => $request->get('field')]);
@@ -348,6 +379,12 @@ class SaleOrderController extends Controller
             $order = SaleOrder::find($id);
             $items = SaleOrderItem::where('sale_order_id', "=", $id)->get();
             $order->transport_charges = $request->get('value');
+
+            activity()
+               ->performedOn($order)
+               ->withProperties(['order_number' => $order->order_number, 'status' => $order->status])
+               ->log('Transport Charges updated to '.number_format($order->transport_charges,2));
+
             $order->update();
 
             $order->calculateTotals();
@@ -390,6 +427,11 @@ class SaleOrderController extends Controller
             $order->amount += $item->total_price; 
         }
     
+        activity()
+           ->performedOn($order)
+           ->withProperties(['order_number' => $order->order_number, 'status' => $order->status])
+           ->log('Status updated to <b>Blocked</b>');
+
         $order->update();
 
         /*
@@ -418,6 +460,12 @@ class SaleOrderController extends Controller
         $order = SaleOrder::with('items')->find($id);
         $order->booked_at = $request->get('booked_at');
         $order->status = SaleOrder::BOOKED;
+
+        activity()
+           ->performedOn($order)
+           ->withProperties(['order_number' => $order->order_number, 'status' => $order->status])
+           ->log('Status updated to <b>Booked</b>');
+
         $order->update();
 
         $inventory = new Inventory();
@@ -459,6 +507,12 @@ class SaleOrderController extends Controller
             $order->courier = $request->get('courier');
             //$order->transport_charges = $request->get('transport_charges');
             $order->status = SaleOrder::DISPATCHED;
+
+            activity()
+               ->performedOn($order)
+               ->withProperties(['order_number' => $order->order_number, 'status' => $order->status])
+               ->log('Status updated to <b>Dispatched</b>');
+
             $order->update();
 
             $inventory = new Inventory();
@@ -503,6 +557,11 @@ class SaleOrderController extends Controller
 
             $inventory = new Inventory();
             $inventory->deleteStock($order);
+
+            activity()
+               ->performedOn($order)
+               ->withProperties(['order_number' => $order->order_number, 'status' => $order->status])
+               ->log('Sale Order deleted');
 
             $order->items()->delete();
             $order->delete();
