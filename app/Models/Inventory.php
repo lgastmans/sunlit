@@ -327,6 +327,17 @@ class Inventory extends Model
         }
     }
 
+    
+    public function hasStock($warehouse_id, $product_id, $ordered)
+    {
+        $inventory = $this->where('warehouse_id', '=', $warehouse_id)->where('product_id', '=', $product_id)->first();
+
+        if ($ordered > $inventory->stock_available)
+            return false;
+
+        return true;
+    }
+
 
     /**
      * THIS FUNCTION IS OBSOLETE 

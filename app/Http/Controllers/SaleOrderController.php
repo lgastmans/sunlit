@@ -445,18 +445,28 @@ class SaleOrderController extends Controller
             //'transport_charges' => 'required'
         ]);
         $order = SaleOrder::find($id);
-        $order->dispatched_at = $request->get('dispatched_at');
-        $order->due_at = $request->get('due_at');
-        $order->tracking_number = $request->get('tracking_number');
-        $order->courier = $request->get('courier');
-        //$order->transport_charges = $request->get('transport_charges');
-        $order->status = SaleOrder::DISPATCHED;
-        $order->update();
 
-        $inventory = new Inventory();
-        $inventory->updateStock($order);
+        $check = $order->canDispatch();
+        //$check = json_decode($order->canDispatch());
+        // $res = implode(" ",$check);
+        // \Debugbar::info(">>".$res);
+        
+        if ($check['success'] == 1) {
 
-        return redirect(route('sale-orders.show', $order->order_number_slug))->with('success', 'order dispatched'); 
+            $order->dispatched_at = $request->get('dispatched_at');
+            $order->due_at = $request->get('due_at');
+            $order->tracking_number = $request->get('tracking_number');
+            $order->courier = $request->get('courier');
+            //$order->transport_charges = $request->get('transport_charges');
+            $order->status = SaleOrder::DISPATCHED;
+            $order->update();
+
+            $inventory = new Inventory();
+            $inventory->updateStock($order);
+
+            return redirect(route('sale-orders.show', $order->order_number_slug))->with('success', 'order dispatched'); 
+        }
+        return back()->with('errors', [trans('error.inventory_insufficient_stock', ['field' => $check['item']])]);
     }
 
 

@@ -76,6 +76,27 @@ class SaleOrder extends Model
         return $this->belongsTo(State::class, 'shipping_state_id');
     }
 
+    public function canDispatch()
+    {
+        $response=array();
+        $response['success'] = 1;
+        // $response['item'] = 'test';
+        //return response()->json($response);
+        
+        $inventory = new Inventory;
+
+        foreach ($this->items as $item)
+        {
+            if (!$inventory->hasStock($this->warehouse_id, $item->product_id, $item->quantity_ordered))
+            {
+                $response['success'] = 0;
+                $response['item'] = "Part number ".$item->product->part_number;
+            }
+        }
+        
+        return $response;
+    }
+
     /**
      * 
      */

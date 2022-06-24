@@ -66,6 +66,8 @@
             <div class="card-body">
                 <h4 class="header-title mb-3">Items from Order #{{ $order->order_number }}</h4>
 
+                <x-forms.errors class="mb-4" :errors="$errors" />
+
                 <div class="table-responsive">
                     <table class="table mb-0" id="sale-order-items-table">
                         <thead class="table-light">
