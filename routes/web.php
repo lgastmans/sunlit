@@ -223,6 +223,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/taxes', [TaxController::class, 'getListForSelect2'])->name('ajax.taxes');
         Route::get('/roles', [RoleController::class, 'getListForSelect2'])->name('ajax.roles');
         Route::get('/products', [ProductController::class, 'getListForSelect2'])->name('ajax.products');
+        Route::get('/freight-zones', [FreightZoneController::class, 'getListForSelect2'])->name('ajax.freightzones');
         Route::get('/products/supplier/{id}', [ProductController::class, 'getListPerSupplier'])->name('ajax.products.supplier');
         Route::get('/products/warehouse/{id}', [ProductController::class, 'getListPerWarehouse'])->name('ajax.products.warehouse');
         Route::get('/product/{id}/{warehouse_id?}', [ProductController::class, 'getById'])->name('product.json');

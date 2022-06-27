@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\State;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use \App\Http\Requests\StoreStateRequest;
 
 class StateController extends Controller
 {
@@ -126,9 +127,16 @@ class StateController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreStateRequest $request)
     {
         //
+        $validatedData = $request->validated();
+        $state = State::create($validatedData);
+        if ($state){
+            return redirect(route('states'))->with('success', trans('app.record_added', ['field' => 'state']));
+        }
+        return back()->withInputs($request->input())->with('error', trans('error.record_added', ['field' => 'state']));
+
     }
 
     /**
@@ -140,6 +148,12 @@ class StateController extends Controller
     public function show($id)
     {
         //
+        $state = State::find($id);
+        if ($state)
+            return view('states.show', ['state' => $state]);
+
+        return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'state']));
+
     }
 
     /**
@@ -151,6 +165,11 @@ class StateController extends Controller
     public function edit($id)
     {
         //
+        $state = State::find($id);
+        if ($state){
+            return view('states.form', ['state' => $state]);
+        }
+        return view('states.index');
     }
 
     /**
@@ -160,9 +179,16 @@ class StateController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreStateRequest $request, $id)
     {
         //
+        $validatedData = $request->validated();
+        $state = State::whereId($id)->update($validatedData);
+        if ($state){
+            return redirect(route('states'))->with('success', trans('app.record_edited', ['field' => 'state']));
+        }
+        return back()->withInputs($request->input())->with('error', trans('error.record_edited', ['field' => 'state']));
+
     }
 
     /**

@@ -208,4 +208,20 @@ class FreightZoneController extends Controller
         // }
         return abort(403, trans('error.unauthorized'));        
     }
+
+    /**
+     * Display a listing of the resource for select2
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return json
+     */
+    public function getListForSelect2(Request $request)
+    {
+        $query = FreightZone::query();
+        if ($request->has('q')){
+            $query->where('name', 'like', $request->get('q').'%');
+        }
+        $rows = $query->select('id', 'name as text')->get();
+        return ['results' => $rows];
+    }     
 }

@@ -123,14 +123,14 @@
                         var edit_btn = '';
                         var delete_btn = '';
 
-                        @if (Auth::user()->can('edit states'))
+                        {{-- @if (Auth::user()->can('edit states')) --}}
                             var edit_route = '{{ route("states.edit", ":id") }}';
                             edit_route = edit_route.replace(':id', data);
                             edit_btn = '<a href="' + edit_route + '" class="action-icon"> <i class="mdi mdi-pencil"></i></a>'                       
-                        @endif
-                        @if (Auth::user()->can('delete states'))
+                        {{-- @endif --}}
+                        {{-- @if (Auth::user()->can('delete states')) --}}
                             delete_btn = '<a href="" class="action-icon" id="' + data + '" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>'
-                        @endif
+                        {{-- @endif --}}
 
                         data = edit_btn +  delete_btn
                     }
