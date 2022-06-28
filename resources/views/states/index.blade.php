@@ -147,13 +147,13 @@
             
         },
     });
-
+/*
     $('#states-datatable').on('dblclick', 'tr', function () {
         var route = '{{  route("states.show", ":id") }}';
         route = route.replace(':id', table.row( this ).data().id);
         window.location.href = route;
     });
-
+*/
     $('#delete-modal').on('show.bs.modal', function (e) {
         var route = '{{ route("states.delete", ":id") }}';
         var button = e.relatedTarget;

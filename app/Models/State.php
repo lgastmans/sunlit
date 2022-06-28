@@ -21,7 +21,7 @@ class State extends Model
      */
     public function state()
     {
-        return $this->hasMany(Supplier::class);
+        return $this->hasMany(FreightZone::class);
     }
 
 }

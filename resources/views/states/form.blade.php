@@ -38,10 +38,12 @@
                     </div>
                 
                     <div class="mb-3 row">
-                        <label class="form-label" for="freightzone-select">Freight Zone</label>
-                        <select class="freightzone-select form-control" name="freight_zone_id"></select>
-                        <div class="invalid-feedback">
-                            {{ __('error.form_invalid_field', ['field' => 'warehouse' ]) }}
+                        <div class="col-xl-5">
+                            <label class="form-label" for="freightzone-select">Freight Zone</label>
+                            <select class="freightzone-select form-control" name="freight_zone_id"></select>
+                            <div class="invalid-feedback">
+                                {{ __('error.form_invalid_field', ['field' => 'warehouse' ]) }}
+                            </div>
                         </div>
                     </div>
 
