@@ -34,7 +34,8 @@ class StoreFreightZoneRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'rate_per_kg' => 'required|numeric'
+            'rate_per_kg' => 'required|numeric',
+            'properties' => 'array'
 //            'email' => 'required|email|unique:suppliers,email,'.$this->id
         ];
     }

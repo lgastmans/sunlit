@@ -32,8 +32,24 @@
                             <x-forms.input label="rate per kg" name="rate_per_kg" value="{{ old('rate_per_kg', $zone->rate_per_kg) }}" required="true"/>
                         </div>
                     </div>
-                
+
+                    <div class="row">
+                        <label>Freight Properties</label>
+                    </div>
+                    @for ($i=0; $i <= 5; $i++)
+                        <div class="row">
+                            <div class="col-md-2">
+                                <input type="text" name="properties[{{ $i }}][key]" class="form-control form-control-sm" value="{{ $zone->properties[$i]['key'] ?? '' }}">
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" name="properties[{{ $i }}][value]" class="form-control form-control-sm" value="{{ $zone->properties[$i]['value'] ?? '' }}">
+                            </div>
+                        </div>
+                    @endfor
                    
+                    <div class="mb-3 row">
+                    </div>
+
                     <button class="btn btn-primary" type="submit">@if ($zone->id) {{ __('app.edit_title', ['field' => 'zone']) }} @else {{ __('app.add_title', ['field' => 'zone']) }} @endif</button>
 
                 </form>
