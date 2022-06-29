@@ -108,13 +108,13 @@
                         <div class="mb-3 row">
                             
                             <div class="col-xl-3">
-                                <x-forms.input label="Actual Weight" name="weight_actual" value="{{ old('weight_actual', $product->weight_actual) }}" message="Please provide Actual Weight" required="false"/>
+                                <x-forms.input label="Actual Weight (kg)" name="weight_actual" value="{{ old('weight_actual', $product->weight_actual) }}" message="Please provide Actual Weight" required="false"/>
                             </div>
                             <div class="col-xl-3">
-                                <x-forms.input label="Volume Weight" name="weight_volume" value="{{ old('weight_volume', $product->weight_volume) }}" message="Please provide Volume Weight" required="false"/>
+                                <x-forms.input label="Volume Weight (kg)" name="weight_volume" value="{{ old('weight_volume', $product->weight_volume) }}" message="Please provide Volume Weight" required="false"/>
                             </div>
                             <div class="col-xl-3">
-                                <x-forms.input label="Calculated Weight" name="weight_calculated" value="{{ old('weight_calculated', $product->weight_calculated) }}" message="Please provide Calculated Weight" required="false"/>
+                                <x-forms.input label="Calculated Weight (kg)" name="weight_calculated" value="{{ old('weight_calculated', $product->weight_calculated) }}" message="Please provide Calculated Weight" required="false"/>
                             </div>
                             <div class="col-xl-3">
                                 <x-forms.input label="Model" name="model" value="{{ old('model', $product->model) }}" message="Please provide a model" required="false" />
