@@ -35,7 +35,8 @@ class SaleOrder extends Model
      */
     var $sub_total = 0;
     var $tax_total = 0;
-    var $transport_total = 0;
+    var $freight_charges = 0; // = total weight * rate per kg / zone
+    var $transport_total = 0; // = freight_charges + with tax
     var $tax_total_half = 0;
     var $total = 0;
     var $total_spellout = '';
@@ -116,11 +117,20 @@ class SaleOrder extends Model
     public function calculateTotals()
     {
         $tax = 0;
+        $rate_per_kg = 0;
 
         $this->sub_total = 0;
         $this->tax_total = 0;
-        $this->transport_total = 0;
+        $this->freight_charges = 0; 
+        $this->transport_total = 0; // = freight_charges + with tax
         $this->total = 0;
+
+        if ($this->dealer->state->freight_zone_id)
+        {
+            $zone = FreightZone::find($this->dealer->state->freight_zone_id);
+            $rate_per_kg = $zone->rate_per_kg;
+        }
+
 
         /**
          * calculate the totals
@@ -129,6 +139,7 @@ class SaleOrder extends Model
         {
             $this->sub_total += $item->quantity_ordered * $item->selling_price;
             $this->tax_total += ($item->quantity_ordered * $item->selling_price) * ($item->tax / 100);
+            $this->freight_charges += ($item->quantity_ordered * $item->product->weight_calculated) * $rate_per_kg;
 
             $tax = $item->tax;
         }

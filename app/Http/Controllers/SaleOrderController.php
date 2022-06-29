@@ -363,6 +363,8 @@ class SaleOrderController extends Controller
                 $order->amount += $item->total_price;
             }
 
+            $order->calculateTotals();
+
             /*
             activity()
                ->performedOn($order)
@@ -372,7 +374,7 @@ class SaleOrderController extends Controller
 
             $order->update();
 
-            return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'field' => $request->get('field')]);
+            return response()->json(['success'=>'true','code'=>200, 'message'=>'OK', 'field'=>$request->get('field'), 'freight_charges'=>$order->freight_charges]);
         }
 
         if ($request->get('field') == "transport_charges"){
@@ -520,7 +522,7 @@ class SaleOrderController extends Controller
 
             return redirect(route('sale-orders.show', $order->order_number_slug))->with('success', 'order dispatched'); 
         }
-        return back()->with('errors', [trans('error.inventory_insufficient_stock', ['field' => $check['item']])]);
+        return back()->withInputs($request->input())->with('error', trans('error.inventory_insufficient_stock', ['field' => $check['item']]));
     }
 
 

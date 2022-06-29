@@ -72,7 +72,8 @@ $(document).ready(function () {
         'item': false,
         '_method': 'PUT'
       },
-      success: function success(result) {//
+      success: function success(result) {
+        $("#freight").val(result.freight_charges);
       }
     });
   }
@@ -304,7 +305,7 @@ $(document).ready(function () {
               $('#item-quantity-' + existing_item_id).val(parseInt(data.item.quantity_ordered));
               var new_total = data.item.selling_price * getTaxValue(data.item.tax) * parseInt($('#item-quantity-' + existing_item_id).val()).toFixed(2);
               $('#item-total-' + existing_item_id).html(new_total.toFixed(2));
-              new_product = false;
+              var new_product = false;
             }
           });
         } else {

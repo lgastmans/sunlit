@@ -13,15 +13,18 @@ class State extends Model
     use SoftDeletes;
 
     protected $fillable = ['freight_zone_id', 'name', 'code', 'abbreviation'];
+    protected $with = ['freight_zone'];
 
     public $timestamps = false;
 
     /**
-     * Get the suppliers associated with the state.
+     * Get the freight zones associated with the state.
      */
-    public function state()
+    
+    public function freight_zone()
     {
-        return $this->hasMany(FreightZone::class);
+        return $this->belongsTo(FreightZone::class);
     }
+    
 
 }
