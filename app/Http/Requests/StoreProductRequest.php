@@ -49,16 +49,16 @@ class StoreProductRequest extends FormRequest
             'name' => 'max:255',
             'model' => 'max:255',
             'purchase_price' => 'max:255',
-            // 'minimum_quantity' => 'integer',
+            'minimum_quantity' => 'integer|nullable',
             'kw_rating' => 'max:255',
             'part_number' => 'max:255|unique:products,part_number,NULL,id,deleted_at,NULL'.$this->id,
             'notes' => 'nullable',
-            // 'cable_length_input' => 'numeric',
-            // 'cable_length_output' => 'numeric',
-            // 'weight_actual' => 'numeric',
-            // 'weight_volume' => 'numeric',
-            // 'weight_calculated' => 'numeric',
-            // 'warranty' => 'integer'
+            'cable_length_input' => 'numeric|nullable',
+            'cable_length_output' => 'numeric|nullable',
+            'weight_actual' => 'numeric|nullable',
+            'weight_volume' => 'numeric|nullable',
+            'weight_calculated' => 'numeric|nullable',
+            'warranty' => 'integer|nullable'
         ];
     }
 }
