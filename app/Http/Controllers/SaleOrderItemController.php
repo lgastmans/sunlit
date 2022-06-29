@@ -279,7 +279,7 @@ class SaleOrderItemController extends Controller
             $order->amount += $item->total_price;
         }
         $order->update();
-        return redirect(route('sale-orders.cart', $order->order_number))->with('success', trans('app.record_deleted', ['field' => 'item']));
+        return redirect(route('sale-orders.cart', $order->order_number_slug))->with('success', trans('app.record_deleted', ['field' => 'item']));
 
     }
 
