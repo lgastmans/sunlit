@@ -355,15 +355,14 @@ class SaleOrderController extends Controller
             return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'field' => $request->get('field')]);
         }
 
-        if ($request->get('field') == "amount"){
+        if (($request->get('field') == "amount") || ($request->get('field') == "quantity"))
+        {
             $order = SaleOrder::find($id);
             $items = SaleOrderItem::where('sale_order_id', "=", $id)->get();
             $order->amount = 0;
             foreach($items as $item){
                 $order->amount += $item->total_price;
             }
-
-            $order->calculateTotals();
 
             /*
             activity()
@@ -372,9 +371,15 @@ class SaleOrderController extends Controller
                ->log('Updated Sale Order Amount to '.$order->amount);
             */
 
+            /*
+                set transport_charges to calculated field 'freight_charges'
+            */
+            $order->calculateTotals();
+            $order->transport_charges = $order->freight_charges; 
+
             $order->update();
 
-            return response()->json(['success'=>'true','code'=>200, 'message'=>'OK', 'field'=>$request->get('field'), 'freight_charges'=>$order->freight_charges]);
+            return response()->json(['success'=>'true','code'=>200, 'message'=>'OK', 'field'=>$request->get('field'), 'freight_charges'=>$order->freight_charges, 'transport_charges'=>$order->transport_total]);
         }
 
         if ($request->get('field') == "transport_charges"){
@@ -434,7 +439,14 @@ class SaleOrderController extends Controller
            ->withProperties(['order_number' => $order->order_number, 'status' => $order->status])
            ->log('Status updated to <b>Blocked</b>');
 
+        /*
+            set transport_charges to calculated field 'freight_charges'
+        */
+        $order->calculateTotals();
+        $order->transport_charges = $order->freight_charges; 
+
         $order->update();
+ 
 
         /*
             - trigger stock out, update Blocked Stock (add) 

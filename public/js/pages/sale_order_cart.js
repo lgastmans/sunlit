@@ -74,6 +74,8 @@ $(document).ready(function () {
       },
       success: function success(result) {
         $("#freight").val(result.freight_charges);
+        $("#transport-charges").html(result.transport_charges);
+        console.log('update' + result.transport_charges); //$(" #total-cost ").html(result.total);                    
       }
     });
   }

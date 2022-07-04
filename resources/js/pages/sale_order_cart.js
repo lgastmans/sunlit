@@ -80,6 +80,9 @@ $(document).ready(function () {
                 },
                 success : function(result){
                     $("#freight").val(result.freight_charges);
+                    $("#transport-charges").html(result.transport_charges);
+                    console.log('update'+result.transport_charges)
+                    //$(" #total-cost ").html(result.total);                    
                 }
             });
     }
@@ -206,6 +209,7 @@ $(document).ready(function () {
                 }
             });
             //var route = '{{ route("sale-orders-items.update", ":id") }}';
+
             var route = globalSettings.sale_order_items_update;
             route = route.replace(':id', item_id);
             $.ajax({
