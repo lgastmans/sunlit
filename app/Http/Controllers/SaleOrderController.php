@@ -534,7 +534,7 @@ class SaleOrderController extends Controller
 
             return redirect(route('sale-orders.show', $order->order_number_slug))->with('success', 'order dispatched'); 
         }
-        return back()->withInputs($request->input())->with('error', trans('error.inventory_insufficient_stock', ['field' => $check['item']]));
+        return back()->withErrors([trans('error.inventory_insufficient_stock', ['field' => $check['item']])]);
     }
 
 
