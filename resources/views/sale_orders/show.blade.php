@@ -140,14 +140,13 @@
     <div class="col-lg-4">
         <div class="card">
             <div class="card-body">
-
                 <input type="hidden" name="sale_order_id" id="sale-order-id" value="{{ $order->id }}">
 
                 <h4 class="header-title mb-3">Order Summary #{{ $order->order_number }}</h4>
 
-                <a class="btn btn-success" href="{{ route('sale-orders.proforma-pdf', $order->order_number) }}" role="button" target="_blank">Export to PDF</a>
+                <a class="btn btn-success" href="{{ route('sale-orders.proforma-pdf', $order->order_number_slug) }}" role="button" target="_blank">Export to PDF</a>
 
-                <a class="btn btn-success" href="{{ route('sale-orders.proforma', $order->order_number) }}" role="button" target="_blank">View Proforma</a>
+                <a class="btn btn-success" href="{{ route('sale-orders.proforma', $order->order_number_slug) }}" role="button" target="_blank">View Proforma</a>
 
 
                 <div class="table-responsive">

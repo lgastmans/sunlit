@@ -589,28 +589,28 @@ class SaleOrderController extends Controller
     }
 
 
-    public function proforma($order_number)
+    public function proforma($order_number_slug)
     {
         $settings = \Setting::all();
 
-        $order = SaleOrder::where('order_number', '=', $order_number)->first();
+        $order = SaleOrder::where('order_number_slug', '=', $order_number_slug)->first();
         $order->calculateTotals();
         
         return view('sale_orders.view_proforma', ['order' => $order, 'settings' => $settings]);
     }
 
 
-    public function exportProformaToPdf($order_number)
+    public function exportProformaToPdf($order_number_slug)
     {
         $settings = \Setting::all();
 
-        $order = SaleOrder::where('order_number', '=', $order_number)->first();
+        $order = SaleOrder::where('order_number_slug', '=', $order_number_slug)->first();
         $order->calculateTotals();
         view()->share('order', $order);
         view()->share('settings', $settings);
         $pdf = PDF::loadView('sale_orders.proforma',  ['order'=> $order]);
 
         // download PDF file with download method
-        return $pdf->download('Proforma Invoice '.$order_number.'.pdf');
+        return $pdf->download('Proforma Invoice '.$order_number_slug.'.pdf');
     }
 }
