@@ -281,7 +281,7 @@
         </tr>
         <tr>
           <td class="label">Address</td>
-          <td class="text">{{ $order->purchase_order->supplier->address }} {{ $order->purchase_order->supplier->address2 }}</td>
+          <td class="text">{{ $order->purchase_order->supplier->address }}@if (!empty($order->purchase_order->supplier->address2)), @endif {{ $order->purchase_order->supplier->address2 }}</td>
         </tr>
         <tr>
           <td class="label">City</td>
@@ -289,7 +289,7 @@
         </tr>
         <tr>
           <td class="label">Phone</td>
-          <td class="text">{{ $order->purchase_order->supplier->phone }} {{ $order->purchase_order->supplier->phone2 }}</td>
+          <td class="text">{{ $order->purchase_order->supplier->phone }} @if (!empty($order->purchase_order->supplier->phone2)) / @endif {{ $order->purchase_order->supplier->phone2 }}</td>
         </tr>
         <tr>
           <td class="label">Email</td>
