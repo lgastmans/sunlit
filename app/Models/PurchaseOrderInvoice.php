@@ -80,6 +80,15 @@ class PurchaseOrderInvoice extends Model
     }
 
 
+    public function getDisplayCreatedAtAttribute()
+    {
+        if ($this->created_at){
+            $dt = Carbon::parse($this->created_at);
+            return $dt->toFormattedDateString(); 
+        } 
+        return "";  
+    }
+
 
     /**
      * Returns the shipped_at date for display Month Day, Year

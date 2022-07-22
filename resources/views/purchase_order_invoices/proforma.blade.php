@@ -150,6 +150,48 @@
         display: block;
         clear: both;
       }
+      #memo .title {
+        font-weight: bold;
+        font-size: 12px;
+        margin-bottom: 7px;
+      }
+      #memo .label {
+        font-style: italic;
+        font-size: 12px;
+      }
+      #memo .text {
+        font-style: normal;
+        font-size: 12px;
+      }
+
+      #client-info {
+        /*float: right;*/
+        margin-top: 10px;
+        margin-right: 10px;
+        /*min-width: 220px;*/
+      }
+      #client-info > div {
+        margin-bottom: 3px;
+      }
+      #client-info span {
+        display: block;
+      }
+      #client-info .title {
+        font-weight: bold;
+        font-size: 12px;
+        margin-bottom: 7px;
+      }
+      #client-info .client-name {
+        font-weight: bold;
+      }
+      #client-info .label {
+        font-style: italic;
+        font-size: 12px;
+      }
+      #client-info .text {
+        font-style: normal;
+        font-size: 12px;
+      }
 
     </style>
   </head>
@@ -163,8 +205,8 @@
       <table>
         <tr>
           <td>
-            <img src="/images/logo.png" alt="" height="48">
-            {{-- <img src="{{ asset('/images/logo.png') }}" alt="" height="48"> --}}
+
+            <img src="{{ public_path('images/logo.png') }}" alt="" height="48">
             
           </td>
 {{--           <td style="text-align: right;">
@@ -174,25 +216,92 @@
           </td>
  --}}        
         </tr>
+        <tr>
+          <td style="text-align: center;font-weight: bold;">
+            PURCHASE ORDER
+          </td>
+        </tr>
       </table> {{-- header --}}
 
       {{-- COMPANY INFO --}}
       <table>
         <tr>
-          <td class="company-info">
-            <span>{{ $settings['company']['name'] }}</span>
-            <div class="separator less"></div>
-            <span>{{ $settings['company']['city'] }} {{ $settings['company']['zipcode'] }}</span><br>
-            <span>{{ $settings['company']['state'] }} {{ $settings['company']['country'] }}</span><br>
-            <span>GSTIN: {{ $settings['company']['gstin'] }}</span><br>
-            <span>Email: {{ $settings['company']['email'] }}</span><br>
-            <span>Phone: {{ $settings['company']['phone'] }}</span>
-          </td>
+          <td style="width: 120px;" class="title">INVOICE TO</td>
+          <td style="width: 60%;">{{ $settings['company']['name'] }}</td>
+          <td>{{ $order->invoice_number}}</td>
+        </tr>
+        <tr>
+          <td class="label">Address</td>
+          <td class="text">{{ $settings['company']['city'] }} {{ $settings['company']['zipcode'] }}</td>
+          <td>{{ $order->display_created_at }}</td>
+        </tr>
+        <tr>
+          <td class="label">State</td>
+          <td class="text">{{ $settings['company']['state'] }}</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="label">Phone</td>
+          <td class="text">{{ $settings['company']['phone'] }}</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="label">Email</td>
+          <td class="text">{{ $settings['company']['email'] }}</td>
+        </tr>
+        <tr>
+          <td class="label">GSTIN</td>
+          <td class="text">{{ $settings['company']['gstin'] }}</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="label">Website</td>
+          <td class="text">http://sunlitfuture.in</td>
+          <td></td>
         </tr>
       </table> {{-- company info --}}
+
     </section> {{-- memo --}}
 
+
     <div class="clearfix"></div>
+
+
+    <section id="client-info">
+
+      {{-- SUPPLIER INFO --}}
+      <table>
+        <tr>
+          <td style="width: 120px;" class="title">SUPPLIER</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="label">Name</td>
+          <td class="text">{{ $order->purchase_order->supplier->company }}</td>
+        </tr>
+        <tr>
+          <td class="label">Address</td>
+          <td class="text">{{ $order->purchase_order->supplier->address }} {{ $order->purchase_order->supplier->address2 }}</td>
+        </tr>
+        <tr>
+          <td class="label">City</td>
+          <td class="text">{{ $order->purchase_order->supplier->city }} {{ $order->purchase_order->supplier->zip_code }}</td>
+        </tr>
+        <tr>
+          <td class="label">Phone</td>
+          <td class="text">{{ $order->purchase_order->supplier->phone }} {{ $order->purchase_order->supplier->phone2 }}</td>
+        </tr>
+        <tr>
+          <td class="label">Email</td>
+          <td class="text">{{ $order->purchase_order->supplier->email }}</td>
+        </tr>
+        <tr>
+          <td class="label">Contact Person</td>
+          <td class="text">{{ $order->purchase_order->supplier->contact_person }}</td>
+        </tr>
+      </table>
+
+    </section>  {{-- client-info --}}
 
 
   </div> {{-- container --}}
