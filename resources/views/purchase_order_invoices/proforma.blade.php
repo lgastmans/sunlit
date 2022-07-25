@@ -193,6 +193,115 @@
         font-size: 12px;
       }
 
+      #items {
+        margin-top: 10px;
+      }
+      #items .first-cell, #items table th:first-child, #items table td:first-child {
+        width: 10px;
+        text-align: right;
+      }
+      #items table {
+        border-collapse: separate;
+        /*width: 100%;*/
+      }
+      #items table th span:empty, #items table td span:empty {
+        display: inline-block;
+      }
+      #items table th {
+        font-weight: bold;
+        padding: 5px;
+        text-align: right;
+        border-bottom: 2px solid #898989;
+      }
+      /*#items table th:nth-child(2) {
+        width: 20%;
+        text-align: left;
+      }
+      */#items table th:last-child {
+        text-align: right;
+      }
+      #items table td {
+        border-bottom: 1px solid #C4C4C4;
+        padding: 4px;
+        text-align: right;
+      }
+      #items table td:first-child {
+        text-align: left;
+      }
+      /*#items table td:nth-child(2) {
+        text-align: left;
+      }
+      */
+      #sums {
+        float: right;
+        margin-top: 10px;
+        page-break-inside: avoid;
+      }
+      #sums table tr th, #sums table tr td {
+        min-width: 100px;
+        padding: 10px;
+        text-align: right;
+      }
+      #sums table tr th {
+        text-align: left;
+        padding-right: 25px;
+      }
+      #sums table tr.amount-total th {
+        text-transform: uppercase;
+        color: #396E00;
+      }
+      #sums table tr.amount-total th, #sums table tr.amount-total td {
+        font-weight: bold;
+        font-size: 16px;
+        border-top: 2px solid #898989;
+      }
+      #sums table tr:last-child th {
+        text-transform: uppercase;
+        color: #396E00;
+      }
+      #sums table tr:last-child th, #sums table tr:last-child td {
+        font-size: 16px;
+        font-weight: bold;
+      }
+
+
+      #terms {
+        font-family: Verdana, sans-serif;
+        font-style: normal;
+        font-size: 12px;
+        margin-top: 20px;
+        page-break-inside: avoid;
+      }
+      #terms > span {
+        font-weight: bold;
+      }
+      #terms > div {
+        color: #396E00;
+        font-size: 12px;
+        min-height: 25px;
+        width: 100%;
+      /*max-width: 500px;*/
+      }
+      #terms table td {
+        vertical-align: top;
+      }
+
+      #signatory {
+        margin-top: 10px;
+        /*margin-right: 70px;*/
+        
+      }
+      #signatory table {
+        border-collapse: separate;
+        border-style: solid;
+        /*width: 100%;*/
+      }
+      #signatory table td {
+        /*border-bottom: 1px solid #C4C4C4;*/
+        padding: 12px;
+        text-align: left;
+      }
+
     </style>
   </head>
 
@@ -302,6 +411,132 @@
       </table>
 
     </section>  {{-- client-info --}}
+
+
+    <section id="items">
+
+      {{-- ITEM DETAILS --}}
+      <table>
+        <thead>
+          <tr>
+            <th style="vertical-align: bottom;">Sr.<br>No.</th> {{-- Dummy cell for the row number and row commands --}}
+            <th style="vertical-align: bottom;text-align: left;width:35%;">Part Number</th>
+            <th style="vertical-align: bottom;text-align: left;width:35%;">Description</th>
+            <th style="vertical-align: bottom;">Qty</th>
+            <th style="vertical-align: bottom;">Unit Price USD</th>
+            <th style="vertical-align: bottom;">Total Price USD</th>
+          </tr>
+        </thead>
+        
+        <tbody>
+          {{-- 
+            The list of items of the sales order
+          --}}
+          @foreach ($order->items as $item)
+
+            <tr data-iterate="item">
+
+              <td>{{ $loop->iteration }}</td> <!-- Don't remove this column as it's needed for the row commands -->
+
+              <td style="text-align: left;"><span>{{ $item->product->part_number }} </span></td>
+
+              <td style="text-align: left;"><span>{{ $item->product->notes }}</span></td>
+
+              <td><span>{{ $item->quantity_shipped }}</span></td>
+
+              <td><span>{{ $item->buying_price }}</span></td>
+
+              <td><span>@php echo number_format($item->quantity_shipped * $item->buying_price,2,'.',','); @endphp</span></td>
+
+            </tr>
+            
+            @php
+              $last_item = $loop->count + 1;
+            @endphp
+
+          @endforeach
+
+        </tbody>
+
+        <tfoot>
+          {{-- 
+            The column totals 
+          --}}
+          <tr>
+            <th colspan="5">Grand Total</th>
+            <th style="text-align: right;">{{ $order->amount_usd }}</th>
+          </tr>
+
+        </tfoot> 
+      </table>
+
+    </section> {{-- items --}}
+
+    <section id="terms">
+      <table>
+        <tr>
+          <th colspan="3">Terms of Delivery and Payment</th>
+        </tr>
+        <tr>
+          <td width="5%">1</td>
+          <td width="25%">Delivery :</td>
+          <td>Item 1 in Q4 / Item 2 in Q3 / Item 3 in Q4 / Item 4 in Q4 / Item 5 in Q4 / Item 6 in Q4 / Item 7 & 8 in Q4</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Requested date of Delivery</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Shipment Terms (Inco Term 2010)</td>
+          <td>CIF-FTWZ-Chennai,</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Payment Terms:</td>
+          <td>60 Days from SolarEdge Invoice date.</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>Condition:</td>
+          <td>This goods are only used for Solar Power Generating Systems and have no other Commercial aspect<br>
+            Please mention heading "Solar Inverters" under Part number description. (Auroville Foundation)<br>
+            Please mention IE Code 0488003440 & Branch Code: 31 in all the documents.<br>
+            Mention terms CIF- FTWZ-Chennai<br>
+            Please send warranty certficates and test reports.
+          </td>
+        </tr>
+          
+      </table>
+
+      <p>
+        <span>Items sold under the purchase order (PO) shall be subject to SolarEdge warranty terms that may be located at https://www.solaredge.com/sites/default/files/solaredge-warranty-May-2021.pdf.</span><br>
+        <span>This order is approved in accordance with and subject to the terms & Conditions of SolarEdge, which can be found at https://www.solaredge.com/sites/default/files/commercial-terms-and-conditions-</span><br>
+      </p>
+
+    </section> {{-- terms --}}
+
+
+    <section id="signatory">
+      <table>
+        <tr>
+          <td>Name of the Signatory:</td>
+          <td></td>
+          <td style="text-align: right;">For Sunlit Future</td>
+        </tr>
+        <tr>
+          <td>Designation / Status:</td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Date:</td>
+          <td></td>
+          <td style="text-align: right;vertical-align: bottom;">Authorized Signatory</td>
+        </tr>
+      </table>
+    </section> {{-- signatory --}}
 
 
   </div> {{-- container --}}

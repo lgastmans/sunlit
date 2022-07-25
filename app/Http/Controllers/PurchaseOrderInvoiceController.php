@@ -420,6 +420,9 @@ class PurchaseOrderInvoiceController extends Controller
         $order = PurchaseOrderInvoice::where('invoice_number', '=', $invoice_number)->first();
         //$order->calculateTotals();
         
+        view()->share('order', $order);
+        view()->share('settings', $settings);
+
         return view('purchase_order_invoices.view_proforma', ['order' => $order, 'settings' => $settings]);
     }
 

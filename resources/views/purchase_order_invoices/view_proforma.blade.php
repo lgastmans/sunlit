@@ -9,5 +9,5 @@
 @endsection
 
 @section('content')
-    {{-- @include('purchase_order_invoices.proforma') --}}
+    @include('purchase_order_invoices.proforma')
 @endsection

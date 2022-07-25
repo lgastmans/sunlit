@@ -71,7 +71,9 @@
             <div class="card-body">
                 <h4 class="header-title mb-3">Invoice Summary #{{ $invoice->invoice_number }}</h4>
 
-                <a class="btn btn-success" href="{{ route('purchase-order-invoices.proforma-pdf', $invoice->invoice_number) }}" role="button" target="_blank">Export to PDF</a>
+                <a class="btn btn-success" href="{{ route('purchase-order-invoices.proforma-pdf', $invoice->invoice_number_slug) }}" role="button" target="_blank">Export to PDF</a>
+                <a class="btn btn-success" href="{{ route('purchase-order-invoices.proforma', $invoice->invoice_number_slug) }}" role="button" target="_blank">View Proforma</a>
+
 
                 <div class="table-responsive">
                     <table class="table mb-0">
