@@ -51,10 +51,11 @@ class importDealers extends Command
                 email           | email can be null
                 gstin           | gstin can be null
                 address         | address not null
-
+                address2        | address2 can be null
+                pin             | can be null
         */
 
-        $file = public_path('dealers-2021.csv');
+        $file = public_path('dealers-import.csv');
         $dataArr = $this->csvToArray($file);
 
         for ($i = 0; $i < count($dataArr); $i ++)
@@ -124,8 +125,15 @@ class importDealers extends Command
                     else
                         $data[$i]['address'] = $row[8];
 
-                    // as the following columns are not given in the csv file and are required, set default values
-                    $data[$i]['zip_code'] = ' ';
+                    if ((empty($row[9])) || (is_null($row[9])))
+                        $data[$i]['address2'] = '';
+                    else
+                        $data[$i]['address2'] = $row[9];
+
+                    if ((empty($row[10])) || (is_null($row[10])))
+                        $data[$i]['zip_code'] = ' ';
+                    else
+                        $data[$i]['zip_code'] = $row[10];
 
                     $i++;
                 }
