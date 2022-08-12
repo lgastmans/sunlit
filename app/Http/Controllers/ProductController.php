@@ -357,28 +357,23 @@ class ProductController extends Controller
     /*
         import products csv file from public folder
     */
-    public function importCsv()
+    public function importCsv(Request $request)
     {
         /*
-            File columns are (in order):
-
-            Unique Code 
-            Part Number 
-            Description 
-            Category    
-            Supplier    
-            Model   
-            Min Qty
-            "Cable Length (input in m)"
-            "Cable Length (output in m)"
-            KW Rating
-            Act Wt(kg)
-            Vol Wt(kg)
-            Cal Wt
-            Std Warranty(yrs)
-            Notes
-            Stock
+            CSV file columns are (in order):
+                serial no
+                notes (description)
+                part number
+                stock
         */
+
+
+        /*
+            set manually:
+                Inverter
+                Power Optimizer
+        */
+        $category = 'Inverter'; //$request->query('category');
 
         $file = public_path('products-import.csv');
 
@@ -393,27 +388,37 @@ class ProductController extends Controller
 
         for ($i = 0; $i < count($dataArr); $i ++)
         {
-            $categories = Category::firstOrCreate([
-                'name' => $dataArr[$i]['category_id']
-            ]);
+            // $categories = Category::firstOrCreate([
+            //     'name' => $dataArr[$i]['category_id']
+            // ]);
+            /*
+                category should be passed in the route
+                /products/import/{category}
+            */
+            $categories = Category::where('name', '=', $category)->first();
             $dataArr[$i]['category_id'] = $categories->id;
 
-            $suppliers = Supplier::firstOrCreate([
-                'company' => $dataArr[$i]['supplier_id'],
-                'address' => 'address',
-                'city' => 'city',
-                'zip_code' => 'zip code',
-                'phone' => 'phone',
-                'currency' => 'inr',
-                'country' => 'country'
-            ]);
+            // $suppliers = Supplier::firstOrCreate([
+            //     'company' => $dataArr[$i]['supplier_id'],
+            //     'address' => 'address',
+            //     'city' => 'city',
+            //     'zip_code' => 'zip code',
+            //     'phone' => 'phone',
+            //     'currency' => 'inr',
+            //     'country' => 'country'
+            // ]);
+            /*
+                set to SolarEdge - this has to be in the db
+            */
+            $suppliers = Supplier::where('company', '=', 'SolarEdge')->first();
             $dataArr[$i]['supplier_id'] = $suppliers->id;
 
             $dataArr[$i]['tax_id'] = $taxes->id;
 
             /*
                 as the 'stock' array key is not a column in Product
-                it needs to be removed
+                it needs to be removed so that it can be saved
+                by the firstOrCreate function below
             */
             $stock = $dataArr[$i]['stock'];
             unset($dataArr[$i]['stock']);
@@ -469,6 +474,12 @@ class ProductController extends Controller
                 if (strpos($row[0], 'UI') !== false)
                     continue;
                 else {
+                    
+                    $data[$i]['notes'] = $row[1];
+                    $data[$i]['part_number'] = ($row[2] != "") ? $row[2] : "no-part-number___".time();
+                    $data[$i]['stock'] = intval($row[3]);
+
+                    /*
                     $data[$i]['code'] = $row[1];
                     $data[$i]['part_number'] = ($row[1] != "") ? $row[1] : "no-part-number___".time();
                     $data[$i]['name'] = $row[1];
@@ -516,12 +527,13 @@ class ProductController extends Controller
                     else
                         $data[$i]['warranty'] = $row[13];
 
-                    $data[$i]['notes'] = $row[2];
-                    $data[$i]['stock'] = intval($row[15]);
+                    $data[$i]['notes'] = $row[1];
+                    $data[$i]['stock'] = intval($row[3]);
                     // as tax is not given in the csv file
                     // the tax_id is initialized in the importCSV function
                     $data[$i]['tax_id'] = 0;
                     $data[$i]['purchase_price'] = 0;
+                    */
 
                     $i++;
                 }

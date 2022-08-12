@@ -37,6 +37,11 @@ class ImportInventory extends Command
      */
     public function handle()
     {
+        /*
+            still to be coded as a command (code below is from Dealers command)
+            right now the import command is in the ProductController
+            and run through the route /products/import
+        */
         return 0;
     }
 
