@@ -209,8 +209,6 @@ class SaleOrderController extends Controller
 
             $order_number_count = \Setting::get('sale_order.order_number') +1;
             $order_number = \Setting::get('sale_order.prefix').$order_number_count.\Setting::get('sale_order.suffix');
-            \Setting::set('sale_order.order_number', $order_number_count);
-            \Setting::save();
 
             return view('sale_orders.form', ['order' => $order, 'order_number' => $order_number, 'order_number_count' => $order_number_count ]);
         }
@@ -257,6 +255,10 @@ class SaleOrderController extends Controller
                 }
                 $order->update();
             }
+
+            $order_number_count = \Setting::get('sale_order.order_number') +1;
+            \Setting::set('sale_order.order_number', $order_number_count);
+            \Setting::save();
 
             activity()
                ->performedOn($order)
