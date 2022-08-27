@@ -19,6 +19,7 @@ use \App\Http\Requests\StorePurchaseOrderRequest;
 
 class PurchaseOrderController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -242,9 +243,6 @@ class PurchaseOrderController extends Controller
 
             $order_number_count = \Setting::get('purchase_order.order_number') +1;
             $order_number = \Setting::get('purchase_order.prefix').$order_number_count.\Setting::get('purchase_order.suffix');
-            \Setting::set('purchase_order.order_number', $order_number_count);
-            \Setting::save();
-
 
             return view('purchase_orders.form', ['purchase_order' => $order, 'order_number' => $order_number, 'order_number_count' => $order_number_count ]);
         }
@@ -262,6 +260,11 @@ class PurchaseOrderController extends Controller
         $validatedData = $request->validated();
         $order = PurchaseOrder::create($validatedData);
         if ($order) {
+
+            $order_number_count = \Setting::get('purchase_order.order_number') +1;
+
+            \Setting::set('purchase_order.order_number', $order_number_count);
+            \Setting::save();
 
             activity()
                ->performedOn($order)
