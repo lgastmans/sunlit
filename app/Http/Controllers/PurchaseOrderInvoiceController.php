@@ -338,7 +338,7 @@ class PurchaseOrderInvoiceController extends Controller
         $invoice->updateItemsBuyingPrice($id);
 
 
-        return redirect(route('purchase-order-invoices.show', $invoice->invoice_number))->with('success', 'order cleared'); 
+        return redirect(route('purchase-order-invoices.show', $invoice->invoice_number_slug))->with('success', 'order cleared'); 
     }
 
     /**
@@ -365,7 +365,7 @@ class PurchaseOrderInvoiceController extends Controller
 
         $inventory->updateStock($invoice);
 
-        return redirect(route('purchase-order-invoices.show', $invoice_number))->with('success', 'order received'); 
+        return redirect(route('purchase-order-invoices.show', $invoice->invoice_number_slug))->with('success', 'order received'); 
     }
 
     /**
@@ -399,7 +399,7 @@ class PurchaseOrderInvoiceController extends Controller
 
         $invoice->updateItemsPaidPrice($id);
 
-        return redirect(route('purchase-order-invoices.show', $invoice_number))->with('success', 'order received'); 
+        return redirect(route('purchase-order-invoices.show', $invoice->invoice_number_slug))->with('success', 'order received'); 
     }
 
     /**
