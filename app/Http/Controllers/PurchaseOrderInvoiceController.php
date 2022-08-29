@@ -413,11 +413,11 @@ class PurchaseOrderInvoiceController extends Controller
         //
     }
 
-    public function proforma($invoice_number)
+    public function proforma($invoice_number_slug)
     {
         $settings = \Setting::all();
 
-        $order = PurchaseOrderInvoice::where('invoice_number', '=', $invoice_number)->first();
+        $order = PurchaseOrderInvoice::where('invoice_number_slug', '=', $invoice_number_slug)->first();
         //$order->calculateTotals();
         
         view()->share('order', $order);
@@ -427,17 +427,17 @@ class PurchaseOrderInvoiceController extends Controller
     }
 
 
-    public function exportProformaToPdf($invoice_number)
+    public function exportProformaToPdf($invoice_number_slug)
     {
         $settings = \Setting::all();
 
-        $order = PurchaseOrderInvoice::where('invoice_number', '=', $invoice_number)->first();
+        $order = PurchaseOrderInvoice::where('invoice_number_slug', '=', $invoice_number_slug)->first();
         //$order->calculateTotals();
         view()->share('order', $order);
         view()->share('settings', $settings);
         $pdf = PDF::loadView('purchase_order_invoices.proforma',  ['order'=> $order]);
 
         // download PDF file with download method
-        return $pdf->download('Purchase Order Invoice '.$invoice_number.'.pdf');
+        return $pdf->download('Purchase Order Invoice '.$invoice_number_slug.'.pdf');
     }    
 }
