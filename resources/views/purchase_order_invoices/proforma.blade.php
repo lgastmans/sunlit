@@ -337,12 +337,12 @@
         <tr>
           <td style="width: 120px;" class="title">INVOICE TO</td>
           <td style="width: 60%;">{{ $settings['company']['name'] }}</td>
-          <td>{{ $order->invoice_number}}</td>
+          <td class="title"># {{ $order->invoice_number}}</td>
         </tr>
         <tr>
           <td class="label">Address</td>
           <td class="text">{{ $settings['company']['city'] }} {{ $settings['company']['zipcode'] }}</td>
-          <td>{{ $order->display_created_at }}</td>
+          <td class="title">{{ $order->display_created_at }}</td>
         </tr>
         <tr>
           <td class="label">State</td>
