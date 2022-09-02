@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section('title')
-    @parent() | SO #{{ $order->order_number }}
+    @parent() | PI #{{ $order->order_number }}
 @endsection
 
 @section('page-title')
-    Sale Order #{{ $order->order_number}}
+    Proforma Invoice #{{ $order->order_number}}
 @endsection
 
 @section('content')
@@ -64,7 +64,7 @@
     <div class="col-lg-8">
         <div class="card">
             <div class="card-body">
-                <h4 class="header-title mb-3">Items from Order #{{ $order->order_number }}</h4>
+                <h4 class="header-title mb-3">Items from PI #{{ $order->order_number }}</h4>
 
                 <x-forms.errors class="mb-4" :errors="$errors" />
 
@@ -142,7 +142,7 @@
             <div class="card-body">
                 <input type="hidden" name="sale_order_id" id="sale-order-id" value="{{ $order->id }}">
 
-                <h4 class="header-title mb-3">Order Summary #{{ $order->order_number }}</h4>
+                <h4 class="header-title mb-3">PI Summary #{{ $order->order_number }}</h4>
 
                 <a class="btn btn-success" href="{{ route('sale-orders.proforma-pdf', $order->order_number_slug) }}" role="button" target="_blank">Export to PDF</a>
 
@@ -251,7 +251,7 @@
                 @method("DELETE")
                 @csrf()
                 <div class="modal-header modal-colored-header bg-danger">
-                    <h4 class="modal-title" id="delete-modalLabelOrder">Delete Sale Order {{ $order->order_number }}</h4>
+                    <h4 class="modal-title" id="delete-modalLabelOrder">Delete Proforma Invoice {{ $order->order_number }}</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
                 </div>
                 <div class="modal-body">

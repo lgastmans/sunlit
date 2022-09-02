@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section('title')
-    @parent() | Sale #{{ $order->order_number }}
+    @parent() | PI #{{ $order->order_number }}
 @endsection
 
 @section('page-title')
-    Sale Order <span class="order-number">#{{ $order->order_number }}</span>
+    Proforma Invoice <span class="order-number">#{{ $order->order_number }}</span>
 @endsection
 
 @section('content')
@@ -245,7 +245,7 @@
                 @method("DELETE")
                 @csrf()
                 <div class="modal-header modal-colored-header bg-danger">
-                    <h4 class="modal-title" id="delete-modalLabelOrder">Delete Sale Order {{ $order->order_number }}</h4>
+                    <h4 class="modal-title" id="delete-modalLabelOrder">Delete Proforma Invoice {{ $order->order_number }}</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
                 </div>
                 <div class="modal-body">

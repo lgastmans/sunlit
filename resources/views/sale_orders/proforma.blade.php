@@ -4,7 +4,7 @@
   <head>
 
     <meta charset="utf-8">
-    <title>Sunlit Future - Sale Order</title>
+    <title>Sunlit Future - Proforma Invoice</title>
     
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">

@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('title')
-    @parent() | Create a Sale Order
+    @parent() | Create a Proforma Invoice
 @endsection
 
-@section('page-title', 'Create a Sale Order')
+@section('page-title', 'Create a Proforma Invoice')
 
 @section('content')
 
