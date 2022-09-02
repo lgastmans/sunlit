@@ -122,7 +122,7 @@
                 <div class="card-body">
                     <div class="row ">
                         <div class="col-sm-12">
-                            <h4 class="mb-4">Orders</h4>
+                            <h4 class="mb-4">Purchase Orders</h4>
                                 <div class="mb-3 row">
                                     <div class="mt-sm-3 mt-xl-0 col-xl-4">
                                         <label class="form-label" for="po_prefix">PO Prefix</label>
@@ -144,21 +144,32 @@
                                     </div>
                                     
                                 </div>
+                        </div><!-- end col-->
+                    </div>
+                </div> <!-- end card-body-->
+            </div> <!-- end card-->
+
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="row ">
+                        <div class="col-sm-12">
+                            <h4 class="mb-4">Proforma Invoices</h4>
                                 <div class="mb-3 row">
                                     <div class="mt-sm-3 mt-xl-0 col-xl-4">
-                                        <label class="form-label" for="so_prefix">SO Prefix</label>
+                                        <label class="form-label" for="so_prefix">PI Prefix</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control" name="sale_order__prefix" id="so_prefix" placeholder="" value="{{ $settings['sale_order']['prefix'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
                                         </div>
                                     </div>
                                     <div class="mt-sm-3 mt-xl-0 col-xl-4">
-                                        <label class="form-label" for="so_suffix">SO Suffix</label>
+                                        <label class="form-label" for="so_suffix">PI Suffix</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control" name="sale_order__suffix" id="so_suffix" placeholder="" value="{{ $settings['sale_order']['suffix'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
                                         </div>
                                     </div>
                                     <div class="mt-sm-3 mt-xl-0 col-xl-4">
-                                        <label class="form-label" for="so_order_number">SO Number</label>
+                                        <label class="form-label" for="so_order_number">PI Number</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control" name="sale_order__order_number" id="so_order_number" placeholder="" value="{{ $settings['sale_order']['order_number'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
                                         </div>
