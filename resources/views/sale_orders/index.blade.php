@@ -94,7 +94,7 @@
         paging: false,
         buttons: [
             {
-                text: '<i class="mdi mdi-plus-circle me-2"></i> {{ __('app.add_title', ['field' => 'sale order']) }}',
+                text: '<i class="mdi mdi-plus-circle me-2"></i> {{ __('app.add_title', ['field' => 'proforma invoice']) }}',
                 className: 'btn btn-light   ',
                 action: function ( e, dt, node, config ) {
                     window.location.href="{{ route('sale-orders.create') }}"

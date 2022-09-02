@@ -13,7 +13,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="row mb-2">
-                    <p>{{ __('app.create_title', ['field' => 'sale order']) }} </p>
+                    <p>{{ __('app.create_title', ['field' => 'proforma invoice']) }} </p>
                 </div>
                 <x-forms.errors class="mb-4" :errors="$errors" />
                     <form action="{{ route('sale-orders.store') }}" method="POST" class="needs-validation" novalidate>
@@ -45,7 +45,7 @@
                             </div>
                         </div>
                     
-                        <button class="btn btn-primary" type="submit">{{ __('app.create_title', ['field' => 'sale order']) }}</button>
+                        <button class="btn btn-primary" type="submit">{{ __('app.create_title', ['field' => 'proforma invoice']) }}</button>
                     </form>
                 </div>
             </div> <!-- end card-body-->
