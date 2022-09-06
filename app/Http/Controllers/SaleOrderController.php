@@ -263,7 +263,7 @@ class SaleOrderController extends Controller
             activity()
                ->performedOn($order)
                ->withProperties(['order_number' => $order->order_number, 'status' => $order->status])
-               ->log('Created Sale Order');
+               ->log('Created Proforma Invoice');
 
             return redirect(route('sale-orders.cart', $order->order_number_slug)); 
         }
@@ -350,7 +350,7 @@ class SaleOrderController extends Controller
             activity()
                ->performedOn($order)
                ->withProperties(['order_number' => $order->order_number, 'status' => $order->status])
-               ->log('Order Number updated to '.$order->order_number);
+               ->log('Proforma Invoice updated to '.$order->order_number);
 
 
             $order->update();
