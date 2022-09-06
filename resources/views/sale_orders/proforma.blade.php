@@ -611,7 +611,7 @@ font-weight: bold;
                 <td>@php echo number_format(($order->transport_charges/2) * ($item->tax)/100, 2); @endphp</td>
               @else
                 <td>{{ $item->tax }}%</td>
-                <td>{{ $order->transport_charges }}</td>
+                <td>{{ $order->transport_tax_amount }}</td>
               @endif
           </tr>
 

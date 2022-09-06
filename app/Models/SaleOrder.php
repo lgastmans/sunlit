@@ -36,6 +36,7 @@ class SaleOrder extends Model
     var $tax_total = 0;
     var $freight_charges = 0; // = total weight * rate per kg / zone
     var $transport_total = 0; // = freight_charges + with tax
+    var $transport_tax_amount = 0;
     var $tax_total_half = 0;
     var $total = 0;
     var $total_spellout = '';
@@ -150,7 +151,8 @@ class SaleOrder extends Model
          * add the Transport Charges to the totals
          */
         $this->sub_total += $this->transport_charges;
-        $this->transport_total = $this->transport_charges + ($this->transport_charges * $tax / 100);
+        $this->transport_tax_amount = ($this->transport_charges * $tax / 100);
+        $this->transport_total = $this->transport_charges + $this->transport_tax_amount;
         $this->tax_total += $this->transport_charges * $tax / 100;
 
         $this->total = $this->sub_total + $this->tax_total;
@@ -174,6 +176,7 @@ class SaleOrder extends Model
         $this->sub_total = $fmt->formatCurrency($this->sub_total, "INR");
         $this->tax_total = $fmt->formatCurrency($this->tax_total, "INR");
         $this->transport_total = $fmt->formatCurrency($this->transport_total, "INR");
+        $this->transport_tax_amount = $fmt->formatCurrency($this->transport_tax_amount, "INR");
         $this->tax_total_half = $fmt->formatCurrency($this->tax_total_half, "INR");
         $this->total = $fmt->formatCurrency($this->total, "INR");
 
