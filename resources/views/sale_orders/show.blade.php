@@ -202,7 +202,7 @@
                         <div class="col-xl-6">
                             <label class="form-label">&nbsp;</label>
                             <div class="input-group">
-                                <a class="btn btn-success" href="#" role="button" id="btn_transport_charges">Save Transport Charges</a>
+                                {{-- <a class="btn btn-success" href="#" role="button" id="btn_transport_charges">Save Transport Charges</a> --}}
                                 {{-- <button class="col-lg-12 text-center btn btn-success" id="btn_transport_charges" name="transport_charges">Save Transport Charges</button> --}}
                             </div>
                         </div>
@@ -333,9 +333,10 @@
             });
 
 
-            $("#btn_transport_charges").on('click', function(e) {
+            //$("#btn_transport_charges").on('click', function(e) {
+            $("#freight").blur(function() {
 
-                e.preventDefault();
+                //e.preventDefault();
 
                 $.ajaxSetup({
                     headers: {
