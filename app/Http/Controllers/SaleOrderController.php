@@ -613,6 +613,6 @@ class SaleOrderController extends Controller
         $pdf = PDF::loadView('sale_orders.proforma',  ['order'=> $order]);
 
         // download PDF file with download method
-        return $pdf->download('Proforma Invoice '.$order_number_slug.'.pdf');
+        return $pdf->download('Proforma Invoice '.$order_number_slug.' - '.$order->shipping_company.'.pdf');
     }
 }
