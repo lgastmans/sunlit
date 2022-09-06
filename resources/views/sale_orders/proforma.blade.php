@@ -340,10 +340,12 @@ font-weight: bold;
 }
 
 .payment-info {
-	color: #888;
+	color: black; /*#888;*/
+  font-weight: normal;
 	font-size: 12px;
 	margin-top: 20px;
 	width: 100%;
+  text-align: left;
 	/*max-width: 440px;*/
 }
 .payment-info div {
