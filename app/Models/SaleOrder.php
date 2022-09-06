@@ -119,6 +119,7 @@ class SaleOrder extends Model
         $rate_per_kg = 0;
 
         $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
+        $fmt->setSymbol(NumberFormatter::CURRENCY_SYMBOL, '');
 
         $this->sub_total = 0;
         $this->tax_total = 0;
