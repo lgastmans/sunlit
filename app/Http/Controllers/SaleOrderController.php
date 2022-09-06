@@ -231,7 +231,7 @@ class SaleOrderController extends Controller
              */
             $dealer = Dealer::find($order->dealer_id);
             if ($dealer){
-                if ($dealer->has_shipping_address){
+                if (!$dealer->has_shipping_address){
                     $order->shipping_company = $dealer->shipping_company;
                     $order->shipping_gstin = $dealer->shipping_gstin;
                     $order->shipping_contact_person =  $dealer->shipping_contact_person;
@@ -243,7 +243,7 @@ class SaleOrderController extends Controller
                     $order->shipping_state_id = $dealer->shipping_state_id;
                 }
                 else {
-                    $order->shipping_company = $dealer->compamy;
+                    $order->shipping_company = $dealer->company;
                     $order->shipping_gstin = $dealer->gstin;
                     $order->shipping_contact_person = $dealer->contact_person;
                     $order->shipping_phone =  $dealer->phone;
