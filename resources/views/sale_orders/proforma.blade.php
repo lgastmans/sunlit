@@ -341,7 +341,7 @@ font-weight: bold;
 
 .payment-info {
 	color: black; /*#888;*/
-  font-weight: normal;
+  font-weight: bold;
 	font-size: 12px;
 	margin-top: 20px;
 	width: 100%;
@@ -681,7 +681,7 @@ font-weight: bold;
     <section id="signatory">
       <table>
         <tr>
-          <td>Name of the Signatory:</td>
+          <td>Prepared By:</td>
           <td></td>
           <td style="text-align: right;">For Sunlit Future</td>
         </tr>
