@@ -683,7 +683,7 @@ font-weight: bold;
         <tr>
           <td>Prepared By:</td>
           <td></td>
-          <td style="text-align: right;">For Sunlit Future</td>
+          <td style="text-align: right;">{{ $order->user->name }} - for Sunlit Future</td>
         </tr>
         <tr>
           <td>Designation / Status:</td>
