@@ -2,7 +2,7 @@
     <div class="col-lg-6">
         <div class="card">
             <div class="card-body">
-                <h4 class="header-title mb-3">Order log</h4>
+                <h4 class="header-title mb-3">Proforma Invoice log</h4>
 
                 <div class="table-responsive">
                     <table class="table table-sm table-centered mb-0">
