@@ -118,6 +118,8 @@ class SaleOrder extends Model
         $tax = 0;
         $rate_per_kg = 0;
 
+        $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
+
         $this->sub_total = 0;
         $this->tax_total = 0;
         $this->freight_charges = 0; 
@@ -162,11 +164,17 @@ class SaleOrder extends Model
         $this->total_spellout = $this->expandAmount($this->total);
 
 
-        $this->sub_total = number_format($this->sub_total, 2);
-        $this->tax_total = number_format($this->tax_total, 2);
-        $this->transport_total = number_format($this->transport_total, 2);
-        $this->tax_total_half = number_format($this->tax_total_half, 2);
-        $this->total = number_format($this->total, 2);
+        //$this->sub_total = number_format($this->sub_total, 2);
+        //$this->tax_total = number_format($this->tax_total, 2);
+        //$this->transport_total = number_format($this->transport_total, 2);
+        //$this->tax_total_half = number_format($this->tax_total_half, 2);
+        //$this->total = number_format($this->total, 2);
+
+        $this->sub_total = $fmt->formatCurrency($this->sub_total, "INR");
+        $this->tax_total = $fmt->formatCurrency($this->tax_total, "INR");
+        $this->transport_total = $fmt->formatCurrency($this->transport_total, "INR");
+        $this->tax_total_half = $fmt->formatCurrency($this->tax_total_half, "INR");
+        $this->total = $fmt->formatCurrency($this->total, "INR");
 
         return true;
 
@@ -175,7 +183,7 @@ class SaleOrder extends Model
 
     static function expandAmount($amount) {
 
-        $fmt = new NumberFormatter("en", NumberFormatter::SPELLOUT);
+        $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::SPELLOUT);
 
         if (strpos($amount,'.') !== false) {
 
