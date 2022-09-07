@@ -429,8 +429,8 @@ font-weight: bold;
           <td></td>
         </tr>
         <tr>
-          <td style="text-align: right;"><span>Due On: </span></td>
-          <td><span>&nbsp;{{ $order->display_due_at}} </span><br></td>
+          <td style="text-align: right;"><span>Dispatch On: </span></td>
+          <td><span>&nbsp;{{ $order->display_dispatched_at}} </span><br></td>
           <td></td>
         </tr>
       </table>
