@@ -41,7 +41,7 @@ class StoreDealerRequest extends FormRequest
             'gstin' => 'required|string',
             'contact_person' => 'required|string',
             'phone' => 'required|string',
-            'phone2' => 'required|string',
+            'phone2' => 'nullable|max:255|string',
             'email' => 'required|email|unique:dealers,email,'.$this->id,
 
             'has_shipping_address' => 'boolean',
