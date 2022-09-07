@@ -398,7 +398,7 @@ class SaleOrderController extends Controller
 
             $order->calculateTotals();
 
-            return response()->json(['success'=>'true', 'total'=>$order->total, 'tax_total'=>$order->tax_total, 'transport_charges'=>$order->transport_total, 'code'=>200, 'message'=> 'OK', 'field' => $request->get('field')]);
+            return response()->json(['success'=>'true', 'total'=>$order->total, 'tax_total'=>$order->tax_total, 'freight_charges'=>$order->freight_charges, 'transport_charges'=>$order->transport_total, 'code'=>200, 'message'=> 'OK', 'field' => $request->get('field')]);
         }
 
         if (str_starts_with($request->get('field'), 'shipping_') == "shipping_")

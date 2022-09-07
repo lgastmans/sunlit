@@ -124,7 +124,7 @@ class SaleOrder extends Model
 
         $this->sub_total = 0;
         $this->tax_total = 0;
-        $this->freight_charges = 0; 
+        $this->freight_charges = $this->transport_charges; 
         $this->transport_total = 0; // = freight_charges + with tax
         $this->total = 0;
 
@@ -142,7 +142,11 @@ class SaleOrder extends Model
         {
             $this->sub_total += $item->quantity_ordered * $item->selling_price;
             $this->tax_total += ($item->quantity_ordered * $item->selling_price) * ($item->tax / 100);
-            $this->freight_charges += ($item->quantity_ordered * $item->product->weight_calculated) * $rate_per_kg;
+            /*
+                this feature left out until finalized
+                with Sunlit Future 
+            */
+            //$this->freight_charges += ($item->quantity_ordered * $item->product->weight_calculated) * $rate_per_kg;
 
             $tax = $item->tax;
         }
