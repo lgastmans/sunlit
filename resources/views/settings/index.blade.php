@@ -142,11 +142,11 @@
                                             <input type="text" class="form-control" name="purchase_order__order_number" id="po_order_number" placeholder="" value="{{ $settings['purchase_order']['order_number'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
                                         </div>
                                     </div>
-                                    <div class="mb-3">
+{{--                                     <div class="mb-3">
                                         <label for="culinary_uses" class="form-label">Culinary uses</label>
                                         <textarea class="form-control" name="culinary_uses" id="culinary_uses">{!! $plant->culinary_uses !!}</textarea>
                                     </div>
-                                    
+ --}}                                    
                                 </div>
                         </div><!-- end col-->
                     </div>
@@ -225,11 +225,11 @@
  $(document).ready(function () {
     "use strict";
 
-    ClassicEditor
-        .create( document.querySelector( '#culinary_uses' ) )
-        .catch( error => {
-            console.error( error );
-        });
+    // ClassicEditor
+    //     .create( document.querySelector( '#culinary_uses' ) )
+    //     .catch( error => {
+    //         console.error( error );
+    //     });
 
     @if(Session::has('success'))
         $.NotificationApp.send("Success","{{ session('success') }}","top-right","","success")
