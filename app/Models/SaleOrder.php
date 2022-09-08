@@ -138,6 +138,7 @@ class SaleOrder extends Model
         /**
          * calculate the totals
          */
+        $tax = 0;
         foreach ($this->items as $item)
         {
             $this->sub_total += $item->quantity_ordered * $item->selling_price;
@@ -148,7 +149,8 @@ class SaleOrder extends Model
             */
             //$this->freight_charges += ($item->quantity_ordered * $item->product->weight_calculated) * $rate_per_kg;
 
-            $tax = $item->tax;
+            if ($item->tax > $tax)
+                $tax = $item->tax;
         }
 
         /**

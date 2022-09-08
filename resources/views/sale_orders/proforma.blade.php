@@ -561,6 +561,7 @@ font-weight: bold;
           {{-- 
             The list of items of the sales order
           --}}
+          @php $tax = 0 @endphp
           @foreach ($order->items as $item)
 
             <tr data-iterate="item">
@@ -587,6 +588,8 @@ font-weight: bold;
             </tr>
             
             @php
+              if ($item->tax > $tax)
+                $tax = $item->tax;
               $last_item = $loop->count + 1;
             @endphp
 
@@ -605,12 +608,12 @@ font-weight: bold;
               {{-- <td><span>&mdash;</span></td> --}}
               <td><span>{{ $order->transport_charges }}</span></td>
               @if ($order->dealer->state->code==33)
-                <td>{{ $item->tax/2 }}%</td>
-                <td>@php echo number_format(($order->transport_charges/2) * ($item->tax)/100, 2); @endphp</td>
-                <td>{{ $item->tax/2 }}%</td>
-                <td>@php echo number_format(($order->transport_charges/2) * ($item->tax)/100, 2); @endphp</td>
+                <td>{{ $tax/2 }}%</td>
+                <td>@php echo number_format($order->transport_tax_amount/2, 2); @endphp</td>
+                <td>{{ $tax/2 }}%</td>
+                <td>@php echo number_format($order->transport_tax_amount/2, 2); @endphp</td>
               @else
-                <td>{{ $item->tax }}%</td>
+                <td>{{ $tax }}%</td>
                 <td>{{ $order->transport_tax_amount }}</td>
               @endif
           </tr>
