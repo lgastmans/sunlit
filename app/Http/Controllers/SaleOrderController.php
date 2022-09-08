@@ -165,11 +165,18 @@ class SaleOrderController extends Controller
             $query->skip($start)->take($length);
 
         $query->orderBy($order_column, $order_dir);
-        $orders = $query->get();
+        $orders = $query->get(['sale_orders.*', 'warehouses.name', 'dealers.company', 'users.name']);
 
         $arr = array();
         foreach($orders as $order)
-        {           
+        {
+            $total_amount = "";
+            if (isset($order->amount)) {
+                $curOrder = SaleOrder::find($order->id);
+                $curOrder->calculateTotals();
+                $total_amount = $curOrder->total;
+            }
+
             $arr[] = array(
                 "id" => $order->id,
                 "order_number" => $order->order_number,
@@ -178,7 +185,8 @@ class SaleOrderController extends Controller
                 "dealer" => $order->dealer->company,
                 "blocked_at" => $order->display_blocked_at,
                 "due_at" => $order->display_due_at,
-                "amount" => (isset($order->amount)) ? trans('app.currency_symbol_inr')." ".$order->amount : "",
+                //(isset($order->amount)) ? trans('app.currency_symbol_inr')." ".$order->amount : "",
+                "amount" => $total_amount, 
                 "status" => $order->display_status,
                 "user" => $order->user->display_name
             );
