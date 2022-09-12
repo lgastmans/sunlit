@@ -245,7 +245,7 @@ class PurchaseOrderInvoiceController extends Controller
                 ->get();            
 
             if ($invoice)
-                return view('purchase_order_invoices.show', ['invoice' => $invoice, 'purchase_order' => $purchase_order, 'activities' => $activities ]);
+                return view('purchase_order_invoices.show', ['invoice' => $invoice, 'purchase_order' => $purchase_order, 'activities' => $activities]);
 
             return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'purchase order']));
         }

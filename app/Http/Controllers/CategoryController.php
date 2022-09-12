@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\PurchaseOrderInvoiceItem;
 use \App\Http\Requests\StoreCategoryRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -199,4 +200,35 @@ class CategoryController extends Controller
         $categories = $query->select('id', 'name as text')->get();
         return ['results' => $categories];
     }     
+
+    public function getCategory(Request $request)
+    {
+        if ($request->has('po_item_id')) {
+
+            $po_item_id = $request->get('po_item_id');
+
+            $po_item = PurchaseOrderInvoiceItem::find($po_item_id);
+
+            $product = Product::find($po_item->product_id);
+
+            $category = Category::find($product->category_id);
+
+            if ($category) {
+                $charges = [
+                    'customs_duty'=> $category->customs_duty,
+                    'social_welfare_surcharge'=> $category->social_welfare_surcharge,
+                    'igst'=> $category->igst,
+                ];
+                $po_item->charges = $charges;
+                $po_item->update();
+            }
+
+            $po_item->updateInvoiceItemCharges($po_item_id);
+
+            return $category;
+            
+        }
+
+        return false;    
+    }
 }

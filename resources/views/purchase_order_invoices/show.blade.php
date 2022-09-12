@@ -32,6 +32,7 @@
                                 <th>Price</th>
                                 <th class="d-none">CD/SWS/IGST</th>
                                 <th>Total</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -39,9 +40,9 @@
                             <tr>
                                 <td>{{ $item->product->part_number }}<br>
                                     <small class="me-2">
-                                        <b>Customs duty:</b> <span class="customs-duty">{{  $item->charges['customs_duty'] }}%</span>
-                                         - <b>Surcharge:</b> <span class="social-welfare">{{  $item->charges['social_welfare_surcharge'] }}%</span>
-                                         - <b>IGST:</b> <span class="igst">{{  $item->charges['igst'] }}%</span>
+                                        <b>Customs duty:</b> <span class="customs-duty" id="customs-duty-perc">{{  $item->charges['customs_duty'] }}%</span>
+                                         - <b>Surcharge:</b> <span class="social-welfare" id="social-welfare-perc">{{  $item->charges['social_welfare_surcharge'] }}%</span>
+                                         - <b>IGST:</b> <span class="igst" id="igst-perc">{{  $item->charges['igst'] }}%</span>
                                     </small>
                                 </td>
                                 <td>{{ $item->quantity_shipped }}</td>
@@ -52,9 +53,13 @@
                                     <span class="product-igst-usd" data-value="{{ $item->igst }}">{{  number_format($item->igst,2) }}</span>
                                 </td>
                                 <td>{{ __('app.currency_symbol_usd')}}{{ number_format($item->total_price,2) }}</td>
+                                <td>
+                                    @if ($invoice->status <= "5")
+                                        <a href="javascript:void(0);" class="action-icon" id="icon-refresh" name="{{ $item->id }}" title="reload the category percentages for this item"> <i class="mdi mdi-refresh"></i></a>
+                                    @endif
+                                </td>
                             </tr>
                             @endforeach
-
                         </tbody>
                     </table>
                 </div>
@@ -229,6 +234,45 @@
     $(document).ready(function () {
         "use strict";
         
+
+        $("#icon-refresh").on("click", function(e){
+            
+            // var ids = $(this).attr('name').split('|');
+            // var po_item_id = ids[0];
+            // var product_id = ids[1];
+
+            var po_item_id = $(this).attr('name');
+
+            console.log(po_item_id);
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                }
+            }); 
+
+            var route = '{{ route("ajax.category", ":id") }}';
+            route = route.replace(':id', po_item_id);
+            
+            $.ajax({
+                type: 'GET',
+                url: route,
+                dataType: 'json',
+                data: { 
+                    'po_item_id': po_item_id,
+                },
+                success : function(result){
+                    console.log(result);
+
+                    $("#customs-duty-perc").text(result.customs_duty+'%');
+                    $("#social-welfare-perc").text(result.social_welfare_surcharge+'%');
+                    $("#igst-perc").text(result.igst+'%');
+
+                }
+            });
+        });
+
+
         $('#customs_exchange_rate').on('change', function(e){
             calculateCharges('rate');            
         });

@@ -37,4 +37,26 @@ class PurchaseOrderInvoiceItem extends Model
     }
 
 
+    public function updateInvoiceItemCharges($invoice_item_id)
+    {
+        $item = PurchaseOrderInvoiceItem::find($invoice_item_id);
+
+        $charges = $item->charges;
+
+        $item->customs_duty = $item->buying_price * $item->quantity_shipped * ($charges['customs_duty'] / 100);
+
+        $item->social_welfare_surcharge = $item->customs_duty * ($charges['social_welfare_surcharge'] / 100);
+
+        $item->igst = (
+                ($item->buying_price * $item->quantity_shipped) 
+                + $item->customs_duty 
+                + $item->social_welfare_surcharge
+            ) * ($charges['igst'] /100);
+
+        $item->update();
+
+    }
+
+
+
 }

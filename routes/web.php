@@ -217,6 +217,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::prefix('ajax')->group(function () {
         Route::get('/states', [StateController::class, 'getListForSelect2'])->name('ajax.states');
         Route::get('/categories', [CategoryController::class, 'getListForSelect2'])->name('ajax.categories');
+        Route::get('/category', [CategoryController::class, 'getCategory'])->name('ajax.category');
         Route::get('/suppliers', [SupplierController::class, 'getListForSelect2'])->name('ajax.suppliers');
         Route::get('/dealers', [DealerController::class, 'getListForSelect2'])->name('ajax.dealers');
         Route::get('/warehouses', [WarehouseController::class, 'getListForSelect2'])->name('ajax.warehouses');
