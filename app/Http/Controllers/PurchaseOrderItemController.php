@@ -236,7 +236,7 @@ class PurchaseOrderItemController extends Controller
         $order->amount_inr = $order->amount_usd * $order->order_exchange_rate;
         $order->update();
 
-        return redirect(route('purchase-orders.cart', $order->order_number))->with('success', trans('app.record_deleted', ['field' => 'item']));
+        return redirect(route('purchase-orders.cart', $order->order_number_slug))->with('success', trans('app.record_deleted', ['field' => 'item']));
 
     }
 }
