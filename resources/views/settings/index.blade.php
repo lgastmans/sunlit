@@ -173,6 +173,7 @@
                                             <input type="text" class="form-control" name="sale_order__order_number" id="so_order_number" placeholder="" value="{{ $settings['sale_order']['order_number'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
                                         </div>
                                     </div>
+                                    <br>&nbsp;
                                     <div class="mb-3">
                                         <label for="so_terms" class="form-label">Payment & Delivery Terms</label>
                                         <textarea class="form-control" name="sale_order__terms" id="so_terms">{!! $settings['sale_order']['terms'] !!}</textarea>
