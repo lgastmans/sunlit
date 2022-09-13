@@ -680,7 +680,7 @@ font-weight: bold;
     <section id="terms">
       <p>
 
-        {!! $settings['sale_order']['terms'] !!}
+        {!! $order->payment_terms !!}
 
 {{--         <span class="text-danger">Note:</span><span> Material is readily available for dispatch</span><br>
         <span class="text-danger">Note:</span><span> On receiving the goods and before signing LR copy, please open the box to check for any damage.</span><br>

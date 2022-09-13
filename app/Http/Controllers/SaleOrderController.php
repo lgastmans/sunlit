@@ -232,8 +232,11 @@ class SaleOrderController extends Controller
     public function store(StoreSaleOrderRequest $request)
     {
         $validatedData = $request->validated();
+
         $order = SaleOrder::create($validatedData);
+
         if ($order) {
+        
             /**
              * retrieve and store the "shipped to" address from the dealer
              */
@@ -261,6 +264,9 @@ class SaleOrderController extends Controller
                     $order->shipping_zip_code = $dealer->zip_code;
                     $order->shipping_state_id = $dealer->state_id;
                 }
+
+                $order->payment_terms = \Setting::get('sale_order.terms');
+
                 $order->update();
             }
 
