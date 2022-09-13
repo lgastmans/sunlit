@@ -18,7 +18,7 @@
 /* Reset styles */
 @import url("https://fonts.googleapis.com/css?family=PT+Sans:400,700&subset=latin,latin-ext,cyrillic,cyrillic-ext");
 
-html, body, div, span, applet, object, iframe,
+/*html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
 del, dfn, em, img, ins, kbd, q, s, samp,
@@ -37,6 +37,15 @@ time, mark, audio, video {
 	font: inherit;
 	font-size: 100%;
 	vertical-align: baseline;
+}*/
+
+html, body {
+  margin: 0;
+  padding: 0;
+  border: 1;
+  font: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
 }
 
 html {
@@ -390,9 +399,9 @@ font-weight: bold;
             
           </td>
           <td style="text-align: right;">
-            <p>Original for Recipient</p>
-            <p>Duplicate for Transporter</p>
-            <p>Triplicate for Supplier</p>
+            <p>Original for Recipient<br>
+            Duplicate for Transporter<br>
+            Triplicate for Supplier</p>
           </td>
         </tr>
       </table> {{-- header --}}
@@ -670,11 +679,15 @@ font-weight: bold;
       
     <section id="terms">
       <p>
-        <span class="text-danger">Note:</span><span> Material is readily available for dispatch</span><br>
+
+        {!! $settings['sale_order']['terms'] !!}
+
+{{--         <span class="text-danger">Note:</span><span> Material is readily available for dispatch</span><br>
         <span class="text-danger">Note:</span><span> On receiving the goods and before signing LR copy, please open the box to check for any damage.</span><br>
         <span class="text-danger">PI Validity</span><span> 7 Days</span><br>
         <span class="text-danger">Payment Terms</span><span> 100% payment before Dispatch</span><br>
         <span>Amount of tax subject to Reverse Charge (Yes or No):</span>
+ --}}        
       </p>
       <span class="hidden">{terms_label}</span>
       <div>Total invoice value (in words): {{ $order->total_spellout }}</div>
