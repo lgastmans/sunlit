@@ -142,11 +142,6 @@
                                             <input type="text" class="form-control" name="purchase_order__order_number" id="po_order_number" placeholder="" value="{{ $settings['purchase_order']['order_number'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
                                         </div>
                                     </div>
-{{--                                     <div class="mb-3">
-                                        <label for="culinary_uses" class="form-label">Culinary uses</label>
-                                        <textarea class="form-control" name="culinary_uses" id="culinary_uses">{!! $plant->culinary_uses !!}</textarea>
-                                    </div>
- --}}                                    
                                 </div>
                         </div><!-- end col-->
                     </div>
@@ -177,6 +172,10 @@
                                         <div class="input-group">
                                             <input type="text" class="form-control" name="sale_order__order_number" id="so_order_number" placeholder="" value="{{ $settings['sale_order']['order_number'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
                                         </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="so_terms" class="form-label">Payment & Delivery Terms</label>
+                                        <textarea class="form-control" name="sale_order__terms" id="so_terms">{!! $settings['sale_order']['terms'] !!}</textarea>
                                     </div>
                                 </div>
                         </div><!-- end col-->
@@ -225,11 +224,11 @@
  $(document).ready(function () {
     "use strict";
 
-    // ClassicEditor
-    //     .create( document.querySelector( '#culinary_uses' ) )
-    //     .catch( error => {
-    //         console.error( error );
-    //     });
+    ClassicEditor
+        .create( document.querySelector( '#so_terms' ) )
+        .catch( error => {
+            console.error( error );
+        });
 
     @if(Session::has('success'))
         $.NotificationApp.send("Success","{{ session('success') }}","top-right","","success")
