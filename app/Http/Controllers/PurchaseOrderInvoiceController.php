@@ -175,6 +175,7 @@ class PurchaseOrderInvoiceController extends Controller
         $invoice->shipped_at = $validatedData['shipped_at'];
         $invoice->user_id = $validatedData['user_id'];
         $invoice->invoice_number_slug =  $validatedData['invoice_number_slug'];
+        $invoice->payment_terms = \Setting::get('purchase_order.terms');
         $invoice->save();
 
         activity()
@@ -267,12 +268,18 @@ class PurchaseOrderInvoiceController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\PurchaseOrderInvoice  $purchaseOrderInvoice
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, PurchaseOrderInvoice $purchaseOrderInvoice)
+    public function update(Request $request, $id)
     {
         //
+        if ($request->get('field') == 'payment_terms')
+        {
+            $order = PurchaseOrderInvoice::find($id);
+            $order->payment_terms = $request->get('value');
+            $order->update();
+        }        
     }
 
 

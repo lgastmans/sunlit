@@ -46,6 +46,7 @@ class StorePurchaseOrderInvoiceRequest extends FormRequest
             'user_id' => 'required|integer',
             'shipped_at' => 'required|date',
             'invoice_number_slug' => 'required',
+            'payment_terms' => 'nullable|string',
         ];
     }
 }

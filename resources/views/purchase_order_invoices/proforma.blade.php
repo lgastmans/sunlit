@@ -14,6 +14,7 @@
 
     <style type="text/css">
 
+      /*
       html, body, div, span, applet, object, iframe,
       h1, h2, h3, h4, h5, h6, p, blockquote, pre,
       a, abbr, acronym, address, big, cite, code,
@@ -27,6 +28,16 @@
       figure, figcaption, footer, header, hgroup,
       menu, nav, output, ruby, section, summary,
       time, mark, audio, video {
+        margin: 0;
+        padding: 0;
+        border: 1;
+        font: inherit;
+        font-size: 100%;
+        vertical-align: baseline;
+      }
+      */
+
+      html, body {
         margin: 0;
         padding: 0;
         border: 1;
@@ -473,47 +484,8 @@
     </section> {{-- items --}}
 
     <section id="terms">
-      <table>
-        <tr>
-          <th colspan="3">Terms of Delivery and Payment</th>
-        </tr>
-        <tr>
-          <td width="5%">1</td>
-          <td width="25%">Delivery :</td>
-          <td>Item 1 in Q4 / Item 2 in Q3 / Item 3 in Q4 / Item 4 in Q4 / Item 5 in Q4 / Item 6 in Q4 / Item 7 & 8 in Q4</td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>Requested date of Delivery</td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td>Shipment Terms (Inco Term 2010)</td>
-          <td>CIF-FTWZ-Chennai,</td>
-        </tr>
-        <tr>
-          <td>4</td>
-          <td>Payment Terms:</td>
-          <td>60 Days from SolarEdge Invoice date.</td>
-        </tr>
-        <tr>
-          <td>5</td>
-          <td>Condition:</td>
-          <td>This goods are only used for Solar Power Generating Systems and have no other Commercial aspect<br>
-            Please mention heading "Solar Inverters" under Part number description. (Auroville Foundation)<br>
-            Please mention IE Code 0488003440 & Branch Code: 31 in all the documents.<br>
-            Mention terms CIF- FTWZ-Chennai<br>
-            Please send warranty certficates and test reports.
-          </td>
-        </tr>
-          
-      </table>
-
-      <p>
-        <span>Items sold under the purchase order (PO) shall be subject to SolarEdge warranty terms that may be located at https://www.solaredge.com/sites/default/files/solaredge-warranty-May-2021.pdf.</span><br>
-        <span>This order is approved in accordance with and subject to the terms & Conditions of SolarEdge, which can be found at https://www.solaredge.com/sites/default/files/commercial-terms-and-conditions-</span><br>
-      </p>
+      
+      {!! $order->payment_terms !!}
 
     </section> {{-- terms --}}
 

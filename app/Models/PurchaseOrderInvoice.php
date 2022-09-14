@@ -22,6 +22,7 @@ class PurchaseOrderInvoice extends Model
     const RECEIVED = 7;
     const PAID = 8;
 
+    protected $fillable = ['payment_terms'];
     protected $dates = ['due_at', 'shipped_at', 'customs_at', 'cleared_at',  'received_at', 'paid_at'];
     protected $with = ['user'];
 

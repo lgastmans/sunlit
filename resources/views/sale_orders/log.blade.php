@@ -99,7 +99,7 @@
 
                         var route = globalSettings.sale_order_update;
                         route = route.replace(':id', $('#sale-order-id').val());
-                        
+
                         var field_name = 'payment_terms';
                         var field_value = editor.getData();
 
@@ -115,7 +115,7 @@
                             },
                             success : function(result){
                                 //console.log(result);
-                                console.log('success da');
+                                
                                 // $.NotificationApp.send("Success","Transport Charges saved","top-right","","success")
                             }
                         });
