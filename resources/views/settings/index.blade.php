@@ -142,6 +142,11 @@
                                             <input type="text" class="form-control" name="purchase_order__order_number" id="po_order_number" placeholder="" value="{{ $settings['purchase_order']['order_number'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
                                         </div>
                                     </div>
+                                   <br>&nbsp;
+                                    <div class="mb-3">
+                                        <label for="poi_terms" class="form-label">Payment & Delivery Terms</label>
+                                        <textarea class="form-control" name="purchase_order__terms" id="poi_terms">{!! $settings['purchase_order']['terms'] !!}</textarea>
+                                    </div>                                    
                                 </div>
                         </div><!-- end col-->
                     </div>
@@ -224,6 +229,12 @@
         
  $(document).ready(function () {
     "use strict";
+
+    ClassicEditor
+        .create( document.querySelector( '#poi_terms' ) )
+        .catch( error => {
+            console.error( error );
+        });
 
     ClassicEditor
         .create( document.querySelector( '#so_terms' ) )
