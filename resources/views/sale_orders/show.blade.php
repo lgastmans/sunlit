@@ -370,7 +370,7 @@
                         }
                 });        
 
-            }); // transport charges
+            }); // transport charges            
 
         }); //document ready
 

@@ -270,7 +270,7 @@
 @section('page-scripts')
 
     <script>
-            let globalSettings = 
+        let globalSettings = 
             {
                 sale_order_update : '{{ route("sale-orders.update", ":id") }}',
                 ajax_dealers : '{{route("ajax.dealers")}}',

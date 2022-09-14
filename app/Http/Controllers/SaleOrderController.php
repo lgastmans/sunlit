@@ -241,6 +241,7 @@ class SaleOrderController extends Controller
              * retrieve and store the "shipped to" address from the dealer
              */
             $dealer = Dealer::find($order->dealer_id);
+            
             if ($dealer){
                 if (!$dealer->has_shipping_address){
                     $order->shipping_company = $dealer->shipping_company;
@@ -413,6 +414,13 @@ class SaleOrderController extends Controller
             $order->calculateTotals();
 
             return response()->json(['success'=>'true', 'total'=>$order->total, 'tax_total'=>$order->tax_total, 'freight_charges'=>$order->freight_charges, 'transport_charges'=>$order->transport_total, 'code'=>200, 'message'=> 'OK', 'field' => $request->get('field')]);
+        }
+
+        if ($request->get('field') == 'payment_terms')
+        {
+            $order = SaleOrder::find($id);
+            $order->payment_terms = $request->get('value');
+            $order->update();
         }
 
         if (str_starts_with($request->get('field'), 'shipping_') == "shipping_")

@@ -48,6 +48,7 @@ class StoreSaleOrderRequest extends FormRequest
             'warehouse_id' => 'required|integer',
             'status' => 'required|integer',
             'user_id' => 'required|integer',
+            'payment_terms' => 'nullable|string',
             'shipping_state_id' => 'integer|nullable',
             'shipping_company' => 'nullable|string|max:255',
             'shipping_address' => 'nullable|string|max:255',
