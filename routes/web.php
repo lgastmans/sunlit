@@ -18,6 +18,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\FreightZoneController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\SaleOrderItemController;
+use App\Http\Controllers\SaleOrderPaymentController;
 use App\Http\Controllers\InventoryMovementController;
 use App\Http\Controllers\PurchaseOrderItemController;
 use App\Http\Controllers\PurchaseOrderInvoiceController;
@@ -50,6 +51,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 
+
+
     Route::get('/sale-orders', [SaleOrderController::class, 'index'])->name('sale-orders');
     Route::get('/sale-orders/create', [SaleOrderController::class, 'create'])->name('sale-orders.create');
     Route::get('/sale-orders/list', [SaleOrderController::class, 'getListForDatatables'])->name('sale-orders.datatables');
@@ -65,6 +68,16 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('/sale-orders/{id}/delivered', [SaleOrderController::class, 'delivered'])->name('sale-orders.delivered');
     Route::put('/sale-orders/{id}', [SaleOrderController::class, 'update'])->name('sale-orders.update');
     Route::delete('/sale-orders/{id}', [SaleOrderController::class, 'destroy'])->name('sale-orders.delete');
+
+
+    Route::get('/sale-order-payments', [SaleOrderPaymentController::class, 'index'])->name('sale-order-payments');
+    Route::get('/sale-order-payments/create', [SaleOrderPaymentController::class, 'create'])->name('sale-order-payments.create');
+    Route::get('/sale-order-payments/list', [SaleOrderPaymentController::class, 'getListForDatatables'])->name('sale-order-payments.datatables');
+    Route::get('/sale-order-payments/{order_number}', [SaleOrderPaymentController::class, 'show'])->name('sale-order-payments.show');
+    Route::post('/sale-order-payments', [SaleOrderPaymentController::class, 'store'])->name('sale-order-payments.store');
+    Route::put('/sale-order-payments/{id}', [SaleOrderPaymentController::class, 'update'])->name('sale-order-payments.update');
+    Route::delete('/sale-order-payments/{id}', [SaleOrderPaymentController::class, 'destroy'])->name('sale-order-payments.delete');
+
 
     // Route::get('/sale-orders-items', [SaleOrderItemController::class, 'index'])->name('sale-orders-items');
     // Route::get('/sale-orders-items/create', [SaleOrderItemController::class, 'create'])->name('sale-orders-items.create');

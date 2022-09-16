@@ -320,6 +320,7 @@ class SaleOrderController extends Controller
 
             $activities = Activity::where('subject_id', $order->id)
                 ->where('subject_type', 'App\Models\SaleOrder')
+                ->orWhere('subject_type', 'App\Models\SaleOrderPayment')
                 ->orderBy('updated_at', 'desc')
                 ->get();
 
