@@ -5,7 +5,7 @@
                 <h4 class="header-title mb-3">Proforma Invoice log</h4>
 
                 <div class="table-responsive">
-                    <table class="table table-sm table-centered mb-0">
+                    <table class="table table-sm table-centered mb-0" id="table-activity-log">
                         <thead>
                             <th>Date</th>
                             <th>&nbsp;</th>
@@ -167,8 +167,6 @@
                 if (!isFocused && text_changed) {
                     text_changed = false;
 
-                    console.log('here'+editor.getData());
-
                     $.ajaxSetup({
                         headers: {
                             'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
@@ -270,7 +268,6 @@
         $('#invoice_payments tbody').on('click', '[id*=btn-edit]', function () {
 
             var data = paymentsTable.row($(this).parents('tr')).data();
-//console.log('payment_id ' + JSON.stringify(data));            
 
             var paymentDate = new Date(data.payment_date).toISOString().slice(0, 10);
             var paymentAmount = data.amount;
@@ -314,7 +311,10 @@
                     }
                 })
                 .done ( function( msg ) {
+
                     paymentsTable.ajax.reload();
+                    $("<tr><td>"+msg.log_date+"</td><td>"+msg.log_text+"</td></tr>").prependTo("#table-activity-log > tbody");
+
                 });
             }
         });
@@ -364,8 +364,12 @@
                     paid_at: payment_date
                 }
             }).done(function (msg) {
+                
                 paymentsTable.ajax.reload();
+                
                 $('#payment-modal-order').modal('hide');
+
+                $("<tr><td>"+msg.log_date+"</td><td>"+msg.log_text+"</td></tr>").prependTo("#table-activity-log > tbody");
             });
 
         });        

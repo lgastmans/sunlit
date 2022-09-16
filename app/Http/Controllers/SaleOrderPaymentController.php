@@ -8,6 +8,7 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Models\Activity;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\SaleOrderPayment;
 use \App\Http\Requests\StoreSaleOrderPaymentRequest;
 
@@ -126,7 +127,9 @@ class SaleOrderPaymentController extends Controller
      */
     public function store(StoreSaleOrderPaymentRequest $request)
     {
-        
+        $log = array();
+        $log_text = '';
+
         if (is_null($request->get('payment_id')))
         {
             $validatedData = $request->validated();
@@ -134,10 +137,12 @@ class SaleOrderPaymentController extends Controller
 
             $dt = Carbon::parse($payment->paid_at);
 
+            $log_text = 'Payment '.$payment->reference.' added, dated '.$dt->toDateString();
+
             activity()
                ->performedOn($payment)
                ->withProperties(['reference'=>$payment->reference, 'amount'=>$payment->amount])
-               ->log('Payment '.$payment->reference.' added, dated '.$dt->toDateString());
+               ->log($log_text);
         }
         else {
             $payment = SaleOrderPayment::find($request->get('payment_id'));
@@ -150,15 +155,19 @@ class SaleOrderPaymentController extends Controller
 
                 $dt = Carbon::parse($payment->paid_at);
 
+                $log_text = 'Payment '.$payment->reference.' edited, dated '.$dt->toDateString();
+
                 activity()
                    ->performedOn($payment)
                    ->withProperties(['reference'=>$payment->reference, 'amount'=>$payment->amount])
-                   ->log('Payment '.$payment->reference.' edited, dated '.$dt->toDateString());
+                   ->log($log_text);
             }
         }
 
+        $log['log_date'] = $dt->toDateString();
+        $log['log_text'] = $log_text.' by <b>'.Auth::user()->name.'</b>';
         // return response()->json($validatedData);
-        return response()->json($request);
+        return response()->json($log);
     }
 
     /**
@@ -206,7 +215,7 @@ class SaleOrderPaymentController extends Controller
         $payment = SaleOrderPayment::find($id);
 
         $dt = Carbon::parse($payment->paid_at);
-        
+
         activity()
            ->performedOn($payment)
            ->withProperties(['paid_at'=>$payment->paid_at, 'reference'=>$payment->reference, 'amount'=>$payment->amount])
@@ -214,7 +223,11 @@ class SaleOrderPaymentController extends Controller
 
         SaleOrderPayment::destroy($id);
 
+        $log['log_date'] = $dt->toDateString();
+        $log['log_text'] = 'Payment '.$payment->reference.' dated '.$dt->toDateString().' deleted'.' by <b>'.Auth::user()->name.'</b>';
 
-        return response()->json($id);
+        // return response()->json($validatedData);
+        return response()->json($log);
+        
     }
 }
