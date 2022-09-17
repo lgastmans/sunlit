@@ -671,6 +671,19 @@ font-weight: bold;
             <th colspan="2">{{ $order->total }}</th>
           </tr>
 
+          @if ($order->total_advance > 0)
+            <tr class="amount-total">
+              <th colspan="{{ $order->dealer->state->code==33 ? 7 : 5}}"></th>
+              <th style="text-align: right;">Advance</th>
+              <th colspan="2">{{ $order->display_total_advance }}</th>
+            </tr>
+            <tr class="amount-total">
+              <th colspan="{{ $order->dealer->state->code==33 ? 7 : 5}}"></th>
+              <th style="text-align: right;">Balance Due</th>
+              <th colspan="2">{{ $order->display_balance_due }}</th>
+            </tr>
+          @endif
+
         </tfoot> 
       </table>
 

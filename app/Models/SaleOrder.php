@@ -18,7 +18,7 @@ class SaleOrder extends Model
 
     protected $fillable = ['dealer_id', 'warehouse_id', 'order_number', 'order_number_slug', 'status', 'user_id', 'transport_charges ', 'payment_terms', 'shipping_state_id', 'shipping_company', 'shipping_address', 'shipping_address2', 'shipping_city', 'shipping_zip_code', 'shipping_gstin', 'shipping_contact_person', 'shipping_phone'];
     protected $dates = ['blocked_at', 'booked_at', 'dispatched_at', 'paid_at', 'due_at', 'shipped_at'];
-    protected $with = ['dealer', 'warehouse', 'user', 'items', 'state'];
+    protected $with = ['dealer', 'warehouse', 'user', 'items', 'state', 'sale_order_payments'];
     //protected static $recordEvents = ['created','updated','deleted'];
 
     const DRAFT = 1;
@@ -40,6 +40,8 @@ class SaleOrder extends Model
     var $tax_total_half = 0;
     var $total = 0;
     var $total_spellout = '';
+    var $total_advance = 0;
+    var $balance_due = 0;
 
     /*
     public function getActivitylogOptions(): LogOptions
@@ -90,6 +92,11 @@ class SaleOrder extends Model
         return $this->belongsTo(State::class, 'shipping_state_id');
     }
 
+    public function sale_order_payments()
+    {
+        return $this->hasMany(SaleOrderPayment::class);
+    }
+
     public function canDispatch()
     {
         $response=array();
@@ -127,6 +134,9 @@ class SaleOrder extends Model
         $this->freight_charges = $this->transport_charges; 
         $this->transport_total = 0; // = freight_charges + with tax
         $this->total = 0;
+        $this->total_advance = 0;
+        $this->balance_due = 0;
+
 
         if ($this->dealer->state->freight_zone_id)
         {
@@ -165,6 +175,14 @@ class SaleOrder extends Model
 
         $this->total = round($this->total);
 
+        foreach ($this->sale_order_payments as $payment)
+        {
+            $this->total_advance += $payment->amount;
+        }    
+
+        $this->balance_due = $this->total - $this->total_advance;
+
+
         /**
          * for SGST and CGST
          */
@@ -179,6 +197,11 @@ class SaleOrder extends Model
         //$this->tax_total_half = number_format($this->tax_total_half, 2);
         //$this->total = number_format($this->total, 2);
 
+        /*
+            eventually these fields should be formated in 
+            a get...Attribute function, like the
+            total_advance and balance_due columns
+        */
         $this->sub_total = $fmt->formatCurrency($this->sub_total, "INR");
         $this->tax_total = $fmt->formatCurrency($this->tax_total, "INR");
         $this->transport_total = $fmt->formatCurrency($this->transport_total, "INR");
@@ -306,7 +329,6 @@ class SaleOrder extends Model
         $this->attributes['delivered_at'] = $dt->toDateTimeString();  
     }
 
-
     public function getDisplayStatusAttribute()
     {
         switch ($this->status)
@@ -343,6 +365,19 @@ class SaleOrder extends Model
         ];
     }
 
+    public function getDisplayTotalAdvanceAttribute()
+    {
+        $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
+        $fmt->setSymbol(NumberFormatter::CURRENCY_SYMBOL, ''); 
+        return $this->total_advance = $fmt->formatCurrency($this->total_advance, "INR");       
+    }
+
+    public function getDisplayBalanceDueAttribute()
+    {
+        $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
+        $fmt->setSymbol(NumberFormatter::CURRENCY_SYMBOL, ''); 
+        return $this->balance_due = $fmt->formatCurrency($this->balance_due, "INR");       
+    }
 
     public function isOverdue()
     {
