@@ -224,11 +224,13 @@
     </div>
 </div>
 
-@if ($order->status >= 2 && $order->status <= 3)
-    <div class="row">
-        <div class="col-lg-8">
-        </div>
-        <div class="col-lg-4">
+
+<div class="row">
+    <div class="col-lg-8">
+        @include('sale_orders.payments')
+    </div>
+    <div class="col-lg-4">
+        @if ($order->status >= 2 && $order->status <= 3)
             <div class="mt-4 mt-lg-0 rounded">
                 <div class="card mt-4 border">
                     <div class="card-body">
@@ -236,9 +238,10 @@
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
     </div>
-@endif
+</div>
+
 
 <div class="row">    
     @include('sale_orders.log')
