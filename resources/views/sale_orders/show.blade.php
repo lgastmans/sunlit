@@ -242,7 +242,6 @@
     </div>
 </div>
 
-
 <div class="row">    
     @include('sale_orders.log')
 </div>
