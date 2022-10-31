@@ -51,7 +51,7 @@
                         @case(7)
                             style="width:75%;"
                             @break
-                        @case(7)
+                        @case(8)
                             style="width:100%;"
                             @break
                         @default
