@@ -121,7 +121,7 @@ class Inventory extends Model
                 $inventory->warehouse_id = $order->warehouse_id;
                 $inventory->product_id = $product->product_id;
 
-                $inventory->stock_ordered = $product->quantity_confirmed;
+                $inventory->stock_ordered += $product->quantity_confirmed;
 
                 $result = $inventory->update();
             }
@@ -129,6 +129,42 @@ class Inventory extends Model
 
     }
 
+    public function resetOrderedStock(Model $model)
+    {
+        /**
+         * current ordered column is calculated based on
+         * POs that have status > CONFIRMED
+         * minus
+         * POIs that have status >= RECEIVED
+         * 
+         * 
+         * 
+SELECT poi.product_id, SUM(poi.quantity_confirmed)
+FROM `purchase_order_items` poi
+LEFT JOIN `purchase_orders` po ON (po.status >= 3)
+WHERE (poi.purchase_order_id = po.id)
+GROUP BY product_id
+
+         */
+
+        $res = array();
+        
+        //PurchaseOrderInvoice::RECEIVED
+
+        // $purchase_orders = PurchaseOrder::select('id')
+        //     ->where('status', '>=', PurchaseOrder::CONFIRMED)
+        //     ->get();
+
+        // forearch ($purchase_orders as $purchase_order)
+        // {
+        //     $res[] = $purchase_order->id;
+
+        //     $purchase_invoices = PurchaseOrderInvoice::select();
+        // }
+
+        // return response()->json($res);
+        
+    }
 
     /**
      * Update the stock values in the inventory based on the model and related status
