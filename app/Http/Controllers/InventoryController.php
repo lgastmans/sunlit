@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\Product;
 use App\Models\Inventory;
 use App\Exports\InventoryExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -247,6 +248,69 @@ class InventoryController extends Controller
         $current = Carbon::now()->format('YmdHs');
 
         return Excel::download(new InventoryExport, 'inventory_'.$current.'.xlsx');
+    }
+
+
+    public function resetOrderedStock()
+    {
+        /**
+         * current ordered column is calculated based on
+         * POs that have status > CONFIRMED
+         * minus
+         * POIs that have status >= RECEIVED
+         * 
+         */
+
+        $res = array();
+
+        $inventory = new Inventory;
+
+        $products = Product::all();
+
+        foreach ($products as $product)
+        {
+            $arr = array();
+
+            //if ($product->id == 566) {
+
+                foreach ($product->inventory as $entry){
+
+                    $ordered     = $inventory->getStockOrdered($product->id, $entry->warehouse_id);
+
+                    if ($ordered)
+                    {
+                        //echo $entry->warehouse_id.">>".$ordered->ordered_stock.":".$received->received_stock."<br>";
+                        $received    = $inventory->getStockReceived($product->id, $entry->warehouse_id);
+
+                        if ($received)
+                        {
+                            $updated_stock = $ordered->ordered_stock - $received->received_stock;
+
+                            $inv = Inventory::find($entry->id);
+
+                            if ($inv)
+                            {
+                                $inv->stock_ordered = $updated_stock;
+                                $inv->save();
+                            }
+                        }
+                    }
+                    else {
+                        // set to zero
+                        $inv = Inventory::find($entry->id);
+
+                        if ($inv)
+                        {
+                            $inv->stock_ordered = 0;
+                            $inv->save();
+                        }
+                    }
+                }
+            //}
+        }
+
+        return response()->json($arr);
+                
     }
 
 }

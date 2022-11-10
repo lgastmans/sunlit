@@ -129,42 +129,63 @@ class Inventory extends Model
 
     }
 
-    public function resetOrderedStock(Model $model)
+
+    /**
+     * get the total stock ordered for a given product, warehouse
+     * 
+     */
+    public function getStockOrdered($product_id, $warehouse_id)
     {
-        /**
-         * current ordered column is calculated based on
-         * POs that have status > CONFIRMED
-         * minus
-         * POIs that have status >= RECEIVED
-         * 
-         * 
-         * 
-SELECT poi.product_id, SUM(poi.quantity_confirmed)
-FROM `purchase_order_items` poi
-LEFT JOIN `purchase_orders` po ON (po.status >= 3)
-WHERE (poi.purchase_order_id = po.id)
-GROUP BY product_id
+        /*
+            SELECT poi.product_id, SUM(poi.quantity_confirmed)
+            FROM `purchase_order_items` poi, warehouses w
+            INNER JOIN purchase_orders po ON (po.warehouse_id = w.id)
+            WHERE (poi.purchase_order_id = po.id) AND (po.status >=3)
+            GROUP BY product_id        
+        */
+        $res = PurchaseOrderItem::select('product_id')
+            ->selectRaw('SUM(purchase_order_items.quantity_confirmed) AS ordered_stock')
+            ->join('purchase_orders', 'purchase_order_items.purchase_order_id', '=', 'purchase_orders.id')
+            ->join('warehouses', 'purchase_orders.warehouse_id', '=', 'warehouses.id')
+            ->where('purchase_orders.warehouse_id', '=', $warehouse_id)
+            ->where('purchase_orders.status', '>=', PurchaseOrder::CONFIRMED)
+            ->where('purchase_order_items.product_id', '=', $product_id)
+            ->groupBy('product_id')
+            //->toSql();
+            ->first();
 
-         */
-
-        $res = array();
-        
-        //PurchaseOrderInvoice::RECEIVED
-
-        // $purchase_orders = PurchaseOrder::select('id')
-        //     ->where('status', '>=', PurchaseOrder::CONFIRMED)
-        //     ->get();
-
-        // forearch ($purchase_orders as $purchase_order)
-        // {
-        //     $res[] = $purchase_order->id;
-
-        //     $purchase_invoices = PurchaseOrderInvoice::select();
-        // }
-
-        // return response()->json($res);
-        
+        return $res;
     }
+
+
+    /**
+     * get the total stock received for a given product, warehouse
+     * 
+     */
+    public function getStockReceived($product_id, $warehouse_id)
+    {
+        /*
+            SELECT pii.product_id, SUM(quantity_shipped)
+            FROM `purchase_order_invoice_items` pii
+            INNER JOIN purchase_order_invoices pis ON (pii.purchase_order_invoice_id = pis.id)
+            INNER JOIN purchase_orders po ON (pis.purchase_order_id = po.id)
+            WHERE (pis.status >= 7) AND (po.warehouse_id = 2) AND (pii.product_id = 616)
+            GROUP BY product_id
+        */
+        $res = PurchaseOrderInvoiceItem::select('product_id')
+            ->selectRaw('SUM(purchase_order_invoice_items.quantity_shipped) AS received_stock')
+            ->join('purchase_order_invoices', 'purchase_order_invoice_items.purchase_order_invoice_id', '=', 'purchase_order_invoices.id')
+            ->join('purchase_orders', 'purchase_order_invoices.purchase_order_id', '=', 'purchase_orders.id')
+            ->where('purchase_order_invoices.status', '>=', PurchaseOrderInvoice::RECEIVED)
+            ->where('purchase_orders.warehouse_id', '=', $warehouse_id)
+            ->where('purchase_order_invoice_items.product_id', '=', $product_id)
+            ->groupBy('product_id')
+            //->toSql();
+            ->first();
+
+        return $res;
+    }
+
 
     /**
      * Update the stock values in the inventory based on the model and related status

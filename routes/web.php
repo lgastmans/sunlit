@@ -133,6 +133,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('/purchase-order-invoices/{id}', [PurchaseOrderInvoiceController::class, 'update'])->name('purchase-order-invoices.update');    
 
     Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory');
+    Route::get('/inventory/resetOrderedStock', [InventoryController::class, 'resetOrderedStock'])->name('inventory.resetOrdered');
     Route::get('/inventory/list', [InventoryController::class, 'getListForDatatables'])->name('inventory.datatables');
 
     Route::get('/inventory-movement', [InventoryMovementController::class, 'index'])->name('inventory-movement');
