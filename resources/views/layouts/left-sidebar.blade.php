@@ -37,10 +37,21 @@
 
             @can('list sale orders')
             <li class="side-nav-item {{ (Request::is('sale-orders*') ? ' menuitem-active' : '') }}">
-                <a href="{{ route('sale-orders')}}" class="side-nav-link {{ (Request::is('sale-orders*') ? ' active' : '') }}">
+                <a data-bs-toggle="collapse" href="#sidebarSales" aria-expanded="false" aria-controls="sidebarSales" class="side-nav-link">
                     <i class="mdi mdi-basket-outline"></i>
                     <span> Sales </span>
+                    <span class="menu-arrow"></span>
                 </a>
+                <div class="collapse" id="sidebarSales">
+                    <ul class="side-nav-second-level">
+                        <li>
+                            <a href="{{ route('sale-orders')}}">Invoices</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('sale-orders.report')}}">Report</a>
+                        </li>
+                    </ul>
+                </div>                
             </li>
             @endcan
 
