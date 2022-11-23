@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Models\Activity;
 
+use DB;
 use PDF;
+use NumberFormatter;
 use App\Models\Dealer;
 use App\Models\Inventory;
 use App\Models\SaleOrder;
@@ -200,6 +202,176 @@ class SaleOrderController extends Controller
             'error' => null
         );
         return response()->json($response);
+    }
+
+
+    public function getListForReport(Request $request)
+    {
+        $dealer_id = 0;
+        if ($request->has('dealer_id'))
+            $dealer_id = $request->get('dealer_id');
+
+        $select_format = 'format_datewise';
+        if ($request->has('select_format'))
+            $select_format = $request->get('select_format');
+
+        $select_period = 'period_monthly';
+        if ($request->has('select_period'))
+            $select_period = $request->get('select_period');
+
+        $month = date('n');
+        if ($request->has('month_id'))
+            $month = $request->get('month_id');
+            
+        $year = date('Y');
+        if ($request->has('year_id'))
+            $year = $request->get('year_id');
+        
+        $quarter = '';
+        if ($request->has('quarterly_id'))
+            $quarter = $request->get('quarterly_id');
+
+        /*
+            SELECT so.dispatched_at, so.order_number_slug, p.part_number, soi.quantity_ordered, soi.selling_price, soi.tax
+            FROM `sale_orders` so
+            INNER JOIN `sale_order_items` soi ON (soi.sale_order_id = so.id)
+            INNER JOIN `products` p ON (p.id = soi.product_id)
+            WHERE so.status >= 4 AND (so.dealer_id = 11) AND (
+            YEAR(`dispatched_at`)=2022 AND MONTH(`dispatched_at`) BETWEEN 10 AND 11)
+
+            select  `categories`.`name`, `products`.`part_number`, SUM(`sale_order_items`.`quantity_ordered`) AS quantity, `sale_order_items`.`selling_price`, `sale_order_items`.`tax`
+            from `sale_orders` 
+            inner join `sale_order_items` on `sale_order_items`.`sale_order_id` = `sale_orders`.`id` 
+            inner join `products` on `products`.`id` = `sale_order_items`.`product_id`
+            inner join `categories` on `categories`.`id` = `products`.`category_id`
+            where `sale_orders`.`status` >= 4 and `sale_orders`.`dealer_id` = 345 and year(`sale_orders`.`dispatched_at`) = 2022 and month(`sale_orders`.`dispatched_at`) = 11
+            and `sale_orders`.`deleted_at` is null 
+            group by `products`.`id`
+            order by `categories`.`name` asc
+
+        */
+
+        $query = SaleOrder::query();
+
+        if ($select_format=='format_datewise')
+            $query->select('sale_orders.dispatched_at', 'sale_orders.order_number_slug', 'products.part_number', 'sale_order_items.quantity_ordered', 'sale_order_items.selling_price', 'sale_order_items.tax');
+        else
+            $query->select('categories.name', 'products.part_number', DB::raw('SUM(sale_order_items.quantity_ordered) AS quantity_ordered'), 'sale_order_items.selling_price', 'sale_order_items.tax');
+
+        $query->join('sale_order_items', 'sale_order_items.sale_order_id', '=', 'sale_orders.id');
+        $query->join('products', 'products.id', '=', 'sale_order_items.product_id');
+
+        if ($select_format=='format_category')
+            $query->join('categories', 'categories.id', '=', 'products.category_id');
+
+        $query->where('sale_orders.status', '>=', '4');
+        $query->where('sale_orders.dealer_id', '=', $dealer_id);
+        if ($select_period=='period_monthly')
+        {
+            $query->whereYear('sale_orders.dispatched_at', '=', $year);
+            $query->whereMonth('sale_orders.dispatched_at', '=', $month);
+        }
+        elseif ($select_period=='period_quarterly')
+        {
+            if ($quarter=='Q1')
+            {
+                $from = date($year.'-01-01');
+                $to = date($year.'-03-31');
+                $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
+            }
+            elseif ($quarter=='Q2')
+            {
+                $from = date($year.'-04-01');
+                $to = date($year.'-06-30');
+                $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
+            }
+            elseif ($quarter=='Q3')
+            {
+                $from = date($year.'-07-01');
+                $to = date($year.'-09-30');
+                $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
+            }
+            elseif ($quarter=='Q4')
+            {
+                $from = date($year.'-10-01');
+                $to = date($year.'-12-31');
+                $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
+            }
+        }
+
+        if ($select_format=='format_datewise')
+        {
+            $query->orderBy('sale_orders.dispatched_at','ASC');
+            $query->orderBy('sale_orders.order_number_slug','ASC');
+        }
+        else
+        {
+            $query->groupBy('products.id');
+            $query->orderBy('categories.name','ASC');
+        }
+
+        $rows = $query->get();
+        //$rows = $query->toSql(); return response()->json($rows);
+
+        $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
+        $fmt->setSymbol(NumberFormatter::CURRENCY_SYMBOL, ''); 
+
+        $arr = array();
+        $footer = array('label'=>'Totals', 'total_quantity'=>0, 'total_taxable_value'=>0, 'total_tax_amount'=>0, 'total_amount'=>0);
+
+        foreach($rows as $row)
+        {
+            $footer['total_quantity'] += $row->quantity_ordered;
+            $footer['total_taxable_value'] += ($row->selling_price * $row->quantity_ordered);
+            $footer['total_tax_amount'] += ($row->selling_price * $row->quantity_ordered) * ($row->tax/100);
+            $footer['total_amount'] += ($row->selling_price * $row->quantity_ordered) * (1+$row->tax/100);
+            
+            $taxable_value = $fmt->formatCurrency(($row->selling_price * $row->quantity_ordered), "INR");
+            $tax_amount = $fmt->formatCurrency(($row->selling_price * $row->quantity_ordered) * ($row->tax/100), "INR");
+            $amount = $fmt->formatCurrency(($row->selling_price * $row->quantity_ordered * (1+$row->tax/100)), "INR");
+
+            if ($select_format=='format_datewise')
+                $arr[] = array(
+                    "invoice_date" => $row->display_dispatched_at,
+                    "invoice_number" => $row->order_number_slug,
+                    "part_number" => $row->part_number,
+                    "quantity" => $row->quantity_ordered,
+                    "price" => $row->selling_price,
+                    "taxable_value" => $taxable_value,
+                    "tax" => $row->tax."%",
+                    "tax_amount" => $tax_amount,
+                    "amount" => $amount
+                );
+            else
+                $arr[] = array(
+                    "category" => $row->name,
+                    "part_number" => $row->part_number,
+                    "quantity" => $row->quantity_ordered,
+                    "price" => $row->selling_price,
+                    "taxable_value" => $taxable_value,
+                    "tax" => $row->tax."%",
+                    "tax_amount" => $tax_amount,
+                    "amount" => $amount
+                );
+
+        }
+
+        $footer['total_taxable_value'] = $fmt->formatCurrency($footer['total_taxable_value'], "INR");
+        $footer['total_tax_amount'] = $fmt->formatCurrency($footer['total_tax_amount'], "INR");
+        $footer['total_amount'] = $fmt->formatCurrency($footer['total_amount'], "INR");
+        
+        //$ret = array("data"=>$arr, "footer"=>'TOTALS');
+                
+        $response = array(
+            //"draw" => $draw,
+            //"recordsTotal" => $totalRecords,
+            //"recordsFiltered" => $totalRecordswithFilter,
+            "data" => array("data"=>$arr, "footer"=>$footer), //$arr,
+
+            "error" => null
+        );
+        return response()->json($response);
+
     }
 
 
@@ -637,5 +809,12 @@ class SaleOrderController extends Controller
 
         // download PDF file with download method
         return $pdf->download($order_number_slug.' - '.$order->dealer->company.'.pdf');
+    }
+
+    public function report()
+    {
+        //$dealer = Dealer::all();
+
+        return view('sale_orders.report');//, ['dealer' => $dealer ]);
     }
 }
