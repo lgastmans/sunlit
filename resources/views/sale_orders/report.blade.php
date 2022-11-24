@@ -257,7 +257,7 @@
             quarterly_id,
             footerData;
 
-        var reportTable = $(" #table-report-datewise ").dataTable({
+        var reportTable = $(" #table-report-datewise ").DataTable({
             processing      : true,
             serverSide      : true,
             deferLoading    : 0,
@@ -366,13 +366,13 @@
         });
 
 
-        var reportTableCategory = $(" #table-report-category ").dataTable({
+        var reportTableCategory = $(" #table-report-category ").DataTable({
             processing      : true,
             serverSide      : true,
             deferLoading    : 0,
             scrollCollapse  : true,
             paging		    : false,				        
-            searching	    : false,
+            searching	    : true,
             filter          : true,
             info            : false,
             autoWidth       : false,
@@ -475,20 +475,19 @@
 
         });
 
-        reportTableCategory.api().columns().eq(0).each(function(colIdx) {
+        reportTableCategory.columns().eq(0).each(function(colIdx) {
 
-            var cell = $('.filters th').eq($(reportTableCategory.api().column(colIdx).header()).index());
+            var cell = $('.filters th').eq($(reportTableCategory.column(colIdx).header()).index());
             var title = $(cell).text();
 
             if($(cell).hasClass('no-filter')){
                 $(cell).html('&nbsp');
             }
             else{
-                $('input', $('.filters th').eq($(reportTableCategory.api().column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
+                $('input', $('.filters th').eq($(reportTableCategory.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
                     e.stopPropagation();
                     $(this).attr('title', $(this).val());
                     reportTableCategory
-                        .api()
                         .column(colIdx)
                         .search(this.value)
                         .draw();
@@ -511,12 +510,12 @@
             if (select_format=='format_datewise')
             {
                 console.log('datewise')
-                reportTable.api().ajax.reload();
+                reportTable.ajax.reload();
             }
             else
             {
                 console.log('category')
-                reportTableCategory.api().ajax.reload();
+                reportTableCategory.ajax.reload();
             }
 
         });
