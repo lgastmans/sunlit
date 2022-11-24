@@ -7,7 +7,6 @@
 @section('page-title', 'Sales Report')
 
 @section('content')
-
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -144,6 +143,19 @@
                                         <th>Tax Amount</th>
                                         <th>Amount</th>
                                     </tr>
+                                    <tr class="filters" style="display: none;">
+                                        <th class="no-filter"><input type="text" class="form-control"></th>
+                                        <th><input type="text" class="form-control"></th>
+                                        <th><input type="text" class="form-control"></th>
+                                        <th><input type="text" class="form-control"></th>
+                                        <th class="no-filter"><input type="text" class="form-control"></th>
+                                        <th class="no-filter"><input type="text" class="form-control"></th>
+                                        <th class="no-filter"><input type="text" class="form-control"></th>
+                                        <th class="no-filter"><input type="text" class="form-control"></th>
+                                        <th class="no-filter"><input type="text" class="form-control"></th>
+                                        <th class="no-filter"><input type="text" class="form-control"></th>
+                                    </tr>
+
                                 </thead>
                                 <tbody></tbody>
                                 <tfoot>
@@ -361,11 +373,38 @@
             scrollCollapse  : true,
             paging		    : false,				        
             searching	    : false,
+            filter          : true,
             info            : false,
             autoWidth       : false,
             dom: 'Bfrtip',
             buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
+                {
+                    extend: 'excelHtml5',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ]
+                    },
+                    className: 'btn btn-success'
+                },
+                {
+                    extend: 'pdfHtml5',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ]
+                    },
+                    className: 'btn btn-warning',
+                    download: 'open'
+                },
+                {
+                    extend: 'colvis',
+                    columns: ':not(.noVis)',
+                    className: 'btn btn-info'
+                },
+                {
+                    text: '<i class="mdi mdi-filter"></i>&nbsp;Filter',
+                    // className: 'btn btn-light',
+                    action: function ( e, dt, node, config ) {
+                        $( ".filters" ).slideToggle('slow');
+                    }
+                }
             ],
             ajax            : 
             {
@@ -414,8 +453,7 @@
                         if (last !== group) {
                             $(rows)
                                 .eq(i)
-                                .before('<tr style="background-color:darkgrey"><td colspan="9">' + group + '</td></tr>')
-                                .css("background-color", "blue");
+                                .before('<tr style="background-color:green"><td colspan="9"><b>' + group + '</b></td></tr>');
     
                             last = group;
                         }
@@ -435,6 +473,28 @@
                 }
             }
 
+        });
+
+        reportTableCategory.api().columns().eq(0).each(function(colIdx) {
+
+            var cell = $('.filters th').eq($(reportTableCategory.api().column(colIdx).header()).index());
+            var title = $(cell).text();
+
+            if($(cell).hasClass('no-filter')){
+                $(cell).html('&nbsp');
+            }
+            else{
+                $('input', $('.filters th').eq($(reportTableCategory.api().column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
+                    e.stopPropagation();
+                    $(this).attr('title', $(this).val());
+                    reportTableCategory
+                        .api()
+                        .column(colIdx)
+                        .search(this.value)
+                        .draw();
+                    
+                }); 
+            }
         });
 
 
