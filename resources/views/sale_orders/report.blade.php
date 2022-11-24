@@ -142,7 +142,7 @@
                                 </tfoot>
                             </table>
 
-                            <table id="table-report-category" class="table table-striped table-condensed" cellspacing="0" width="100%" style="width:100% !important;display:none">
+                            <table id="table-report-category" class="table table-striped table-condensed" cellspacing="0" width="100%" style="display:none">
                             <thead>
                                     <tr>
                                         <th>Category</th>
@@ -339,7 +339,7 @@
                 { data: 'amount', orderable : false}
             ],
             "columnDefs": [
-                { className: "dt-right", "targets": [5,6,7,8,9,10] }  //'_all' }
+                { className: "dt-right", "targets": [5,6,7,8,9,10] },  //'_all' }
             ],
             oLanguage : {
                 "sInfo": "", //"_TOTAL_ entries",
@@ -479,7 +479,7 @@
             },            
             columns   : [
                 { data: 'category', orderable : false},
-                { data: 'part_number', orderable : false},
+                { data: 'part_number', orderable : false, 'width': '100px'},
                 { data: 'model', orderable : false},
                 { data: 'kw_rating', orderable : false},
                 { data: 'quantity', orderable : false},
@@ -491,7 +491,7 @@
             ],
             columnDefs: [
                 { className: "dt-right", "targets": [3,4,5,6,7,8,9] },   //'_all' }
-                { visible: false, "targets": [0] }
+                { visible: false, "targets": [0] },
             ],
             oLanguage : {
                 "sInfo": "", //"_TOTAL_ entries",
