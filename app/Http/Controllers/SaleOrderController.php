@@ -254,7 +254,7 @@ class SaleOrderController extends Controller
         $query = SaleOrder::query();
 
         if ($select_format=='format_datewise')
-            $query->select('sale_orders.dispatched_at', 'sale_orders.order_number_slug', 'products.part_number', 'sale_order_items.quantity_ordered', 'sale_order_items.selling_price', 'sale_order_items.tax');
+            $query->select('sale_orders.dispatched_at', 'sale_orders.order_number_slug', 'products.part_number', 'products.model', 'products.kw_rating', 'sale_order_items.quantity_ordered', 'sale_order_items.selling_price', 'sale_order_items.tax');
         else
             $query->select('categories.name', 'products.part_number', 'products.model', 'products.kw_rating', DB::raw('SUM(sale_order_items.quantity_ordered) AS quantity_ordered'), 'sale_order_items.selling_price', 'sale_order_items.tax');
 
@@ -270,7 +270,17 @@ class SaleOrderController extends Controller
         $column_arr = $request->get('columns');
 
         if ($select_format=='format_datewise')
-        {}
+        {
+            if (!empty($column_arr[2]['search']['value']))
+                $query->where('products.part_number', 'like', '%'.$column_arr[2]['search']['value'].'%');
+
+            if (!empty($column_arr[3]['search']['value']))
+                $query->where('products.model', 'like', '%'.$column_arr[3]['search']['value'].'%');
+
+            if (!empty($column_arr[4]['search']['value']))
+                $query->where('products.kw_rating', 'like', '%'.$column_arr[4]['search']['value'].'%');
+
+        }
         elseif ($select_format=='format_category')
         {
             if (!empty($column_arr[1]['search']['value']))

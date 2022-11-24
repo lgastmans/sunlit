@@ -110,6 +110,19 @@
                                         <th>Tax Amount</th>
                                         <th>Amount</th>
                                     </tr>
+                                    <tr class="filters-datewise" style="display: none;">
+                                        <th class="no-filter"><input type="text" class="form-control"></th>
+                                        <th class="no-filter"><input type="text" class="form-control"></th>
+                                        <th><input type="text" class="form-control"></th>
+                                        <th><input type="text" class="form-control"></th>
+                                        <th><input type="text" class="form-control"></th>
+                                        <th class="no-filter"><input type="text" class="form-control"></th>
+                                        <th class="no-filter"><input type="text" class="form-control"></th>
+                                        <th class="no-filter"><input type="text" class="form-control"></th>
+                                        <th class="no-filter"><input type="text" class="form-control"></th>
+                                        <th class="no-filter"><input type="text" class="form-control"></th>
+                                        <th class="no-filter"><input type="text" class="form-control"></th>
+                                    </tr>
                                 </thead>
                                 <tbody></tbody>
                                 <tfoot>
@@ -143,7 +156,7 @@
                                         <th>Tax Amount</th>
                                         <th>Amount</th>
                                     </tr>
-                                    <tr class="filters" style="display: none;">
+                                    <tr class="filters-category" style="display: none;">
                                         <th class="no-filter"><input type="text" class="form-control"></th>
                                         <th><input type="text" class="form-control"></th>
                                         <th><input type="text" class="form-control"></th>
@@ -201,16 +214,21 @@
             }
         });
 
+
         $(" #select_format ").on("change", function() {
             if ($(this).val()=='format_datewise')
             {
                 $(" #table-report-datewise ").css('display','block');
                 $(" #table-report-category ").css('display','none');
+                $(" #table-report-datewise_wrapper ").css('display','block');
+                $(" #table-report-category_wrapper ").css('display','none');
             }
             else if ($(this).val()=='format_category')
             {
                 $(" #table-report-datewise ").css('display','none');
                 $(" #table-report-category ").css('display','block');
+                $(" #table-report-datewise_wrapper ").css('display','none');
+                $(" #table-report-category_wrapper ").css('display','block');
             }
         })
 
@@ -264,9 +282,35 @@
             //"scrollY" 		: '80vh',
             scrollCollapse  : true,
             paging		    : false,				        
-            searching	    : false,
+            searching	    : true,
+            filter          : true,
             info            : false,
             autoWidth       : false,
+            dom: 'Blrtip', //'Bfrtip',
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ]
+                    },
+                    className: 'btn btn-success'
+                },
+                {
+                    extend: 'pdfHtml5',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ]
+                    },
+                    className: 'btn btn-warning',
+                    download: 'open'
+                },
+                {
+                    text: '<i class="mdi mdi-filter"></i>&nbsp;Filter',
+                    // className: 'btn btn-light',
+                    action: function ( e, dt, node, config ) {
+                        $( ".filters-datewise" ).slideToggle('slow');
+                    }
+                }
+            ],
             ajax            : 
             {
                 method 	: "GET",
@@ -306,7 +350,6 @@
             fnInitComplete : function () {
                 // Event handler to be fired when rendering is complete (Turn off Loading gif for example)
                 // console.log('Datatable rendering complete');
-
             },
 
             // fnRowCallback : function (nRow, aData, iDisplayIndex) {
@@ -362,9 +405,28 @@
                     $( api.column( 10 ).footer() ).html(json.data.footer.total_amount );
                 }
             }
-
         });
 
+        reportTable.columns().eq(0).each(function(colIdx) {
+
+            var cell = $('.filters-datewise th').eq($(reportTable.column(colIdx).header()).index());
+            var title = $(cell).text();
+
+            if($(cell).hasClass('no-filter')){
+                $(cell).html('&nbsp');
+            }
+            else{
+                $('input', $('.filters-datewise th').eq($(reportTable.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
+                    e.stopPropagation();
+                    $(this).attr('title', $(this).val());
+                    reportTable
+                        .column(colIdx)
+                        .search(this.value)
+                        .draw();
+                    
+                }); 
+            }
+            });
 
         var reportTableCategory = $(" #table-report-category ").DataTable({
             processing      : true,
@@ -376,7 +438,7 @@
             filter          : true,
             info            : false,
             autoWidth       : false,
-            dom: 'Bfrtip',
+            dom: 'Blrtip', //'Bfrtip',
             buttons: [
                 {
                     extend: 'excelHtml5',
@@ -394,15 +456,10 @@
                     download: 'open'
                 },
                 {
-                    extend: 'colvis',
-                    columns: ':not(.noVis)',
-                    className: 'btn btn-info'
-                },
-                {
                     text: '<i class="mdi mdi-filter"></i>&nbsp;Filter',
                     // className: 'btn btn-light',
                     action: function ( e, dt, node, config ) {
-                        $( ".filters" ).slideToggle('slow');
+                        $( ".filters-category" ).slideToggle('slow');
                     }
                 }
             ],
@@ -477,14 +534,14 @@
 
         reportTableCategory.columns().eq(0).each(function(colIdx) {
 
-            var cell = $('.filters th').eq($(reportTableCategory.column(colIdx).header()).index());
+            var cell = $('.filters-category th').eq($(reportTableCategory.column(colIdx).header()).index());
             var title = $(cell).text();
 
             if($(cell).hasClass('no-filter')){
                 $(cell).html('&nbsp');
             }
             else{
-                $('input', $('.filters th').eq($(reportTableCategory.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
+                $('input', $('.filters-category th').eq($(reportTableCategory.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
                     e.stopPropagation();
                     $(this).attr('title', $(this).val());
                     reportTableCategory
@@ -509,16 +566,18 @@
 
             if (select_format=='format_datewise')
             {
-                console.log('datewise')
                 reportTable.ajax.reload();
             }
             else
             {
-                console.log('category')
                 reportTableCategory.ajax.reload();
             }
 
         });
+
+        setTimeout(function() {
+            $(" #table-report-category_wrapper ").css('display','none');
+        }, 50);        
 
     });
     
