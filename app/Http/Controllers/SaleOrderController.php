@@ -335,6 +335,8 @@ class SaleOrderController extends Controller
                     "invoice_date" => $row->display_dispatched_at,
                     "invoice_number" => $row->order_number_slug,
                     "part_number" => $row->part_number,
+                    "model" => $row->model,
+                    "kw_rating" => $row->kw_rating,
                     "quantity" => $row->quantity_ordered,
                     "price" => $row->selling_price,
                     "taxable_value" => $taxable_value,
@@ -346,6 +348,8 @@ class SaleOrderController extends Controller
                 $arr[] = array(
                     "category" => $row->name,
                     "part_number" => $row->part_number,
+                    "model" => $row->model,
+                    "kw_rating" => $row->kw_rating,
                     "quantity" => $row->quantity_ordered,
                     "price" => $row->selling_price,
                     "taxable_value" => $taxable_value,

@@ -102,6 +102,8 @@
                                         <th>Date</th>
                                         <th>Invoice Number</th>
                                         <th>Part Number</th>
+                                        <th>Model</th>
+                                        <th>KW Rating</th>
                                         <th>Quantity</th>
                                         <th>Price</th>
                                         <th>Taxable Value</th>
@@ -113,6 +115,8 @@
                                 <tbody></tbody>
                                 <tfoot>
                                     <tr>
+                                        <th></th>
+                                        <th></th>
                                         <th></th>
                                         <th></th>
                                         <th></th>
@@ -131,6 +135,8 @@
                                     <tr>
                                         <th>Category</th>
                                         <th>Part Number</th>
+                                        <th>Model</th>
+                                        <th>KW Rating</th>
                                         <th>Quantity</th>
                                         <th>Price</th>
                                         <th>Taxable Value</th>
@@ -142,6 +148,8 @@
                                 <tbody></tbody>
                                 <tfoot>
                                     <tr>
+                                        <th></th>
+                                        <th></th>
                                         <th></th>
                                         <th></th>
                                         <th></th>
@@ -265,6 +273,8 @@
                 { data: 'invoice_date', orderable : false},
                 { data: 'invoice_number', orderable : false},
                 { data: 'part_number', orderable : false},
+                { data: 'model', orderable : false},
+                { data: 'kw_rating', orderable : false},
                 { data: 'quantity', orderable : false},
                 { data: 'price', orderable : false},
                 { data: 'taxable_value', orderable : false},
@@ -273,7 +283,7 @@
                 { data: 'amount', orderable : false}
             ],
             "columnDefs": [
-                { className: "dt-right", "targets": [3,4,5,6,7,8] }  //'_all' }
+                { className: "dt-right", "targets": [5,6,7,8,9,10] }  //'_all' }
             ],
             oLanguage : {
                 "sInfo": "", //"_TOTAL_ entries",
@@ -334,10 +344,10 @@
 
                     // console.log('object ' + json.data.footer.label);
                     $( api.column( 0 ).footer() ).html(json.data.footer.label );
-                    $( api.column( 3 ).footer() ).html(json.data.footer.total_quantity );
-                    $( api.column( 5 ).footer() ).html(json.data.footer.total_taxable_value );
-                    $( api.column( 7 ).footer() ).html(json.data.footer.total_tax_amount );
-                    $( api.column( 8 ).footer() ).html(json.data.footer.total_amount );
+                    $( api.column( 5 ).footer() ).html(json.data.footer.total_quantity );
+                    $( api.column( 7 ).footer() ).html(json.data.footer.total_taxable_value );
+                    $( api.column( 9 ).footer() ).html(json.data.footer.total_tax_amount );
+                    $( api.column( 10 ).footer() ).html(json.data.footer.total_amount );
                 }
             }
 
@@ -374,6 +384,8 @@
             columns   : [
                 { data: 'category', orderable : false},
                 { data: 'part_number', orderable : false},
+                { data: 'model', orderable : false},
+                { data: 'kw_rating', orderable : false},
                 { data: 'quantity', orderable : false},
                 { data: 'price', orderable : false},
                 { data: 'taxable_value', orderable : false},
@@ -382,7 +394,7 @@
                 { data: 'amount', orderable : false}
             ],
             columnDefs: [
-                { className: "dt-right", "targets": [3,4,5,6,7] },   //'_all' }
+                { className: "dt-right", "targets": [3,4,5,6,7,8,9] },   //'_all' }
                 { visible: false, "targets": [0] }
             ],
             oLanguage : {
@@ -402,7 +414,8 @@
                         if (last !== group) {
                             $(rows)
                                 .eq(i)
-                                .before('<tr style="background-color:darkgrey"><td colspan="7">' + group + '</td></tr>');
+                                .before('<tr style="background-color:darkgrey"><td colspan="9">' + group + '</td></tr>')
+                                .css("background-color", "blue");
     
                             last = group;
                         }
@@ -415,10 +428,10 @@
                 if (json!==undefined)
                 {
                     $( api.column( 0 ).footer() ).html(json.data.footer.label );
-                    $( api.column( 2 ).footer() ).html(json.data.footer.total_quantity );
-                    $( api.column( 4 ).footer() ).html(json.data.footer.total_taxable_value );
-                    $( api.column( 6 ).footer() ).html(json.data.footer.total_tax_amount );
-                    $( api.column( 7 ).footer() ).html(json.data.footer.total_amount );
+                    $( api.column( 4 ).footer() ).html(json.data.footer.total_quantity );
+                    $( api.column( 6 ).footer() ).html(json.data.footer.total_taxable_value );
+                    $( api.column( 8 ).footer() ).html(json.data.footer.total_tax_amount );
+                    $( api.column( 9 ).footer() ).html(json.data.footer.total_amount );
                 }
             }
 
