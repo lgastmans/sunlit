@@ -137,8 +137,8 @@
                         <label class="form-label">Paid date</label>
                         <input type="text" class="form-control" name="paid_at"
                             value="{{ $invoice->display_paid_at }}" data-provide="datepicker" data-date-autoclose="true"
-                            data-date-container="#paid_at" data-date-format="M d, yyyy" required data-date-start-date="-1d"
-                            data-date-end-date="+6m" data-date-today-highlight="true">
+                            data-date-container="#paid_at" data-date-format="M d, yyyy" required
+                            data-date-today-highlight="true">
                     </div>
                     <div class="col-xl-6">
                         <label class="form-label">Paid Exchange Rate</label>
