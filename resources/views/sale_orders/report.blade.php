@@ -80,115 +80,110 @@
                             <button class="btn btn-primary form-control" type="button" id="btn-load">Load</button>
                         </div>
 
-                    </div>
-
-
-                    <div class="row">
-                        <div class="col-12">
-                        <div class="table-responsive">
-
-                            <table id="table-report-datewise" class="table table-striped table-condensed " cellspacing="0" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Invoice Number</th>
-                                        <th>Part Number</th>
-                                        <th>Model</th>
-                                        <th>KW Rating</th>
-                                        <th>Quantity</th>
-                                        <th>Price</th>
-                                        <th>Taxable Value</th>
-                                        <th>Tax</th>
-                                        <th>Tax Amount</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    <tr class="filters-datewise" style="display: none;">
-                                        <th class="no-filter"><input type="text" class="form-control"></th>
-                                        <th class="no-filter"><input type="text" class="form-control"></th>
-                                        <th><input type="text" class="form-control"></th>
-                                        <th><input type="text" class="form-control"></th>
-                                        <th><input type="text" class="form-control"></th>
-                                        <th class="no-filter"><input type="text" class="form-control"></th>
-                                        <th class="no-filter"><input type="text" class="form-control"></th>
-                                        <th class="no-filter"><input type="text" class="form-control"></th>
-                                        <th class="no-filter"><input type="text" class="form-control"></th>
-                                        <th class="no-filter"><input type="text" class="form-control"></th>
-                                        <th class="no-filter"><input type="text" class="form-control"></th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                    </tr>
-                                </tfoot>
-                            </table>
-
-                            <table id="table-report-category" class="table table-striped table-condensed" cellspacing="0" width="100%" style="display:none">
-                            <thead>
-                                    <tr>
-                                        <th>Category</th>
-                                        <th>Part Number</th>
-                                        <th>Model</th>
-                                        <th>KW Rating</th>
-                                        <th>Quantity</th>
-                                        <th>Price</th>
-                                        <th>Taxable Value</th>
-                                        <th>Tax</th>
-                                        <th>Tax Amount</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                    <tr class="filters-category" style="display: none;">
-                                        <th class="no-filter"><input type="text" class="form-control"></th>
-                                        <th><input type="text" class="form-control"></th>
-                                        <th><input type="text" class="form-control"></th>
-                                        <th><input type="text" class="form-control"></th>
-                                        <th class="no-filter"><input type="text" class="form-control"></th>
-                                        <th class="no-filter"><input type="text" class="form-control"></th>
-                                        <th class="no-filter"><input type="text" class="form-control"></th>
-                                        <th class="no-filter"><input type="text" class="form-control"></th>
-                                        <th class="no-filter"><input type="text" class="form-control"></th>
-                                        <th class="no-filter"><input type="text" class="form-control"></th>
-                                    </tr>
-
-                                </thead>
-                                <tbody></tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                    </tr>
-                                </tfoot>
-
-                            </table>
-
-                        </div> {{-- table-responsive --}}
-                        </div>
-                    </div>
-                    
+                    </div>   
                 </div> <!-- end card-body-->
             </div> <!-- end card-->
         </div> <!-- end col -->
     </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="table-responsive">
+                <table id="table-report-datewise" class="table table-striped table-condensed " cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Invoice Number</th>
+                            <th>Part Number</th>
+                            <th>Model</th>
+                            <th>KW Rating</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Taxable Value</th>
+                            <th>Tax</th>
+                            <th>Tax Amount</th>
+                            <th>Amount</th>
+                        </tr>
+                        <tr class="filters-datewise" style="display: none;">
+                            <th class="no-filter"><input type="text" class="form-control"></th>
+                            <th class="no-filter"><input type="text" class="form-control"></th>
+                            <th><input type="text" class="form-control"></th>
+                            <th><input type="text" class="form-control"></th>
+                            <th><input type="text" class="form-control"></th>
+                            <th class="no-filter"><input type="text" class="form-control"></th>
+                            <th class="no-filter"><input type="text" class="form-control"></th>
+                            <th class="no-filter"><input type="text" class="form-control"></th>
+                            <th class="no-filter"><input type="text" class="form-control"></th>
+                            <th class="no-filter"><input type="text" class="form-control"></th>
+                            <th class="no-filter"><input type="text" class="form-control"></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    <tfoot>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                </table>
 
+                <table id="table-report-category" class="table table-striped table-condensed" cellspacing="0" width="100%" style="display:none">
+                <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Part Number</th>
+                            <th>Model</th>
+                            <th>KW Rating</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Taxable Value</th>
+                            <th>Tax</th>
+                            <th>Tax Amount</th>
+                            <th>Amount</th>
+                        </tr>
+                        <tr class="filters-category" style="display: none;">
+                            <th class="no-filter"><input type="text" class="form-control"></th>
+                            <th><input type="text" class="form-control"></th>
+                            <th><input type="text" class="form-control"></th>
+                            <th><input type="text" class="form-control"></th>
+                            <th class="no-filter"><input type="text" class="form-control"></th>
+                            <th class="no-filter"><input type="text" class="form-control"></th>
+                            <th class="no-filter"><input type="text" class="form-control"></th>
+                            <th class="no-filter"><input type="text" class="form-control"></th>
+                            <th class="no-filter"><input type="text" class="form-control"></th>
+                            <th class="no-filter"><input type="text" class="form-control"></th>
+                        </tr>
+
+                    </thead>
+                    <tbody></tbody>
+                    <tfoot>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+
+                </table>
+
+            </div> {{-- table-responsive --}}
+        </div>
+    </div>
 @endsection <!-- content -->
 
 @section('page-scripts')
@@ -217,17 +212,17 @@
         $(" #select_format ").on("change", function() {
             if ($(this).val()=='format_datewise')
             {
-                $(" #table-report-datewise ").css('display','block');
-                $(" #table-report-category ").css('display','none');
-                $(" #table-report-datewise_wrapper ").css('display','block');
-                $(" #table-report-category_wrapper ").css('display','none');
+                $(" #table-report-datewise ").show();
+                $(" #table-report-category ").hide();
+                $(" #table-report-datewise_wrapper ").show();
+                $(" #table-report-category_wrapper ").hide();
             }
             else if ($(this).val()=='format_category')
             {
-                $(" #table-report-datewise ").css('display','none');
-                $(" #table-report-category ").css('display','block');
-                $(" #table-report-datewise_wrapper ").css('display','none');
-                $(" #table-report-category_wrapper ").css('display','block');
+                $(" #table-report-datewise ").hide();
+                $(" #table-report-category ").show();
+                $(" #table-report-datewise_wrapper ").hide();
+                $(" #table-report-category_wrapper ").show();
             }
         })
 
@@ -236,21 +231,21 @@
 
             if ($(this).val()=='period_monthly')
             {
-                $(" #display_monthly_month ").css('display','block');
-                $(" #display_monthly_year ").css('display','block');
-                $(" #display_period_quarterly ").css('display', 'none');
+                $(" #display_monthly_month ").show();
+                $(" #display_monthly_year ").show();
+                $(" #display_period_quarterly ").hide();
             }
             else if ($(this).val()=='period_quarterly')
             {
-                $(" #display_monthly_month ").css('display','none');
-                $(" #display_monthly_year ").css('display','block');
-                $(" #display_period_quarterly ").css('display', 'block');
+                $(" #display_monthly_month ").hide();
+                $(" #display_monthly_year ").show();
+                $(" #display_period_quarterly ").show();
             }
             else if ($(this).val()=='period_yearly')
             {
-                $(" #display_monthly_month ").css('display','none');
-                $(" #display_monthly_year ").css('display','none');
-                $(" #display_period_quarterly ").css('display', 'none');
+                $(" #display_monthly_month ").hide();
+                $(" #display_monthly_year ").hide();
+                $(" #display_period_quarterly ").hide();
             }
         });
 
@@ -575,7 +570,7 @@
         });
 
         setTimeout(function() {
-            $(" #table-report-category_wrapper ").css('display','none');
+            $(" #table-report-category_wrapper ").hide();
         }, 50);        
 
     });
