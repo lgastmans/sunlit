@@ -13,17 +13,20 @@ $(document).ready(function () {
   shippingStateSelect.select2({
     ajax: {
       url: routeShippingState,
-      dataType: 'json' // processResults: function (data) {
+      dataType: 'json'
+      // processResults: function (data) {
       //     return {
       //         //results: data
       //     };
       // }
-
     }
   });
+
   shippingStateSelect.on("change", function (e) {
     var lastValue = e.currentTarget.value;
-    var lastText = e.currentTarget.textContent; //console.log(lastValue +' :: ' + lastText);
+    var lastText = e.currentTarget.textContent;
+
+    //console.log(lastValue +' :: ' + lastText);
 
     $.ajaxSetup({
       headers: {
@@ -33,7 +36,6 @@ $(document).ready(function () {
     var route = globalSettings.sale_order_update;
     route = route.replace(':id', $('#sale-order-id').val());
     var field_name = 'shipping_state_id'; //$(this).attr('id');
-
     var field_value = lastValue;
     $.ajax({
       type: 'POST',
@@ -46,8 +48,11 @@ $(document).ready(function () {
         '_method': 'PUT'
       },
       success: function success(result) {
-        console.log(result); // $(" #transport-charges ").html(result.transport_charges);
+        console.log(result);
+
+        // $(" #transport-charges ").html(result.transport_charges);
         // $(" #total-cost ").html(result.total);
+
         // $.NotificationApp.send("Success","Transport Charges saved","top-right","","success")
       }
     });
@@ -58,8 +63,9 @@ $(document).ready(function () {
     $('.item-total').each(function (index) {
       grand_total = grand_total + parseFloat($(this).html());
     });
-    $('#grand-total').html(grand_total.toFixed(2)); //var route = '{{ route("sale-orders.update", ":id") }}';
+    $('#grand-total').html(grand_total.toFixed(2));
 
+    //var route = '{{ route("sale-orders.update", ":id") }}';
     var route = globalSettings.sale_order_update;
     route = route.replace(':id', $('#sale-order-id').val());
     $.ajax({
@@ -76,7 +82,8 @@ $(document).ready(function () {
         $("#freight").val(result.freight_charges);
         $("#transport-charges").html(result.transport_charges);
         $("#total-cost").html(result.total_cost);
-        console.log('result ' + JSON.stringify(result)); //console.log('update' + result.transport_charges)
+        console.log('result ' + JSON.stringify(result));
+        //console.log('update' + result.transport_charges)
         //$(" #total-cost ").html(result.total);                    
       }
     });
@@ -90,7 +97,6 @@ $(document).ready(function () {
       dataType: 'json'
     }
   });
-
   function formatProduct(el) {
     var item = "<div><h5>" + el.text + "</h5>";
     var sa = 0;
@@ -105,23 +111,23 @@ $(document).ready(function () {
     item += "</div>";
     return $(item);
   }
-
   var productSelect = $(".product-select").select2();
   var product_route = globalSettings.product_route; //'{{ route("ajax.products.warehouse", [":warehouse_id"]) }}';
-
   product_route = product_route.replace(':warehouse_id', $('#warehouse-id').val());
   productSelect.select2({
     ajax: {
       url: product_route,
       dataType: 'json'
     },
-    templateResult: formatProduct // templateSelection : formatProduct,
+    templateResult: formatProduct
+    // templateSelection : formatProduct,
     //   escapeMarkup: function(m) {
     //       // Do not escape HTML in the select options text
     //       return m;
     //    },
+  });
 
-  }); // productSelect.on("keyup", function (e) { 
+  // productSelect.on("keyup", function (e) { 
   //     console.log(e.keyCode);
   //     if (( e.keyCode == 13 ) || ( e.keyCode == 9)) {
   //         e.preventDefault();
@@ -131,8 +137,8 @@ $(document).ready(function () {
 
   productSelect.on("change", function (e) {
     var product_id = $(".product-select").find(':selected').val();
-    var warehouse_id = $(".product-select").find(':selected').val(); //var route = '{{ route("product.json", [":id", ":warehouse_id"]) }}';
-
+    var warehouse_id = $(".product-select").find(':selected').val();
+    //var route = '{{ route("product.json", [":id", ":warehouse_id"]) }}';
     var route = globalSettings.product_json;
     route = route.replace(':id', product_id);
     route = route.replace(':warehouse_id', $('#warehouse-id').val());
@@ -147,10 +153,10 @@ $(document).ready(function () {
          * default quantity to 1
          */
         $("#quantity_ordered").val("1");
+
         /**
          * suggest price if average selling price not set
          */
-
         if (parseInt(data.average_selling_price) > 0) {
           $('#selling_price').val(data.average_selling_price);
           $(" #suggested_selling_price ").hide();
@@ -165,13 +171,11 @@ $(document).ready(function () {
       }
     });
   });
-
   function getTaxValue(tax_percentage) {
     if (tax_percentage == null) return 1;
     var tax = 1 + parseFloat(tax_percentage.replace('%', '') / 100);
     return tax;
   }
-
   $('body').on('blur', '.editable-field', function (e) {
     if ($(this).val() != $(this).attr('data-value')) {
       if ($(this).attr('data-field') == "price") {
@@ -179,14 +183,14 @@ $(document).ready(function () {
       } else {
         var item_id = $(this).parent().parent().attr('data-id');
       }
-
       var total = $('#item-price-' + item_id).val() * getTaxValue($('#item-tax-' + item_id).html()) * $('#item-quantity-' + item_id).val();
       $('#item-total-' + item_id).html(total.toFixed(2));
       $.ajaxSetup({
         headers: {
           'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
         }
-      }); //var route = '{{ route("sale-orders-items.update", ":id") }}';
+      });
+      //var route = '{{ route("sale-orders-items.update", ":id") }}';
 
       var route = globalSettings.sale_order_items_update;
       route = route.replace(':id', item_id);
@@ -212,7 +216,6 @@ $(document).ready(function () {
     //var route = '{{ route("sale-orders-items.delete", ":id") }}';
     var route = globalSettings.sale_order_items_delete;
     var button = e.relatedTarget;
-
     if (button != null) {
       route = route.replace(':id', button.id);
       $('#delete-form').attr('action', route);
@@ -222,13 +225,11 @@ $(document).ready(function () {
     //var route = '{{ route("sale-orders.delete", ":id") }}';
     var route = globalSettings.sale_order_delete;
     var button = e.relatedTarget;
-
     if (button != null) {
       route = route.replace(':id', button.id);
       $('#delete-order-form').attr('action', route);
     }
   });
-
   function is_existing_product(product_id) {
     var item_id = 0;
     $('.item').each(function (index) {
@@ -238,58 +239,50 @@ $(document).ready(function () {
     });
     return item_id;
   }
-
   $('.form-product').on('submit', function (e) {
     e.preventDefault();
     var price = $("#selling_price").val();
     var asked_quantity = $('#quantity_ordered').val();
     var product_id = $('#product_id').val();
+
     /**
      * validate product 
      */
-
     if (product_id === null) {
       $.NotificationApp.send("Error", "Product not defined", "top-right", "", "error");
       return false;
     }
+
     /**
      * validate quantity
      */
-
-
     if (isNaN(parseFloat(asked_quantity))) {
       $.NotificationApp.send("Error", "Invalid Quantity", "top-right", "", "error");
       return false;
     }
-
     if (parseFloat(asked_quantity) === 0) {
       $.NotificationApp.send("Error", "Quantity cannot be zero", "top-right", "", "error");
       return false;
     }
+
     /**
      * validate price
      */
-
-
     if (isNaN(parseFloat(price))) {
       $.NotificationApp.send("Error", "Invalid Selling Price", "top-right", "", "error");
       return false;
     }
-
     if (parseFloat(price) === 0) {
       $.NotificationApp.send("Error", "Selling Price cannot be zero", "top-right", "", "error");
       return false;
     }
-
     $(" #suggested_selling_price ").hide();
     $(" #suggested_selling_price ").html('');
     var existing_item_id = is_existing_product($('#product_id').val());
-
     if (existing_item_id > 0) {
       var new_quantity = parseInt(asked_quantity) + parseInt($('#item-quantity-' + existing_item_id).val());
       $('#quantity_ordered').val(new_quantity);
     }
-
     $.ajaxSetup({
       headers: {
         'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
@@ -343,10 +336,9 @@ $(document).ready(function () {
           $('#sale-order-items-table > tbody:last-child').append(item);
           $('.no-items').remove();
         }
-
         $('.place-order-form-container').removeClass('d-none');
-        recalculateGrandTotal(); // clear the form
-
+        recalculateGrandTotal();
+        // clear the form
         $('#quantity_ordered').val('');
         $('#selling_price').val('');
         $('#product_id').val(null).trigger('change');
@@ -511,17 +503,20 @@ $(document).ready(function () {
     "email": "felbye@rediff.com",
     "contact_person": "Fonsie Elby",
     "phone": "8827000251"
-  }]; // Default Datatable
+  }];
 
+  // Default Datatable
   var url = "{{ route('suppliers.list') }}";
   console.log(url);
   var table = $('#suppliers-datatable').DataTable({
     //"data": data,
+
     processing: true,
     serverSide: true,
     //type : "POST",
     //contentType: "json",
     //processData: false,
+
     ajax: url,
     "language": {
       "paginate": {
@@ -539,7 +534,6 @@ $(document).ready(function () {
         if (type === 'display') {
           data = "<div class=\"form-check\"><input type=\"checkbox\" class=\"form-check-input dt-checkboxes\"><label class=\"form-check-label\">&nbsp;</label></div>";
         }
-
         return data;
       },
       'checkboxes': {
