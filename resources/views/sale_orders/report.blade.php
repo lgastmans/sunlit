@@ -69,18 +69,10 @@
 
                         {{-- Monthly - year --}}
 
-                        <div class="col-xl-1 position-relative" id="display_monthly_year">
+                        <div class="col-xl-1 position-relative " id="display_monthly_year">
                             <label class="form-label">&nbsp;</label>
-                            <input type="text" class="form-control" id="year_id" value="{{ date('Y') }}"
-                                data-provide="datepicker" 
-                                data-date-container="#display_monthly_year"
-                                data-date-autoclose="true"
-                                data-date-format="yyyy"
-                                {{-- data-date-start-date="-1d" --}}
-                                {{-- data-date-end-date="+6m" --}}
-                                data-date-today-highlight="true"
-                                required
-                            >
+                            <input type="text" class="form-control " id="year_id" value="{{ date('Y') }}" required data-provide="datepicker" 
+                            data-date-container="#display_monthly_year">
                         </div>
 
                         <div class="col-xl-1">
@@ -205,6 +197,13 @@
 
     $(document).ready(function () {
         "use strict";
+
+        $('#year_id').datepicker({
+            format: 'yyyy',
+            minViewMode: 2,
+            maxViewMode: 2,
+            autoclose: true,
+        });
 
         var dealerSelect = $(".dealer-select").select2();
         dealerSelect.select2({
