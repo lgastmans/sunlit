@@ -1,3 +1,5 @@
+Coucou
+
 # Sunlit Inventory
 
 Sunlit inventory is a Laravel based project for managing Sunlit Future's stock inventory.
