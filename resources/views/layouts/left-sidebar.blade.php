@@ -94,14 +94,38 @@
                 </a>
             </li>
             @endcan
+            
             @can('list dealers')
-            <li class="side-nav-item {{ (Request::is('dealers*') ? ' menuitem-active' : '') }}">
+<!--
+             <li class="side-nav-item {{ (Request::is('dealers*') ? ' menuitem-active' : '') }}">
                 <a href="{{ route('dealers')}}" class="side-nav-link {{ (Request::is('dealers*') ? ' active' : '') }}">
                     <i class="uil-users-alt"></i>
                     <span> Dealers </span>
                 </a>
             </li>
+ -->
+             <li class="side-nav-item {{ (Request::is('dealers*') ? ' menuitem-active' : '') }}">
+                <a data-bs-toggle="collapse" href="#sidebarDealers" aria-expanded="false" aria-controls="sidebarDealers" class="side-nav-link">
+                    <i class="uil-users-alt"></i>
+                    <span> Dealers </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="sidebarDealers">
+                    <ul class="side-nav-second-level">
+                        <li>
+                            <a href="{{ route('dealers')}}">List</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('dealers.ledger')}}">Ledger</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('dealers.ledger-summary')}}">Ledger Summary</a>
+                        </li>
+                    </ul>
+                </div>                
+            </li>
             @endcan
+
             @can('list warehouses')
             <li class="side-nav-item {{ (Request::is('warehouses*') ? ' menuitem-active' : '') }}">
                 <a href="{{ route('warehouses')}}" class="side-nav-link {{ (Request::is('warehouses*') ? ' active' : '') }}">
@@ -110,7 +134,6 @@
                 </a>
             </li>
             @endcan
-
 
             <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#sidebarSettings" aria-expanded="false" aria-controls="sidebarSettings" class="side-nav-link">

@@ -164,6 +164,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/dealers', [DealerController::class, 'index'])->name('dealers');
     Route::get('/dealers/create', [DealerController::class, 'create'])->name('dealers.create');
     Route::get('/dealers/list', [DealerController::class, 'getListForDatatables'])->name('dealers.datatables');
+    Route::get('/dealers/ledger', [DealerController::class, 'ledger'])->name('dealers.ledger');
+    Route::get('/dealers/ledger-summary', [DealerController::class, 'ledgerSummary'])->name('dealers.ledger-summary');
     Route::get('/dealers/{id}', [DealerController::class, 'show'])->name('dealers.show');
     Route::get('/dealers/{id}/edit', [DealerController::class, 'edit'])->name('dealers.edit');
     Route::post('/dealers', [DealerController::class, 'store'])->name('dealers.store');
@@ -236,6 +238,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/category', [CategoryController::class, 'getCategory'])->name('ajax.category');
         Route::get('/suppliers', [SupplierController::class, 'getListForSelect2'])->name('ajax.suppliers');
         Route::get('/dealers', [DealerController::class, 'getListForSelect2'])->name('ajax.dealers');
+        Route::get('/dealers-ledger', [DealerController::class, 'getListForLedger'])->name('ajax.dealers-ledger');
         Route::get('/warehouses', [WarehouseController::class, 'getListForSelect2'])->name('ajax.warehouses');
         Route::get('/taxes', [TaxController::class, 'getListForSelect2'])->name('ajax.taxes');
         Route::get('/roles', [RoleController::class, 'getListForSelect2'])->name('ajax.roles');
@@ -245,7 +248,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/products/warehouse/{id}', [ProductController::class, 'getListPerWarehouse'])->name('ajax.products.warehouse');
         Route::get('/product/{id}/{warehouse_id?}', [ProductController::class, 'getById'])->name('product.json');
         Route::get('/sale-orders', [SaleOrderController::class, 'getListForReport'])->name('ajax.sales-report');
-
     });
 
     Route::prefix('export')->group(function () {

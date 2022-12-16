@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use DateTime;
+use Carbon\Carbon;
+use NumberFormatter;
 use App\Models\Dealer;
+use App\Models\SaleOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Http\Requests\StoreDealerRequest;
@@ -122,6 +126,105 @@ class DealerController extends Controller
         return response()->json($response);
     }
 
+
+    public function getListForLedger(Request $request)
+    {
+        $vdata = array();
+
+        $ret = array(
+                "data"=>array(),
+                "footer"=>array("debit_total"=>0, "credit_total"=>0),
+                "customer"=>array("company"=>'',"address"=>'')
+            );
+
+        $dealer_id = 0;
+        if ($request->has('dealer_id')) {
+            $dealer_id = $request->get("dealer_id");
+        }
+
+        /**
+         * get the dealer's invoices
+        */
+        $query = SaleOrder::query();
+        $query->select('sale_orders.id, sale_orders.dispatched_at', 'sale_orders.order_number_slug', 'sale_orders.amount', 'sale_orders.transport_charges');
+        $query->where('sale_orders.status', '>=', '4');
+        $query->where('sale_orders.dealer_id', '=', $dealer_id);
+        $query->orderBy('sale_orders.dispatched_at','ASC');
+        $query->orderBy('sale_orders.order_number_slug','ASC');        
+        $rows = $query->get();
+
+        $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
+        $fmt->setSymbol(NumberFormatter::CURRENCY_SYMBOL, ''); 
+
+        $arr = array();
+        $footer = array('label'=>'Totals', 'total_quantity'=>0, 'total_taxable_value'=>0, 'total_tax_amount'=>0, 'total_amount'=>0);
+
+        foreach($rows as $obj)
+        {
+            $row = array();
+
+            $total = $obj->amount + $obj->transport_charges;
+
+            $row["vch_date"]    = date('d-m-Y', strtotime($obj->dispatched_at));
+            $row["particulars"] = $obj->order_number_slug;
+            $row["vch_type"]    = "Sales";
+            $row["vch_no"]      = $obj->order_number_slug;
+            $row["debit"]       = $fmt->formatCurrency($total, "INR");
+            $row["credit"]      = 0;
+            
+            $vdata[] = $row;
+            
+            /**
+             * get the payments against the invoice
+             */
+            $sale_order = SaleOrder::findById($obj->id);
+            
+            $query = SaleOrderPayment::query();
+            $query->select('');
+            $query->join('sale_orders', 'sale_orders.id', '=', 'sale_order_id');
+
+
+        }
+
+//print_r($vdata);die();
+
+        /**
+         * sort the data by date
+         */
+        usort($vdata, function ($a, $b) {
+            $dateA = DateTime::createFromFormat('d-m-Y', $a['vch_date']);
+            $dateB = DateTime::createFromFormat('d-m-Y', $b['vch_date']);
+            return $dateA >= $dateB;
+        });        
+
+        // usort($vdata, function ($a, $b) {
+        //     $dateA = Carbon::createFromFormat('d-m-Y', $a['vch_date']);
+        //     $dateB = Carbon::createFromFormat('d-m-Y', $b['vch_date']);
+        //     return $dateA >= $dateB;
+        // });
+
+        $response = array(
+            //"draw" => $draw,
+            //"recordsTotal" => $totalRecords,
+            //"recordsFiltered" => $totalRecordswithFilter,
+            "data" => array("data"=>$vdata, "footer"=>$footer), //$arr,
+
+            "error" => null
+        );
+        return response()->json($response);
+    }
+
+
+    public function ledger(Request $request)
+    {
+        return view('dealers.ledger');
+    }
+
+
+    public function ledgerSummary(Request $request)
+    {
+        return "ledger summary";
+    }
 
     /**
      * Show the form for creating a new resource.
