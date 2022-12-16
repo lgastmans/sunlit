@@ -51,7 +51,7 @@
                     <tbody></tbody>
                     <tfoot>
                         <tr>
-                            <th></th>
+                            <th>Totals</th>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -176,11 +176,11 @@
                 if (json!==undefined)
                 {
                     // console.log('object ' + json.data.footer.label);
-                    // $( api.column( 0 ).footer() ).html(json.data.footer.label );
-                    // $( api.column( 5 ).footer() ).html(json.data.footer.total_quantity );
-                    // $( api.column( 7 ).footer() ).html(json.data.footer.total_taxable_value );
-                    // $( api.column( 9 ).footer() ).html(json.data.footer.total_tax_amount );
-                    // $( api.column( 10 ).footer() ).html(json.data.footer.total_amount );
+                    //$( api.column( 0 ).footer() ).html(json.data.footer.label );
+                    //$( api.column( 5 ).footer() ).html(json.data.footer.total_quantity );
+                    $( api.column( 4 ).footer() ).html(json.data.footer.debit_total );
+                    $( api.column( 5 ).footer() ).html(json.data.footer.credit_total );
+                    //$( api.column( 10 ).footer() ).html(json.data.footer.total_amount );
                 }
             }
         });

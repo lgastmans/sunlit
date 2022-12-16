@@ -146,7 +146,7 @@ class DealerController extends Controller
          * get the dealer's invoices
         */
         $query = SaleOrder::query();
-        $query->select('sale_orders.id, sale_orders.dispatched_at', 'sale_orders.order_number_slug', 'sale_orders.amount', 'sale_orders.transport_charges');
+        $query->select('sale_orders.id', 'sale_orders.dispatched_at', 'sale_orders.order_number_slug', 'sale_orders.amount', 'sale_orders.transport_charges');
         $query->where('sale_orders.status', '>=', '4');
         $query->where('sale_orders.dealer_id', '=', $dealer_id);
         $query->orderBy('sale_orders.dispatched_at','ASC');
@@ -154,10 +154,13 @@ class DealerController extends Controller
         $rows = $query->get();
 
         $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
-        $fmt->setSymbol(NumberFormatter::CURRENCY_SYMBOL, ''); 
+        //$fmt->setSymbol(NumberFormatter::CURRENCY_SYMBOL, ''); 
 
         $arr = array();
         $footer = array('label'=>'Totals', 'total_quantity'=>0, 'total_taxable_value'=>0, 'total_tax_amount'=>0, 'total_amount'=>0);
+
+        $debit_total = 0;
+        $credit_total = 0;
 
         foreach($rows as $obj)
         {
@@ -170,23 +173,32 @@ class DealerController extends Controller
             $row["vch_type"]    = "Sales";
             $row["vch_no"]      = $obj->order_number_slug;
             $row["debit"]       = $fmt->formatCurrency($total, "INR");
-            $row["credit"]      = 0;
+            $row["credit"]      = '';
             
             $vdata[] = $row;
-            
+
+            $debit_total += $total;            
+
             /**
              * get the payments against the invoice
              */
-            $sale_order = SaleOrder::findById($obj->id);
-            
-            $query = SaleOrderPayment::query();
-            $query->select('');
-            $query->join('sale_orders', 'sale_orders.id', '=', 'sale_order_id');
+            $sale_order = SaleOrder::find($obj->id);
 
+            foreach ($sale_order->sale_order_payments as $payment)
+            {
+                $row["vch_date"]    = date('d-m-Y', strtotime($payment->paid_at));
+                $row["particulars"] = $payment->reference;
+                $row["vch_type"]    = "Receipt";
+                $row["vch_no"]      = $obj->order_number_slug;
+                $row["debit"]       = '';
+                $row["credit"]      = $fmt->formatCurrency($payment->amount, "INR");
 
+                $vdata[] = $row;
+
+                $credit_total += $payment->amount;
+            }
         }
 
-//print_r($vdata);die();
 
         /**
          * sort the data by date
@@ -197,20 +209,22 @@ class DealerController extends Controller
             return $dateA >= $dateB;
         });        
 
-        // usort($vdata, function ($a, $b) {
-        //     $dateA = Carbon::createFromFormat('d-m-Y', $a['vch_date']);
-        //     $dateB = Carbon::createFromFormat('d-m-Y', $b['vch_date']);
-        //     return $dateA >= $dateB;
-        // });
+        $balance_total = $debit_total - $credit_total;
+        $balance_total = $fmt->formatCurrency($balance_total, "INR");
+        $debit_total = $fmt->formatCurrency($debit_total, "INR");
+        $credit_total = $fmt->formatCurrency($credit_total, "INR");
 
         $response = array(
             //"draw" => $draw,
             //"recordsTotal" => $totalRecords,
             //"recordsFiltered" => $totalRecordswithFilter,
-            "data" => array("data"=>$vdata, "footer"=>$footer), //$arr,
-
+            "data" => array(
+                "data"=>$vdata, 
+                "footer"=>array("debit_total"=>$debit_total, "credit_total"=>$credit_total, "balance_total"=>$balance_total)
+            ),
             "error" => null
         );
+
         return response()->json($response);
     }
 
