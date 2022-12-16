@@ -227,7 +227,7 @@
         })
 
         $(" #select_period ").on("change", function() {
-            console.log('changed the period ' + $(this).val() );
+            //console.log('changed the period ' + $(this).val() );
 
             if ($(this).val()=='period_monthly')
             {
@@ -502,11 +502,15 @@
                     .data()
                     .each(function (group, i) {
                         if (last !== group) {
+                            
                             $(rows)
                                 .eq(i)
-                                .before('<tr style="background-color:green"><td colspan="9"><b>' + group + '</b></td></tr>');
-    
+                                .before('<tr class="datatables-report-group-header"><td colspan="9"><b>' + group + '</b></td></tr>');
+                                
                             last = group;
+                        }
+                        else{
+                            $(rows).removeClass('text-success');
                         }
                     });
             },            
