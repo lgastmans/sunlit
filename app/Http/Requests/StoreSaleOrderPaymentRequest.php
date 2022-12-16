@@ -25,6 +25,7 @@ class StoreSaleOrderPaymentRequest extends FormRequest
     {
         return [
             'sale_order_id' => 'required|integer',
+            'dealer_id' => 'nullable|numeric',
             'amount' => 'required|numeric',
             'reference' => 'nullable|string',
             'paid_at' => 'required|date' //'required|date|date_format:Y-m-d'
