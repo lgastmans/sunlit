@@ -239,6 +239,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/suppliers', [SupplierController::class, 'getListForSelect2'])->name('ajax.suppliers');
         Route::get('/dealers', [DealerController::class, 'getListForSelect2'])->name('ajax.dealers');
         Route::get('/dealers-ledger', [DealerController::class, 'getListForLedger'])->name('ajax.dealers-ledger');
+        Route::get('/dealers-ledger-summary', [DealerController::class, 'getListForLedgerSummary'])->name('ajax.dealers-ledger-summary');
         Route::get('/warehouses', [WarehouseController::class, 'getListForSelect2'])->name('ajax.warehouses');
         Route::get('/taxes', [TaxController::class, 'getListForSelect2'])->name('ajax.taxes');
         Route::get('/roles', [RoleController::class, 'getListForSelect2'])->name('ajax.roles');
