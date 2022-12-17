@@ -9,6 +9,7 @@ use Spatie\Activitylog\Models\Activity;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\SaleOrder;
 use App\Models\SaleOrderPayment;
 use \App\Http\Requests\StoreSaleOrderPaymentRequest;
 
@@ -130,6 +131,8 @@ class SaleOrderPaymentController extends Controller
         $log = array();
         $log_text = '';
 
+        $order = SaleOrder::find($request->get('sale_order_id'));
+
         if (is_null($request->get('payment_id')))
         {
             $validatedData = $request->validated();
@@ -141,7 +144,7 @@ class SaleOrderPaymentController extends Controller
 
             activity()
                ->performedOn($payment)
-               ->withProperties(['reference'=>$payment->reference, 'amount'=>$payment->amount])
+               ->withProperties(['reference'=>$payment->reference, 'amount'=>$payment->amount, 'order_number'=>$order->order_number])
                ->log($log_text);
         }
         else {
@@ -159,7 +162,7 @@ class SaleOrderPaymentController extends Controller
 
                 activity()
                    ->performedOn($payment)
-                   ->withProperties(['reference'=>$payment->reference, 'amount'=>$payment->amount])
+                   ->withProperties(['reference'=>$payment->reference, 'amount'=>$payment->amount, 'order_number'=>$order->order_number])
                    ->log($log_text);
             }
         }
