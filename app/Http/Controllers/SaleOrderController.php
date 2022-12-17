@@ -522,7 +522,7 @@ class SaleOrderController extends Controller
             $order = SaleOrder::with('state')->where('order_number_slug', '=', $order_number_slug)->first();
             $order->calculateTotals();
 
-            $activities = Activity::where('properties->order_number', 'SO/13/22-23')
+            $activities = Activity::where('properties->order_number', $order->order_number)
                 //->where('subject_id', $order->id)
                 //->where('subject_type', 'App\Models\SaleOrder')
                 //->where('subject_type', 'App\Models\SaleOrderPayment')
