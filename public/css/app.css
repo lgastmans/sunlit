@@ -9,3 +9,11 @@
 .table-has-dlb-click{
     cursor: pointer;
 }
+
+.datatables-report-group-header{
+    color: var(--bs-white) !important;
+} 
+
+.datatables-report-group-header td{
+    box-shadow: inset 0 0 0 9999px var(--bs-primary);
+}
