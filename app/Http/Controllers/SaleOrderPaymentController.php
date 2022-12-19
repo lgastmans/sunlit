@@ -143,7 +143,8 @@ class SaleOrderPaymentController extends Controller
             $log_text = 'Payment '.$payment->reference.' added, dated '.$dt->toDateString();
 
             activity()
-               ->performedOn($payment)
+               //->performedOn($payment)
+               ->performedOn($order)
                ->withProperties(['reference'=>$payment->reference, 'amount'=>$payment->amount, 'order_number'=>$order->order_number])
                ->log($log_text);
         }
@@ -161,7 +162,8 @@ class SaleOrderPaymentController extends Controller
                 $log_text = 'Payment '.$payment->reference.' edited, dated '.$dt->toDateString();
 
                 activity()
-                   ->performedOn($payment)
+                   //->performedOn($payment)
+                   ->performedOn($order)
                    ->withProperties(['reference'=>$payment->reference, 'amount'=>$payment->amount, 'order_number'=>$order->order_number])
                    ->log($log_text);
             }

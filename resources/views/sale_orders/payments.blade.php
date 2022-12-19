@@ -232,7 +232,8 @@
                 url: "{{ route('sale-order-payments.store') }}",
                 data: {
                     payment_id: payment_id,
-                    sale_order_id: $("#sale-order-id").val(), 
+                    sale_order_id: $("#sale-order-id").val(),
+                    dealer_id: $("#dealer-id").val(), 
                     amount: amount,
                     reference: reference,
                     paid_at: payment_date
