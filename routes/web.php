@@ -72,6 +72,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 
     Route::get('/sale-order-payments', [SaleOrderPaymentController::class, 'index'])->name('sale-order-payments');
+    Route::get('/sale-order-payments/updatePaymentsData', [SaleOrderPaymentController::class, 'updatePaymentsData'])->name('sale-order-payments.updatePaymentsData');
     Route::get('/sale-order-payments/create', [SaleOrderPaymentController::class, 'create'])->name('sale-order-payments.create');
     Route::get('/sale-order-payments/list', [SaleOrderPaymentController::class, 'getListForDatatables'])->name('sale-order-payments.datatables');
     Route::get('/sale-order-payments/{order_number}', [SaleOrderPaymentController::class, 'show'])->name('sale-order-payments.show');

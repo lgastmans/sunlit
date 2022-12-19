@@ -235,4 +235,26 @@ class SaleOrderPaymentController extends Controller
         return response()->json($log);
         
     }
+
+    public function updatePaymentsData()
+    {
+        /**
+         * set the dealer_id for each payment
+         */
+        $sale_orders = SaleOrder::all();
+
+        foreach ($sale_orders as $sale_order)
+        {
+            foreach ($sale_order->sale_order_payments as $payment)
+            {
+                $sale_order_payment = SaleOrderPayment::find($payment->id);
+                // echo $sale_order_payment->dealer_id."<br>";
+                $sale_order_payment->dealer_id = $sale_order->dealer_id;
+                $sale_order_payment->save();
+            }
+        }
+
+        return false;
+    }
+
 }
