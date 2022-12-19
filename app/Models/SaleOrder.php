@@ -34,11 +34,12 @@ class SaleOrder extends Model
      */
     var $sub_total = 0;
     var $tax_total = 0;
-    var $freight_charges = 0; // = total weight * rate per kg / zone
-    var $transport_total = 0; // = freight_charges + with tax
+    var $freight_charges = 0;   // = total weight * rate per kg / zone
+    var $transport_total = 0;   // = freight_charges + with tax
     var $transport_tax_amount = 0;
     var $tax_total_half = 0;
     var $total = 0;
+    var $total_unfmt = 0;       // unformatted total
     var $total_spellout = '';
     var $total_advance = 0;
     var $balance_due = 0;
@@ -134,6 +135,7 @@ class SaleOrder extends Model
         $this->freight_charges = $this->transport_charges; 
         $this->transport_total = 0; // = freight_charges + with tax
         $this->total = 0;
+        $this->total_unfmt = 0;
         $this->total_advance = 0;
         $this->balance_due = 0;
 
@@ -208,6 +210,7 @@ class SaleOrder extends Model
         $this->transport_tax_amount = $fmt->formatCurrency($this->transport_tax_amount, "INR");
         $this->tax_total_half = $fmt->formatCurrency($this->tax_total_half, "INR");
         $this->total = $fmt->formatCurrency($this->total, "INR");
+        $this->total_unfmt = $this->total;
 
         return true;
 
