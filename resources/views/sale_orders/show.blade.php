@@ -20,7 +20,6 @@
                     <form action="{{ route('sale-orders-items.store') }}" method="POST" class="form-product row">
                         <input type="hidden" name="sale_order_id" id="sale-order-id" value="{{ $order->id }}">
                         <input type="hidden" name="order_number_slug" id="order_number_slug" value="{{ $order->order_number_slug }}">
-                        <input type="hidden" name="dealer_id" id="dealer-id" value="{{ $order->dealer->id }}">
                         <input type="hidden" name="warehouse_id" id="warehouse-id" value="{{ $order->warehouse->id }}">
                         
                         <div class="col-lg-3">
@@ -141,6 +140,7 @@
         <div class="card">
             <div class="card-body">
                 <input type="hidden" name="sale_order_id" id="sale-order-id" value="{{ $order->id }}">
+                <input type="hidden" name="dealer_id" id="dealer-id" value="{{ $order->dealer->id }}">
 
                 <h4 class="header-title mb-3">PI Summary #{{ $order->order_number }}</h4>
 

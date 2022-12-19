@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use DateTime;
 use Carbon\Carbon;
 use NumberFormatter;
 use App\Models\Dealer;
 use App\Models\SaleOrder;
 use Illuminate\Http\Request;
+use App\Models\SaleOrderPayment;
 use Illuminate\Support\Facades\Auth;
 use \App\Http\Requests\StoreDealerRequest;
 
@@ -166,7 +168,10 @@ class DealerController extends Controller
         {
             $row = array();
 
-            $total = $obj->amount + $obj->transport_charges;
+            $curOrder = SaleOrder::find($obj->id);
+            $curOrder->calculateTotals();
+            if ($curOrder)
+                $total = $curOrder->total_unfmt;
 
             $row["vch_date"]    = date('d-m-Y', strtotime($obj->dispatched_at));
             $row["particulars"] = $obj->order_number_slug;
@@ -228,6 +233,113 @@ class DealerController extends Controller
         return response()->json($response);
     }
 
+    public function getListForLedgerSummary(Request $request)
+    {
+        $vdata = array();
+
+        $ret = array(
+                "data"=>array(),
+                "footer"=>array("debit_total"=>0, "credit_total"=>0),
+                "customer"=>array("company"=>'',"address"=>'')
+            );
+
+        $serial = 1;
+
+        $debit_grand_total = 0;
+        $credit_grand_total = 0;
+        $balance_grand_total = 0;
+
+        $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
+        //$fmt->setSymbol(NumberFormatter::CURRENCY_SYMBOL, ''); 
+
+        $dealers = Dealer::all();
+
+        foreach ($dealers as $dealer)
+        {
+            $row = array();
+
+            $row['serial_number']      = $serial;
+            $row['dealer']      = $dealer->company.", ".$dealer->address." - ".$dealer->city."-".$dealer->zip_code;
+            $row['debit']       = 0;
+            $row['credit']      = 0;
+            $row['balance']     = 0;
+
+            $debit_total = 0;
+            $credit_total = 0;
+            $balance_total = 0;
+
+            /**
+             * get the invoices total
+             * could not run a SUM query as the amount saved does not include taxes, 
+             * and transport charges
+             */
+            $query = SaleOrder::select('sale_orders.id');
+            //$query = SaleOrder::select(DB::raw('SUM(sale_orders.amount + sale_orders.transport_charges) AS dealer_debit'));
+            $query->where('sale_orders.status', '>=', '4');
+            $query->where('sale_orders.dealer_id', '=', $dealer->id);
+            //$query->groupBy('sale_orders.dealer_id');
+            //$ret = $query->toSql(); print_r($ret);die();
+            //$sale_order = $query->first();
+            $sale_orders = $query->get();
+  
+            foreach ($sale_orders as $sale_order)
+            {
+                $curOrder = SaleOrder::find($sale_order->id);
+                $curOrder->calculateTotals();
+                if ($curOrder)
+                    $debit_total += $curOrder->total_unfmt;
+            }
+
+            /**
+             * get the payments total
+             */
+            $query = SaleOrderPayment::select(DB::raw('SUM(amount) AS dealer_credit'));
+            $query->where('sale_order_payments.dealer_id', '=', $dealer->id);
+            $query->groupBy('sale_order_payments.dealer_id');
+
+            $sale_order_payment = $query->first();
+
+            if ($sale_order_payment)
+            {
+                $credit_total = $sale_order_payment->dealer_credit;
+            }
+
+            $balance_total = $debit_total - $credit_total;
+
+            if ($balance_total > 0)
+            {
+                $row['debit'] = $fmt->formatCurrency($debit_total, "INR");
+                $row['credit'] = $fmt->formatCurrency($credit_total, "INR");
+                $row['balance'] = $fmt->formatCurrency($balance_total, "INR");
+
+                $vdata[] = $row;
+                $serial++;
+
+                $debit_grand_total += $debit_total;
+                $credit_grand_total += $credit_total;
+                $balance_grand_total += $balance_total;                
+            }
+
+        }
+
+        $debit_grand_total = $fmt->formatCurrency($debit_grand_total, "INR");
+        $credit_grand_total = $fmt->formatCurrency($credit_grand_total, "INR");
+        $balance_grand_total = $fmt->formatCurrency($balance_grand_total, "INR");
+
+        $response = array(
+            //"draw" => $draw,
+            //"recordsTotal" => $totalRecords,
+            //"recordsFiltered" => $totalRecordswithFilter,
+            "data" => array(
+                "data"=>$vdata, 
+                "footer"=>array("label"=>"TOTALS", "debit_total"=>$debit_grand_total, "credit_total"=>$credit_grand_total, "balance_total"=>$balance_grand_total)
+            ),
+            "error" => null
+        );
+
+        return response()->json($response);
+    }
+
 
     public function ledger(Request $request)
     {
@@ -237,7 +349,7 @@ class DealerController extends Controller
 
     public function ledgerSummary(Request $request)
     {
-        return "ledger summary";
+        return view("dealers.ledger-summary");
     }
 
     /**

@@ -193,12 +193,6 @@ class SaleOrder extends Model
         $this->total_spellout = $this->expandAmount($this->total);
 
 
-        //$this->sub_total = number_format($this->sub_total, 2);
-        //$this->tax_total = number_format($this->tax_total, 2);
-        //$this->transport_total = number_format($this->transport_total, 2);
-        //$this->tax_total_half = number_format($this->tax_total_half, 2);
-        //$this->total = number_format($this->total, 2);
-
         /*
             eventually these fields should be formated in 
             a get...Attribute function, like the
@@ -209,8 +203,8 @@ class SaleOrder extends Model
         $this->transport_total = $fmt->formatCurrency($this->transport_total, "INR");
         $this->transport_tax_amount = $fmt->formatCurrency($this->transport_tax_amount, "INR");
         $this->tax_total_half = $fmt->formatCurrency($this->tax_total_half, "INR");
-        $this->total = $fmt->formatCurrency($this->total, "INR");
         $this->total_unfmt = $this->total;
+        $this->total = $fmt->formatCurrency($this->total, "INR");
 
         return true;
 
