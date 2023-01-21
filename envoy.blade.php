@@ -36,9 +36,9 @@ $pathOnServer = "./";
     git pull origin develop
 @endtask
 
-@task('composer:install')
+@task('composer:update')
     cd {{ $pathOnServer }}
-    echo "Running composer install"
+    echo "Running composer update"
     composer update
     composer dump-autoload -o
 @endtask
