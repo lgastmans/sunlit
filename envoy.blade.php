@@ -32,8 +32,8 @@ $pathOnServer = "./";
 @task('git:pull')
     echo "Pulling changes on server"
     cd {{ $pathOnServer }}
-    echo "git pull origin master"
-    git pull origin master
+    echo "git pull origin develop"
+    git pull origin develop
 @endtask
 
 @task('composer:install')
