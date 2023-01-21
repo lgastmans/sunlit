@@ -7,9 +7,9 @@ $pathOnServer = "./";
 
 @story('deploy')
     app:down
-    {{-- app:backup --}}
-    {{-- git:pull --}}
-    composer:install
+    app:backup
+    git:pull
+    composer:update
     cache:clear
     db:migrate
     app:up
