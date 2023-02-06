@@ -308,7 +308,7 @@
             ajax            : 
             {
                 method 	: "GET",
-				url 	: "{{ route('ajax.sales-report') }}",
+				url 	: "{{ route('ajax.sales-dealer-report') }}",
                 dataSrc : "data.data",
                 data  : function ( d ) {
                     d.dealer_id = dealer_id,
@@ -460,7 +460,7 @@
             ajax            : 
             {
                 method 	: "GET",
-				url 	: "{{ route('ajax.sales-report') }}",
+				url 	: "{{ route('ajax.sales-dealer-report') }}",
                 dataSrc : "data.data",
                 data  : function ( d ) {
                     d.dealer_id = dealer_id,

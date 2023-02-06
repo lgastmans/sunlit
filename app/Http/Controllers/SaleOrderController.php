@@ -205,7 +205,7 @@ class SaleOrderController extends Controller
     }
 
 
-    public function getListForReport(Request $request)
+    public function getListForDealerReport(Request $request)
     {
         $dealer_id = 0;
         if ($request->has('dealer_id'))
@@ -859,10 +859,20 @@ class SaleOrderController extends Controller
         return $pdf->download($order_number_slug.' - '.$order->dealer->company.'.pdf');
     }
 
+    public function report()
+    {
+        return view('sale_orders.report');
+    }
+
     public function dealerReport()
     {
         //$dealer = Dealer::all();
 
         return view('sale_orders.dealer-report');//, ['dealer' => $dealer ]);
+    }
+
+    public function stateReport()
+    {
+        return view('sale_orders.state-report');   
     }
 }
