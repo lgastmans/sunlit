@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('title')
-    @parent() | Sales Report
+    @parent() | Dealer-Wise Sales Report
 @endsection
 
-@section('page-title', 'Sales Report')
+@section('page-title', 'Dealer-Wise Sales Report')
 
 @section('content')
     <div class="row">

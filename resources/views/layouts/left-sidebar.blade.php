@@ -48,7 +48,7 @@
                             <a href="{{ route('sale-orders')}}">Invoices</a>
                         </li>
                         <li>
-                            <a href="{{ route('sale-orders.report')}}">Report</a>
+                            <a href="{{ route('sale-orders.dealer-report')}}">Dealer-Wise Report</a>
                         </li>
                     </ul>
                 </div>                

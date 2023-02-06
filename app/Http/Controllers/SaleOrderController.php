@@ -211,9 +211,19 @@ class SaleOrderController extends Controller
         if ($request->has('dealer_id'))
             $dealer_id = $request->get('dealer_id');
 
-        $select_format = 'format_datewise';
-        if ($request->has('select_format'))
-            $select_format = $request->get('select_format');
+        /**
+         * if the dealer is not set, then force category-wise listing
+         */
+        if ($dealer_id !== null)
+        {
+            $select_format = 'format_datewise';
+            if ($request->has('select_format'))
+                $select_format = $request->get('select_format');
+        }
+        else {
+            $dealer_id = 0;
+            $select_format = 'format_category';
+        }
 
         $select_period = 'period_monthly';
         if ($request->has('select_period'))
@@ -265,7 +275,9 @@ class SaleOrderController extends Controller
             $query->join('categories', 'categories.id', '=', 'products.category_id');
 
         $query->where('sale_orders.status', '>=', '4');
-        $query->where('sale_orders.dealer_id', '=', $dealer_id);
+
+        if ($dealer_id !== 0)
+            $query->where('sale_orders.dealer_id', '=', $dealer_id);
 
         $column_arr = $request->get('columns');
 
@@ -335,7 +347,10 @@ class SaleOrderController extends Controller
         else
         {
             $query->groupBy('products.id');
-            $query->orderBy('categories.name','ASC');
+            if ($dealer_id !== 0)
+                $query->orderBy('categories.name','ASC');
+            else
+                $query->orderBy('sale_order_items.quantity_ordered', 'DESC');
         }
 
         $rows = $query->get();
@@ -844,10 +859,10 @@ class SaleOrderController extends Controller
         return $pdf->download($order_number_slug.' - '.$order->dealer->company.'.pdf');
     }
 
-    public function report()
+    public function dealerReport()
     {
         //$dealer = Dealer::all();
 
-        return view('sale_orders.report');//, ['dealer' => $dealer ]);
+        return view('sale_orders.dealer-report');//, ['dealer' => $dealer ]);
     }
 }
