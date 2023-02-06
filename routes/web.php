@@ -251,8 +251,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/products/supplier/{id}', [ProductController::class, 'getListPerSupplier'])->name('ajax.products.supplier');
         Route::get('/products/warehouse/{id}', [ProductController::class, 'getListPerWarehouse'])->name('ajax.products.warehouse');
         Route::get('/product/{id}/{warehouse_id?}', [ProductController::class, 'getById'])->name('product.json');
-        Route::get('/sale-orders', [SaleOrderController::class, 'getListForDealerReport'])->name('ajax.sales-dealer-report');
+        Route::get('/sale-orders', [SaleOrderController::class, 'getListForReport'])->name('ajax.sales-report');
+        Route::get('/sale-orders/dealer-report', [SaleOrderController::class, 'getListForDealerReport'])->name('ajax.sales-dealer-report');
+        Route::get('/sale-orders/state-report', [SaleOrderController::class, 'getListForStateReport'])->name('ajax.sales-state-report');
     });
+
 
     Route::prefix('export')->group(function () {
         Route::get('/products', [ProductController::class, 'getExportList'])->name('export.products');
