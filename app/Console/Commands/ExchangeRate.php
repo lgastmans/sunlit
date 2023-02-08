@@ -7,7 +7,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 
 
-class ExhangeRate extends Command
+class ExchangeRate extends Command
 {
     /**
      * The name and signature of the console command.
