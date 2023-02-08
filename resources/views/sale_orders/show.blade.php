@@ -72,8 +72,8 @@
                         <thead class="table-light">
                             <tr>
                                 <th class="col-5">Product</th>
-                                <th class="col-2">Price</th>
-                                <th class="col-1">Quantity</th>
+                                <th class="col-2">Quantity</th>
+                                <th class="col-1">Price</th>
                                 <th class="col-1">Tax</th>
                                 <th class="col-2">Total</th>
                                 <th class="col-1"></th>
