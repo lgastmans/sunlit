@@ -282,9 +282,9 @@ class SaleOrderController extends Controller
             }
         }
 
-        $query->groupBy('products.id');
+        $query->groupBy('products.id', 'sale_order_items.selling_price');
         $query->orderBy('categories.name','ASC');
-        $query->orderBy('sale_order_items.quantity_ordered', 'DESC');
+        $query->orderBy('products.part_number', 'ASC');
 
         $rows = $query->get();
         //$rows = $query->toSql(); return response()->json($rows);
@@ -480,9 +480,11 @@ class SaleOrderController extends Controller
         }
         else
         {
-            $query->groupBy('products.id');
-            if ($dealer_id !== 0)
+            $query->groupBy('products.id', 'sale_order_items.selling_price');
+            if ($dealer_id !== 0) {
                 $query->orderBy('categories.name','ASC');
+                $query->orderBy('products.part_number', 'ASC');
+            }
             else
                 $query->orderBy('sale_order_items.quantity_ordered', 'DESC');
         }
@@ -652,9 +654,10 @@ class SaleOrderController extends Controller
             }
         }
 
-        $query->groupBy('products.id');
+        $query->groupBy('products.id', 'sale_order_items.selling_price');
         $query->orderBy('categories.name','ASC');
-        $query->orderBy('sale_order_items.quantity_ordered', 'DESC');
+        //$query->orderBy('sale_order_items.quantity_ordered', 'DESC');
+        $query->orderBy('products.part_number', 'ASC');
 
         $rows = $query->get();
         //$rows = $query->toSql(); return response()->json($rows);
