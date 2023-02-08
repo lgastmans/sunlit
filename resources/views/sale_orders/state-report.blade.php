@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('title')
-    @parent() | Sales Report
+    @parent() | State-Wise Sales Report
 @endsection
 
-@section('page-title', 'Sales Report')
+@section('page-title', 'State-Wise Sales Report')
 
 @section('content')
     <div class="row">
@@ -13,6 +13,16 @@
                 <div class="card-body">
                     
                     <div class="mb-3 row">
+
+                        <div class="col-xl-4">
+                            <label class="form-label" for="state-select">State</label>
+                            <select class="state-select form-control" name="state_id" id="select_state">
+                                <option value="" selected="selected"></option>
+                            </select>
+                            <div class="invalid-feedback">
+                                {{ __('error.form_invalid_field', ['field' => 'state' ]) }}
+                            </div>
+                        </div>
 
                         <div class="col-xl-1">
                             <label class="form-label" for="period-select">Period</label>
@@ -62,9 +72,6 @@
                             <button class="btn btn-primary form-control" type="button" id="btn-load">Load</button>
                         </div>
 
-                        <div class="col-xl-4">
-                        </div>
-
                         <div class="col-xl-3">
                         </div>
 
@@ -76,9 +83,10 @@
     <div class="row">
         <div class="col-12">
             <div class="table-responsive">
-                <table id="table-report-category" class="table table-striped table-condensed" cellspacing="0" width="100%">
+                <table id="table-report-states" class="table table-striped table-condensed" cellspacing="0" width="100%">
                     <thead>
                         <tr>
+                            <th>State</th>
                             <th>Category</th>
                             <th>Part Number</th>
                             <th>Model</th>
@@ -91,6 +99,7 @@
                             <th>Amount</th>
                         </tr>
                         <tr class="filters-category" style="display: none;">
+                            <th class="no-filter"><input type="text" class="form-control"></th>
                             <th class="no-filter"><input type="text" class="form-control"></th>
                             <th><input type="text" class="form-control"></th>
                             <th><input type="text" class="form-control"></th>
@@ -107,6 +116,7 @@
                     <tbody></tbody>
                     <tfoot>
                         <tr>
+                            <th></th>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -141,33 +151,16 @@
             autoclose: true,
         });
 
-/*
-        var dealerSelect = $(".dealer-select").select2();
-        dealerSelect.select2({
+
+        var stateSelect = $(".state-select").select2();
+        stateSelect.select2({
             ajax: {
-                url: '{{route('ajax.dealers')}}',
+                url: '{{route('ajax.states')}}',
                 dataType: 'json'
             }
         });
-*/
-/*
-        $(" #select_format ").on("change", function() {
-            if ($(this).val()=='format_datewise')
-            {
-                $(" #table-report-datewise ").show();
-                $(" #table-report-category ").hide();
-                $(" #table-report-datewise_wrapper ").show();
-                $(" #table-report-category_wrapper ").hide();
-            }
-            else if ($(this).val()=='format_category')
-            {
-                $(" #table-report-datewise ").hide();
-                $(" #table-report-category ").show();
-                $(" #table-report-datewise_wrapper ").hide();
-                $(" #table-report-category_wrapper ").show();
-            }
-        })
-*/
+
+
         $(" #select_period ").on("change", function() {
             //console.log('changed the period ' + $(this).val() );
 
@@ -203,20 +196,21 @@
         //     });
         // });
 
-        var select_period,
+        var state_id,
+            select_period,
             month_id,
             year_id,
             quarterly_id,
             footerData;
 
 
-        var reportTableCategory = $(" #table-report-category ").DataTable({
+        var reportTableStates = $(" #table-report-states ").DataTable({
             processing      : true,
             serverSide      : true,
             deferLoading    : 0,
             scrollCollapse  : true,
-            paging		    : false,				        
-            searching	    : true,
+            paging          : false,                        
+            searching       : true,
             filter          : true,
             info            : false,
             autoWidth       : false,
@@ -247,10 +241,11 @@
             ],
             ajax            : 
             {
-                method 	: "GET",
-				url 	: "{{ route('ajax.sales-report') }}",
+                method  : "GET",
+                url     : "{{ route('ajax.sales-state-report') }}",
                 dataSrc : "data.data",
                 data  : function ( d ) {
+                    d.state_id = state_id,
                     d.select_period = select_period,
                     d.month_id = month_id,
                     d.year_id = year_id,
@@ -258,6 +253,7 @@
                 }
             },            
             columns   : [
+                { data: 'state', orderable : false},
                 { data: 'category', orderable : false},
                 { data: 'part_number', orderable : false, 'width': '100px'},
                 { data: 'model', orderable : false},
@@ -270,7 +266,7 @@
                 { data: 'amount', orderable : false}
             ],
             columnDefs: [
-                { className: "dt-right", "targets": [3,4,5,6,7,8,9] },   //'_all' }
+                { className: "dt-right", "targets": [3,4,5,6,7,8,9,10] },   //'_all' }
                 { visible: false, "targets": [0] },
             ],
             oLanguage : {
@@ -284,19 +280,19 @@
                 var last = null;
     
                 api
-                    .column(0)  // column 0 for category
+                    .column(0)  // column 0 for state
                     .data()
                     .each(function (group, i) {
                         if (last !== group) {
                             
                             $(rows)
                                 .eq(i)
-                                .before('<tr class="datatables-report-group-header"><td colspan="9"><b>' + group + '</b></td></tr>');
+                                .before('<tr class="datatables-report-group-header"><td colspan="10"><b>' + group + '</b></td></tr>');
                                 
                             last = group;
                         }
                         else{
-                            $(rows).removeClass('text-success');
+                            $(rows).removeClass('text-danger');
                         }
                     });
             },            
@@ -307,28 +303,28 @@
                 if (json!==undefined)
                 {
                     $( api.column( 0 ).footer() ).html(json.data.footer.label );
-                    $( api.column( 4 ).footer() ).html(json.data.footer.total_quantity );
-                    $( api.column( 6 ).footer() ).html(json.data.footer.total_taxable_value );
-                    $( api.column( 8 ).footer() ).html(json.data.footer.total_tax_amount );
-                    $( api.column( 9 ).footer() ).html(json.data.footer.total_amount );
+                    $( api.column( 5 ).footer() ).html(json.data.footer.total_quantity );
+                    $( api.column( 7 ).footer() ).html(json.data.footer.total_taxable_value );
+                    $( api.column( 9 ).footer() ).html(json.data.footer.total_tax_amount );
+                    $( api.column( 10 ).footer() ).html(json.data.footer.total_amount );
                 }
             }
 
         });
 
-        reportTableCategory.columns().eq(0).each(function(colIdx) {
+        reportTableStates.columns().eq(0).each(function(colIdx) {
 
-            var cell = $('.filters-category th').eq($(reportTableCategory.column(colIdx).header()).index());
+            var cell = $('.filters-category th').eq($(reportTableStates.column(colIdx).header()).index());
             var title = $(cell).text();
 
             if($(cell).hasClass('no-filter')){
                 $(cell).html('&nbsp');
             }
             else{
-                $('input', $('.filters-category th').eq($(reportTableCategory.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
+                $('input', $('.filters-category th').eq($(reportTableStates.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
                     e.stopPropagation();
                     $(this).attr('title', $(this).val());
-                    reportTableCategory
+                    reportTableStates
                         .column(colIdx)
                         .search(this.value)
                         .draw();
@@ -341,12 +337,14 @@
 
         $(" #btn-load ").on("click", function() {
 
+            state_id = $(" #select_state ").val();
             select_period = $(" #select_period ").val();
             month_id = $(" #month_id ").val();
             year_id = $(" #year_id ").val();
             quarterly_id = $(" #quarterly_id ").val();
 
-            reportTableCategory.ajax.reload();
+            reportTableStates.ajax.reload();
+            reportTableStates.columns.adjust();
 
         });        
 

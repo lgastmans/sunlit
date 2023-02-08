@@ -334,8 +334,6 @@ class SaleOrderController extends Controller
             "error" => null
         );
         return response()->json($response);
-
-
     }
 
 
@@ -553,6 +551,159 @@ class SaleOrderController extends Controller
         );
         return response()->json($response);
 
+    }
+
+
+    public function getListForStateReport(Request $request)
+    {
+        $state_id = 0;
+        if ($request->has('state_id'))
+            $state_id = $request->get('state_id');
+
+        $select_period = 'period_monthly';
+        if ($request->has('select_period'))
+            $select_period = $request->get('select_period');
+
+        $month = date('n');
+        if ($request->has('month_id'))
+            $month = $request->get('month_id');
+            
+        $year = date('Y');
+        if ($request->has('year_id'))
+            $year = $request->get('year_id');
+        
+        $quarter = '';
+        if ($request->has('quarterly_id'))
+            $quarter = $request->get('quarterly_id');
+
+        /*
+            select `states`.`name`, `categories`.`name`, `products`.`part_number`, `products`.`model`, `products`.`kw_rating`, SUM(sale_order_items.quantity_ordered) AS quantity_ordered 
+            from `sale_orders` 
+            inner join `sale_order_items` on `sale_order_items`.`sale_order_id` = `sale_orders`.`id` 
+            inner join `products` on `products`.`id` = `sale_order_items`.`product_id` 
+            inner join `categories` on `categories`.`id` = `products`.`category_id`
+            inner join `dealers` on `dealers`.`id` = `sale_orders`.`dealer_id`
+            inner join `states` on `states`.`id` = `dealers`.`state_id`
+            where `sale_orders`.`status` >= 4 and `dealers`.`state_id` = 19 and `sale_orders`.`dispatched_at` between '2023-01-01' and '2023-02-28' 
+                and `sale_orders`.`deleted_at` is null 
+                and `sale_order_items`.`deleted_at` is null
+            group by `products`.`id`
+            order by `categories`.`name` asc;
+        */
+
+        $query = SaleOrder::query();
+
+        $query->select('states.name AS state_name', 'categories.name AS category_name', 'products.part_number', 'products.model', 'products.kw_rating', DB::raw('SUM(sale_order_items.quantity_ordered) AS quantity_ordered'), 'sale_order_items.selling_price', 'sale_order_items.tax');
+
+        $query->join('sale_order_items', 'sale_order_items.sale_order_id', '=', 'sale_orders.id');
+        $query->join('products', 'products.id', '=', 'sale_order_items.product_id');
+        $query->join('categories', 'categories.id', '=', 'products.category_id');
+        $query->join('dealers', 'dealers.id', '=', 'sale_orders.dealer_id');
+        $query->join('states', 'states.id', '=', 'dealers.state_id');
+
+        $query->where('sale_orders.status', '>=', '4');
+        $query->where('dealers.state_id', '=', $state_id);
+        $query->whereNull('sale_order_items.deleted_at');
+
+        $column_arr = $request->get('columns');
+
+        if (!empty($column_arr[2]['search']['value']))
+            $query->where('products.part_number', 'like', '%'.$column_arr[2]['search']['value'].'%');
+
+        if (!empty($column_arr[3]['search']['value']))
+            $query->where('products.model', 'like', '%'.$column_arr[3]['search']['value'].'%');
+
+        if (!empty($column_arr[4]['search']['value']))
+            $query->where('products.kw_rating', 'like', '%'.$column_arr[4]['search']['value'].'%');
+
+
+        if ($select_period=='period_monthly')
+        {
+            $query->whereYear('sale_orders.dispatched_at', '=', $year);
+            $query->whereMonth('sale_orders.dispatched_at', '=', $month);
+        }
+        elseif ($select_period=='period_quarterly')
+        {
+            if ($quarter=='Q1')
+            {
+                $from = date($year.'-01-01');
+                $to = date($year.'-03-31');
+                $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
+            }
+            elseif ($quarter=='Q2')
+            {
+                $from = date($year.'-04-01');
+                $to = date($year.'-06-30');
+                $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
+            }
+            elseif ($quarter=='Q3')
+            {
+                $from = date($year.'-07-01');
+                $to = date($year.'-09-30');
+                $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
+            }
+            elseif ($quarter=='Q4')
+            {
+                $from = date($year.'-10-01');
+                $to = date($year.'-12-31');
+                $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
+            }
+        }
+
+        $query->groupBy('products.id');
+        $query->orderBy('categories.name','ASC');
+        $query->orderBy('sale_order_items.quantity_ordered', 'DESC');
+
+        $rows = $query->get();
+        //$rows = $query->toSql(); return response()->json($rows);
+
+        $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
+        $fmt->setSymbol(NumberFormatter::CURRENCY_SYMBOL, ''); 
+
+        $arr = array();
+        $footer = array('label'=>'Totals', 'total_quantity'=>0, 'total_taxable_value'=>0, 'total_tax_amount'=>0, 'total_amount'=>0);
+
+        foreach($rows as $row)
+        {
+            $footer['total_quantity'] += $row->quantity_ordered;
+            $footer['total_taxable_value'] += ($row->selling_price * $row->quantity_ordered);
+            $footer['total_tax_amount'] += ($row->selling_price * $row->quantity_ordered) * ($row->tax/100);
+            $footer['total_amount'] += ($row->selling_price * $row->quantity_ordered) * (1+$row->tax/100);
+            
+            $taxable_value = $fmt->formatCurrency(($row->selling_price * $row->quantity_ordered), "INR");
+            $tax_amount = $fmt->formatCurrency(($row->selling_price * $row->quantity_ordered) * ($row->tax/100), "INR");
+            $amount = $fmt->formatCurrency(($row->selling_price * $row->quantity_ordered * (1+$row->tax/100)), "INR");
+
+            $arr[] = array(
+                "state" => $row->state_name,
+                "category" => $row->category_name,
+                "part_number" => $row->part_number,
+                "model" => $row->model,
+                "kw_rating" => $row->kw_rating,
+                "quantity" => $row->quantity_ordered,
+                "price" => $row->selling_price,
+                "taxable_value" => $taxable_value,
+                "tax" => $row->tax."%",
+                "tax_amount" => $tax_amount,
+                "amount" => $amount
+            );
+        }
+
+        $footer['total_taxable_value'] = $fmt->formatCurrency($footer['total_taxable_value'], "INR");
+        $footer['total_tax_amount'] = $fmt->formatCurrency($footer['total_tax_amount'], "INR");
+        $footer['total_amount'] = $fmt->formatCurrency($footer['total_amount'], "INR");
+        
+        //$ret = array("data"=>$arr, "footer"=>'TOTALS');
+                
+        $response = array(
+            //"draw" => $draw,
+            //"recordsTotal" => $totalRecords,
+            //"recordsFiltered" => $totalRecordswithFilter,
+            "data" => array("data"=>$arr, "footer"=>$footer), //$arr,
+
+            "error" => null
+        );
+        return response()->json($response);
     }
 
 
