@@ -10,11 +10,13 @@
                                 <th>Warehouse</th>
                                 <th>Dealer</th>
                                 <th>Quantity</th>
+                                <th>Price</th>
                                 <th>Status</th>
                                 <th>On</th>
                                 <th>Created by</th>
                             </tr>
                             <tr class="sale-orders-filters" style="display:none;">
+                                <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
@@ -132,6 +134,10 @@
             { 
                 'data': 'quantity_ordered',
                 'orderable': true
+            },
+            { 
+                'data': 'selling_price',
+                'orderable': false
             },
             { 
                 'data': 'status',

@@ -127,6 +127,7 @@ class SaleOrderItemController extends Controller
                 "ordered_at" => $sales_order_date,
                 "order_number" => $order->sale_order->order_number,
                 "quantity_ordered" => $order->quantity_ordered,
+                "selling_price" => $order->selling_price,
                 "status" => $order->sale_order->display_status,
                 "warehouse" => $order->sale_order->warehouse->name,
                 "dealer" => $order->sale_order->dealer->company,
