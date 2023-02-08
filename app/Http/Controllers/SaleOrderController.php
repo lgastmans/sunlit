@@ -235,6 +235,7 @@ class SaleOrderController extends Controller
         $query->join('categories', 'categories.id', '=', 'products.category_id');
 
         $query->where('sale_orders.status', '>=', '4');
+        $query->whereNull('sale_order_items.deleted_at');
 
         $column_arr = $request->get('columns');
 
@@ -408,7 +409,7 @@ class SaleOrderController extends Controller
 
         $query->where('sale_orders.status', '>=', '4');
         $query->whereNull('sale_order_items.deleted_at');
-        
+
         if ($dealer_id !== 0)
             $query->where('sale_orders.dealer_id', '=', $dealer_id);
 
