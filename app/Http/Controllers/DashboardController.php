@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use DateTime;
 use Carbon\Carbon;
 use App\Models\Inventory;
+use App\Models\SaleOrder;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\PurchaseOrder;
 use App\Models\SaleOrderItem;
@@ -29,7 +32,11 @@ class DashboardController extends Controller
            // $sale_overview = SaleOrderItem::getNumberAndTotalSaleByRange('monthly');
             // There's an issue with the json format returned by the call
             
-            return view('dashboard', ['stock_filter' => $stock_filter,'due_orders' => $due_orders, 'overdue_orders' => $overdue_orders, 'exchange_rate_update_ago' => $exchange_rate_update_ago]);
+            $sale_order = new SaleOrder;
+            $cur_year = date('Y');
+            $sale_order_totals = $sale_order->calculateSalesTotals("period_monthly",$cur_year);
+
+            return view('dashboard', ['stock_filter' => $stock_filter,'due_orders' => $due_orders, 'overdue_orders' => $overdue_orders, 'exchange_rate_update_ago' => $exchange_rate_update_ago, 'sale_order_totals'=> $sale_order_totals]);
         }
         return abort(403, trans('error.unauthorized'));
     }

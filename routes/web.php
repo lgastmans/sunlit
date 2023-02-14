@@ -254,6 +254,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/sale-orders', [SaleOrderController::class, 'getListForReport'])->name('ajax.sales-report');
         Route::get('/sale-orders/dealer-report', [SaleOrderController::class, 'getListForDealerReport'])->name('ajax.sales-dealer-report');
         Route::get('/sale-orders/state-report', [SaleOrderController::class, 'getListForStateReport'])->name('ajax.sales-state-report');
+        Route::get('/sale-orders/sales-totals', [SaleOrderController::class, 'getSalesTotals'])->name('ajax.sales-totals');
     });
 
 

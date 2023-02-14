@@ -4,6 +4,68 @@
 
 @section('content')
 
+<div class="row">
+    <div class="col-xl-12 col-lg-12 ">
+
+        <div class="card border-primary mb-3">
+            <div class="card-header">
+                <h4>Monthly Sales Totals</h4>
+            </div>
+            <div class="card-body">
+
+                <div class="col-xl-1">
+                    <label class="form-label" for="period-select">Period</label>
+                    <select class="period-select form-control" name="period_id" id="select_period">
+                        <option value="period_monthly" selected>Monthly</option>
+                        <option value="period_quarterly">Quarterly</option>
+                        <!-- <option value="period_yearly">Yearly</option> -->
+                    </select>
+                </div>
+                
+                <div class="col-xl-1 position-relative " id="display_monthly_year">
+                    <label class="form-label">&nbsp;</label>
+                    <input type="text" class="form-control " id="year_id" value="{{ date('Y') }}" required data-provide="datepicker" 
+                    data-date-container="#display_monthly_year">
+                </div>                
+
+                <div class="table-responsive">
+                    <table id="table-sales-totals" class="table table-striped table-condensed" cellspacing="0" width="100%">
+                        <thead id="table-sales-totals-thead">
+                            <tr>
+                                <th>Category</th>
+                                <th>January</th>
+                                <th>February</th>
+                                <th>March</th>
+                                <th>April</th>
+                                <th>May</th>
+                                <th>June</th>
+                                <th>July</th>   
+                                <th>August</th>
+                                <th>September</th>
+                                <th>October</th>
+                                <th>November</th>
+                                <th>December</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-sales-totals-tbody">
+                            @foreach ($sale_order_totals as $category_label=>$category)
+                                <tr>
+                                    <td>{{ $category_label }}</td>
+
+                                    @foreach ($category as $key=>$month)
+                                        <td>{{ $month['total_amount'] }}</td>
+                                    @endforeach
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div> {{-- table-responsive --}}
+
+            </div> {{-- card-body --}}
+        </div>
+
+    </div>
+</div>
 
 <div class="row">
     <div class="col-xl-3 col-lg-4 ">
@@ -143,11 +205,99 @@
  $(document).ready(function () {
     "use strict";
 
+    /**
+     * Monthly Sales Totals
+     * 
+     */
+    $(" #select_period ").on("change", function() {
+        drawSalesTotals();
+    });
+
+    $('#year_id').datepicker({
+        format: 'yyyy',
+        minViewMode: 2,
+        maxViewMode: 2,
+        autoclose: true,
+    })
+    .on("change", function() {
+        drawSalesTotals();
+    });   
+
+    function drawSalesTotals()
+    {
+        select_period = $(" #select_period ").val();
+        year_id = $(" #year_id ").val();
+
+        var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        var quarters = ['1st Quarter', '2nd Quarter', '3rd Quarter', '4th Quarter'];
+
+        $(" #table-sales-totals-thead ").empty();
+        $(" #table-sales-totals-tbody ").empty();
+
+        $(" #table-sales-totals-thead ").append('<th>Category</th>');
+
+        if (select_period=='period_monthly')
+        {
+            $.each(months, function( index, value ) {
+                $(" #table-sales-totals-thead ").append('<th>'+value+'</th>');
+            });
+
+        }
+        else if (select_period=='period_quarterly')
+        {
+            $.each(quarters, function( index, value ) {
+                $(" #table-sales-totals-thead ").append('<th>'+value+'</th>');
+            });
+
+        }
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        var route = '{{ route("ajax.sales-totals") }}';
+
+        $.ajax({
+            type: 'POST',
+            url: route,
+            dataType: 'json',
+            data: { 
+                'period': select_period,
+                'year': year_id,
+                'month': '_ALL',
+                'quarter': '_ALL',
+                'category': '',
+                '_method': 'GET'
+            },
+            success : function(result)
+            {
+                console.log(result);
+                
+                $.each(result, function(index, category) {
+                    $(" #table-sales-totals-tbody ").append('<tr>');
+
+                    $(" #table-sales-totals-tbody ").append('<td>'+index+'</td>');
+
+                    $.each(category, function(key, month){
+                        $(" #table-sales-totals-tbody ").append('<td>'+month.total_amount+'</td>');
+                    });
+
+                    $(" #table-sales-totals-tbody ").append('</tr>');
+                });
+            }
+        });
+    }
+
+    /**
+     *  datatables for negative stock
+     * 
+     */
     $('.toggle-filters').on('click', function(e) {
         $( ".filters" ).slideToggle('slow');
     });
 
-    // datatables for negative stock
     var table = $('#inventory-datatable').DataTable({
         dom: 'Bfrtip',
         stateSave: true,
@@ -417,7 +567,6 @@
 
         $.getJSON(url, function(response) {
             $.each(response.series, function(k, v) {
-                console.log(k+'==='+ v);
                 chart.updateSeries([{
                     name: v.name,
                     data: v.data

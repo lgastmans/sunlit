@@ -293,7 +293,11 @@ class SaleOrderController extends Controller
         $fmt->setSymbol(NumberFormatter::CURRENCY_SYMBOL, ''); 
 
         $arr = array();
-        $footer = array('label'=>'Totals', 'total_quantity'=>0, 'total_taxable_value'=>0, 'total_tax_amount'=>0, 'total_amount'=>0);
+        $footer = array('label'=>'Totals', 'total_quantity'=>0, 'total_taxable_value'=>0, 'total_tax_amount'=>0, 'total_amount'=>0, 'total_category'=>array());
+
+        $current_category = '';
+        $total_category_amount = 0;
+        $total_category_qty = 0;
 
         foreach($rows as $row)
         {
@@ -301,6 +305,24 @@ class SaleOrderController extends Controller
             $footer['total_taxable_value'] += ($row->selling_price * $row->quantity_ordered);
             $footer['total_tax_amount'] += ($row->selling_price * $row->quantity_ordered) * ($row->tax/100);
             $footer['total_amount'] += ($row->selling_price * $row->quantity_ordered) * (1+$row->tax/100);
+
+            if ($current_category !== $row->name)
+            {
+                $total_category_amount = ($row->selling_price * $row->quantity_ordered) * (1+$row->tax/100);
+                $total_category_qty = $row->quantity_ordered;
+
+                $footer['total_category'][$row->name]['category'] = $row->name;
+                $footer['total_category'][$row->name]['total_amount'] = $total_category_amount;
+                $footer['total_category'][$row->name]['total_qty'] = $total_category_qty;
+
+                $current_category = $row->name;
+            }
+            else {
+                $total_category_amount += ($row->selling_price * $row->quantity_ordered) * (1+$row->tax/100);
+                $total_category_qty += $row->quantity_ordered;
+                $footer['total_category'][$row->name]['total_amount'] = $total_category_amount;
+                $footer['total_category'][$row->name]['total_qty'] = $total_category_qty;
+            }
             
             $taxable_value = $fmt->formatCurrency(($row->selling_price * $row->quantity_ordered), "INR");
             $tax_amount = $fmt->formatCurrency(($row->selling_price * $row->quantity_ordered) * ($row->tax/100), "INR");
@@ -711,7 +733,46 @@ class SaleOrderController extends Controller
         return response()->json($response);
     }
 
+    public function getSalesTotals(Request $request)
+    {
+        /**
+         * period_monthly or period_quarteryl
+         */
+        $period = 'period_monthly';
+        if ($request->has('period'))
+            $period = $request->get('period');
 
+        $year = date('Y');
+        if ($request->has('year'))
+            $year = $request->get('year');
+
+        if ($request->has('month'))
+        {
+            $month = $request->get('month');
+            if (empty($month))
+                $month = date('n');
+        }
+
+        if ($request->has('quarter'))
+        {
+            $quarter = $request->get('quarter');
+            if (empty($quarter))
+                $quarter = 'Q1';
+        }
+
+        if ($request->has('category'))
+        {
+            $category = $request->get('category');
+            if (empty($category))
+                $category = "_ALL";
+        }
+        
+        $sale_order = new SaleOrder();
+        $res = $sale_order->calculateSalesTotals($period, $year, $month, $quarter, $category);
+        //$sale_order_totals = $sale_order->calculateSalesTotals("period_quarterly",$cur_year);
+
+        return $res;
+    }
 
     /**
      * Show the form for creating a new resource.
