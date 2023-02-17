@@ -9,7 +9,7 @@
 
         <div class="card border-primary mb-3">
             <div class="card-header">
-                <h4>Monthly Sales Totals</h4>
+                <h4>Category-wise Sales Totals</h4>
             </div>
             <div class="card-body">
 
@@ -53,6 +53,70 @@
                                     <td>{{ $category_label }}</td>
 
                                     @foreach ($category as $key=>$month)
+                                        <td>{{ $month['total_amount'] }}</td>
+                                    @endforeach
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div> {{-- table-responsive --}}
+
+            </div> {{-- card-body --}}
+        </div>
+
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-xl-12 col-lg-12 ">
+
+        <div class="card border-primary mb-3">
+            <div class="card-header">
+                <h4>State-wise Sales Totals</h4>
+            </div>
+            <div class="card-body">
+
+                <div class="col-xl-1">
+                    <label class="form-label" for="period-state">Period</label>
+                    <select class="period-state form-control" name="state_period_id" id="select_state_period">
+                        <option value="period_monthly" selected>Monthly</option>
+                        <option value="period_quarterly">Quarterly</option>
+                        <!-- <option value="period_yearly">Yearly</option> -->
+                    </select>
+                </div>
+                
+                <div class="col-xl-1 position-relative " id="display_state_year">
+                    <label class="form-label">&nbsp;</label>
+                    <input type="text" class="form-control " id="state_year_id" value="{{ date('Y') }}" required data-provide="datepicker" 
+                    data-date-container="#display_state_year">
+                </div>                
+
+                <div class="table-responsive">
+                    <table id="table-state-totals" class="table table-striped table-condensed" cellspacing="0" width="100%">
+                        <thead id="table-state-totals-thead">
+                            <tr>
+                                <th>Category</th>
+                                <th>January</th>
+                                <th>February</th>
+                                <th>March</th>
+                                <th>April</th>
+                                <th>May</th>
+                                <th>June</th>
+                                <th>July</th>   
+                                <th>August</th>
+                                <th>September</th>
+                                <th>October</th>
+                                <th>November</th>
+                                <th>December</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-state-totals-tbody">
+                            @foreach ($state_totals as $state_label=>$state)
+                                <tr>
+                                    <td>{{ $state_label }}</td>
+
+                                    @foreach ($state as $key=>$month)
                                         <td>{{ $month['total_amount'] }}</td>
                                     @endforeach
                                 </tr>
@@ -206,7 +270,7 @@
     "use strict";
 
     /**
-     * Monthly Sales Totals
+     * Category-wise Sales Totals
      * 
      */
     $(" #select_period ").on("change", function() {
@@ -273,8 +337,6 @@
             },
             success : function(result)
             {
-                console.log(result);
-                
                 $.each(result, function(index, category) {
                     $(" #table-sales-totals-tbody ").append('<tr>');
 
@@ -285,6 +347,90 @@
                     });
 
                     $(" #table-sales-totals-tbody ").append('</tr>');
+                });
+            }
+        });
+    }
+
+
+    /**
+     * State-wise Sales Totals
+     * 
+     */
+    $(" #select_state_period ").on("change", function() {
+        drawStateTotals();
+    });
+
+    $('#state_year_id').datepicker({
+        format: 'yyyy',
+        minViewMode: 2,
+        maxViewMode: 2,
+        autoclose: true,
+    })
+    .on("change", function() {
+        drawStateTotals();
+    }); 
+
+    function drawStateTotals()
+    {
+        select_period = $(" #select_state_period ").val();
+        year_id = $(" #state_year_id ").val();
+
+        var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        var quarters = ['1st Quarter', '2nd Quarter', '3rd Quarter', '4th Quarter'];
+
+        $(" #table-state-totals-thead ").empty();
+        $(" #table-state-totals-tbody ").empty();
+
+        $(" #table-state-totals-thead ").append('<th>Category</th>');
+
+        if (select_period=='period_monthly')
+        {
+            $.each(months, function( index, value ) {
+                $(" #table-state-totals-thead ").append('<th>'+value+'</th>');
+            });
+
+        }
+        else if (select_period=='period_quarterly')
+        {
+            $.each(quarters, function( index, value ) {
+                $(" #table-state-totals-thead ").append('<th>'+value+'</th>');
+            });
+
+        }
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        var route = "{{ route('ajax.sales-state-totals') }}";
+
+        $.ajax({
+            type: 'POST',
+            url: route,
+            dataType: 'json',
+            data: { 
+                'period': select_period,
+                'year': year_id,
+                'month': '_ALL',
+                'quarter': '_ALL',
+                'state': '',
+                '_method': 'GET'
+            },
+            success : function(result)
+            {
+                $.each(result, function(index, state) {
+                    $(" #table-state-totals-tbody ").append('<tr>');
+
+                    $(" #table-state-totals-tbody ").append('<td>'+index+'</td>');
+
+                    $.each(state, function(key, month){
+                        $(" #table-state-totals-tbody ").append('<td>'+month.total_amount+'</td>');
+                    });
+
+                    $(" #table-state-totals-tbody ").append('</tr>');
                 });
             }
         });

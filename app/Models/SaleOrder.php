@@ -120,6 +120,11 @@ class SaleOrder extends Model
         return $response;
     }
 
+    /**
+     * 
+     * Calculate the sales totals per category
+     * 
+     */
     public function calculateMonthSalesTotals($month="", $year="", $category_id=0)
     {
 
@@ -148,6 +153,7 @@ class SaleOrder extends Model
         $query->orderBy('categories.name','ASC');
         $query->orderBy('products.part_number', 'ASC');
 
+        //return $query->toSql();
         $rows = $query->get();
 
         $total_amount = 0;
@@ -287,7 +293,188 @@ class SaleOrder extends Model
         return $res;
     }
 
+
     /**
+     * 
+     * Calculate the sales totals per state
+     * 
+     */
+    public function calculateMonthStateSalesTotals($month="", $year="", $state_id=0)
+    {
+        if (empty($month))
+            $month = date('n');
+            
+        if (empty($year))
+            $year = date('Y');
+
+        $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
+        $fmt->setSymbol(NumberFormatter::CURRENCY_SYMBOL, '');
+
+        $query = SaleOrder::select('states.name AS state_name', 'categories.name AS category_name', 'products.part_number', 'products.model', 'products.kw_rating', 'sale_order_items.selling_price', 'sale_order_items.tax')
+            ->selectRaw('SUM(sale_order_items.quantity_ordered) AS quantity_ordered')
+            ->join('sale_order_items', 'sale_order_items.sale_order_id', '=', 'sale_orders.id')
+            ->join('products', 'products.id', '=', 'sale_order_items.product_id')
+            ->join('categories', 'categories.id', '=', 'products.category_id')
+            ->join('dealers', 'dealers.id', '=', 'sale_orders.dealer_id')
+            ->join('states', 'states.id', '=', 'dealers.state_id')
+            ->where('sale_orders.status', '>=', SaleOrder::DISPATCHED)
+            ->where('dealers.state_id', '=', $state_id)
+            ->whereNull('sale_order_items.deleted_at');
+
+        $query->whereYear('sale_orders.dispatched_at', '=', $year);
+        $query->whereMonth('sale_orders.dispatched_at', '=', $month);
+
+        $query->groupBy('products.id', 'sale_order_items.selling_price');
+        $query->orderBy('categories.name','ASC');
+        $query->orderBy('products.part_number', 'ASC');
+
+        //return $query->toSql();
+        $rows = $query->get();
+
+        $total_amount = 0;
+        $total_qty = 0;
+        foreach($rows as $row)
+        {
+            $total_amount += ($row->selling_price * $row->quantity_ordered) * (1+$row->tax/100);
+            $total_qty += $row->quantity_ordered;
+        }
+
+        $res['total_amount'] =$fmt->formatCurrency($total_amount, "INR");
+        $res['total_qty'] = $fmt->formatCurrency($total_qty, "INR");
+
+        return $res;
+    }
+
+    public function calculateQuarterStateSalesTotals($quarter="", $year="", $state_id=0)
+    {
+        if (empty($quarter))
+            $quarter = 'Q1';
+            
+        if (empty($year))
+            $year = date('Y');
+
+        $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
+        $fmt->setSymbol(NumberFormatter::CURRENCY_SYMBOL, '');
+
+        $query = SaleOrder::select('states.name AS state_name', 'categories.name AS category_name', 'products.part_number', 'products.model', 'products.kw_rating', 'sale_order_items.selling_price', 'sale_order_items.tax')
+            ->selectRaw('SUM(sale_order_items.quantity_ordered) AS quantity_ordered')
+            ->join('sale_order_items', 'sale_order_items.sale_order_id', '=', 'sale_orders.id')
+            ->join('products', 'products.id', '=', 'sale_order_items.product_id')
+            ->join('categories', 'categories.id', '=', 'products.category_id')
+            ->join('dealers', 'dealers.id', '=', 'sale_orders.dealer_id')
+            ->join('states', 'states.id', '=', 'dealers.state_id')
+            ->where('sale_orders.status', '>=', SaleOrder::DISPATCHED)
+            ->where('dealers.state_id', '=', $state_id)
+            ->whereNull('sale_order_items.deleted_at');
+
+        if ($quarter=='Q1')
+        {
+            $from = date($year.'-01-01');
+            $to = date($year.'-03-31');
+            $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
+        }
+        elseif ($quarter=='Q2')
+        {
+            $from = date($year.'-04-01');
+            $to = date($year.'-06-30');
+            $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
+        }
+        elseif ($quarter=='Q3')
+        {
+            $from = date($year.'-07-01');
+            $to = date($year.'-09-30');
+            $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
+        }
+        elseif ($quarter=='Q4')
+        {
+            $from = date($year.'-10-01');
+            $to = date($year.'-12-31');
+            $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
+        }
+
+        $query->groupBy('products.id', 'sale_order_items.selling_price');
+        $query->orderBy('categories.name','ASC');
+        $query->orderBy('products.part_number', 'ASC');
+
+        //return $query->toSql();
+        $rows = $query->get();
+
+        $total_amount = 0;
+        $total_qty = 0;
+        foreach($rows as $row)
+        {
+            $total_amount += ($row->selling_price * $row->quantity_ordered) * (1+$row->tax/100);
+            $total_qty += $row->quantity_ordered;
+        }
+
+        $res['total_amount'] =$fmt->formatCurrency($total_amount, "INR");
+        $res['total_qty'] = $fmt->formatCurrency($total_qty, "INR");
+
+        return $res;
+    }
+
+    public function calculateStateSalesTotals($period="", $year="", $month="_ALL", $quarter="_ALL", $state="_ALL")
+    {
+        $select_period = 'period_monthly';
+        if (!empty($period))
+            $select_period = $period;
+
+        if (empty($month))
+            $month = date('n');
+            
+        if (empty($year))
+            $year = date('Y');
+        
+        if (empty($quarter))
+            $quarter = 'Q1';
+
+        $states = State::select('id', 'name');
+        if ($state!='_ALL')
+            $states->where('id','=',$state);
+        $states = $states->orderBy('name')
+            ->get();
+
+        $res = array();
+        foreach ($states as $row)
+        {
+
+            if ($select_period=='period_monthly')
+            {
+                if ($month=="_ALL")
+                {
+                    for ($i=1;$i<=12;$i++)
+                    {
+                        $dt = DateTime::createFromFormat('!m', $i);
+                        $res[$row->name][$dt->format('F')] = $this->calculateMonthStateSalesTotals($i, $year, $row->id);
+                    }
+                }
+                else
+                {
+                    $dt = DateTime::createFromFormat('!m', $month);
+                    $res[$row->name][$dt->format('F')] = $this->calculateMonthStateSalesTotals($month, $year, $row->id);
+                }
+            }
+            else
+            {
+                if ($quarter=="_ALL")
+                {
+                    $res[$row->name]['Q1'] = $this->calculateQuarterStateSalesTotals('Q1', $year, $row->id);
+                    $res[$row->name]['Q2'] = $this->calculateQuarterStateSalesTotals('Q2', $year, $row->id);
+                    $res[$row->name]['Q3'] = $this->calculateQuarterStateSalesTotals('Q3', $year, $row->id);
+                    $res[$row->name]['Q4'] = $this->calculateQuarterStateSalesTotals('Q4', $year, $row->id);
+                }
+                else
+                    $res[$row->name][$quarter] = $this->calculateQuarterStateSalesTotals($quarter, $year, $row->id);
+            }
+        }
+
+        return $res;
+    }
+
+
+    /**
+     * 
+     * Calculate the totals per Sale Order
      * 
      */
     public function calculateTotals()

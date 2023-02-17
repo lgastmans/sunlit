@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DateTime;
 use Carbon\Carbon;
+use App\Models\State;
 use App\Models\Inventory;
 use App\Models\SaleOrder;
 use App\Models\Category;
@@ -36,7 +37,9 @@ class DashboardController extends Controller
             $cur_year = date('Y');
             $sale_order_totals = $sale_order->calculateSalesTotals("period_monthly",$cur_year);
 
-            return view('dashboard', ['stock_filter' => $stock_filter,'due_orders' => $due_orders, 'overdue_orders' => $overdue_orders, 'exchange_rate_update_ago' => $exchange_rate_update_ago, 'sale_order_totals'=> $sale_order_totals]);
+            $state_totals = $sale_order->calculateStateSalesTotals("period_monthly",$cur_year);
+
+            return view('dashboard', ['stock_filter' => $stock_filter,'due_orders' => $due_orders, 'overdue_orders' => $overdue_orders, 'exchange_rate_update_ago' => $exchange_rate_update_ago, 'sale_order_totals'=> $sale_order_totals, 'state_totals'=>$state_totals]);
         }
         return abort(403, trans('error.unauthorized'));
     }

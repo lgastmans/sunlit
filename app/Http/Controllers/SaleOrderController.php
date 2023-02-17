@@ -736,7 +736,7 @@ class SaleOrderController extends Controller
     public function getSalesTotals(Request $request)
     {
         /**
-         * period_monthly or period_quarteryl
+         * period_monthly or period_quarterly
          */
         $period = 'period_monthly';
         if ($request->has('period'))
@@ -770,6 +770,46 @@ class SaleOrderController extends Controller
         $sale_order = new SaleOrder();
         $res = $sale_order->calculateSalesTotals($period, $year, $month, $quarter, $category);
         //$sale_order_totals = $sale_order->calculateSalesTotals("period_quarterly",$cur_year);
+
+        return $res;
+    }
+
+    public function getStateSalesTotals(Request $request)
+    {
+        /**
+         * period_monthly or period_quarterly
+         */
+        $period = 'period_monthly';
+        if ($request->has('period'))
+            $period = $request->get('period');
+
+        $year = date('Y');
+        if ($request->has('year'))
+            $year = $request->get('year');
+
+        if ($request->has('month'))
+        {
+            $month = $request->get('month');
+            if (empty($month))
+                $month = date('n');
+        }
+
+        if ($request->has('quarter'))
+        {
+            $quarter = $request->get('quarter');
+            if (empty($quarter))
+                $quarter = 'Q1';
+        }
+
+        if ($request->has('state'))
+        {
+            $state = $request->get('state');
+            if (empty($state))
+                $state = "_ALL";
+        }
+        
+        $sale_order = new SaleOrder();
+        $res = $sale_order->calculateStateSalesTotals($period, $year, $month, $quarter, $state);
 
         return $res;
     }
