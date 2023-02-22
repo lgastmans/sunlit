@@ -289,8 +289,8 @@
 
     function drawSalesTotals()
     {
-        select_period = $(" #select_period ").val();
-        year_id = $(" #year_id ").val();
+        var select_period = $(" #select_period ").val();
+        var year_id = $(" #year_id ").val();
 
         var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         var quarters = ['1st Quarter', '2nd Quarter', '3rd Quarter', '4th Quarter'];
@@ -373,8 +373,8 @@
 
     function drawStateTotals()
     {
-        select_period = $(" #select_state_period ").val();
-        year_id = $(" #state_year_id ").val();
+        var select_period = $(" #select_state_period ").val();
+        var year_id = $(" #state_year_id ").val();
 
         var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         var quarters = ['1st Quarter', '2nd Quarter', '3rd Quarter', '4th Quarter'];
