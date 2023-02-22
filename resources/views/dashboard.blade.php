@@ -31,7 +31,7 @@
               
 
                 <div class="table-responsive">
-                    <table id="table-sales-totals" class="table table-striped table-condensed" cellspacing="0" width="100%">
+                    <table id="table-sales-totals" class="table table-striped table-sm " cellspacing="0" width="100%">
                         <thead id="table-sales-totals-thead">
                             <tr>
                                 <th>Category</th>
@@ -98,7 +98,7 @@
 
                 
                 <div class="table-responsive">
-                    <table id="table-state-totals" class="table table-striped table-condensed" cellspacing="0" width="100%">
+                    <table id="table-state-totals" class="table table-striped table-sm " cellspacing="0" width="100%">
                         <thead id="table-state-totals-thead">
                             <tr>
                                 <th>Category</th>
