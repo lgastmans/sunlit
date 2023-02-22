@@ -10,23 +10,25 @@
         <div class="card border-primary mb-3">
             <div class="card-header">
                 <h4>Category-wise Sales Totals</h4>
+                <div class="row justify-content-start">
+                    <span class="col-1 pt-1">Period</span>
+                    <div class="col-2">
+                        {{-- <label class="form-label" for="period-select">Period</label> --}}
+                        <select class="period-select form-control" name="period_id" id="select_period">
+                            <option value="period_monthly" selected>Monthly</option>
+                            <option value="period_quarterly">Quarterly</option>
+                            <!-- <option value="period_yearly">Yearly</option> -->
+                        </select>
+                    </div>
+                    
+                    <div class="col-2" id="display_monthly_year">
+                        <input type="text" class="form-control " id="year_id" value="{{ date('Y') }}" required data-provide="datepicker" 
+                        data-date-container="#display_monthly_year">
+                    </div>  
+                </div>              
             </div>
             <div class="card-body">
-
-                <div class="col-xl-1">
-                    <label class="form-label" for="period-select">Period</label>
-                    <select class="period-select form-control" name="period_id" id="select_period">
-                        <option value="period_monthly" selected>Monthly</option>
-                        <option value="period_quarterly">Quarterly</option>
-                        <!-- <option value="period_yearly">Yearly</option> -->
-                    </select>
-                </div>
-                
-                <div class="col-xl-1 position-relative " id="display_monthly_year">
-                    <label class="form-label">&nbsp;</label>
-                    <input type="text" class="form-control " id="year_id" value="{{ date('Y') }}" required data-provide="datepicker" 
-                    data-date-container="#display_monthly_year">
-                </div>                
+              
 
                 <div class="table-responsive">
                     <table id="table-sales-totals" class="table table-striped table-condensed" cellspacing="0" width="100%">
@@ -74,24 +76,27 @@
         <div class="card border-primary mb-3">
             <div class="card-header">
                 <h4>State-wise Sales Totals</h4>
+                <div class="row justify-content-start">
+                    <span class="col-1 pt-1">Period</span>
+                    <div class="col-2">
+                        {{-- <label class="form-label" for="period-state">Period</label> --}}
+                        <select class="period-state form-control" name="state_period_id" id="select_state_period">
+                            <option value="period_monthly" selected>Monthly</option>
+                            <option value="period_quarterly">Quarterly</option>
+                            <!-- <option value="period_yearly">Yearly</option> -->
+                        </select>
+                    </div>
+                    <div class="col-2" id="display_state_year">
+                        {{-- <label class="form-label">&nbsp;</label> --}}
+                        <input type="text" class="form-control " id="state_year_id" value="{{ date('Y') }}" required data-provide="datepicker" 
+                        data-date-container="#display_state_year">
+                    </div>                
+    
+                </div>
             </div>
             <div class="card-body">
 
-                <div class="col-xl-1">
-                    <label class="form-label" for="period-state">Period</label>
-                    <select class="period-state form-control" name="state_period_id" id="select_state_period">
-                        <option value="period_monthly" selected>Monthly</option>
-                        <option value="period_quarterly">Quarterly</option>
-                        <!-- <option value="period_yearly">Yearly</option> -->
-                    </select>
-                </div>
                 
-                <div class="col-xl-1 position-relative " id="display_state_year">
-                    <label class="form-label">&nbsp;</label>
-                    <input type="text" class="form-control " id="state_year_id" value="{{ date('Y') }}" required data-provide="datepicker" 
-                    data-date-container="#display_state_year">
-                </div>                
-
                 <div class="table-responsive">
                     <table id="table-state-totals" class="table table-striped table-condensed" cellspacing="0" width="100%">
                         <thead id="table-state-totals-thead">
