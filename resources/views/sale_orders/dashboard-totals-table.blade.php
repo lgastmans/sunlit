@@ -1,9 +1,9 @@
 <div class="table-responsive">
     <table class="table table-striped table-sm " cellspacing="0" width="100%">
         <thead >
-            @if($type == "period_monthly")
+            @if($period == "period_monthly")
                 <tr>
-                    <th>Category</th>
+                    <th>{{ ucfirst($type) }}</th>
                     <th>January</th>
                     <th>February</th>
                     <th>March</th>
@@ -28,11 +28,10 @@
             @endif
         </thead>
         <tbody>
-            @foreach ($state_totals as $state_label=>$state)
+            @foreach ($totals as $label=>$total)
                 <tr>
-                    <td>{{ $state_label }}</td>
-
-                    @foreach ($state as $key=>$month)
+                    <td>{{ $label }}</td>
+                    @foreach ($total as $key=>$month)
                         <td>{{ $month['total_amount'] }}</td>
                     @endforeach
                 </tr>

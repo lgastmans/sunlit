@@ -775,7 +775,7 @@ class SaleOrderController extends Controller
         $res = $sale_order->calculateSalesTotals($period, $year, $month, $quarter, $category);
         //$sale_order_totals = $sale_order->calculateSalesTotals("period_quarterly",$cur_year);
 
-        return view('sale_orders.dashboard-totals-table', ['type'=> $period, 'state_totals' => $res]);
+        return view('sale_orders.dashboard-totals-table', ['period'=> $period, 'type' => 'category', 'totals' => $res]);
     }
 
     public function getStateSalesTotals(Request $request)
@@ -791,6 +791,7 @@ class SaleOrderController extends Controller
         if ($request->has('year'))
             $year = $request->get('year');
 
+        $month = date('n');
         if ($request->has('month'))
         {
             $month = $request->get('month');
@@ -798,6 +799,7 @@ class SaleOrderController extends Controller
                 $month = date('n');
         }
 
+        $quarter = 'Q1';
         if ($request->has('quarter'))
         {
             $quarter = $request->get('quarter');
@@ -805,6 +807,7 @@ class SaleOrderController extends Controller
                 $quarter = 'Q1';
         }
 
+        $state = "_ALL";
         if ($request->has('state'))
         {
             $state = $request->get('state');
@@ -814,7 +817,7 @@ class SaleOrderController extends Controller
         
         $sale_order = new SaleOrder();
         $res = $sale_order->calculateStateSalesTotals($period, $year, $month, $quarter, $state);
-        return view('sale_orders.dashboard-totals-table', ['type'=> $period, 'state_totals' => $res]);
+        return view('sale_orders.dashboard-totals-table', ['period'=> $period, 'type' => 'states', 'totals' => $res]);
 
     }
 
