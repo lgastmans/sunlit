@@ -13,11 +13,9 @@
                 <div class="row justify-content-start">
                     <span class="col-1 pt-1">Period</span>
                     <div class="col-2">
-                        {{-- <label class="form-label" for="period-select">Period</label> --}}
                         <select class="period-select form-control" name="period_id" id="select_period">
                             <option value="period_monthly" selected>Monthly</option>
                             <option value="period_quarterly">Quarterly</option>
-                            <!-- <option value="period_yearly">Yearly</option> -->
                         </select>
                     </div>
                     
@@ -27,43 +25,7 @@
                     </div>  
                 </div>              
             </div>
-            <div class="card-body">
-              
-
-                <div class="table-responsive">
-                    <table id="table-sales-totals" class="table table-striped table-sm " cellspacing="0" width="100%">
-                        <thead id="table-sales-totals-thead">
-                            <tr>
-                                <th>Category</th>
-                                <th>January</th>
-                                <th>February</th>
-                                <th>March</th>
-                                <th>April</th>
-                                <th>May</th>
-                                <th>June</th>
-                                <th>July</th>   
-                                <th>August</th>
-                                <th>September</th>
-                                <th>October</th>
-                                <th>November</th>
-                                <th>December</th>
-                            </tr>
-                        </thead>
-                        <tbody id="table-sales-totals-tbody">
-                            @foreach ($sale_order_totals as $category_label=>$category)
-                                <tr>
-                                    <td>{{ $category_label }}</td>
-
-                                    @foreach ($category as $key=>$month)
-                                        <td>{{ $month['total_amount'] }}</td>
-                                    @endforeach
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div> {{-- table-responsive --}}
-
-            </div> {{-- card-body --}}
+            <div class="card-body" id="table-sales-tables-container"></div>
         </div>
 
     </div>
@@ -79,58 +41,19 @@
                 <div class="row justify-content-start">
                     <span class="col-1 pt-1">Period</span>
                     <div class="col-2">
-                        {{-- <label class="form-label" for="period-state">Period</label> --}}
                         <select class="period-state form-control" name="state_period_id" id="select_state_period">
                             <option value="period_monthly" selected>Monthly</option>
                             <option value="period_quarterly">Quarterly</option>
-                            <!-- <option value="period_yearly">Yearly</option> -->
                         </select>
                     </div>
                     <div class="col-2" id="display_state_year">
-                        {{-- <label class="form-label">&nbsp;</label> --}}
                         <input type="text" class="form-control " id="state_year_id" value="{{ date('Y') }}" required data-provide="datepicker" 
                         data-date-container="#display_state_year">
                     </div>                
     
                 </div>
             </div>
-            <div class="card-body">
-
-                
-                <div class="table-responsive">
-                    <table id="table-state-totals" class="table table-striped table-sm " cellspacing="0" width="100%">
-                        <thead id="table-state-totals-thead">
-                            <tr>
-                                <th>Category</th>
-                                <th>January</th>
-                                <th>February</th>
-                                <th>March</th>
-                                <th>April</th>
-                                <th>May</th>
-                                <th>June</th>
-                                <th>July</th>   
-                                <th>August</th>
-                                <th>September</th>
-                                <th>October</th>
-                                <th>November</th>
-                                <th>December</th>
-                            </tr>
-                        </thead>
-                        <tbody id="table-state-totals-tbody">
-                            @foreach ($state_totals as $state_label=>$state)
-                                <tr>
-                                    <td>{{ $state_label }}</td>
-
-                                    @foreach ($state as $key=>$month)
-                                        <td>{{ $month['total_amount'] }}</td>
-                                    @endforeach
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div> {{-- table-responsive --}}
-
-            </div> {{-- card-body --}}
+            <div class="card-body" id="table-state-tables-container"></div>
         </div>
 
     </div>
@@ -138,31 +61,9 @@
 
 <div class="row">
     <div class="col-xl-3 col-lg-4 ">
-        <div class="card tilebox-one d-none">
-            <div class="card-body">
-                <i class='uil uil-users-alt float-right'></i>
-                <h6 class="text-uppercase mt-0">Active Users</h6>
-                <h2 class="my-2" id="active-users-count">121</h2>
-                <p class="mb-0 text-muted">
-                    <span class="text-success mr-2"><span class="mdi mdi-arrow-up-bold"></span> 5.27%</span>
-                    <span class="text-nowrap">Since last month</span>  
-                </p>
-            </div> <!-- end card-body-->
-        </div>
-        <!--end card-->
 
-        <div class="card tilebox-one d-none">
-            <div class="card-body">
-                <i class='uil uil-window-restore float-right'></i>
-                <h6 class="text-uppercase mt-0">Views per minute</h6>
-                <h2 class="my-2" id="active-views-count">560</h2>
-                <p class="mb-0 text-muted">
-                    <span class="text-danger mr-2"><span class="mdi mdi-arrow-down-bold"></span> 1.08%</span>
-                    <span class="text-nowrap">Since previous week</span>
-                </p>
-            </div> <!-- end card-body-->
-        </div>
-        <!--end card-->
+
+
 
         <div class="card cta-box overflow-hidden">
             <div class="card-body">
@@ -186,32 +87,7 @@
         </div>
     </div> <!-- end col -->
 
-    <div class="col-xl-9 col-lg-8">
-        <div class="card">
-            <div class="card-body">
-                <ul class="nav float-right d-none">
-                    <li class="nav-item">
-                        <a class="nav-link text-muted" href="#">Today</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-muted" href="#">7d</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">15d</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-muted" href="#">1m</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-muted" href="#">1y</a>
-                    </li>
-                </ul>
-                <h4 class="header-title mb-3">Sales Overview</h4>
-
-                <div id="sessions-overview" class="apex-charts mt-3" data-colors="#0acf97"></div>
-            </div> <!-- end card-body-->
-        </div> <!-- end card-->
-    </div>
+    
 </div>
 
 
@@ -273,7 +149,8 @@
         
  $(document).ready(function () {
     "use strict";
-
+    drawSalesTotals();
+    drawStateTotals();
     /**
      * Category-wise Sales Totals
      * 
@@ -294,31 +171,6 @@
 
     function drawSalesTotals()
     {
-        var select_period = $(" #select_period ").val();
-        var year_id = $(" #year_id ").val();
-
-        var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-        var quarters = ['1st Quarter', '2nd Quarter', '3rd Quarter', '4th Quarter'];
-
-        $(" #table-sales-totals-thead ").empty();
-        $(" #table-sales-totals-tbody ").empty();
-
-        $(" #table-sales-totals-thead ").append('<th>Category</th>');
-
-        if (select_period=='period_monthly')
-        {
-            $.each(months, function( index, value ) {
-                $(" #table-sales-totals-thead ").append('<th>'+value+'</th>');
-            });
-
-        }
-        else if (select_period=='period_quarterly')
-        {
-            $.each(quarters, function( index, value ) {
-                $(" #table-sales-totals-thead ").append('<th>'+value+'</th>');
-            });
-
-        }
 
         $.ajaxSetup({
             headers: {
@@ -331,10 +183,10 @@
         $.ajax({
             type: 'POST',
             url: route,
-            dataType: 'json',
+            dataType: 'html',
             data: { 
-                'period': select_period,
-                'year': year_id,
+                'period': $(" #select_period ").val(),
+                'year': $(" #year_id ").val(),
                 'month': '_ALL',
                 'quarter': '_ALL',
                 'category': '',
@@ -342,17 +194,7 @@
             },
             success : function(result)
             {
-                $.each(result, function(index, category) {
-                    $(" #table-sales-totals-tbody ").append('<tr>');
-
-                    $(" #table-sales-totals-tbody ").append('<td>'+index+'</td>');
-
-                    $.each(category, function(key, month){
-                        $(" #table-sales-totals-tbody ").append('<td>'+month.total_amount+'</td>');
-                    });
-
-                    $(" #table-sales-totals-tbody ").append('</tr>');
-                });
+                $("#table-sales-tables-container").html(result);
             }
         });
     }
@@ -378,31 +220,6 @@
 
     function drawStateTotals()
     {
-        var select_period = $(" #select_state_period ").val();
-        var year_id = $(" #state_year_id ").val();
-
-        var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-        var quarters = ['1st Quarter', '2nd Quarter', '3rd Quarter', '4th Quarter'];
-
-        $(" #table-state-totals-thead ").empty();
-        $(" #table-state-totals-tbody ").empty();
-
-        $(" #table-state-totals-thead ").append('<th>Category</th>');
-
-        if (select_period=='period_monthly')
-        {
-            $.each(months, function( index, value ) {
-                $(" #table-state-totals-thead ").append('<th>'+value+'</th>');
-            });
-
-        }
-        else if (select_period=='period_quarterly')
-        {
-            $.each(quarters, function( index, value ) {
-                $(" #table-state-totals-thead ").append('<th>'+value+'</th>');
-            });
-
-        }
 
         $.ajaxSetup({
             headers: {
@@ -415,10 +232,10 @@
         $.ajax({
             type: 'POST',
             url: route,
-            dataType: 'json',
+            dataType: 'html',
             data: { 
-                'period': select_period,
-                'year': year_id,
+                'period': $(" #select_state_period ").val(),
+                'year': $(" #state_year_id ").val(),
                 'month': '_ALL',
                 'quarter': '_ALL',
                 'state': '',
@@ -426,17 +243,7 @@
             },
             success : function(result)
             {
-                $.each(result, function(index, state) {
-                    $(" #table-state-totals-tbody ").append('<tr>');
-
-                    $(" #table-state-totals-tbody ").append('<td>'+index+'</td>');
-
-                    $.each(state, function(key, month){
-                        $(" #table-state-totals-tbody ").append('<td>'+month.total_amount+'</td>');
-                    });
-
-                    $(" #table-state-totals-tbody ").append('</tr>');
-                });
+                $("#table-state-tables-container").html(result);
             }
         });
     }
@@ -620,110 +427,6 @@
         $.NotificationApp.send("Error","{{ session('error') }}","top-right","","error")
     @endif
 
-
-
-    function getRandomData(number) {
-        var graphData = [];
-        for (var idx=0; idx < number; idx++) {
-            graphData.push(Math.floor(Math.random() * Math.floor(90)) + 30);
-        }
-        return graphData;
-    }
-
-    function getDaysInMonth(month, year) {
-        var date = new Date(year, month, 1);
-        var days = [];
-        var idx = 0;
-        while (date.getMonth() === month && idx < 15) {
-            var d = new Date(date);
-            days.push(d.getDate() + " " +  d.toLocaleString('en-us', { month: 'short' }));
-            date.setDate(date.getDate() + 1);
-            idx += 1;
-        }
-        return days;
-    }
-
-    // Sales overview
-    var now = new Date();
-    var labels = getDaysInMonth(now.getMonth() + 1, now.getFullYear());
-       var options = {
-            chart: {
-                height: 400,
-                type: 'area'
-            },
-            legend: {
-                show: true,
-                position: 'bottom',
-                horizontalAlign: 'center', 
-                floating: false,
-                fontSize: '14px',
-            },
-            dataLabels: {
-                enabled: false
-            },
-            stroke: {
-                curve: 'smooth',
-                width: 3
-            },
-            series: [],
-            noData: {
-                text: 'Loading...'
-            },
-            zoom: {
-                enabled: true
-            },
-            colors: ["#e57373", "#7986cb", "#4db6ac", "#fff176", "#f06292", "#64b5f6", "#81c784", "#ffb74d", "#ba68c8", "#4dd0e1"],
-            xaxis: {
-                type: 'string',
-                categories: labels,
-                tooltip: {
-                    enabled: false
-                },
-                axisBorder: {
-                    show: false
-                },
-                labels: {
-                    
-                }
-            },
-            yaxis: {
-                labels: {
-                    formatter: function (val) {
-                        return val + "k"
-                    },
-                    offsetX: -15
-                }
-            },
-            fill: {
-                type: 'gradient',
-                gradient: {
-                    type: "vertical",
-                    shadeIntensity: 1,
-                    inverseColors: false,
-                    opacityFrom: 0.45,
-                    opacityTo: 0.05,
-                    stops: [45, 100]
-                  },
-            },
-        }
-
-        var chart = new ApexCharts(
-            document.querySelector("#sessions-overview"),
-            options
-        );
-
-        chart.render();
-
-        var url = "{{ route('sale-orders-items.sales-by-category', ['range' => 'monthly']) }}";
-
-        $.getJSON(url, function(response) {
-            $.each(response.series, function(k, v) {
-                chart.updateSeries([{
-                    name: v.name,
-                    data: v.data
-                }]) 
-            });
-        });
 
 });
 

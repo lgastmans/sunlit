@@ -1,0 +1,42 @@
+<div class="table-responsive">
+    <table class="table table-striped table-sm " cellspacing="0" width="100%">
+        <thead >
+            @if($type == "period_monthly")
+                <tr>
+                    <th>Category</th>
+                    <th>January</th>
+                    <th>February</th>
+                    <th>March</th>
+                    <th>April</th>
+                    <th>May</th>
+                    <th>June</th>
+                    <th>July</th>   
+                    <th>August</th>
+                    <th>September</th>
+                    <th>October</th>
+                    <th>November</th>
+                    <th>December</th>
+                </tr>
+            @else
+                <tr>
+                    <th>Category</th>
+                    <th>1st Quarter</th>
+                    <th>2nd Quarter</th>
+                    <th>3rd Quarter</th>
+                    <th>4th Quarter</th>
+                </tr>
+            @endif
+        </thead>
+        <tbody>
+            @foreach ($state_totals as $state_label=>$state)
+                <tr>
+                    <td>{{ $state_label }}</td>
+
+                    @foreach ($state as $key=>$month)
+                        <td>{{ $month['total_amount'] }}</td>
+                    @endforeach
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div> {{-- table-responsive --}}
