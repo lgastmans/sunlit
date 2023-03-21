@@ -290,7 +290,8 @@ class SaleOrderController extends Controller
         //$rows = $query->toSql(); return response()->json($rows);
 
         $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
-        $fmt->setSymbol(NumberFormatter::CURRENCY_SYMBOL, ''); 
+        //$fmt->setSymbol(NumberFormatter::CURRENCY_SYMBOL, '');
+        $fmt->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 0); 
 
         $arr = array();
         $footer = array('label'=>'Totals', 'total_quantity'=>0, 'total_taxable_value'=>0, 'total_tax_amount'=>0, 'total_amount'=>0, 'total_category'=>array());
@@ -324,6 +325,7 @@ class SaleOrderController extends Controller
                 $footer['total_category'][$row->name]['total_qty'] = $total_category_qty;
             }
             
+            $price = $fmt->formatCurrency($row->selling_price, "INR");
             $taxable_value = $fmt->formatCurrency(($row->selling_price * $row->quantity_ordered), "INR");
             $tax_amount = $fmt->formatCurrency(($row->selling_price * $row->quantity_ordered) * ($row->tax/100), "INR");
             $amount = $fmt->formatCurrency(($row->selling_price * $row->quantity_ordered * (1+$row->tax/100)), "INR");
@@ -334,7 +336,7 @@ class SaleOrderController extends Controller
                 "model" => $row->model,
                 "kw_rating" => $row->kw_rating,
                 "quantity" => $row->quantity_ordered,
-                "price" => $row->selling_price,
+                "price" => $price, //$row->selling_price,
                 "taxable_value" => $taxable_value,
                 "tax" => $row->tax."%",
                 "tax_amount" => $tax_amount,
@@ -515,7 +517,8 @@ class SaleOrderController extends Controller
         //$rows = $query->toSql(); return response()->json($rows);
 
         $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
-        $fmt->setSymbol(NumberFormatter::CURRENCY_SYMBOL, ''); 
+        //$fmt->setSymbol(NumberFormatter::CURRENCY_SYMBOL, ''); 
+        $fmt->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 0);
 
         $arr = array();
         $footer = array('label'=>'Totals', 'total_quantity'=>0, 'total_taxable_value'=>0, 'total_tax_amount'=>0, 'total_amount'=>0);
@@ -527,6 +530,7 @@ class SaleOrderController extends Controller
             $footer['total_tax_amount'] += ($row->selling_price * $row->quantity_ordered) * ($row->tax/100);
             $footer['total_amount'] += ($row->selling_price * $row->quantity_ordered) * (1+$row->tax/100);
             
+            $price = $fmt->formatCurrency($row->selling_price, "INR");
             $taxable_value = $fmt->formatCurrency(($row->selling_price * $row->quantity_ordered), "INR");
             $tax_amount = $fmt->formatCurrency(($row->selling_price * $row->quantity_ordered) * ($row->tax/100), "INR");
             $amount = $fmt->formatCurrency(($row->selling_price * $row->quantity_ordered * (1+$row->tax/100)), "INR");
@@ -539,7 +543,7 @@ class SaleOrderController extends Controller
                     "model" => $row->model,
                     "kw_rating" => $row->kw_rating,
                     "quantity" => $row->quantity_ordered,
-                    "price" => $row->selling_price,
+                    "price" => $price, //$row->selling_price,
                     "taxable_value" => $taxable_value,
                     "tax" => $row->tax."%",
                     "tax_amount" => $tax_amount,
@@ -552,7 +556,7 @@ class SaleOrderController extends Controller
                     "model" => $row->model,
                     "kw_rating" => $row->kw_rating,
                     "quantity" => $row->quantity_ordered,
-                    "price" => $row->selling_price,
+                    "price" => $price, //$row->selling_price,
                     "taxable_value" => $taxable_value,
                     "tax" => $row->tax."%",
                     "tax_amount" => $tax_amount,
@@ -685,7 +689,8 @@ class SaleOrderController extends Controller
         //$rows = $query->toSql(); return response()->json($rows);
 
         $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
-        $fmt->setSymbol(NumberFormatter::CURRENCY_SYMBOL, ''); 
+        //$fmt->setSymbol(NumberFormatter::CURRENCY_SYMBOL, '');
+        $fmt->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 0); 
 
         $arr = array();
         $footer = array('label'=>'Totals', 'total_quantity'=>0, 'total_taxable_value'=>0, 'total_tax_amount'=>0, 'total_amount'=>0);
@@ -697,6 +702,7 @@ class SaleOrderController extends Controller
             $footer['total_tax_amount'] += ($row->selling_price * $row->quantity_ordered) * ($row->tax/100);
             $footer['total_amount'] += ($row->selling_price * $row->quantity_ordered) * (1+$row->tax/100);
             
+            $price = $fmt->formatCurrency($row->selling_price, "INR");
             $taxable_value = $fmt->formatCurrency(($row->selling_price * $row->quantity_ordered), "INR");
             $tax_amount = $fmt->formatCurrency(($row->selling_price * $row->quantity_ordered) * ($row->tax/100), "INR");
             $amount = $fmt->formatCurrency(($row->selling_price * $row->quantity_ordered * (1+$row->tax/100)), "INR");
@@ -708,7 +714,7 @@ class SaleOrderController extends Controller
                 "model" => $row->model,
                 "kw_rating" => $row->kw_rating,
                 "quantity" => $row->quantity_ordered,
-                "price" => $row->selling_price,
+                "price" => $price, //$row->selling_price,
                 "taxable_value" => $taxable_value,
                 "tax" => $row->tax."%",
                 "tax_amount" => $tax_amount,
