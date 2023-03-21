@@ -135,7 +135,8 @@ class SaleOrder extends Model
             $year = date('Y');
 
         $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
-        $fmt->setSymbol(NumberFormatter::CURRENCY_SYMBOL, '');        
+        //$fmt->setSymbol(NumberFormatter::CURRENCY_SYMBOL, 'INR');
+        $fmt->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 0);
 
         $query = SaleOrder::select('categories.name', 'products.part_number', 'products.model', 'products.kw_rating', 'sale_order_items.selling_price', 'sale_order_items.tax')
             ->selectRaw('SUM(sale_order_items.quantity_ordered) AS quantity_ordered')
@@ -179,7 +180,8 @@ class SaleOrder extends Model
             $year = date('Y');
 
         $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
-        $fmt->setSymbol(NumberFormatter::CURRENCY_SYMBOL, '');        
+        //$fmt->setSymbol(NumberFormatter::CURRENCY_SYMBOL, '');
+        $fmt->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 0);
 
         $query = SaleOrder::select('categories.name', 'products.part_number', 'products.model', 'products.kw_rating', 'sale_order_items.selling_price', 'sale_order_items.tax')
             ->selectRaw('SUM(sale_order_items.quantity_ordered) AS quantity_ordered')
@@ -308,7 +310,8 @@ class SaleOrder extends Model
             $year = date('Y');
 
         $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
-        $fmt->setSymbol(NumberFormatter::CURRENCY_SYMBOL, '');
+        //$fmt->setSymbol(NumberFormatter::CURRENCY_SYMBOL, '');
+        $fmt->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 0);
 
         $query = SaleOrder::select('states.name AS state_name', 'categories.name AS category_name', 'products.part_number', 'products.model', 'products.kw_rating', 'sale_order_items.selling_price', 'sale_order_items.tax')
             ->selectRaw('SUM(sale_order_items.quantity_ordered) AS quantity_ordered')
@@ -354,7 +357,8 @@ class SaleOrder extends Model
             $year = date('Y');
 
         $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
-        $fmt->setSymbol(NumberFormatter::CURRENCY_SYMBOL, '');
+        //$fmt->setSymbol(NumberFormatter::CURRENCY_SYMBOL, '');
+        $fmt->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 0);
 
         $query = SaleOrder::select('states.name AS state_name', 'categories.name AS category_name', 'products.part_number', 'products.model', 'products.kw_rating', 'sale_order_items.selling_price', 'sale_order_items.tax')
             ->selectRaw('SUM(sale_order_items.quantity_ordered) AS quantity_ordered')
