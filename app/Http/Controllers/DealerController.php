@@ -81,7 +81,7 @@ class DealerController extends Controller
 
         // Fetch records
         if ($length < 0)
-            $dealers = Dealer::select('dealers.id AS dealer_id', 'company', 'contact_person', 'city', 'states.name as state_name', 'email', 'phone')
+            $dealers = Dealer::select('dealers.id AS dealer_id', 'company', 'contact_person', 'city', 'states.name as state_name', 'email', 'email2', 'email3', 'phone', 'phone2')
                 ->where('contact_person', 'like', '%'.$search.'%')
                 ->join('states', 'states.id', '=', 'dealers.state_id')
                 ->orWhere('company', 'like', '%'.$search.'%')
@@ -90,7 +90,7 @@ class DealerController extends Controller
                 ->orderBy($order_column, $order_dir)
                 ->get();
         else
-            $dealers = Dealer::select('dealers.id AS dealer_id', 'company', 'contact_person', 'city', 'states.name as state_name', 'email', 'phone')
+            $dealers = Dealer::select('dealers.id AS dealer_id', 'company', 'contact_person', 'city', 'states.name as state_name', 'email', 'email2', 'email3', 'phone', 'phone2')
                 ->where('contact_person', 'like', '%'.$search.'%')
                 ->join('states', 'states.id', '=', 'state_id')
                 ->orWhere('company', 'like', '%'.$search.'%')
@@ -112,8 +112,8 @@ class DealerController extends Controller
                 "contact_person" => $record->contact_person,
                 "city" => $record->city,
                 "state_name" => $record->state_name,
-                "email" => $record->email,
-                "phone" => $record->phone
+                "email" => $record->email.(!empty($record->email2) ? ", ".$record->email2:"").(!empty($record->email3) ? ", ".$record->email3:""),
+                "phone" => $record->phone.(!empty($record->phone2) ? ", ".$record->phone2:"")
             );
         }
 
