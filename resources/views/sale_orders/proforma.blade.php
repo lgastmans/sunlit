@@ -510,7 +510,7 @@ font-weight: bold;
         </tr>
         <tr>
           <td class="label">Email</td>
-          <td>{{ $order->dealer->email }}</td>
+          <td>{{ $order->dealer->email }} {{ $order->dealer->email2 != "" ? ', '.$order->dealer->email2 : ''}} {{ $order->dealer->email3 != "" ? ', '.$order->dealer->email3 : ''}}</td>
           <td class="label">&nbsp;</td>
           <td></td>
         </tr>
