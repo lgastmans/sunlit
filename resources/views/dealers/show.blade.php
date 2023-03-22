@@ -114,6 +114,9 @@
 <div class="row">
     <div class="col-12">
         <div class="card">
+            <div class="card-header bg-secondary text-light">
+                <h4>Sales Report</h4>
+            </div>
             <div class="card-body">
                 <div class="mb-3 row">
 
