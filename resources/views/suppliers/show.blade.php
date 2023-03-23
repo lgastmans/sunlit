@@ -19,7 +19,7 @@
                         <div class="row align-items-center">
                             <div class="col-auto">
                                 <div class="avatar-lg">
-                                    <img src="/images/users/avatar-2.jpg" alt="" class="rounded-circle img-thumbnail">
+                                    <!-- <img src="/images/users/avatar-2.jpg" alt="" class="rounded-circle img-thumbnail"> -->
                                 </div>
                             </div>
                             <div class="col">
@@ -81,7 +81,7 @@
 
                     <p class="text-muted"><strong>Email :</strong> <span class="ms-2">{{ $supplier->email }}</span></p>
 
-                    <p class="text-muted"><strong>Location :</strong> <span class="ms-2">{{ $supplier->address }}, {{ $supplier->city }}, {{ $supplier->state->name }} {{ $supplier->zip_code }}</span></p>
+                    <p class="text-muted"><strong>Location :</strong> <span class="ms-2">{{ $supplier->address }}, {{ $supplier->city }}, {{ $supplier->state->name ?? "" }} {{ $supplier->zip_code }}</span></p>
 
                     @if ($supplier->gstin)
                         <p class="text-muted"><strong>GSTIN :</strong><span class="ms-2">{{ $supplier->gstin }}</span></p>
