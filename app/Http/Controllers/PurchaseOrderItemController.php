@@ -115,6 +115,7 @@ class PurchaseOrderItemController extends Controller
                 "id" => $record->id,
                 "ordered_at" => $record->purchase_order->display_ordered_at,
                 "order_number" => $record->purchase_order->order_number,
+                "supplier" => $record->purchase_order->supplier->company,
                 "quantity_confirmed" => $record->quantity_confirmed,
                 "status" => $record->purchase_order->display_status,
                 "warehouse" => $record->purchase_order->warehouse->name,

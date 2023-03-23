@@ -6,14 +6,16 @@
                     <table class="table table-centered table-striped table-bordered table-hover w-100 dt-responsive nowrap" id="purchase-orders-datatable">
                         <thead class="table-light">
                             <tr>
-                                <th>Order</th>
+                                <th>Order #</th>
                                 <th>Warehouse</th>
+                                <th>Supplier</th>
                                 <th>Quantity</th>
                                 <th>Status</th>
                                 <th>Ordered on</th>
                                 <th>Created by</th>
                              </tr>
                             <tr class="purchase-orders-filters" style="display:none;">
+                                <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
@@ -64,14 +66,14 @@
             {
                 extend: 'excelHtml5',
                 exportOptions: {
-                    columns: [ 0, 1, 2, 3, 4, 5]
+                    columns: [ 0, 1, 2, 3, 4, 5, 6]
                 },
                 className: 'btn btn-success'
             },
             {
                 extend: 'pdfHtml5',
                 exportOptions: {
-                    columns: [ 0, 1, 2, 3, 4, 5]
+                    columns: [ 0, 1, 2, 3, 4, 5, 6]
                 },
                 className: 'btn btn-warning',
                 download: 'open'
@@ -122,6 +124,10 @@
             },
             { 
                 'data': 'warehouse',
+                'orderable': true
+            },
+            {
+                'data': 'supplier',
                 'orderable': true
             },
             { 
