@@ -19,12 +19,14 @@
                             <tr>
                                 <th>Invoice #</th>
                                 <th>Order #</th>
+                                <th>Supplier</th>
                                 <th>Shipped On</th> 
                                 <th>Amount</th> 
                                 <th style="width:100px;">Status</th> 
                                 <th>Created By</th> 
                             </tr>
                             <tr class="filters" style="display: none;" >
+                                <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
                                 <th id="shipped_at" class="position-relative">
@@ -136,6 +138,10 @@
             },
             { 
                 'data': 'order_number',
+                'orderable': true 
+            },
+            { 
+                'data': 'supplier',
                 'orderable': true 
             },
             { 
