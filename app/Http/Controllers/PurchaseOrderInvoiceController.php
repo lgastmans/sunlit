@@ -74,7 +74,6 @@ class PurchaseOrderInvoiceController extends Controller
             $order_dir = $order_arr[0]['dir'];
         }
 
-
         $search = '';
         if ($request->has('search')) {
             $search_arr = $request->get('search');
@@ -83,10 +82,10 @@ class PurchaseOrderInvoiceController extends Controller
 
         $totalRecords = PurchaseOrderInvoice::count();
         
-
         $query = PurchaseOrderInvoice::query();
         $query->join('users', 'users.id', '=', 'user_id');
         $query->join('purchase_orders', 'purchase_orders.id', '=', 'purchase_order_id');
+        $query->join('suppliers', 'suppliers.id', '=', 'purchase_orders.supplier_id');
 
         if (!empty($column_arr[0]['search']['value'])){
             $query->where('purchase_order_invoices.invoice_number', 'like', '%'.$column_arr[0]['search']['value'].'%');
@@ -95,16 +94,19 @@ class PurchaseOrderInvoiceController extends Controller
             $query->where('purchase_orders.order_number', 'like', '%'.$column_arr[1]['search']['value'].'%');
         }
         if (!empty($column_arr[2]['search']['value'])){
-            $query->where('purchase_order_invoices.shipped_at', 'like', convertDateToMysql($column_arr[2]['search']['value']));
+            $query->where('suppliers.company', 'like', '%'.$column_arr[2]['search']['value'].'%');
         }
         if (!empty($column_arr[3]['search']['value'])){
-            $query->where('purchase_order_invoices.amount_inr', 'like', $column_arr[3]['search']['value'].'%');
+            $query->where('purchase_order_invoices.shipped_at', 'like', convertDateToMysql($column_arr[3]['search']['value']));
         }
-        if (!empty($column_arr[4]['search']['value']) && $column_arr[4]['search']['value'] != "all"){
-            $query->where('purchase_order_invoices.status', 'like', $column_arr[4]['search']['value']);
+        if (!empty($column_arr[4]['search']['value'])){
+            $query->where('purchase_order_invoices.amount_inr', 'like', $column_arr[4]['search']['value'].'%');
         }
-        if (!empty($column_arr[5]['search']['value'])){
-            $query->where('users.name', 'like', $column_arr[5]['search']['value'].'%');
+        if (!empty($column_arr[5]['search']['value']) && $column_arr[5]['search']['value'] != "all"){
+            $query->where('purchase_order_invoices.status', 'like', $column_arr[5]['search']['value']);
+        }
+        if (!empty($column_arr[6]['search']['value'])){
+            $query->where('users.name', 'like', $column_arr[6]['search']['value'].'%');
         }
         
         if ($request->has('search')){
@@ -113,6 +115,7 @@ class PurchaseOrderInvoiceController extends Controller
                 $q->where('purchase_orders.order_number', 'like', '%'.$search.'%')
                     ->orWhere('purchase_order_invoices.amount_inr', 'like', $search.'%')
                     ->orWhere('purchase_order_invoices.invoice_number', 'like', '%'.$search.'%')
+                    ->orWhere('suppliers.company', 'like', '%'.$search.'%')
                     ->orWhere('users.name', 'like', '%'.$search.'%');
             });    
         }
@@ -124,7 +127,7 @@ class PurchaseOrderInvoiceController extends Controller
             $query->skip($start)->take($length);
 
         $query->orderBy($order_column, $order_dir);
-        $invoices = $query->select('purchase_order_invoices.*', 'purchase_orders.order_number')->get();
+        $invoices = $query->select('purchase_order_invoices.*', 'purchase_orders.order_number', 'suppliers.company')->get();
 
         $arr = array();
         foreach($invoices as $invoice)
@@ -134,6 +137,7 @@ class PurchaseOrderInvoiceController extends Controller
                 "invoice_number" => $invoice->invoice_number,
                 "invoice_number_slug" => $invoice->invoice_number_slug,
                 "order_number" => $invoice->purchase_order->order_number,
+                "supplier" => $invoice->company,
                 "shipped_at" => $invoice->display_shipped_at,
                 "amount" => (isset($invoice->amount_inr)) ? trans('app.currency_symbol_inr')." ".$invoice->amount_inr : "",
                 "status" => $invoice->display_status,
@@ -196,19 +200,38 @@ class PurchaseOrderInvoiceController extends Controller
             $invoice_item->quantity_shipped = $quantity_shipped;
             $purchase_order_item = PurchaseOrderItem::where('purchase_order_id', $purchase_order->id)->where('product_id', $product_id)->first();
             
+            /**
+             * purchase_order_item->buying_price is either INR or USD based on the supplier
+             * being domestic (India) or International
+             */
             $invoice_item->buying_price = $purchase_order_item->buying_price;
 
-            $invoice_item->customs_duty = $invoice_item->buying_price * $invoice_item->quantity_shipped * ($product->category->customs_duty /100);
+            if ($purchase_order->supplier->is_international)
+            {
+                $invoice_item->customs_duty = $invoice_item->buying_price * $invoice_item->quantity_shipped * ($product->category->customs_duty /100);
 
-            $invoice_item->social_welfare_surcharge = $invoice_item->customs_duty * ($product->category->social_welfare_surcharge /100);
+                $invoice_item->social_welfare_surcharge = $invoice_item->customs_duty * ($product->category->social_welfare_surcharge /100);
 
-            $invoice_item->igst = (($invoice_item->buying_price * $quantity_shipped) + $invoice_item->customs_duty + $invoice_item->social_welfare_surcharge) * ($product->category->igst /100);
-         
-            $charges = [
-                'customs_duty'=> $product->category->customs_duty,
-                'social_welfare_surcharge'=> $product->category->social_welfare_surcharge,
-                'igst'=> $product->category->igst,
-            ];
+                $invoice_item->igst = (($invoice_item->buying_price * $quantity_shipped) + $invoice_item->customs_duty + $invoice_item->social_welfare_surcharge) * ($product->category->igst /100);
+             
+                $charges = [
+                    'customs_duty'=> $product->category->customs_duty,
+                    'social_welfare_surcharge'=> $product->category->social_welfare_surcharge,
+                    'igst'=> $product->category->igst,
+                ];
+            }
+            else
+            {
+                $invoice_item->customs_duty = 0;
+                $invoice_item->social_welfare_surcharge = 0;
+                $invoice_item->igst = 0;
+                $charges = [
+                    'customs_duty'=> 0,
+                    'social_welfare_surcharge'=> 0,
+                    'igst'=> 0,
+                ];
+            }
+            
             $invoice_item->charges = $charges;
 
             $invoice_item->save();
@@ -219,8 +242,16 @@ class PurchaseOrderInvoiceController extends Controller
         $inventory = new Inventory();
         $inventory->updateStock($invoice);        
 
-        $invoice->amount_usd = $amount_usd;
-        $invoice->amount_inr = $invoice->amount_usd * $invoice->order_exchange_rate;
+        if ($purchase_order->supplier->is_international)
+        {
+            $invoice->amount_usd = $amount_usd;
+            $invoice->amount_inr = $invoice->amount_usd * $invoice->order_exchange_rate;
+        }
+        else 
+        {
+            $invoice->amount_usd = 0; 
+            $invoice->amount_inr = $amount_usd;
+        }
         $invoice->update();
         
         return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'redirect' => route('purchase-order-invoices.show', $invoice_number_slug)]);
@@ -384,16 +415,33 @@ class PurchaseOrderInvoiceController extends Controller
      */
     public function paid(Request $request, $id)
     {
-        $validated = $request->validate([
-            'paid_at' => 'required|date',
-            'paid_exchange_rate' => 'required',
-        ]);
 
-        $invoice = PurchaseOrderInvoice::find($id);
+        $invoice = PurchaseOrderInvoice::with('purchase_order')->find($id);
+
+        if ($invoice->purchase_order->supplier->is_international)        
+            $validated = $request->validate([
+                'paid_at' => 'required|date',
+                'paid_exchange_rate' => 'required',
+            ]);
+        else
+            $validated = $request->validate([
+                'paid_at' => 'required|date',
+            ]);
+
+        
+        //$purchase_order = PurchaseOrder::find($invoice->purchase_order_id);
+
         $invoice_number = $invoice->invoice_number;
         $invoice->paid_at = $request->get('paid_at');
-        $invoice->paid_exchange_rate = $request->get('paid_exchange_rate');
-        $invoice->paid_cost = $invoice->amount_usd * $request->get('paid_exchange_rate');
+        if ($invoice->purchase_order->supplier->is_international)        
+        {
+            $invoice->paid_exchange_rate = $request->get('paid_exchange_rate');
+            $invoice->paid_cost = $invoice->amount_usd * $request->get('paid_exchange_rate');
+        }
+        else {
+            $invoice->paid_exchange_rate = 1;
+            $invoice->paid_cost = $invoice->amount_usd * 1;
+        }
         $invoice->payment_reference = $request->get('payment_reference');
         $invoice->status = PurchaseOrderInvoice::PAID;
 

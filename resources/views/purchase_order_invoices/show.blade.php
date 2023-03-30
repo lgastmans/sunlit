@@ -5,7 +5,7 @@
 @endsection
 
 @section('page-title')
-    Invoice #{{ $invoice->invoice_number}}  / <a href="{{ route("purchase-orders.show", $invoice->purchase_order->order_number_slug) }}">{{ $invoice->purchase_order->order_number }}</a>
+    {{ ($purchase_order->supplier->is_international ? 'International' : 'Domestic')}} Invoice #{{ $invoice->invoice_number}}  | <a href="{{ route("purchase-orders.show", $invoice->purchase_order->order_number_slug) }}">{{ $invoice->purchase_order->order_number }}</a>
 @endsection
 
 @section('content')
@@ -39,21 +39,24 @@
                         <tbody>
                             @foreach($invoice->items as $item)
                             <tr>
-                                <td>{{ $item->product->part_number }}<br>
+                                <td>{{ $item->product->part_number }}
+                                    @if ($purchase_order->supplier->is_international)
+                                    <br>
                                     <small class="me-2">
                                         <b>Customs duty:</b> <span class="customs-duty" id="customs-duty-perc">{{  $item->charges['customs_duty'] }}%</span>
                                          - <b>Surcharge:</b> <span class="social-welfare" id="social-welfare-perc">{{  $item->charges['social_welfare_surcharge'] }}%</span>
                                          - <b>IGST:</b> <span class="igst" id="igst-perc">{{  $item->charges['igst'] }}%</span>
                                     </small>
+                                    @endif
                                 </td>
                                 <td>{{ $item->quantity_shipped }}</td>
-                                <td>{{ __('app.currency_symbol_usd')}}{{ number_format($item->buying_price,2) }}</td>
+                                <td>{{ ($purchase_order->supplier->is_international) ? __('app.currency_symbol_usd') : __('app.currency_symbol_inr')}}{{ number_format($item->buying_price,2) }}</td>
                                 <td class="d-none">
                                     <span class="product-customs-duty-usd" data-value="{{ $item->customs_duty }}">{{  number_format($item->customs_duty,2) }}</span>
                                     <span class="product-social-welfare-surcharge-usd" data-value="{{ $item->social_welfare_surcharge }}">{{  number_format($item->social_welfare_surcharge,2) }}</span>
                                     <span class="product-igst-usd" data-value="{{ $item->igst }}">{{  number_format($item->igst,2) }}</span>
                                 </td>
-                                <td>{{ __('app.currency_symbol_usd')}}{{ number_format($item->total_price,2) }}</td>
+                                <td>{{ ($purchase_order->supplier->is_international) ? __('app.currency_symbol_usd') : __('app.currency_symbol_inr')}}{{ number_format($item->total_price,2) }}</td>
                                 <td>
                                     @if ($invoice->status <= "5")
                                         <a href="javascript:void(0);" class="action-icon" id="icon-refresh" name="{{ $item->id }}" title="reload the category percentages for this item"> <i class="mdi mdi-refresh"></i></a>
@@ -87,64 +90,75 @@
                             <tr>
                                 <td>Invoice Total :</td>
                                 <td>
-                                    <span>{{ __('app.currency_symbol_usd')}}</span>
-                                    <span id="amount-usd">{{ $invoice->amount_usd }}</span>
+                                    @if ($purchase_order->supplier->is_international)
+                                        <span>{{ __('app.currency_symbol_usd') }}</span>
+                                        <span id="amount-usd">{{ $invoice->amount_usd }}</span>
+                                    @else
+                                        <span>{{ __('app.currency_symbol_inr') }}</span>
+                                        <span id="amount-usd">{{ $invoice->amount_inr }}</span>
+                                    @endif
                                 </td>
                             </tr>
                           
-                            <tr>
-                                <td>Exchange Rate <abbr title="Supplier">(S</abbr>/<abbr title="Customs">C</abbr>) :</td>
-                                <td>
-                                    <span>{{ __('app.currency_symbol_inr')}}</span>
-                                    <span id="order-echange-rate">{{ $invoice->order_exchange_rate }}</span>
-                                    /
-                                    <span>{{ __('app.currency_symbol_inr')}}</span>
-                                    <span id="customs-echange-rate">{{ $invoice->customs_exchange_rate }}</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Supplier Amount : </td>
-                                <td>
-                                    <span>{{ __('app.currency_symbol_inr')}}</span>
-                                    <span id="amount-inr">{{ $invoice->amount_inr }}</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Customs Amount : </td>
-                                <td>
-                                    <span>{{ __('app.currency_symbol_inr')}}</span>
-                                    <span id="customs-amount-inr">@if ($invoice->customs_exchange_rate) {{ $invoice->amount_usd * $invoice->customs_exchange_rate }}@endif</span>
-                                </td>
-                            </tr>
+                            @if ($purchase_order->supplier->is_international)
+                                <tr>
+                                    <td>Exchange Rate <abbr title="Supplier">(S</abbr>/<abbr title="Customs">C</abbr>) :</td>
+                                    <td>
+                                        <span>{{ __('app.currency_symbol_inr')}}</span>
+                                        <span id="order-echange-rate">{{ $invoice->order_exchange_rate }}</span>
+                                        /
+                                        <span>{{ __('app.currency_symbol_inr')}}</span>
+                                        <span id="customs-echange-rate">{{ $invoice->customs_exchange_rate }}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Supplier Amount : </td>
+                                    <td>
+                                        <span>{{ __('app.currency_symbol_inr')}}</span>
+                                        <span id="amount-inr">{{ $invoice->amount_inr }}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Customs Amount : </td>
+                                    <td>
+                                        <span>{{ __('app.currency_symbol_inr')}}</span>
+                                        <span id="customs-amount-inr">@if ($invoice->customs_exchange_rate) {{ $invoice->amount_usd * $invoice->customs_exchange_rate }}@endif</span>
+                                    </td>
+                                </tr>
+                            @endif
+
                             @if ($invoice->status >= "5")
-                                <tr>
-                                    <td>Total Customs Duty : </td>
-                                    <td>
-                                        <span>{{ __('app.currency_symbol_inr')}}</span>
-                                        <span id="customs-duty">{{ $invoice->customs_duty }}</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Total Social Welfare Surcharge : </td>
-                                    <td>
-                                        <span>{{ __('app.currency_symbol_inr')}}</span>
-                                        <span id="social-welfare-surcharge">{{ $invoice->social_welfare_surcharge }}</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>IGST : </td>
-                                    <td>
-                                        <span>{{ __('app.currency_symbol_inr')}}</span>
-                                        <span id="igst">{{ $invoice->igst }}</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Landed Cost (rounded):</th>
-                                    <th>
-                                        <span>{{ __('app.currency_symbol_inr')}}</span>
-                                        <span id="landed-cost">@php echo number_format($invoice->landed_cost,2); @endphp</span>
-                                    </th>
-                                </tr>
+                            
+                                @if ($purchase_order->supplier->is_international)
+                                    <tr>
+                                        <td>Total Customs Duty : </td>
+                                        <td>
+                                            <span>{{ __('app.currency_symbol_inr')}}</span>
+                                            <span id="customs-duty">{{ $invoice->customs_duty }}</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total Social Welfare Surcharge : </td>
+                                        <td>
+                                            <span>{{ __('app.currency_symbol_inr')}}</span>
+                                            <span id="social-welfare-surcharge">{{ $invoice->social_welfare_surcharge }}</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>IGST : </td>
+                                        <td>
+                                            <span>{{ __('app.currency_symbol_inr')}}</span>
+                                            <span id="igst">{{ $invoice->igst }}</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Landed Cost (rounded):</th>
+                                        <th>
+                                            <span>{{ __('app.currency_symbol_inr')}}</span>
+                                            <span id="landed-cost">@php echo number_format($invoice->landed_cost,2); @endphp</span>
+                                        </th>
+                                    </tr>
+                                @endif
                             @endif
                         </tbody>
                     </table>

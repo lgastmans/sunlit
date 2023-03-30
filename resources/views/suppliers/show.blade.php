@@ -26,7 +26,6 @@
                                 <div>
                                     <h4 class="mt-1 mb-1 text-white">{{ $supplier->contact_person }}</h4>
                                     <p class="font-13 text-white-50"> {{ $supplier->company }}</p>
-
                                     <ul class="mb-0 list-inline text-light">
                                         <li class="list-inline-item me-3">
                                             <h5 class="mb-1">{{ $supplier->currency_code }} <span class="pending_orders_amount"></span></h5>
@@ -81,7 +80,7 @@
 
                     <p class="text-muted"><strong>Email :</strong> <span class="ms-2">{{ $supplier->email }}</span></p>
 
-                    <p class="text-muted"><strong>Location :</strong> <span class="ms-2">{{ $supplier->address }}, {{ $supplier->city }}, {{ $supplier->state->name ?? "" }} {{ $supplier->zip_code }}</span></p>
+                    <p class="text-muted"><strong>Location :</strong> <span class="ms-2">{{ $supplier->address }}, {{ $supplier->city }}, {{ $supplier->state->name ?? "" }} {{ $supplier->zip_code }} {{ $supplier->country }} </span></p>
 
                     @if ($supplier->gstin)
                         <p class="text-muted"><strong>GSTIN :</strong><span class="ms-2">{{ $supplier->gstin }}</span></p>

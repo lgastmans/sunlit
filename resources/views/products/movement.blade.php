@@ -140,7 +140,7 @@
             }
         ],
         
-        "order": [[1, "desc"]],
+        "order": [[4, "desc"]],
         "drawCallback": function () {
             $('.dataTables_paginate > .pagination').addClass('pagination-rounded');
             $('#movement-datatable_length label').addClass('form-label');

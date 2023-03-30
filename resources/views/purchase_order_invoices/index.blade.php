@@ -142,7 +142,7 @@
             },
             { 
                 'data': 'supplier',
-                'orderable': true 
+                'orderable': false 
             },
             { 
                 'data': 'shipped_at',

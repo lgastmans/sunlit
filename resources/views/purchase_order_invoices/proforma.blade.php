@@ -55,8 +55,15 @@
       }
 
       table {
-        border-collapse: collapse;
-        border-spacing: 0;
+        font-weight: normal;
+        font-style: normal;
+        font-size: 11px;
+
+      }
+      table th, table td {
+        vertical-align: top;
+        word-break: keep-all;
+        word-wrap: break-word;
       }
 
       caption, th, td {
@@ -405,7 +412,7 @@
         </tr>
         <tr>
           <td class="label">City</td>
-          <td class="text">{{ $order->purchase_order->supplier->city }} {{ $order->purchase_order->supplier->zip_code }}</td>
+          <td class="text">{{ $order->purchase_order->supplier->city }} {{ $order->purchase_order->supplier->zip_code }} {{ $order->purchase_order->supplier->country}}</td>
         </tr>
         <tr>
           <td class="label">Phone</td>
@@ -434,8 +441,13 @@
             <th style="vertical-align: bottom;text-align: left;width:35%;">Part Number</th>
             <th style="vertical-align: bottom;text-align: left;width:35%;">Description</th>
             <th style="vertical-align: bottom;">Qty</th>
-            <th style="vertical-align: bottom;">Unit Price USD</th>
-            <th style="vertical-align: bottom;">Total Price USD</th>
+            @if ($order->purchase_order->supplier->is_international) 
+              <th style="vertical-align: bottom;">Unit Price USD</th>
+              <th style="vertical-align: bottom;">Total Price USD</th>
+            @else
+              <th style="vertical-align: bottom;">Unit Price INR</th>
+              <th style="vertical-align: bottom;">Total Price INR</th>
+            @endif
           </tr>
         </thead>
         

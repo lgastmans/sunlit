@@ -33,12 +33,19 @@
     <div class="col-lg-4  @if (!$invoice->paid_at) d-none @endif">
         <div class="card">
             <div class="card-body">
-                <h4 class="header-title mb-3">Payment Information</h4>
+                <h4 class="header-title mb-3 text-center">Payment Information</h4>
                 <div class="text-center">
-                    <i class="mdi mdi-cash-usd-outline h2 text-muted"></i>
+                    @if ($purchase_order->supplier->is_international)
+                        <i class="mdi mdi-cash-usd-outline h2 text-muted"></i>
+                    @else
+                        <p>&#8377;</p>
+                    @endif
                     <h5><b>{{ $invoice->courier }}</b></h5>
                     <p class="mb-1"><b>Payment # :</b> {{ $invoice->payment_reference }}</p>
-                    <p class="mb-0"><b>FX rate :</b> {{ __('app.currency_symbol_inr')}} {{ $invoice->paid_exchange_rate }}</p>
+                    <p class="mb-1"><b>Paid On:</b> {{ $invoice->display_paid_at }}</p>
+                    @if ($purchase_order->supplier->is_international)
+                        <p class="mb-0"><b>FX rate :</b> {{ __('app.currency_symbol_inr')}} {{ $invoice->paid_exchange_rate }}</p>
+                    @endif
                 </div>
             </div>
         </div>

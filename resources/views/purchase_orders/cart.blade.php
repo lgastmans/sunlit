@@ -5,7 +5,7 @@
 @endsection
 
 @section('page-title')
-    Purchase Order <span class="order-number">#{{ $purchase_order->order_number }}</span>
+    {{ ($purchase_order->supplier->is_international ? 'International' : 'Domestic')}} Purchase Order <span class="order-number">#{{ $purchase_order->order_number }} </span>
 @endsection
 
 @section('content')
@@ -35,7 +35,7 @@
                         <div class="mb-3">
                             <label class="form-label" for="product-select">Price</label>
                             <div class="input-group flex-nowrap">
-                                <span class="input-group-text">{{ __('app.currency_symbol_usd')}}</span>
+                                <span class="input-group-text">{{ ($purchase_order->supplier->is_international) ? __('app.currency_symbol_usd') : __('app.currency_symbol_inr') }}</span>
                                 <input type="buying_price" class="form-control" name="buying_price"  id="buying_price" value="">
                                 <input type="hidden" name="tax" id="tax">
                             </div>
@@ -83,7 +83,7 @@
                                             </td>
                                             <td>
                                                 <div class="input-group flex-nowrap">
-                                                    <span class="input-group-text">{{ __('app.currency_symbol_usd')}}</span>
+                                                    <span class="input-group-text">{{ ($purchase_order->supplier->is_international) ? __('app.currency_symbol_usd') : __('app.currency_symbol_inr')}}</span>
                                                     <input id="item-price-{{ $item->id }}" type="text" class="editable-field form-control" data-value="{{ $item->buying_price }}" data-field="price" data-item="{{ $item->id }}" placeholder="" value="{{ $item->buying_price }}">
                                                 </div>
                                             </td>
@@ -96,7 +96,7 @@
                                                 <span id="item-tax-{{ $item->id }}">0.00%</span>
                                             </td>
                                             <td>
-                                                <span>{{ __('app.currency_symbol_usd')}}</span>
+                                                <span>{{ ($purchase_order->supplier->is_international) ? __('app.currency_symbol_usd') : __('app.currency_symbol_inr')}}</span>
                                                 <span id="item-total-{{ $item->id }}" class="item-total">{{ $item->total_price }}</span>
                                             </td>
                                             <td>
@@ -144,38 +144,40 @@
                                         <tr>
                                             <td>Order Total :</td>
                                             <td>
-                                                <span>{{ __('app.currency_symbol_usd')}}</span>
+                                                <span>{{ ($purchase_order->supplier->is_international) ? __('app.currency_symbol_usd') : __('app.currency_symbol_inr') }}</span>
                                                 <span id="grand-total">{{ $purchase_order->amount_usd }}</span>
                                             </td>
                                         </tr>
                                       
-                                        <tr>
-                                            <td>Exchange Rate: </td>
-                                            <td>
-                                                <div class="input-group flex-nowrap">
-                                                    <span class="input-group-text">{{ __('app.currency_symbol_inr')}}</span>
-                                                    <input class="form-control" type="text" id="order-exchange-rate"
-                                                    value="@if ($purchase_order->order_exchange_rate) {{ $purchase_order->order_exchange_rate }} @else {{ number_format(Setting::get('purchase_order.exchange_rate'),2) }} @endif">
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Amount : </td>
-                                            <td>
-                                                <span>{{ __('app.currency_symbol_inr')}}</span>
-                                                {{-- <span id="amount-inr">{{ $purchase_order->amount_inr }}</span> --}}
-                                                <span id="amount-inr">
-                                                    @php 
-                                                        if ($purchase_order->amount_inr==null) {
-                                                            echo number_format(Setting::get('purchase_order.exchange_rate') * $purchase_order->amount_usd, 2);
-                                                        }
-                                                        else
-                                                            echo $purchase_order->amount_inr;
-                                                    @endphp
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    
+                                        @if ($purchase_order->supplier->is_international)
+                                            <tr>
+                                                <td>Exchange Rate: </td>
+                                                <td>
+                                                    <div class="input-group flex-nowrap">
+                                                        <span class="input-group-text">{{ __('app.currency_symbol_inr')}}</span>
+                                                        <input class="form-control" type="text" id="order-exchange-rate"
+                                                        value="@if ($purchase_order->order_exchange_rate) {{ $purchase_order->order_exchange_rate }} @else {{ number_format(Setting::get('purchase_order.exchange_rate'),2) }} @endif">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Amount : </td>
+                                                <td>
+                                                    <span>{{ __('app.currency_symbol_inr')}}</span>
+                                                    {{-- <span id="amount-inr">{{ $purchase_order->amount_inr }}</span> --}}
+                                                    <span id="amount-inr">
+                                                        @php 
+                                                            if ($purchase_order->amount_inr==null) {
+                                                                echo number_format(Setting::get('purchase_order.exchange_rate') * $purchase_order->amount_usd, 2);
+                                                            }
+                                                            else
+                                                                echo $purchase_order->amount_inr;
+                                                        @endphp
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        @endif
+
                                     </tbody>
                                 </table>
                                 
@@ -427,8 +429,9 @@
     }
 
     var productSelect = $(".product-select").select2();
-    var product_route = '{{ route("ajax.products.supplier", [":supplier_id"]) }}';
-    product_route = product_route.replace(':supplier_id', $('#supplier-id').val());
+    //var product_route = '{{ route("ajax.products.supplier", [":supplier_id"]) }}';
+    //product_route = product_route.replace(':supplier_id', $('#supplier-id').val());
+    var product_route = '{{ route("ajax.products") }}';
     productSelect.select2({
         ajax: {
             url: product_route,
@@ -614,7 +617,7 @@
                                 item += '</td>';
                                 item += '<td>';
                                     item += '<div class="input-group flex-nowrap">';
-                                        item += '<span class="input-group-text">$</span>';
+                                        item += '<span class="input-group-text">{{ ($purchase_order->supplier->is_international) ? __('app.currency_symbol_usd') : __('app.currency_symbol_inr')}}</span>';
                                         item += '<input id="item-price-'+ data.item.id +'" type="text" class="editable-field form-control" data-value="'+ data.item.buying_price +'" data-field="price" data-item="'+ data.item.id +'" placeholder="" value="'+ data.item.buying_price  +'">';
                                         item += '</div>';
                                         item += '</td>';
@@ -625,7 +628,7 @@
                             item += '<span id="item-tax-'+ data.item.id +'" class="item-tax">'+ 0 +'%</span>';
                             item += '</td>';
                             item += '<td>';
-                            item += '<span>{{ __('app.currency_symbol_usd')}}</span><span id="item-total-'+ data.item.id +'" class="item-total">'+((data.item.buying_price * getTaxValue(data.item.tax)) * parseInt(data.item.quantity_confirmed)).toFixed(2) +'</span>';
+                            item += '<span>{{ ($purchase_order->supplier->is_international) ? __('app.currency_symbol_usd') : __('app.currency_symbol_inr')}}</span><span id="item-total-'+ data.item.id +'" class="item-total">'+((data.item.buying_price * getTaxValue(data.item.tax)) * parseInt(data.item.quantity_confirmed)).toFixed(2) +'</span>';
                             item += '</td>';
                             item += '<td>';
                             item += '<a href="javascript:void(0);" class="action-icon" id="'+ data.item.id +'" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>';

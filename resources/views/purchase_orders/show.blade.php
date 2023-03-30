@@ -5,7 +5,7 @@
 @endsection
 
 @section('page-title')
-    Purchase Orders #{{ $purchase_order->order_number}}
+    {{ ($purchase_order->supplier->is_international ? 'International' : 'Domestic')}} Purchase Order #{{ $purchase_order->order_number}}
 @endsection
 
 @section('content')
@@ -58,9 +58,9 @@
                                     
                                 </td>
                                 <td>@if (!empty($shipped[$item->product_id]) ) {{ $shipped[$item->product_id] }} @else 0 @endif</td>
-                                <td>{{ __('app.currency_symbol_usd')}}{{ number_format($item->buying_price,2) }}</td>
+                                <td>{{ ($purchase_order->supplier->is_international) ? __('app.currency_symbol_usd') : __('app.currency_symbol_inr')}}{{ number_format($item->buying_price,2) }}</td>
                                 <td class="d-none">{{ number_format($item->tax,2) }}%</td>
-                                <td>{{ __('app.currency_symbol_usd')}}{{ number_format($item->total_price,2) }}</td>
+                                <td>{{ ($purchase_order->supplier->is_international) ? __('app.currency_symbol_usd') : __('app.currency_symbol_inr')}}{{ number_format($item->total_price,2) }}</td>
                             </tr>
                             @endforeach
 
@@ -86,11 +86,12 @@
                             <tr>
                                 <td>Order Total :</td>
                                 <td>
-                                    <span>{{ __('app.currency_symbol_usd')}}</span>
+                                    <span>{{ ($purchase_order->supplier->is_international) ? __('app.currency_symbol_usd') : __('app.currency_symbol_inr')}}</span>
                                     <span id="grand-total">{{ $purchase_order->amount_usd }}</span>
                                 </td>
                             </tr>
-                          
+                            
+                            @if ($purchase_order->supplier->is_international)
                             <tr>
                                 <td>Exchange Rate:</td>
                                 <td>
@@ -105,6 +106,7 @@
                                     <span id="amount-inr">{{ $purchase_order->amount_inr }}</span>
                                 </td>
                             </tr>
+                            @endif
                             
                         </tbody>
                     </table>

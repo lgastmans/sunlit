@@ -14,6 +14,8 @@ class Supplier extends Model
 
     protected $fillable = ['state_id', 'company', 'address', 'address2', 'city', 'zip_code', 'gstin', 'contact_person', 'phone', 'phone2', 'email', 'currency', 'country'];
     protected $with = ['state'];
+    protected $appends = ['is_international'];
+
 
     /**
      * Get the state associated with the supplier.
@@ -45,7 +47,14 @@ class Supplier extends Model
         return trans('app.currency_symbol_usd');
     }
 
-
+    /**
+     * 
+     */
+    public function getIsInternationalAttribute()
+    {
+        return ($this->country=='India') ? false : true;
+    }    
+    
     // this is the recommended way for declaring event handlers
     public static function boot() 
     {
