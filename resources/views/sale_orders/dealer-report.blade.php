@@ -96,12 +96,12 @@
                             <th>Part Number</th>
                             <th>Model</th>
                             <th>KW Rating</th>
-                            <th>Quantity</th>
-                            <th>Price</th>
-                            <th>Taxable Value</th>
-                            <th>Tax</th>
-                            <th>Tax Amount</th>
-                            <th>Amount</th>
+                            <th style="text-align: right;">Quantity</th>
+                            <th style="text-align: right;">Price</th>
+                            <!-- <th>Taxable Value</th> -->
+                            <!-- <th>Tax</th> -->
+                            <!-- <th>Tax Amount</th> -->
+                            <th style="text-align: right;">Amount</th>
                         </tr>
                         <tr class="filters-datewise" style="display: none;">
                             <th class="no-filter"><input type="text" class="form-control"></th>
@@ -111,18 +111,15 @@
                             <th><input type="text" class="form-control"></th>
                             <th class="no-filter"><input type="text" class="form-control"></th>
                             <th class="no-filter"><input type="text" class="form-control"></th>
-                            <th class="no-filter"><input type="text" class="form-control"></th>
-                            <th class="no-filter"><input type="text" class="form-control"></th>
-                            <th class="no-filter"><input type="text" class="form-control"></th>
+                            <!-- <th class="no-filter"><input type="text" class="form-control"></th> -->
+                            <!-- <th class="no-filter"><input type="text" class="form-control"></th> -->
+                            <!-- <th class="no-filter"><input type="text" class="form-control"></th> -->
                             <th class="no-filter"><input type="text" class="form-control"></th>
                         </tr>
                     </thead>
                     <tbody></tbody>
                     <tfoot>
                         <tr>
-                            <th></th>
-                            <th></th>
-                            <th></th>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -142,12 +139,12 @@
                             <th>Part Number</th>
                             <th>Model</th>
                             <th>KW Rating</th>
-                            <th>Quantity</th>
-                            <th>Price</th>
-                            <th>Taxable Value</th>
-                            <th>Tax</th>
-                            <th>Tax Amount</th>
-                            <th>Amount</th>
+                            <th style="text-align: right;">Quantity</th>
+                            <th style="text-align: right;">Price</th>
+                            <!-- <th>Taxable Value</th> -->
+                            <!-- <th>Tax</th> -->
+                            <!-- <th>Tax Amount</th> -->
+                            <th style="text-align: right;">Amount</th>
                         </tr>
                         <tr class="filters-category" style="display: none;">
                             <th class="no-filter"><input type="text" class="form-control"></th>
@@ -156,9 +153,9 @@
                             <th><input type="text" class="form-control"></th>
                             <th class="no-filter"><input type="text" class="form-control"></th>
                             <th class="no-filter"><input type="text" class="form-control"></th>
-                            <th class="no-filter"><input type="text" class="form-control"></th>
-                            <th class="no-filter"><input type="text" class="form-control"></th>
-                            <th class="no-filter"><input type="text" class="form-control"></th>
+                            <!-- <th class="no-filter"><input type="text" class="form-control"></th> -->
+                            <!-- <th class="no-filter"><input type="text" class="form-control"></th> -->
+                            <!-- <th class="no-filter"><input type="text" class="form-control"></th> -->
                             <th class="no-filter"><input type="text" class="form-control"></th>
                         </tr>
 
@@ -166,9 +163,6 @@
                     <tbody></tbody>
                     <tfoot>
                         <tr>
-                            <th></th>
-                            <th></th>
-                            <th></th>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -285,14 +279,14 @@
                 {
                     extend: 'excelHtml5',
                     exportOptions: {
-                        columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ]
+                        columns: [ 0, 1, 2, 3, 4, 5 ]
                     },
                     className: 'btn btn-success'
                 },
                 {
                     extend: 'pdfHtml5',
                     exportOptions: {
-                        columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ]
+                        columns: [ 0, 1, 2, 3, 4, 5 ]
                     },
                     className: 'btn btn-warning',
                     download: 'open'
@@ -327,13 +321,13 @@
                 { data: 'kw_rating', orderable : false},
                 { data: 'quantity', orderable : false},
                 { data: 'price', orderable : false},
-                { data: 'taxable_value', orderable : false},
-                { data: 'tax', orderable : false},
-                { data: 'tax_amount', orderable : false},
+                // { data: 'taxable_value', orderable : false},
+                // { data: 'tax', orderable : false},
+                // { data: 'tax_amount', orderable : false},
                 { data: 'amount', orderable : false}
             ],
             "columnDefs": [
-                { className: "dt-right", "targets": [5,6,7,8,9,10] },  //'_all' }
+                { className: "dt-right", "targets": [5,6,7] },  //'_all' }
             ],
             oLanguage : {
                 "sInfo": "", //"_TOTAL_ entries",
@@ -394,9 +388,9 @@
                     // console.log('object ' + json.data.footer.label);
                     $( api.column( 0 ).footer() ).html(json.data.footer.label );
                     $( api.column( 5 ).footer() ).html(json.data.footer.total_quantity );
-                    $( api.column( 7 ).footer() ).html(json.data.footer.total_taxable_value );
-                    $( api.column( 9 ).footer() ).html(json.data.footer.total_tax_amount );
-                    $( api.column( 10 ).footer() ).html(json.data.footer.total_amount );
+                    // $( api.column( 7 ).footer() ).html(json.data.footer.total_taxable_value );
+                    // $( api.column( 9 ).footer() ).html(json.data.footer.total_tax_amount );
+                    $( api.column( 7 ).footer() ).html(json.data.footer.total_amount );
                 }
             }
         });
@@ -437,14 +431,14 @@
                 {
                     extend: 'excelHtml5',
                     exportOptions: {
-                        columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ]
+                        columns: [ 0, 1, 2, 3, 4, 5 ]
                     },
                     className: 'btn btn-success'
                 },
                 {
                     extend: 'pdfHtml5',
                     exportOptions: {
-                        columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ]
+                        columns: [ 0, 1, 2, 3, 4, 5 ]
                     },
                     className: 'btn btn-warning',
                     download: 'open'
@@ -478,13 +472,13 @@
                 { data: 'kw_rating', orderable : false},
                 { data: 'quantity', orderable : false},
                 { data: 'price', orderable : false},
-                { data: 'taxable_value', orderable : false},
-                { data: 'tax', orderable : false},
-                { data: 'tax_amount', orderable : false},
+                // { data: 'taxable_value', orderable : false},
+                // { data: 'tax', orderable : false},
+                // { data: 'tax_amount', orderable : false},
                 { data: 'amount', orderable : false}
             ],
             columnDefs: [
-                { className: "dt-right", "targets": [3,4,5,6,7,8,9] },   //'_all' }
+                { className: "dt-right", "targets": [3,4,5,6] },   //'_all' }
                 { visible: false, "targets": [0] },
             ],
             oLanguage : {
@@ -522,9 +516,9 @@
                 {
                     $( api.column( 0 ).footer() ).html(json.data.footer.label );
                     $( api.column( 4 ).footer() ).html(json.data.footer.total_quantity );
-                    $( api.column( 6 ).footer() ).html(json.data.footer.total_taxable_value );
-                    $( api.column( 8 ).footer() ).html(json.data.footer.total_tax_amount );
-                    $( api.column( 9 ).footer() ).html(json.data.footer.total_amount );
+                    // $( api.column( 6 ).footer() ).html(json.data.footer.total_taxable_value );
+                    // $( api.column( 8 ).footer() ).html(json.data.footer.total_tax_amount );
+                    $( api.column( 6 ).footer() ).html(json.data.footer.total_amount );
                 }
             }
 
