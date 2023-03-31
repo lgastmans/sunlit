@@ -19,7 +19,7 @@
                 </tr>
             @else
                 <tr style="text-align: right;">
-                    <th style="text-align:left">Category</th>
+                    <th style="text-align:left">{{ ucfirst($type) }}</th>
                     <th>1st Quarter</th>
                     <th>2nd Quarter</th>
                     <th>3rd Quarter</th>
