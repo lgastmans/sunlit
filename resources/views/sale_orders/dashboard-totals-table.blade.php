@@ -29,12 +29,16 @@
         </thead>
         <tbody>
             @foreach ($totals as $label=>$total)
-                <tr>
-                    <td>{{ $label }}</td>
-                    @foreach ($total as $key=>$month)
-                        <td style="text-align: right;">{{ $month['total_amount'] }}</td>
-                    @endforeach
-                </tr>
+                @if ($total['row_total'] > 0)
+                    <tr>
+                        <td>{{ $label }}</td>
+                        @foreach ($total as $key=>$month)
+                            @if ($key != 'row_total')
+                                <td style="text-align: right;">{{ $month['total_amount'] }}</td>
+                            @endif
+                        @endforeach
+                    </tr>
+                @endif
             @endforeach
         </tbody>
     </table>

@@ -165,6 +165,7 @@ class SaleOrder extends Model
             $total_qty += $row->quantity_ordered;
         }
 
+        $res['total_amount_unfmt'] = $total_amount;
         $res['total_amount'] =$fmt->formatCurrency($total_amount, "INR");
         $res['total_qty'] = $fmt->formatCurrency($total_qty, "INR");
 
@@ -230,7 +231,8 @@ class SaleOrder extends Model
             $total_amount += ($row->selling_price * $row->quantity_ordered) * (1+$row->tax/100);
             $total_qty += $row->quantity_ordered;
         }
-
+        
+        $res['total_amount_unfmt'] = $total_amount;
         $res['total_amount'] =$fmt->formatCurrency($total_amount, "INR");
         $res['total_qty'] = $fmt->formatCurrency($total_qty, "INR");
 
@@ -266,11 +268,16 @@ class SaleOrder extends Model
             {
                 if ($month=="_ALL")
                 {
+                    $row_total = 0;
+                    
                     for ($i=1;$i<=12;$i++)
                     {
                         $dt = DateTime::createFromFormat('!m', $i);
                         $res[$category->name][$dt->format('F')] = $this->calculateMonthSalesTotals($i, $year, $category->id);
+                        $row_total += (float)$res[$category->name][$dt->format('F')]['total_amount_unfmt'];
                     }
+
+                    $res[$category->name]['row_total'] = $row_total;
                 }
                 else
                 {
@@ -282,10 +289,18 @@ class SaleOrder extends Model
             {
                 if ($quarter=="_ALL")
                 {
+                    $row_total = 0;
+                    
                     $res[$category->name]['Q1'] = $this->calculateQuarterSalesTotals('Q1', $year, $category->id);
+                    $row_total += (float)$res[$category->name]['Q1']['total_amount_unfmt'];
                     $res[$category->name]['Q2'] = $this->calculateQuarterSalesTotals('Q2', $year, $category->id);
+                    $row_total += (float)$res[$category->name]['Q2']['total_amount_unfmt'];
                     $res[$category->name]['Q3'] = $this->calculateQuarterSalesTotals('Q3', $year, $category->id);
+                    $row_total += (float)$res[$category->name]['Q3']['total_amount_unfmt'];
                     $res[$category->name]['Q4'] = $this->calculateQuarterSalesTotals('Q4', $year, $category->id);
+                    $row_total += (float)$res[$category->name]['Q4']['total_amount_unfmt'];
+
+                    $res[$category->name]['row_total'] = $row_total;
                 }
                 else
                     $res[$category->name][$quarter] = $this->calculateQuarterSalesTotals($quarter, $year, $category->id);
@@ -342,6 +357,7 @@ class SaleOrder extends Model
             $total_qty += $row->quantity_ordered;
         }
 
+        $res['total_amount_unfmt'] = $total_amount;
         $res['total_amount'] =$fmt->formatCurrency($total_amount, "INR");
         $res['total_qty'] = $fmt->formatCurrency($total_qty, "INR");
 
@@ -411,7 +427,8 @@ class SaleOrder extends Model
             $total_qty += $row->quantity_ordered;
         }
 
-        $res['total_amount'] =$fmt->formatCurrency($total_amount, "INR");
+        $res['total_amount_unfmt'] = $total_amount;
+        $res['total_amount'] = $fmt->formatCurrency($total_amount, "INR");
         $res['total_qty'] = $fmt->formatCurrency($total_qty, "INR");
 
         return $res;
@@ -438,6 +455,10 @@ class SaleOrder extends Model
         $states = $states->orderBy('name')
             ->get();
 
+        $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
+        //$fmt->setSymbol(NumberFormatter::CURRENCY_SYMBOL, '');
+        $fmt->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 0);
+
         $res = array();
         foreach ($states as $row)
         {
@@ -446,11 +467,17 @@ class SaleOrder extends Model
             {
                 if ($month=="_ALL")
                 {
+                    $row_total = 0;
+
                     for ($i=1;$i<=12;$i++)
                     {
                         $dt = DateTime::createFromFormat('!m', $i);
                         $res[$row->name][$dt->format('F')] = $this->calculateMonthStateSalesTotals($i, $year, $row->id);
+                        $row_total += (float)$res[$row->name][$dt->format('F')]['total_amount_unfmt'];
                     }
+
+                    $res[$row->name]['row_total'] = $row_total; //$fmt->formatCurrency($row_total, "INR");
+
                 }
                 else
                 {
@@ -462,10 +489,17 @@ class SaleOrder extends Model
             {
                 if ($quarter=="_ALL")
                 {
+                    $row_total = 0;
                     $res[$row->name]['Q1'] = $this->calculateQuarterStateSalesTotals('Q1', $year, $row->id);
+                    $row_total += (float)$res[$row->name]['Q1']['total_amount_unfmt'];
                     $res[$row->name]['Q2'] = $this->calculateQuarterStateSalesTotals('Q2', $year, $row->id);
+                    $row_total += (float)$res[$row->name]['Q2']['total_amount_unfmt'];
                     $res[$row->name]['Q3'] = $this->calculateQuarterStateSalesTotals('Q3', $year, $row->id);
+                    $row_total += (float)$res[$row->name]['Q3']['total_amount_unfmt'];
                     $res[$row->name]['Q4'] = $this->calculateQuarterStateSalesTotals('Q4', $year, $row->id);
+                    $row_total += (float)$res[$row->name]['Q4']['total_amount_unfmt'];
+
+                    $res[$row->name]['row_total'] = $row_total;
                 }
                 else
                     $res[$row->name][$quarter] = $this->calculateQuarterStateSalesTotals($quarter, $year, $row->id);
