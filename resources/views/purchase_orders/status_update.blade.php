@@ -14,7 +14,7 @@
                     data-date-container="#confirmed_at"
                     data-date-autoclose="true"
                     data-date-format="M d, yyyy"
-                    data-date-start-date="-1d"
+                    data-date-start-date="-1m"
                     data-date-end-date="+6m"
                     data-date-today-highlight="true"
                     required>
@@ -49,7 +49,7 @@
                         data-date-container="#customs_at"
                         data-date-autoclose="true"
                         data-date-format="M d, yyyy"
-                        data-date-start-date="-1d"
+                        data-date-start-date="-1m"
                         data-date-end-date="+6m"
                         data-date-today-highlight="true"
                         required>
@@ -88,7 +88,7 @@
                         data-date-container="#cleared_at"
                         data-date-autoclose="true"
                         data-date-format="M d, yyyy"
-                        data-date-start-date="-1d"
+                        data-date-start-date="-1m"
                         data-date-end-date="+6m"
                         data-date-today-highlight="true"
                         required>
@@ -140,9 +140,15 @@
                     <div class="col-xl-6" id="received_at">
                         <label class="form-label">Received date</label>
                         <input type="text" class="form-control" name="received_at"
-                            value="{{ $purchase_order->display_received_at }}" data-provide="datepicker" data-date-autoclose="true"
-                            data-date-container="#received_at" data-date-format="M d, yyyy" data-date-today-highlight="true" data-date-start-date="-1d"
-                            data-date-end-date="+6m" required>
+                            value="{{ $purchase_order->display_received_at }}" 
+                            data-provide="datepicker" 
+                            data-date-autoclose="true"
+                            data-date-container="#received_at" 
+                            data-date-format="M d, yyyy" 
+                            data-date-today-highlight="true" 
+                            data-date-start-date="-1m"
+                            data-date-end-date="+6m" 
+                            required>
                     </div>
                 </div>
             
