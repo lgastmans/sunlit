@@ -187,9 +187,15 @@
                         <div class="col-xl-6" id="received_at">
                             <label class="form-label">Received date</label>
                             <input type="text" class="form-control" name="received_at"
-                                value="{{ $invoice->display_received_at }}" data-provide="datepicker" data-date-autoclose="true"
-                                data-date-container="#received_at" data-date-format="M d, yyyy" required data-date-start-date="-1d"
-                                data-date-end-date="+6m" data-date-today-highlight="true">
+                                value="{{ $invoice->display_received_at }}" 
+                                data-provide="datepicker" 
+                                data-date-autoclose="true"
+                                data-date-container="#received_at" 
+                                data-date-format="M d, yyyy" 
+                                required 
+                                data-date-start-date="-1m"
+                                data-date-end-date="+6m" 
+                                data-date-today-highlight="true">
                         </div>
                     </div>
                 
