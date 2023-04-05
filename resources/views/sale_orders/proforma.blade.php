@@ -395,7 +395,7 @@ font-weight: bold;
         <tr>
           <td>
 
-             <img src="{{ public_path('images/logo.png') }}" alt="" height="48">
+             <!-- <img src="{{ public_path('images/logo.png') }}" alt="" height="48"> -->
             
           </td>
           <td style="text-align: right;">
