@@ -566,7 +566,7 @@ class SaleOrder extends Model
          */
         $this->sub_total += (float)$this->transport_charges;
         $this->transport_tax_amount = (float)($this->transport_charges * $tax / 100);
-        $this->transport_total = (float)$this->transport_charges + $this->transport_tax_amount;
+        $this->transport_total = (float)$this->transport_charges + (float)$this->transport_tax_amount;
         $this->tax_total += (float)$this->transport_charges * $tax / 100;
 
         $this->total = $this->sub_total + $this->tax_total;
@@ -597,7 +597,7 @@ class SaleOrder extends Model
         $this->sub_total = $fmt->formatCurrency($this->sub_total, "INR");
         $this->tax_total = $fmt->formatCurrency($this->tax_total, "INR");
         $this->transport_total = $fmt->formatCurrency($this->transport_total, "INR");
-        $this->transport_tax_amount = $fmt->formatCurrency($this->transport_tax_amount, "INR");
+        $this->transport_tax_amount = $fmt->formatCurrency((float)$this->transport_tax_amount, "INR");
         $this->tax_total_half = $fmt->formatCurrency($this->tax_total_half, "INR");
         $this->total_unfmt = $this->total;
         $this->total = $fmt->formatCurrency($this->total, "INR");
