@@ -523,6 +523,9 @@ class SaleOrder extends Model
         $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
         $fmt->setSymbol(NumberFormatter::CURRENCY_SYMBOL, '');
 
+        if (!isset($this->transport_charges))
+            $this->transport_charges = 0;
+
         $this->sub_total = 0;
         $this->tax_total = 0;
         $this->freight_charges = $this->transport_charges; 
