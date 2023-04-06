@@ -618,9 +618,9 @@ font-weight: bold;
               <td><span>{{ $order->transport_charges }}</span></td>
               @if ($order->dealer->state->code==33)
                 <td>{{ $tax/2 }}%</td>
-                <td>@php echo number_format($order->transport_tax_amount/2, 2); @endphp</td>
+                <td>@php echo number_format($order->transport_tax_amount_unfmt/2, 2); @endphp</td>
                 <td>{{ $tax/2 }}%</td>
-                <td>@php echo number_format($order->transport_tax_amount/2, 2); @endphp</td>
+                <td>@php echo number_format($order->transport_tax_amount_unfmt/2, 2); @endphp</td>
               @else
                 <td>{{ $tax }}%</td>
                 <td>{{ $order->transport_tax_amount }}</td>
