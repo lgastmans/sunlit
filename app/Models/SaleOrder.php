@@ -528,7 +528,7 @@ class SaleOrder extends Model
 
         $this->sub_total = 0;
         $this->tax_total = 0;
-        $this->freight_charges = $this->transport_charges; 
+        $this->freight_charges = (float)$this->transport_charges; 
         $this->transport_total = 0; // = freight_charges + with tax
         $this->total = 0;
         $this->total_unfmt = 0;
@@ -564,8 +564,8 @@ class SaleOrder extends Model
         /**
          * add the Transport Charges to the totals
          */
-        $this->sub_total += $this->transport_charges;
-        $this->transport_tax_amount = ((float)$this->transport_charges * $tax / 100);
+        $this->sub_total += (float)$this->transport_charges;
+        $this->transport_tax_amount = (float)($this->transport_charges * $tax / 100);
         $this->transport_total = (float)$this->transport_charges + $this->transport_tax_amount;
         $this->tax_total += (float)$this->transport_charges * $tax / 100;
 
