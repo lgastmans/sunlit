@@ -565,9 +565,9 @@ class SaleOrder extends Model
          * add the Transport Charges to the totals
          */
         $this->sub_total += $this->transport_charges;
-        $this->transport_tax_amount = ($this->transport_charges * $tax / 100);
-        $this->transport_total = $this->transport_charges + $this->transport_tax_amount;
-        $this->tax_total += $this->transport_charges * $tax / 100;
+        $this->transport_tax_amount = ((float)$this->transport_charges * $tax / 100);
+        $this->transport_total = (float)$this->transport_charges + $this->transport_tax_amount;
+        $this->tax_total += (float)$this->transport_charges * $tax / 100;
 
         $this->total = $this->sub_total + $this->tax_total;
 
