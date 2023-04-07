@@ -170,7 +170,7 @@
         "select": {
             "style": "multi"
         },
-        "order": [[1, "desc"]],
+        "aaSorting": [[3, "desc"]],
         "drawCallback": function () {
             $('.dataTables_paginate > .pagination').addClass('pagination-rounded');
             $('#products-datatable_length label').addClass('form-label');
