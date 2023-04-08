@@ -3267,7 +3267,7 @@ textarea.form-control-lg {
   flex-direction: column;
   min-width: 0;
   word-wrap: break-word;
-  background-color: #fff;
+  background-color: #e6e6e6;
   background-clip: border-box;
   border: 1px solid #eef2f7;
   border-radius: 0.25rem; }
