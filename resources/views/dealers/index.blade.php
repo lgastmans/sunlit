@@ -151,7 +151,7 @@
 
             
         ],
-        "order": [[0, "desc"]],
+        "aaSorting": [[0, "asc"]],
         "drawCallback": function () {
             $('.dataTables_paginate > .pagination').addClass('pagination-rounded');
             $('#dealers-datatable_length label').addClass('form-label');
