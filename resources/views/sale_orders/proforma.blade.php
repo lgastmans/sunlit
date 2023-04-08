@@ -415,7 +415,7 @@ font-weight: bold;
             <span>{{ $settings['company']['city'] }} {{ $settings['company']['zipcode'] }}</span><br>
             <span>{{ $settings['company']['state'] }} {{ $settings['company']['country'] }}</span><br>
             <span>GSTIN: {{ $settings['company']['gstin'] }}</span><br>
-            <span>Email: {{ Auth::user()->email ?? "" }}</span><br>
+            <span>Email: {{ $order->user->email ?? Auth::user()->email }}</span><br>
             <span>Phone: {{ $settings['company']['phone'] }}</span>
           </td>
         </tr>
