@@ -66,7 +66,7 @@ class SaleOrderItemController extends Controller
         $arr = array();
         if (!$request->has('filter_product_id'))
             return $arr;
-        $filter_product_id = $request->get('filter_product_id');
+        $filter_product_id = $request->get('filter_product_id');      
 
         // Total records
         $totalRecords = SaleOrderItem::where('product_id','=', $filter_product_id)->count();
@@ -101,6 +101,10 @@ class SaleOrderItemController extends Controller
             $query->where('users.name', 'like', $column_arr[6]['search']['value'].'%');
         }
                 
+        if ($request->has('month_id')){
+            $month = $request->get('month_id');  
+            $query->whereMonth('sale_orders.dispatched_at', '=', $month);
+        }
 
         $totalRecordswithFilter = $query->count();
 

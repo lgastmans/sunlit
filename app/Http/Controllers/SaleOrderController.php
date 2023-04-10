@@ -227,7 +227,7 @@ class SaleOrderController extends Controller
 
         $query = SaleOrder::query();
 
-        $query->select('categories.name', 'products.part_number', 'products.model', 'products.kw_rating', DB::raw('SUM(sale_order_items.quantity_ordered) AS quantity_ordered'), DB::raw('SUM(sale_order_items.selling_price * sale_order_items.quantity_ordered) / SUM(sale_order_items.quantity_ordered) AS avg_selling_price'), 'sale_order_items.tax');
+        $query->select('categories.name', 'products.id', 'products.part_number', 'products.model', 'products.kw_rating', DB::raw('SUM(sale_order_items.quantity_ordered) AS quantity_ordered'), DB::raw('SUM(sale_order_items.selling_price * sale_order_items.quantity_ordered) / SUM(sale_order_items.quantity_ordered) AS avg_selling_price'), 'sale_order_items.tax');
 
         $query->join('sale_order_items', 'sale_order_items.sale_order_id', '=', 'sale_orders.id');
         $query->join('products', 'products.id', '=', 'sale_order_items.product_id');
@@ -334,6 +334,7 @@ class SaleOrderController extends Controller
             $amount = $fmt->formatCurrency(((int)$row->avg_selling_price * (int)$row->quantity_ordered), "INR");
 
             $arr[] = array(
+                "id" => $row->id,
                 "category" => $row->name,
                 "part_number" => $row->part_number,
                 "model" => $row->model,

@@ -122,14 +122,55 @@
             </div> {{-- table-responsive --}}
         </div>
     </div>
+
+    <input type="hidden" value="" id="product_id" name="product_id">
+
+    <div id="sales-modal-order" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="delete-modalLabelOrder" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header modal-colored-header bg-success">
+                    <h4 class="modal-title" id="delete-modalLabelOrder">Sales detail for part number <span id="modal_part_number"> </span></h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+
+                    <table class="table table-centered table-striped table-bordered table-hover w-100 dt-responsive nowrap" id="sale-orders-datatable">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Order #</th>
+                                <th>Warehouse</th>
+                                <th>Dealer</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th>On</th>
+                                <th>Created by</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                   
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">{{ __('app.modal_close') }}</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
 @endsection <!-- content -->
 
 @section('page-scripts')
 
 <script>
 
+    var saleTable;
+
     $(document).ready(function () {
         "use strict";
+
 
         $('#year_id').datepicker({
             format: 'yyyy',
@@ -256,7 +297,14 @@
             },            
             columns   : [
                 { data: 'category', orderable : false},
-                { data: 'part_number', orderable : false, 'width': '100px'},
+                { 
+                    data: 'part_number', 
+                    orderable : false, 
+                    'width': '100px',
+                    'render': function(data, type, full, meta) {
+                        return '<a href="javascript:lnk_product_sales(\''+full.id+'\', \''+data+'\')">' + data + '</a>';
+                    }
+                },
                 { data: 'model', orderable : false},
                 { data: 'kw_rating', orderable : false},
                 { data: 'quantity', orderable : false},
@@ -264,7 +312,8 @@
                 //{ data: 'taxable_value', orderable : false},
                 //{ data: 'tax', orderable : false},
                 //{ data: 'tax_amount', orderable : false},
-                { data: 'amount', orderable : false}
+                { data: 'amount', orderable : false},
+                { data: 'id', visible: false }
             ],
             columnDefs: [
                 { className: "dt-right", "targets": [4,5,6] },   //'_all' }
@@ -334,8 +383,6 @@
             }
         });
 
-
-
         $(" #btn-load ").on("click", function() {
 
             select_period = $(" #select_period ").val();
@@ -345,10 +392,93 @@
 
             reportTableCategory.ajax.reload();
 
-        });        
+        });       
 
+
+        saleTable = $('#sale-orders-datatable').DataTable({
+            processing: true,
+            serverSide: true,
+            orderCellsTop: true,
+            fixedHeader: true,
+            deferLoading: 0,
+            searching: true,
+            paging: false,
+            ajax      : {
+                url   : "{{ route('sale-orders-items.datatables') }}",
+                "data": function ( d ) {
+                    d.filter_product_id = $(" #product_id ").val();
+                    d.month_id = $(" #month_id ").val();
+                },
+            }, 
+            "language": {
+                "paginate": {
+                    "previous": "<i class='mdi mdi-chevron-left'>",
+                    "next": "<i class='mdi mdi-chevron-right'>"
+                },
+                "info": "Showing inventory _START_ to _END_ of _TOTAL_",
+                "lengthMenu": "Display <select class='form-select form-select-sm ms-1 me-1'>" +
+                    '<option value="10">10</option>' +
+                    '<option value="20">20</option>' +
+                    '<option value="-1">All</option>' +
+                    '</select> rows'
+            },
+            "pageLength": {{ Setting::get('general.grid_rows') }},
+            "columns": [
+                { 
+                    'data': 'order_number',
+                    'orderable': true 
+                },
+                { 
+                    'data': 'warehouse',
+                    'orderable': true
+                },
+                { 
+                    'data': 'dealer',
+                    'orderable': true
+                },
+                { 
+                    'data': 'quantity_ordered',
+                    'orderable': true
+                },
+                { 
+                    'data': 'selling_price',
+                    'orderable': false
+                },
+                { 
+                    'data': 'status',
+                    'orderable': true
+                },
+                { 
+                    'data': 'ordered_at',
+                    'orderable': true 
+                },
+                { 
+                    'data': 'user',
+                    'orderable': true
+                }
+            ],
+            
+            "aaSorting": [[6, "desc"]],
+            "drawCallback": function () {
+                $('.dataTables_paginate > .pagination').addClass('pagination-rounded');
+                $('#sale-orders-datatable_length label').addClass('form-label');
+     
+            },
+            
+        });
     });
     
+    function lnk_product_sales(product_id, part_number)
+    {
+        $(" #modal_part_number ").html(part_number);
+
+        $(" #product_id ").val(product_id);
+        $(' #sales-modal-order ').modal('show');
+
+        saleTable.ajax.reload();
+    }
+    
+
 </script>    
 
 @endsection <!-- page-scripts -->

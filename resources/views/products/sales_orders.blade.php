@@ -21,7 +21,7 @@
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
-                                <th><select class="form-control status-select"><option value="0">All</option>@foreach($sale_order_status as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
+                                <th><select class="form-control status-select"><option value="0">All</option>@foreach($sale_order_status ?? '' as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
                                 <th id="sale_ordered_at" class="position-relative">
                                     <input type="text" class="form-control" name="ordered_at" 
                                     data-provide="datepicker" 
@@ -153,7 +153,7 @@
             }
         ],
         
-        "order": [[1, "desc"]],
+        "aaSorting": [[6, "desc"]],
         "drawCallback": function () {
             $('.dataTables_paginate > .pagination').addClass('pagination-rounded');
             $('#sale-orders-datatable_length label').addClass('form-label');
