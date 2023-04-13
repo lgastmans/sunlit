@@ -90,8 +90,8 @@
     var table = $('#sale-orders-datatable').DataTable({
         dom: 'Bfrtip',
         stateSave: true,
-        scrollY: "500px",
-        paging: false,
+        //scrollY: "500px",
+        paging: true,
         buttons: [
             {
                 text: '<i class="mdi mdi-plus-circle me-2"></i> {{ __('app.add_title', ['field' => 'proforma invoice']) }}',
