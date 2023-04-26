@@ -1,3 +1,5 @@
+@php // print_r($totals); @endphp
+
 <div class="table-responsive">
     <table class="table table-striped table-sm " cellspacing="0" width="100%">
         <thead >
@@ -16,6 +18,7 @@
                     <th>October</th>
                     <th>November</th>
                     <th>December</th>
+                    <th>Total</th>
                 </tr>
             @else
                 <tr style="text-align: right;">
@@ -24,20 +27,44 @@
                     <th>2nd Quarter</th>
                     <th>3rd Quarter</th>
                     <th>4th Quarter</th>
+                    <th>Total</th>
                 </tr>
             @endif
         </thead>
         <tbody>
             @foreach ($totals as $label=>$total)
-                @if ($total['row_total'] > 0)
+                @if ($label == 'column_total')
                     <tr>
-                        <td>{{ $label }}</td>
+                        <td style="font-weight: bold;"">Totals</td>
                         @foreach ($total as $key=>$month)
-                            @if ($key != 'row_total')
-                                <td style="text-align: right;">{{ $month['total_amount'] }}</td>
-                            @endif
+                            <td style="text-align: right;font-weight: bold;">
+                                @php 
+                                    $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
+                                    $fmt->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 0);                                    
+                                    echo $fmt->formatCurrency($month, "INR");
+                                @endphp
+                            </td>
                         @endforeach
                     </tr>
+                @else
+                    @if ($total['row_total'] > 0)
+                        <tr>
+                            <td>{{ $label }}</td>
+                            @foreach ($total as $key=>$month)
+                                @if ($key != 'row_total')
+                                    <td style="text-align: right;">{{ $month['total_amount'] }}</td>
+                                @else
+                                    <td style="text-align: right;font-weight: bold;">
+                                        @php 
+                                            $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
+                                            $fmt->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 0);                                    
+                                            echo $fmt->formatCurrency($total['row_total'], "INR");
+                                        @endphp
+                                    </td>
+                                @endif
+                            @endforeach
+                        </tr>
+                    @endif
                 @endif
             @endforeach
         </tbody>
