@@ -159,10 +159,12 @@ class SaleOrder extends Model
         $rows = $query->get();
 
         $total_amount = 0;
+        $total_tax = 0;
         $total_qty = 0;
         foreach($rows as $row)
         {
-            $total_amount += ($row->selling_price * $row->quantity_ordered) * (1+$row->tax/100);
+            $total_amount += ($row->selling_price * $row->quantity_ordered);
+            $total_tax += ($row->selling_price * $row->quantity_ordered) * ($row->tax/100);
             $total_qty += $row->quantity_ordered;
         }
 
@@ -226,10 +228,12 @@ class SaleOrder extends Model
         $rows = $query->get();        
 
         $total_amount = 0;
+        $total_tax = 0;
         $total_qty = 0;
         foreach($rows as $row)
         {
-            $total_amount += ($row->selling_price * $row->quantity_ordered) * (1+$row->tax/100);
+            $total_amount += ($row->selling_price * $row->quantity_ordered);
+            $total_tax += ($row->selling_price * $row->quantity_ordered) * ($row->tax/100);
             $total_qty += $row->quantity_ordered;
         }
         
@@ -380,10 +384,12 @@ class SaleOrder extends Model
         $rows = $query->get();
 
         $total_amount = 0;
+        $total_tax = 0;
         $total_qty = 0;
         foreach($rows as $row)
         {
-            $total_amount += ($row->selling_price * $row->quantity_ordered) * (1+$row->tax/100);
+            $total_amount += ($row->selling_price * $row->quantity_ordered);
+            $total_tax += ($row->selling_price * $row->quantity_ordered) * ($row->tax/100);
             $total_qty += $row->quantity_ordered;
         }
 
@@ -450,10 +456,12 @@ class SaleOrder extends Model
         $rows = $query->get();
 
         $total_amount = 0;
+        $total_tax = 0;
         $total_qty = 0;
         foreach($rows as $row)
         {
-            $total_amount += ($row->selling_price * $row->quantity_ordered) * (1+$row->tax/100);
+            $total_amount += ($row->selling_price * $row->quantity_ordered);
+            $total_tax += ($row->selling_price * $row->quantity_ordered) * ($row->tax/100);
             $total_qty += $row->quantity_ordered;
         }
 
