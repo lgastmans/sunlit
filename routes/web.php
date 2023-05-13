@@ -8,6 +8,7 @@ use App\Http\Controllers\StateController;
 use App\Http\Controllers\DealerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\DashboardController;
@@ -144,6 +145,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/inventory-movement/list', [InventoryMovementController::class, 'getListForDatatables'])->name('inventory-movement.datatables');
     Route::get('/inventory-movement/{id}', [InventoryMovementController::class, 'show'])->name('inventory-movement.show');
 
+    Route::get('/reports', [ReportsController::class, 'index'])->name('reports');
+    Route::get('/reports/closing-stock', [ReportsController::class, 'closingStock'])->name('reports.closing-stock');
+    Route::get('/reports/sales-product-totals', [ReportsController::class, 'salesProductTotals'])->name('reports.sales-product-totals');
+
     Route::get('/products', [ProductController::class, 'index'])->name('products');
     Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
     Route::get('/products/list', [ProductController::class, 'getListForDatatables'])->name('products.datatables');
@@ -256,6 +261,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/sale-orders/state-report', [SaleOrderController::class, 'getListForStateReport'])->name('ajax.sales-state-report');
         Route::get('/sale-orders/sales-totals', [SaleOrderController::class, 'getSalesTotals'])->name('ajax.sales-totals');
         Route::get('/sale-orders/sales-state-totals', [SaleOrderController::class, 'getStateSalesTotals'])->name('ajax.sales-state-totals');
+        Route::get('/inventory-movement/stock-report', [InventoryMovementController::class, 'getListForClosingStockReport'])->name('ajax.inventory-closing-stock');
     });
 
 

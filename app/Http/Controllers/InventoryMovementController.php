@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use DB;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
@@ -220,6 +222,153 @@ class InventoryMovementController extends Controller
         );
 
         return response()->json($response);
+    }
+
+    public function getListForClosingStockReport(Request $request)
+    {
+        $draw = 1;
+        if ($request->has('draw'))
+            $draw = $request->get('draw');
+
+        $start = 0;
+        if ($request->has('start'))
+            $start = $request->get("start");
+
+        $length = 10;
+        if ($request->has('length')) {
+            $length = $request->get("length");
+        }
+        
+        $order_column = 'created_at';
+        $order_dir = 'ASC';
+        $order_arr = array();
+        if ($request->has('order')) {
+            $order_arr = $request->get('order');
+            $column_arr = $request->get('columns');
+            $column_index = $order_arr[0]['column'];
+            $order_column = $column_arr[$column_index]['data'];
+
+            if ($request->has('source') && $request->source == "warehouses"){
+                if ($column_index==0)
+                    $order_column = "warehouses.name";
+                if ($column_index==1)
+                    $order_column = "products.part_number";
+            }else{
+                if ($column_index==0)
+                    $order_column = "warehouses.name";
+                if ($column_index==1)
+                    $order_column = "products.part_number";
+                if ($column_index==2)
+                    $order_column = "products.notes";
+
+            }
+            $order_dir = $order_arr[0]['dir'];
+        }
+
+        $search = '';
+        if ($request->has('search')) {
+            $search_arr = $request->get('search');
+            $search = $search_arr['value'];
+        }
+
+        $arr = array();
+
+        if (!$request->has('select_period'))
+            $filter_period = date('Y-m-d');
+        $filter_period = $request->get('select_period');
+        //$filter_period = Carbon::createFromFormat('d-m-Y', $filter_period)->format('Y-m-d');       
+        $filter_period = Carbon::parse($filter_period)->format('Y-m-d h:i:s');
+
+        // Total records
+        $totalRecords = InventoryMovement::groupBy('warehouse_id','product_id')->count();
+        $totalRecordswithFilter = InventoryMovement::groupBy('warehouse_id','product_id')
+                //->where('product_id', '=', $filter_product_id)
+                ->count();
+    
+        /*
+        $query_received = InventoryMovement::query();
+        $query_received->select(DB::raw('SUM(inventory_movements.quantity) AS quantity_received'))
+            ->where('created_at', '<=', $filter_date)
+            ->where('movement_type', '=', InventoryMovement::RECEIVED)
+            ->groupBy('warehouse_id','product_id')
+
+        $query_delivered = InventoryMovement::query(DB::raw('SUM(inventory_movements.quantity) AS quantity_delivered'));
+            ->where('created_at', '<=', $filter_date)
+            ->where('movement_type', '=', InventoryMovement::DELIVERED)
+            ->groupBy('warehouse_id','product_id')
+        */
+
+        $query = InventoryMovement::query();
+
+        $query->select('products.part_number', 'products.notes', 'warehouses.name', 
+                    DB::raw("(SELECT SUM(quantity) FROM inventory_movements im1
+                        WHERE (movement_type = 1) AND (im1.product_id = inventory_movements.product_id) AND (DATE(created_at) <= '".$filter_period."')
+                        GROUP BY warehouse_id, product_id) AS quantity_received
+                    "),
+                    DB::raw("(SELECT SUM(quantity) FROM inventory_movements im2
+                        WHERE (movement_type = 2) AND (im2.product_id = inventory_movements.product_id)  AND (DATE(created_at) <= '".$filter_period."')
+                        GROUP BY warehouse_id, product_id) AS quantity_delivered
+                    ")
+                )
+            ->join('warehouses', 'warehouses.id', '=', 'inventory_movements.warehouse_id')
+            ->join('products', 'products.id', '=', 'inventory_movements.product_id')
+            ->groupBy('warehouse_id','product_id');
+                    
+        if ($request->has('source') && $request->source == "warehouses"){
+            if (!empty($column_arr[0]['search']['value']))
+                $query->where('warehouses.name', 'LIKE', '%'.$column_arr[0]['search']['value'].'%');
+            if (!empty($column_arr[1]['search']['value']))
+                $query->where('products.part_number', 'LIKE', '%'.$column_arr[1]['search']['value'].'%');
+            if (!empty($column_arr[2]['search']['value']))
+                $query->where('products.notes', 'LIKE', '%'.$column_arr[2]['search']['value'].'%');
+            
+        }else{
+            if (!empty($column_arr[0]['search']['value']))
+                $query->where('warehouses.name', 'like', '%'.$column_arr[0]['search']['value'].'%');
+            if (!empty($column_arr[1]['search']['value']))
+                $query->where('products.part_number', 'LIKE', $column_arr[1]['search']['value'].'%');
+            if (!empty($column_arr[2]['search']['value']))
+                $query->where('products.notes', 'LIKE', '%'.$column_arr[2]['search']['value'].'%');
+        }
+        if ($request->has('search')){
+            $search = $request->get('search')['value'];
+            $query->where( function ($q) use ($search){
+                $q->where('warehouses.name', 'like', '%'.$search.'%')
+                    ->orWhere('products.part_number', 'like', $search.'%')
+                    ->orWhere('products.notes', 'like', '%'.$search.'%');
+            });    
+        }
+
+        $query->orderBy($order_column, $order_dir);
+
+        if ($length > 0)
+            $query->skip($start)->take($length);
+
+
+        //dd($query->toSql());
+
+        $movement = $query->get();
+
+        foreach ($movement as $record)
+        {
+            $arr[] = array(
+                //"id" => $record->id,
+                "warehouse" => $record->name,
+                "part_number" => $record->part_number,
+                "description" => $record->notes,
+                "closing_stock" => $record->quantity_received - $record->quantity_delivered,
+            );
+        }
+
+        $response = array(
+            "draw" => $draw,
+            "recordsTotal" => $totalRecords,
+            "recordsFiltered" => $totalRecordswithFilter,
+            "data" => $arr,
+            'error' => null
+        );
+
+        return response()->json($response);        
     }
 
 }

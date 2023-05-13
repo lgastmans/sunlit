@@ -33,6 +33,24 @@
             </li>
             @endcan
 
+            <li class="side-nav-item {{ (Request::is('reports*') ? ' menuitem-active' : '') }}">
+                <a data-bs-toggle="collapse" href="#sidebarReports" aria-expanded="false" aria-controls="sidebarReports" class="side-nav-link">
+                    <i class="mdi mdi-note-outline"></i>
+                    <span> Reports </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="sidebarReports">
+                    <ul class="side-nav-second-level">
+                        <li>
+                            <a href="{{ route('reports.closing-stock')}}">Closing Stock</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('reports.sales-product-totals')}}">Product-wise Sales Totals</a>
+                        </li>
+                    </ul>
+                </div>                
+            </li>
+
             <li class="side-nav-title side-nav-item mt-4">Orders</li>
 
             @can('list sale orders')

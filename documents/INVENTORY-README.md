@@ -29,6 +29,10 @@ user_id
 movement_type 		1 - RECEIVED | 2 - DELIVERED | (RETURNED | CANCELLED | CORRECTED...)
 
 
+To get the stock at a given date, SUM received minus SUM delivered, filtering on created_at and warehouse
+
+
+
 Purchase Order (PO)
 -------------------
 1 Draft
