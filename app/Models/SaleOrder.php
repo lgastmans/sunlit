@@ -143,7 +143,7 @@ class SaleOrder extends Model
 
         $query = SaleOrder::query();
 
-        $query->select('products.id', 'products.part_number')
+        $query->select('products.id', 'products.part_number', 'products.notes')
             ->selectRaw('SUM(sale_order_items.quantity_ordered) AS quantity_sold')
             ->selectRaw('SUM(sale_order_items.selling_price * sale_order_items.quantity_ordered) / SUM(sale_order_items.quantity_ordered) AS avg_selling_price')
             ->join('sale_order_items', 'sale_order_items.sale_order_id', '=', 'sale_orders.id')

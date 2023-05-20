@@ -31,6 +31,7 @@
                 <table id="table-product-sales" class="table table-striped table-condensed" cellspacing="0" width="100%">
                     <thead>
                         <tr>
+                            <th>Id</th>
                             <th>Part Number</th>
                             <th style="text-align: right;">January</th>
                             <th style="text-align: right;">February</th>
@@ -121,6 +122,7 @@
             },
             "pageLength": {{ Setting::get('general.grid_rows') }},
             "columns": [
+                { data: 'id', visible: false },
                 { 
                     'data': 'part_number',
                     'orderable': false 
@@ -179,9 +181,9 @@
                 },
             ],
             columnDefs: [
-                { className: "dt-right", "targets": [1,2,3,4,5,6,7,8,9,10,11,12,13] },   //'_all' }
+                { className: "dt-right", "targets": [2,3,4,5,6,7,8,9,10,11,12,13,14] },   //'_all' }
             ],            
-            "aaSorting": [[13, "desc"]],
+            "aaSorting": [[14, "desc"]],
             "drawCallback": function () {
                 $('.dataTables_paginate > .pagination').addClass('pagination-rounded');
                 $('#sale-orders-datatable_length label').addClass('form-label');
