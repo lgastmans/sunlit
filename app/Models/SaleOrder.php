@@ -123,12 +123,174 @@ class SaleOrder extends Model
 
     /**
      * 
+     * Calculate the sales totals per product
+     * 
+     */
+    public function calculateProductMonthSalesTotals($month="", $year="", $part_number="_ALL")
+    {
+
+        $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
+        $fmt->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 0);
+        
+        if (empty($month))
+            $month = date('n');
+            
+        if (empty($year))
+            $year = date('Y');
+
+        $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
+        $fmt->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 0);
+
+        $query = SaleOrder::query();
+
+        $query->select('products.id', 'products.part_number')
+            ->selectRaw('SUM(sale_order_items.quantity_ordered) AS quantity_sold')
+            ->selectRaw('SUM(sale_order_items.selling_price * sale_order_items.quantity_ordered) / SUM(sale_order_items.quantity_ordered) AS avg_selling_price')
+            ->join('sale_order_items', 'sale_order_items.sale_order_id', '=', 'sale_orders.id')
+            ->join('products', 'products.id', '=', 'sale_order_items.product_id');
+
+        if ($part_number != "_ALL")
+            $query->where('products.part_number', 'LIKE', "%".$part_number."%");
+
+        $query->where('sale_orders.status', '>=', SaleOrder::DISPATCHED);
+        $query->whereNull('sale_order_items.deleted_at');
+
+        $query->whereYear('sale_orders.dispatched_at', '=', $year);
+        $query->whereMonth('sale_orders.dispatched_at', '=', $month);
+
+
+        $query->groupBy('products.id');
+        $query->orderBy('products.part_number', 'ASC');
+
+        //dd($query->toSql());
+        $rows = $query->get();
+
+        $res = array();
+        foreach($rows as $product)
+        {
+            $res[$product->id]['id'] = $product->id;
+            $res[$product->id]['part_number'] = $product->part_number;
+            $res[$product->id]['description'] = $product->notes;
+            $res[$product->id]['quantity_sold'] = $product->quantity_sold;
+            $res[$product->id]['amount_sold'] = $product->quantity_sold * $product->avg_selling_price;
+        }
+
+        return $res;
+    }
+
+    public function calculateProductSalesTotals($period="", $year="", $month="_ALL", $quarter="_ALL", $part_number="_ALL", $limit=0)
+    {
+        $select_period = 'period_monthly';
+        if (!empty($period))
+            $select_period = $period;
+
+        if (empty($month))
+            $month = date('n');
+            
+        if (empty($year))
+            $year = date('Y');
+        
+        if (empty($quarter))
+            $quarter = 'Q1';
+
+        $products = Product::select('id', 'part_number');
+        if ($part_number!='_ALL') {
+            $products->where('part_number','like', "%".$part_number."%");
+        }
+
+        $products = $products->orderBy('part_number')
+            ->get();
+
+        $res = array();
+        
+        /*
+            set the arrays to zero
+        */
+        $totals = array();
+        if ($select_period=='period_monthly')
+        {
+            for ($i=1;$i<=12;$i++)
+            {
+                $totals[$i] = 0;
+            }
+        }
+        else {
+            $totals['Q1'] = 0;
+            $totals['Q2'] = 0;
+            $totals['Q3'] = 0;
+            $totals['Q4'] = 0;
+        }
+        
+        foreach ($products as $product)
+        {
+
+            if ($select_period=='period_monthly')
+            {
+                if ($month=="_ALL")
+                {
+                    $row_total = 0;
+
+                    for ($month=1;$month<=12;$month++)
+                    {
+                        if ($part_number!='_ALL')
+                            $res[$month] = $this->calculateProductMonthSalesTotals($month, $year, $part_number);
+                        else
+                            $res[$month] = $this->calculateProductMonthSalesTotals($month, $year);
+                    }
+                }
+                else
+                {
+                    /*
+                    $dt = DateTime::createFromFormat('!m', $month);
+                    $res[$category->name][$dt->format('F')] = $this->calculateMonthSalesTotals($month, $year, $category->id);
+                    */
+                }
+            }
+            else
+            {
+                if ($quarter=="_ALL")
+                {
+                    $row_total = 0;
+                    /*
+                    $res[$category->name]['Q1'] = $this->calculateQuarterSalesTotals('Q1', $year, $category->id);
+                    $row_total += (float)$res[$category->name]['Q1']['total_amount_unfmt'];
+                    $totals['Q1'] += (float)$res[$category->name]['Q1']['total_amount_unfmt'];
+
+                    $res[$category->name]['Q2'] = $this->calculateQuarterSalesTotals('Q2', $year, $category->id);
+                    $row_total += (float)$res[$category->name]['Q2']['total_amount_unfmt'];
+                    $totals['Q2'] += (float)$res[$category->name]['Q2']['total_amount_unfmt'];
+
+                    $res[$category->name]['Q3'] = $this->calculateQuarterSalesTotals('Q3', $year, $category->id);
+                    $row_total += (float)$res[$category->name]['Q3']['total_amount_unfmt'];
+                    $totals['Q3'] += (float)$res[$category->name]['Q3']['total_amount_unfmt'];
+
+                    $res[$category->name]['Q4'] = $this->calculateQuarterSalesTotals('Q4', $year, $category->id);
+                    $row_total += (float)$res[$category->name]['Q4']['total_amount_unfmt'];
+                    $totals['Q4'] += (float)$res[$category->name]['Q4']['total_amount_unfmt'];
+
+                    $res[$category->name]['row_total'] = $row_total;
+                    */
+                }
+                else
+                {
+                    //$res[$category->name][$quarter] = $this->calculateQuarterSalesTotals($quarter, $year, $category->id);
+                }
+            }
+        }
+
+        //$res['column_total'] = $totals;
+
+        return $res;
+
+    }
+
+    /**
+     * 
      * Calculate the sales totals per category
      * 
      */
     public function calculateMonthSalesTotals($month="", $year="", $category_id=0)
     {
-
         if (empty($month))
             $month = date('n');
             
@@ -169,7 +331,7 @@ class SaleOrder extends Model
         }
 
         $res['total_amount_unfmt'] = $total_amount;
-        $res['total_amount'] =$fmt->formatCurrency($total_amount, "INR");
+        $res['total_amount'] = $fmt->formatCurrency($total_amount, "INR");
         $res['total_qty'] = $fmt->formatCurrency($total_qty, "INR");
 
         return $res;
@@ -244,6 +406,10 @@ class SaleOrder extends Model
         return $res;        
     }
 
+    /*
+        This function calculates based on Category
+        Should have been called "calculateCategorySalesTotals"
+    */
     public function calculateSalesTotals($period="", $year="", $month="_ALL", $quarter="_ALL", $category="_ALL")
     {
         $select_period = 'period_monthly';

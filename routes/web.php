@@ -262,6 +262,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/sale-orders/sales-totals', [SaleOrderController::class, 'getSalesTotals'])->name('ajax.sales-totals');
         Route::get('/sale-orders/sales-state-totals', [SaleOrderController::class, 'getStateSalesTotals'])->name('ajax.sales-state-totals');
         Route::get('/inventory-movement/stock-report', [InventoryMovementController::class, 'getListForClosingStockReport'])->name('ajax.inventory-closing-stock');
+        Route::get('/reports/sales-product-totals', [ReportsController::class, 'getSalesProductTotals'])->name('ajax.sales-product-totals');
     });
 
 

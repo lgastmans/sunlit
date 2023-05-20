@@ -162,7 +162,6 @@ class SaleOrderController extends Controller
 
         $totalRecordswithFilter = $query->count();
 
-
         if ($length > 0)
             $query->skip($start)->take($length);
 
@@ -205,7 +204,6 @@ class SaleOrderController extends Controller
     }
 
 
-    
     public function getListForReport(Request $request)
     {
 
@@ -234,7 +232,7 @@ class SaleOrderController extends Controller
 
         $query->join('categories', 'categories.id', '=', 'products.category_id');
 
-        $query->where('sale_orders.status', '>=', '4');
+        $query->where('sale_orders.status', '>=', SaleOrder::DISPATCHED);
         $query->whereNull('sale_order_items.deleted_at');
 
         $column_arr = $request->get('columns');
@@ -435,7 +433,7 @@ class SaleOrderController extends Controller
         if ($select_format=='format_category')
             $query->join('categories', 'categories.id', '=', 'products.category_id');
 
-        $query->where('sale_orders.status', '>=', '4');
+        $query->where('sale_orders.status', '>=', SaleOrder::DISPATCHED);
         $query->whereNull('sale_order_items.deleted_at');
 
         if ($dealer_id !== 0)
@@ -637,7 +635,7 @@ class SaleOrderController extends Controller
         $query->join('dealers', 'dealers.id', '=', 'sale_orders.dealer_id');
         $query->join('states', 'states.id', '=', 'dealers.state_id');
 
-        $query->where('sale_orders.status', '>=', '4');
+        $query->where('sale_orders.status', '>=', SaleOrder::DISPATCHED);
         $query->where('dealers.state_id', '=', $state_id);
         $query->whereNull('sale_order_items.deleted_at');
 
