@@ -8,6 +8,10 @@ var __webpack_exports__ = {};
 $(document).ready(function () {
   "use strict";
 
+  /**
+   * the GlobalSettings variable is declared 
+   * in cart.blade.php
+  */
   var shippingStateSelect = $(".shipping-state-select").select2();
   var routeShippingState = globalSettings.sale_order_shipping_state;
   shippingStateSelect.select2({

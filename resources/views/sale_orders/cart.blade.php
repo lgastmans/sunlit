@@ -67,8 +67,8 @@
                                 <thead class="table-light">
                                     <tr>
                                         <th class="col-5">Product</th>
-                                        <th class="col-2">Price</th>
                                         <th class="col-1">Quantity</th>
+                                        <th class="col-2">Price</th>
                                         <th class="col-1">Tax</th>
                                         <th class="col-2">Total</th>
                                         <th class="col-1"></th>
@@ -87,14 +87,14 @@
                                                 </p>
                                             </td>
                                             <td>
+                                                <input id="item-quantity-{{ $item->id }}" type="number" min="1" value="{{ $item->quantity_ordered }}" class="editable-field form-control" data-value="{{ $item->quantity_ordered }}" data-field="quantity" data-item="{{ $item->id }}"
+                                                    placeholder="Qty" style="width: 120px;">
+                                            </td>
+                                            <td>
                                                 <div class="input-group flex-nowrap">
                                                     <span class="input-group-text">{{ __('app.currency_symbol_inr')}}</span>
                                                     <input id="item-price-{{ $item->id }}" type="text" class="editable-field form-control" data-value="{{ $item->selling_price }}" data-field="price" data-item="{{ $item->id }}" placeholder="" value="{{ $item->selling_price }}">
                                                 </div>
-                                            </td>
-                                            <td>
-                                                <input id="item-quantity-{{ $item->id }}" type="number" min="1" value="{{ $item->quantity_ordered }}" class="editable-field form-control" data-value="{{ $item->quantity_ordered }}" data-field="quantity" data-item="{{ $item->id }}"
-                                                    placeholder="Qty" style="width: 120px;">
                                             </td>
                                             <td>
                                                 <span id="item-tax-{{ $item->id }}">@if ($item->tax){{ $item->tax }}@else 0.00 @endif%</span>
