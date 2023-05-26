@@ -1251,7 +1251,7 @@ class SaleOrderController extends Controller
         $order = SaleOrder::where('order_number_slug', '=', $order_number_slug)->first();
         $order->calculateTotals();
         
-        return view('sale_orders.view_proforma', ['order' => $order, 'settings' => $settings]);
+        return view('sale_orders.view_proforma', ['order' => $order, 'settings' => $settings, 'not_pdf'=>true]);
     }
 
 

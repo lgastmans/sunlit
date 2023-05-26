@@ -394,9 +394,11 @@ font-weight: bold;
       <table>
         <tr>
           <td>
-
-             <img src="{{ public_path('images/logo.png') }}" alt="" height="48">
-            
+            @isset($not_pdf)
+              <img src="/images/logo.png" alt="" height="48">
+            @else
+              <img src="{{ public_path('images/logo.png') }}" alt="" height="48">
+            @endisset
           </td>
           <td style="text-align: right;">
             <p>Original for Recipient<br>
