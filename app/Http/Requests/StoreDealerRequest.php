@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Auth\Access\AuthorizationException;
 
@@ -44,8 +45,9 @@ class StoreDealerRequest extends FormRequest
             'phone2' => 'nullable|max:255|string',
             'email2' => 'nullable|max:255|string',
             'email3' => 'nullable|max:255|string',
-            'email' => 'required|email|unique:dealers,email,'.$this->id,
-
+            'email' => 'nullable|max:255|string',
+            //'email' => 'required|email|unique:dealers,email,'.$this->id,
+            //'email' => ['required', Rule::unique('dealers')->whereNull('deleted_at')],
 
             'has_shipping_address' => 'boolean',
             'shipping_company' => 'nullable|string|max:255',

@@ -77,7 +77,7 @@
 
                         <div class="mb-3 row">
                            <div class="col-xl-4">
-                                <x-forms.inputGroup label="email address" name="email" value="{{ old('email', $dealer->email) }}"  required="true" position="before" symbol="@"/>
+                                <x-forms.inputGroup label="email address" name="email" value="{{ old('email', $dealer->email) }}"  required="0" position="before" symbol="@"/>
                             </div>
                            <div class="col-xl-4">
                                 <x-forms.inputGroup label="email address" name="email2" value="{{ old('email2', $dealer->email2) }}"  required="0" position="before" symbol="@"/>
