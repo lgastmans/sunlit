@@ -33,6 +33,12 @@
                     </div>
 
                     <div class="input-group input-group-sm mb-3">
+                      <span class="input-group-text">Contact & Phone</span>
+                      <input type="text" class="form-control" aria-label="Contact" value="{{$order->shipping_contact_person2}}" id="shipping_contact_person2">
+                      <input type="text" class="form-control" aria-label="Contact" value="{{$order->shipping_phone2}}" id="shipping_phone2">
+                    </div>
+
+                    <div class="input-group input-group-sm mb-3">
                       <span class="input-group-text" id="inputGroup-address1">Address</span>
                       <input type="text" class="form-control" aria-label="Address" aria-describedby="inputGroup-address1" value="{{$order->shipping_address}}" id="shipping_address">
                     </div>
@@ -40,6 +46,12 @@
                     <div class="input-group input-group-sm mb-3">
                       <span class="input-group-text" id="inputGroup-address2">Address</span>
                       <input type="text" class="form-control" aria-label="Address" aria-describedby="inputGroup-address2" value="{{$order->shipping_address2}}" id="shipping_address2">
+                    </div>
+                    
+                    <div class="input-group input-group-sm mb-3">
+                      <span class="input-group-text" id="inputGroup-address3">Address</span>
+                      <input type="text" class="form-control" aria-label="Address" aria-describedby="inputGroup-address3" value="{{$order->shipping_address3}}" id="shipping_address3">
+
                     </div>
 
                     <div class="input-group input-group-sm mb-3">
@@ -58,6 +70,12 @@
                         </select>
 
                       {{-- <input type="text" class="form-control" aria-label="State" aria-describedby="inputGroup-state" value="{{$order->shipping_state_id}}" id="shipping_state_id"> --}}
+                    </div>
+
+                    <div class="input-group input-group-sm mb-3">
+                      <span class="input-group-text">Emails</span>
+                      <input type="text" aria-label="Emails" class="form-control" value="{{$order->shipping_email}}" id="shipping_email">
+                      <input type="text" aria-label="Emails" class="form-control" value="{{$order->shipping_email2}}" id="shipping_email2">
                     </div>
 
                 </div>

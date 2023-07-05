@@ -296,7 +296,7 @@
                 This function could be moved to sale_order_cart.js
                 The code for the value for the State select is in the sale_order_cart.js
             */
-            $("#shipping_company, #shipping_gstin, #shipping_contact_person, #shipping_phone, #shipping_address, #shipping_address2, #shipping_city, #shipping_zip_code").blur(function() {
+            $("#shipping_company, #shipping_gstin, #shipping_contact_person, #shipping_phone, #shipping_contact_person2, #shipping_phone2, #shipping_address, #shipping_address2, #shipping_address3, #shipping_city, #shipping_zip_code, #shipping_email, #shipping_email2").blur(function() {
 
                 //console.log('update shipping address ' + $(this).attr('id') +'::' + $(this).val());
 

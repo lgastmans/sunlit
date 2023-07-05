@@ -34,6 +34,12 @@
                             <div class="col-xl-5">
                                 <x-forms.input label="contact person" name="contact_person" value="{{ old('contact_person', $dealer->contact_person) }}" required="true"/>
                             </div>
+                            <div class="col-xl-2">
+                                <x-forms.input label="phone" name="phone" value="{{ old('phone', $dealer->phone) }}" required="true"/>
+                            </div>
+                            <div class="col-xl-2">
+                                <x-forms.input label="phone 2" name="phone2" value="{{ old('phone2', $dealer->phone2) }}"  required="false"/>
+                            </div>
                         </div>
                         <div class="mb-3 row">
                             <div class="col-xl-12">
@@ -64,15 +70,6 @@
                                 <x-forms.input label="zip code" name="zip_code" value="{{ old('zip_code', $dealer->zip_code) }}" required="true"/>
                             </div>
                             
-                        </div>
-
-                        <div class="mb-3 row">
-                            <div class="col-xl-2">
-                                <x-forms.input label="phone" name="phone" value="{{ old('phone', $dealer->phone) }}" required="true"/>
-                            </div>
-                            <div class="col-xl-2">
-                                <x-forms.input label="phone 2" name="phone2" value="{{ old('phone2', $dealer->phone2) }}"  required="false"/>
-                            </div>
                         </div>
 
                         <div class="mb-3 row">
@@ -117,6 +114,17 @@
                             <div class="col-xl-5">
                                 <x-forms.input label="contact person" name="shipping_contact_person" value="{{ old('shipping_contact_person', $dealer->shipping_contact_person) }}" required="false"/>
                             </div>
+                            <div class="col-xl-5">
+                                <x-forms.input label="phone" name="shipping_phone" value="{{ old('shipping_phone', $dealer->shipping_phone) }}" required="false"/>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <div class="col-xl-5">
+                                <x-forms.input label="contact person 2" name="shipping_contact_person2" value="{{ old('shipping_contact_person2', $dealer->shipping_contact_person2) }}" required="false"/>
+                            </div>
+                            <div class="col-xl-5">
+                                <x-forms.input label="phone 2" name="shipping_phone2" value="{{ old('shipping_phone2', $dealer->shipping_phone2) }}" required="false"/>
+                            </div>
                         </div>
                         <div class="mb-3 row">
                             <div class="col-xl-12">
@@ -126,6 +134,11 @@
                         <div class="mb-3 row">
                             <div class="col-xl-12">
                                 <x-forms.input label="address 2" name="shipping_address2" value="{{ old('shipping_address2', $dealer->shipping_address2) }}" required="false"/>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <div class="col-xl-12">
+                                <x-forms.input label="address 3" name="shipping_address3" value="{{ old('shipping_address3', $dealer->shipping_address3) }}" required="false"/>
                             </div>
                         </div>
                         <div class="mb-3 row">
@@ -148,7 +161,14 @@
                             </div>
                         </div>
 
-
+                        <div class="mb-3 row">
+                           <div class="col-xl-4">
+                                <x-forms.inputGroup label="email address" name="shipping_email" value="{{ old('shipping_email', $dealer->shipping_email) }}"  required="0" position="before" symbol="@"/>
+                            </div>
+                           <div class="col-xl-4">
+                                <x-forms.inputGroup label="email address" name="shipping_email2" value="{{ old('shipping_email2', $dealer->shipping_email2) }}"  required="0" position="before" symbol="@"/>
+                            </div>
+                        </div>
                         
                        
                         

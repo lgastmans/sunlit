@@ -475,6 +475,12 @@ font-weight: bold;
           <td>{{ $order->shipping_address2 }}</td>
         </tr>
         <tr>
+          <td></td>
+          <td>&nbsp;</td>
+          <td></td>
+          <td>{{ $order->shipping_address3 }}</td>
+        </tr>        
+        <tr>
           <td class="label">City</td>
           <td>{{ $order->dealer->city }} {{ $order->dealer->zip_code }}</td>
           <td class="label">City</td>
@@ -500,21 +506,24 @@ font-weight: bold;
         </tr>
         <tr>
           <td class="label">Contact</td>
-          <td>{{ $order->dealer->contact_person}}</td>
+          <td>{{ $order->dealer->contact_person}} {{ $order->dealer->phone }}</td>
           <td class="label">Contact</td>
-          <td>{{ $order->shipping_contact_person}}</td>
+          <td>{{ $order->shipping_contact_person}} {{ $order->shipping_phone }}</td>
         </tr>
         <tr>
-          <td class="label">Phone</td>
-          <td>{{ $order->dealer->phone }}</td>
-          <td class="label">Phone</td>
-          <td>{{ $order->shipping_phone }}</td>
+          <td class="label"></td>
+          <td> {{ $order->dealer->phone2 }}</td>
+          <td class="label"></td>
+          <td>{{ $order->shipping_contact_person2}} {{ $order->shipping_phone2 }}</td>
         </tr>
+
+
+
         <tr>
           <td class="label">Email</td>
           <td>{{ $order->dealer->email }} {{ $order->dealer->email2 != "" ? ', '.$order->dealer->email2 : ''}} {{ $order->dealer->email3 != "" ? ', '.$order->dealer->email3 : ''}}</td>
           <td class="label">&nbsp;</td>
-          <td></td>
+          <td>{{ $order->dealer->shipping_email }} {{ $order->dealer->shipping_email2 != "" ? ', '.$order->dealer->shipping_email2 : ''}}</td>
         </tr>
         <tr>
           <td class="label">Transport details</td>

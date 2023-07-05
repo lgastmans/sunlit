@@ -53,11 +53,16 @@ class StoreSaleOrderRequest extends FormRequest
             'shipping_company' => 'nullable|string|max:255',
             'shipping_address' => 'nullable|string|max:255',
             'shipping_address2' => 'nullable|string|max:255',
+            'shipping_address3' => 'nullable|string|max:255',
             'shipping_city' => 'nullable|string|max:255',
             'shipping_zip_code' => 'nullable|string|max:255',
             'shipping_gstin' => 'nullable|string|max:255',
             'shipping_contact_person' => 'nullable|string|max:255',
-            'shipping_phone' => 'nullable|string|max:255'
+            'shipping_contact_person2' => 'nullable|string|max:255',
+            'shipping_phone' => 'nullable|string|max:255',
+            'shipping_phone2' => 'nullable|string|max:255',
+            'shipping_email' => 'nullable|string|max:255',
+            'shipping_email2' => 'nullable|string|max:255'
         ];
     }
 }

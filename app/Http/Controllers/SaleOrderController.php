@@ -875,10 +875,20 @@ class SaleOrderController extends Controller
                 if (!$dealer->has_shipping_address){
                     $order->shipping_company = $dealer->shipping_company;
                     $order->shipping_gstin = $dealer->shipping_gstin;
+
                     $order->shipping_contact_person =  $dealer->shipping_contact_person;
+                    $order->shipping_contact_person2 =  $dealer->shipping_contact_person2;
+
                     $order->shipping_phone =  $dealer->shipping_phone;
+                    $order->shipping_phone2 =  $dealer->shipping_phone2;
+
                     $order->shipping_address = $dealer->shipping_address;
                     $order->shipping_address2 = $dealer->shipping_address2;
+                    $order->shipping_address3 = $dealer->shipping_address3;
+
+                    $order->shipping_email = $dealer->shipping_email;
+                    $order->shipping_email2 = $dealer->shipping_email2;
+
                     $order->shipping_city = $dealer->shipping_city;
                     $order->shipping_zip_code = $dealer->shipping_zip_code;
                     $order->shipping_state_id = $dealer->shipping_state_id;
@@ -886,10 +896,18 @@ class SaleOrderController extends Controller
                 else {
                     $order->shipping_company = $dealer->company;
                     $order->shipping_gstin = $dealer->gstin;
+
                     $order->shipping_contact_person = $dealer->contact_person;
+                    $order->shipping_contact_person2 =  '';
+
                     $order->shipping_phone =  $dealer->phone;
+                    $order->shipping_phone2 =  $dealer->phone2;
+
+
                     $order->shipping_address = $dealer->address;
                     $order->shipping_address2 = $dealer->address2;
+                    $order->shipping_address3 = '';
+
                     $order->shipping_city = $dealer->city;
                     $order->shipping_zip_code = $dealer->zip_code;
                     $order->shipping_state_id = $dealer->state_id;
