@@ -14,7 +14,7 @@
         </div>
     </div> <!-- end col -->
 
-    @if ($order->status >= 2 && $order->status <= 3)
+    @if ($order->status >= 2 ) <!-- && $order->status <= 3) -->
         <div class="col-lg-8">
             <div class="card">
                 <div class="card-body">
