@@ -617,7 +617,9 @@ font-weight: bold;
 
           {{-- 
             The Transport Charges as a row 
+            Do not display if zero
           --}}
+          @if ($order->transport_charges > 0 )
           <tr>
               <td>{{ $last_item }}</td> <!-- Don't remove this column as it's needed for the row commands -->
               <td style="text-align: left;"><span> Transport charges </span></td>
@@ -637,6 +639,7 @@ font-weight: bold;
                 <td>{{ $order->transport_tax_amount }}</td>
               @endif
           </tr>
+          @endif
 
         </tbody>
 
