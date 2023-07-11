@@ -162,7 +162,7 @@ class Inventory extends Model
      * get the total stock received for a given product, warehouse
      * 
      */
-    public function getStockReceived($product_id, $warehouse_id)
+    public function getStockReceived($product_id, $warehouse_id, $till_date=null)
     {
         /*
             SELECT pii.product_id, SUM(quantity_shipped)
@@ -172,6 +172,10 @@ class Inventory extends Model
             WHERE (pis.status >= 7) AND (po.warehouse_id = 2) AND (pii.product_id = 616)
             GROUP BY product_id
         */
+
+        if (is_null($till_date))
+            $till_date = date('Y-m-d');
+
         $res = PurchaseOrderInvoiceItem::select('product_id')
             ->selectRaw('SUM(purchase_order_invoice_items.quantity_shipped) AS received_stock')
             ->join('purchase_order_invoices', 'purchase_order_invoice_items.purchase_order_invoice_id', '=', 'purchase_order_invoices.id')
@@ -179,11 +183,36 @@ class Inventory extends Model
             ->where('purchase_order_invoices.status', '>=', PurchaseOrderInvoice::RECEIVED)
             ->where('purchase_orders.warehouse_id', '=', $warehouse_id)
             ->where('purchase_order_invoice_items.product_id', '=', $product_id)
+            ->whereDate('purchase_order_invoices.received_at', '<=', $till_date)
             ->groupBy('product_id')
             //->toSql();
             ->first();
 
         return $res;
+    }
+
+
+    /**
+     * get the total stock delivered for a given product, warehouse
+     * 
+     */
+    public function getStockDispatched($product_id, $warehouse_id, $till_date=null)
+    {
+        if (is_null($till_date))
+            $till_date = date('Y-m-d');
+
+        $res = SaleOrderItem::select('product_id')
+            ->selectRaw('SUM(sale_order_items.quantity_ordered) AS dispatched_stock')
+            ->join('sale_orders', 'sale_order_items.sale_order_id', '=', 'sale_orders.id')
+            ->where('sale_orders.status', '>=', SaleOrder::DISPATCHED)
+            ->where('sale_orders.warehouse_id', '=', $warehouse_id)
+            ->where('sale_order_items.product_id', '=', $product_id)
+            ->whereDate('sale_orders.dispatched_at', '<=', $till_date)
+            ->groupBy('product_id')
+            //->toSql();
+            ->first();
+
+        return $res;        
     }
 
 

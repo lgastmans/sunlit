@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
+use App\Models\Inventory;
 use App\Models\InventoryMovement;
 
 class InventoryMovementController extends Controller
@@ -285,21 +286,10 @@ class InventoryMovementController extends Controller
                 //->where('product_id', '=', $filter_product_id)
                 ->count();
     
-        /*
-        $query_received = InventoryMovement::query();
-        $query_received->select(DB::raw('SUM(inventory_movements.quantity) AS quantity_received'))
-            ->where('created_at', '<=', $filter_date)
-            ->where('movement_type', '=', InventoryMovement::RECEIVED)
-            ->groupBy('warehouse_id','product_id')
-
-        $query_delivered = InventoryMovement::query(DB::raw('SUM(inventory_movements.quantity) AS quantity_delivered'));
-            ->where('created_at', '<=', $filter_date)
-            ->where('movement_type', '=', InventoryMovement::DELIVERED)
-            ->groupBy('warehouse_id','product_id')
-        */
 
         $query = InventoryMovement::query();
 
+        /*
         $query->select('products.part_number', 'products.notes', 'warehouses.name', 
                     DB::raw("(SELECT SUM(quantity) FROM inventory_movements im1
                         WHERE (movement_type = 1) AND (im1.product_id = inventory_movements.product_id) AND (DATE(created_at) <= '".$filter_period."')
@@ -313,7 +303,14 @@ class InventoryMovementController extends Controller
             ->join('warehouses', 'warehouses.id', '=', 'inventory_movements.warehouse_id')
             ->join('products', 'products.id', '=', 'inventory_movements.product_id')
             ->groupBy('warehouse_id','product_id');
+        */
                     
+        $query->select('products.id AS product_id', 'products.part_number', 'products.notes', 'warehouses.id AS warehouse_id', 'warehouses.name')
+            ->join('warehouses', 'warehouses.id', '=', 'inventory_movements.warehouse_id')
+            ->join('products', 'products.id', '=', 'inventory_movements.product_id')
+            ->groupBy('warehouse_id','product_id');
+
+        /*
         if ($request->has('source') && $request->source == "warehouses"){
             if (!empty($column_arr[0]['search']['value']))
                 $query->where('warehouses.name', 'LIKE', '%'.$column_arr[0]['search']['value'].'%');
@@ -338,6 +335,7 @@ class InventoryMovementController extends Controller
                     ->orWhere('products.notes', 'like', '%'.$search.'%');
             });    
         }
+        */
 
         $query->orderBy($order_column, $order_dir);
 
@@ -349,14 +347,23 @@ class InventoryMovementController extends Controller
 
         $movement = $query->get();
 
+        $inventory = new Inventory;
+
         foreach ($movement as $record)
         {
+            $quantity_received = $inventory->getStockReceived($record->product_id, $record->warehouse_id, $filter_period);
+            $quantity_dispatched = $inventory->getStockDispatched($record->product_id, $record->warehouse_id, $filter_period);
+
+            $received_stock = (is_null($quantity_received) ? 0 : $quantity_received["received_stock"]);
+            $dispatched_stock = (is_null($quantity_dispatched) ? 0 : $quantity_dispatched["dispatched_stock"]);
+            $closing_stock = $received_stock - $dispatched_stock;
+
             $arr[] = array(
                 //"id" => $record->id,
                 "warehouse" => $record->name,
                 "part_number" => $record->part_number,
                 "description" => $record->notes,
-                "closing_stock" => $record->quantity_received - $record->quantity_delivered,
+                "closing_stock" => $closing_stock
             );
         }
 
