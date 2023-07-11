@@ -64,8 +64,8 @@
                     
                 </div>
                 
-                <div class="row mb-3 d-none" >
-                    <div class="col-xl-4 offset-xl-2" id="due_at">
+                <div class="row mb-3" >
+                    <div class="col-xl-4" id="due_at">
                         <label class="form-label">Due date</label>
                         <input type="text" class="form-control" name="due_at" value="{{ $order->display_due_at }}"
                         data-provide="datepicker" 

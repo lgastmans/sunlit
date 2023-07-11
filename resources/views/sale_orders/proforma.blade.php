@@ -527,7 +527,7 @@ font-weight: bold;
         </tr>
         <tr>
           <td class="label">Transport details</td>
-          <td colspan="3"></td>
+          <td colspan="3">{{ $order->courier }} {{ $order->tracking_number != "" ? ', '.$order->tracking_number : ''}}</td>
         </tr>
       </table>
 
