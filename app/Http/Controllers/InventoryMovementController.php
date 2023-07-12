@@ -351,11 +351,11 @@ class InventoryMovementController extends Controller
 
         foreach ($movement as $record)
         {
-            $quantity_received = $inventory->getStockReceived($record->product_id, $record->warehouse_id, $filter_period);
-            $quantity_dispatched = $inventory->getStockDispatched($record->product_id, $record->warehouse_id, $filter_period);
+            $received_stock = $inventory->getStockReceived($record->product_id, $record->warehouse_id, $filter_period);
+            $dispatched_stock = $inventory->getStockDispatched($record->product_id, $record->warehouse_id, $filter_period);
 
-            $received_stock = (is_null($quantity_received) ? 0 : $quantity_received["received_stock"]);
-            $dispatched_stock = (is_null($quantity_dispatched) ? 0 : $quantity_dispatched["dispatched_stock"]);
+            //$received_stock = (is_null($quantity_received) ? 0 : $quantity_received["received_stock"]);
+            //$dispatched_stock = (is_null($quantity_dispatched) ? 0 : $quantity_dispatched["dispatched_stock"]);
             $closing_stock = $received_stock - $dispatched_stock;
 
             $arr[] = array(

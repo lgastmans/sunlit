@@ -187,8 +187,34 @@ class Inventory extends Model
             ->groupBy('product_id')
             //->toSql();
             ->first();
+        
+        $received_stock = 0;
+        if ($res)
+            $received_stock = $res['received_stock'];
 
-        return $res;
+        /**
+         * The opening stock got initialized at the launch of the software
+         * without creating an entry in the Purchase
+         * This quantity is found in the Inventory Movement table, where
+         * the entry will have all ids set to null, and this quantity
+         * needs to be considered in the total received
+         * 
+         * see ProductController, function importCsv
+         * 
+         */
+        $init_stock = InventoryMovement::select('quantity')
+            ->where('warehouse_id', '=', $warehouse_id)
+            ->where('product_id', '=', $product_id)
+            ->whereNull('purchase_order_id')
+            ->whereNull('purchase_order_invoice_id')
+            ->whereNull('sales_order_id')
+            ->first();
+
+        $initial_stock = 0;
+        if ($init_stock)
+            $initial_stock = $init_stock['quantity'];
+
+        return $received_stock + $initial_stock;
     }
 
 
@@ -212,7 +238,11 @@ class Inventory extends Model
             //->toSql();
             ->first();
 
-        return $res;        
+        $dispatched_stock = 0;
+        if ($res)
+            $dispatched_stock = $res['dispatched_stock'];
+
+        return $dispatched_stock;
     }
 
 
