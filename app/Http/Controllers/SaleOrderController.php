@@ -903,10 +903,12 @@ class SaleOrderController extends Controller
                     $order->shipping_phone =  $dealer->phone;
                     $order->shipping_phone2 =  $dealer->phone2;
 
-
                     $order->shipping_address = $dealer->address;
                     $order->shipping_address2 = $dealer->address2;
                     $order->shipping_address3 = '';
+
+                    $order->shipping_email = $dealer->email;
+                    $order->shipping_email2 = $dealer->email2;
 
                     $order->shipping_city = $dealer->city;
                     $order->shipping_zip_code = $dealer->zip_code;

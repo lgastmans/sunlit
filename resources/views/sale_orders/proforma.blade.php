@@ -521,9 +521,9 @@ font-weight: bold;
 
         <tr>
           <td class="label">Email</td>
-          <td>{{ $order->dealer->email }} {{ $order->dealer->email2 != "" ? ', '.$order->dealer->email2 : ''}} {{ $order->dealer->email3 != "" ? ', '.$order->dealer->email3 : ''}}</td>
+          <td>{{ $order->dealer->email }}{{ $order->dealer->email2 != "" ? ', '.$order->dealer->email2 : ''}}{{ $order->dealer->email3 != "" ? ', '.$order->dealer->email3 : ''}}</td>
           <td class="label">&nbsp;</td>
-          <td>{{ $order->dealer->shipping_email }} {{ $order->dealer->shipping_email2 != "" ? ', '.$order->dealer->shipping_email2 : ''}}</td>
+          <td>{{ $order->shipping_email }}{{ $order->shipping_email2 != "" ? ', '.$order->shipping_email2 : ''}}</td>
         </tr>
         <tr>
           <td class="label">Transport details</td>
