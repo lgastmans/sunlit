@@ -20,11 +20,15 @@
                         @csrf()
                         <div class="mb-3">
                             <label class="form-label" for="order_number">Order #</label>
-                            <input type="hidden" name="order_number" id="order_number" value="{{ $order_number }}">
+<!--                            <input type="hidden" name="order_number" id="order_number" value="{{ $order_number }}"> -->
                             <div class="input-group">
-                                <span class="input-group-text">{{ Setting::get('purchase_order.prefix') }}</span>
+
+<!--                                 <span class="input-group-text">{{ Setting::get('purchase_order.prefix') }}</span>
                                 <input type="text" class="form-control" name="order_number_count" id="order_number_count" placeholder="" value="{{ $order_number_count }}" readonly required>
                                 <span class="input-group-text">{{ Setting::get('purchase_order.suffix') }}</span>
+ -->                                
+                                 <input type="text" class="form-control" name="order_number" id="order_number" placeholder="" value="{{ $order_number }}" required>
+
                                 <div class="invalid-feedback">
                                     {{ __('error.form_invalid_field', ['field' => strtolower('order #') ]) }}
                                 </div>
