@@ -788,6 +788,21 @@ class SaleOrder extends Model
             */
             //$this->freight_charges += ($item->quantity_ordered * $item->product->weight_calculated) * $rate_per_kg;
 
+            /*
+                get the HSN breakdown according to the item's category
+                the code below is from invent, to group tax totals according to HSN
+                but this request was not required
+                just in case in future this is requested...
+            */
+            /*
+            $int_index = getColumn($arr_taxes, $sql_items->FieldByName('tax_id'));
+            if ($int_index > -1)
+                $arr_taxes[$int_index][2] += ($tax_amount * $total_quantity);
+            */
+
+            /*
+                select the highest tax from the list of items
+            */
             if ($item->tax > $tax)
                 $tax = $item->tax;
         }

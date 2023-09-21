@@ -12,6 +12,47 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
+                <div class="row p-3 bg-secondary mb-3 rounded" >
+                    <div class="col-3">
+                        <div class="alert alert-danger d-none" role="alert">
+                            <span id="date-filter-alert"></span>
+                        </div>
+                    </div>
+                    <div class="col-2 pt-1 text-white" style="text-align: right;">
+                        <span>Filter date:</span>
+                    </div>
+                    <div class="col-1">
+                        <select class="date-filter-select form-control" id="filter-column">
+                            <option value="blocked">Blocked on</option>
+                            <option value="expected">Expected on</option>
+                        </select>
+                    </div>
+                    <div class="col-2 position-relative" id="filter_from">
+                        <input type="text" class="form-control" name="filter_from"
+                            id="filter-from" 
+                            data-provide="datepicker" 
+                            data-date-container="#filter_from"
+                            data-date-autoclose="true"
+                            data-date-format="M d, yyyy"
+                            data-date-today-highlight="false"
+                            required>
+                    </div>
+                    <div class="col-2 position-relative" id="filter_to">
+                        <input type="text" class="form-control" name="filter_to" 
+                            id="filter-to"
+                            data-provide="datepicker" 
+                            data-date-container="#filter_to"
+                            data-date-autoclose="true"
+                            data-date-format="M d, yyyy"
+                            data-date-today-highlight="false"
+                            required>
+
+                    </div>
+                    <div class="col-2">
+                        <button type="button" class="btn btn-info" id="btn-apply-filter">Apply</button>
+                        <button type="button" class="btn btn-danger" id="btn-clear-filter">Clear</button>
+                    </div>
+                </div>
                 <div class="table-responsive">
                     <table class="table table-centered table-striped table-bordered table-hover w-100 dt-responsive nowrap table-has-dlb-click" id="sale-orders-datatable">
                         <thead class="table-light">
@@ -77,6 +118,57 @@
  $(document).ready(function () {
     "use strict";
 
+    let filter_column_val = null
+    let filter_from_val = null
+    let filter_to_val = null
+
+    $('#btn-apply-filter').on('click', function(e) {
+        filter_column_val = $("#filter-column").val();
+
+        let toDate = null
+        if ($("#filter-to").val()) {
+            let toDate = new Date($("#filter-to").val())
+            const offsetTo = toDate.getTimezoneOffset()
+            toDate = new Date(toDate.getTime() - (offsetTo*60*1000))
+            filter_to_val = toDate.toISOString().split('T')[0]
+        }
+
+        let fromDate = null
+        if ($("#filter-from").val()) {
+            let fromDate = new Date($("#filter-from").val())
+            const offsetFrom = fromDate.getTimezoneOffset()
+            fromDate = new Date(fromDate.getTime() - (offsetFrom*60*1000))
+            filter_from_val = fromDate.toISOString().split('T')[0]
+        }
+
+
+        if ((filter_from_val!==null) && (filter_to_val!==null)) {
+            if (fromDate > toDate) {
+                $(".alert").show()
+                $("#date-filter-alert").text('From date cannot be greater than to date')
+                setTimeout( '$(".alert").hide(); $("#filter-from").focus()', 2000)
+            }
+            else
+                table.ajax.reload();
+        }
+        else {
+            console.log('erh')
+            $(".alert").show()
+            $("#date-filter-alert").text('Dates not specified')
+            setTimeout( '$(".alert").hide(); $("#filter-from").focus()', 2000)
+        }
+    })
+
+
+    $('#btn-clear-filter').on('click', function(e) {
+        $("#filter-from").val('')
+        $("#filter-to").val('')
+        filter_from_val = null
+        filter_to_val = null
+        table.ajax.reload();
+    })
+
+
     $('.toggle-filters').on('click', function(e) {
         $( ".filters" ).slideToggle('slow');
     });
@@ -85,6 +177,7 @@
     $('.status-select').select2({
         minimumResultsForSearch: Infinity,
     });
+
 
     // Default Datatable
     var table = $('#sale-orders-datatable').DataTable({
@@ -133,7 +226,14 @@
 
         processing: true,
         serverSide: true,
-        ajax: "{{ route('sale-orders.datatables') }}",
+        ajax: {
+            url     : "{{ route('sale-orders.datatables') }}",
+            data    : function(d) {
+                d.filter_column = filter_column_val,
+                d.filter_from = filter_from_val,
+                d.filter_to = filter_to_val
+            }  
+        },
 
         "language": {
             "paginate": {

@@ -7,6 +7,7 @@ use Spatie\Activitylog\Models\Activity;
 
 use DB;
 use PDF;
+use Carbon\Carbon;
 use NumberFormatter;
 use App\Models\Dealer;
 use App\Models\Inventory;
@@ -158,6 +159,22 @@ class SaleOrderController extends Controller
                     ->orWhere('dealers.company', 'like', '%'.$search.'%')
                     ->orWhere('users.name', 'like', '%'.$search.'%');
             });    
+        }
+
+        if ($request->has('filter_column')) {
+            $filter_column = $request->get('filter_column');
+            $filter_from = $request->get('filter_from');
+            $filter_to = $request->get('filter_to');
+
+            if ((!is_null($filter_from)) && (!is_null($filter_to))) {
+                $filter_from = Carbon::createFromFormat('Y-m-d', $filter_from);
+                $filter_to = Carbon::createFromFormat('Y-m-d', $filter_to);                
+
+                if ($filter_column=='blocked')
+                    $query->whereBetween('sale_orders.blocked_at', [$filter_from, $filter_to]);
+                else
+                    $query->whereBetween('sale_orders.due_at', [$filter_from, $filter_to]);
+            }
         }
 
         $totalRecordswithFilter = $query->count();
