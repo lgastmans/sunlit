@@ -62,10 +62,10 @@ class SaleOrderController extends Controller
             // the sale order datatable isn't the same in index than in warehouse>sale orders 
             if ($request->has('source') && $request->source == "warehouses"){
                 switch ($column_index){
-                    case 1:
+                    case 2:
                         $order_column = "dealers.company";
                         break;
-                    case 4:
+                    case 7:
                         $order_column = "users.name";
                         break;
                     default:
@@ -79,7 +79,10 @@ class SaleOrderController extends Controller
                     case 2:
                         $order_column = "dealers.company";
                         break;
-                    case 7:
+                    case 3:
+                        $order_column = "states.name";
+                        break;
+                    case 8:
                         $order_column = "users.name";
                         break;
                     default:
@@ -103,6 +106,7 @@ class SaleOrderController extends Controller
         $query->join('dealers', 'dealers.id', '=', 'dealer_id');
         $query->join('warehouses', 'warehouses.id', '=', 'warehouse_id');
         $query->join('users', 'users.id', '=', 'user_id');
+        $query->join('states', 'states.id', '=', 'dealers.state_id');
 
         if ($request->has('filter_warehouse_id')){
             $query->where('sale_orders.warehouse_id', '=', $request->filter_warehouse_id);
@@ -118,10 +122,10 @@ class SaleOrderController extends Controller
             if (!empty($column_arr[2]['search']['value'])){
                 $query->where('sale_orders.status', 'like', $column_arr[2]['search']['value']);
             }
-            if (!empty($column_arr[3]['search']['value'])){
+            if (!empty($column_arr[4]['search']['value'])){
                 $query->where('sale_orders.blocked_at', 'like', convertDateToMysql($column_arr[3]['search']['value']));
             }
-            if (!empty($column_arr[4]['search']['value'])){
+            if (!empty($column_arr[5]['search']['value'])){
                 $query->where('users.name', 'like', $column_arr[4]['search']['value'].'%');
             }
         }else{
@@ -135,19 +139,22 @@ class SaleOrderController extends Controller
                 $query->where('dealers.company', 'like', '%'.$column_arr[2]['search']['value'].'%');
             }
             if (!empty($column_arr[3]['search']['value'])){
-                $query->where('sale_orders.blocked_at', 'like', convertDateToMysql($column_arr[3]['search']['value']));
+                $query->where('states.name', 'like', '%'.$column_arr[3]['search']['value'].'%');
             }
             if (!empty($column_arr[4]['search']['value'])){
-                $query->where('sale_orders.due_at', 'like', convertDateToMysql($column_arr[4]['search']['value']));
+                $query->where('sale_orders.blocked_at', 'like', convertDateToMysql($column_arr[4]['search']['value']));
             }
             if (!empty($column_arr[5]['search']['value'])){
-                $query->where('sale_orders.amount', 'like', $column_arr[5]['search']['value'].'%');
+                $query->where('sale_orders.due_at', 'like', convertDateToMysql($column_arr[5]['search']['value']));
             }
-            if (!empty($column_arr[6]['search']['value']) && $column_arr[6]['search']['value'] != "all"){
-                $query->where('sale_orders.status', 'like', $column_arr[6]['search']['value']);
+            if (!empty($column_arr[6]['search']['value'])){
+                $query->where('sale_orders.amount', 'like', $column_arr[6]['search']['value'].'%');
             }
-            if (!empty($column_arr[7]['search']['value'])){
-                $query->where('users.name', 'like', $column_arr[7]['search']['value'].'%');
+            if (!empty($column_arr[7]['search']['value']) && $column_arr[7]['search']['value'] != "all"){
+                $query->where('sale_orders.status', 'like', $column_arr[7]['search']['value']);
+            }
+            if (!empty($column_arr[8]['search']['value'])){
+                $query->where('users.name', 'like', $column_arr[8]['search']['value'].'%');
             }
         }
         
@@ -157,7 +164,8 @@ class SaleOrderController extends Controller
                 $q->where('sale_orders.order_number', 'like', '%'.$search.'%')
                     ->orWhere('sale_orders.amount', 'like', $search.'%')
                     ->orWhere('dealers.company', 'like', '%'.$search.'%')
-                    ->orWhere('users.name', 'like', '%'.$search.'%');
+                    ->orWhere('users.name', 'like', '%'.$search.'%')
+                    ->orWhere('states.name', 'like', '%'.$search.'%');
             });    
         }
 
@@ -201,6 +209,7 @@ class SaleOrderController extends Controller
                 "order_number_slug" => $order->order_number_slug,
                 "warehouse" => $order->warehouse->name,
                 "dealer" => $order->dealer->company,
+                "state" => $order->dealer->state->name,
                 "blocked_at" => $order->display_blocked_at,
                 "due_at" => $order->display_due_at,
                 //(isset($order->amount)) ? trans('app.currency_symbol_inr')." ".$order->amount : "",

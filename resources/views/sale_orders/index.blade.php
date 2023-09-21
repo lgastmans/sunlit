@@ -60,13 +60,15 @@
                                 <th>Order #</th>
                                 <th>Warehouse</th>
                                 <th>Dealer</th>
+                                <th>State</th>
                                 <th>Blocked On</th> 
                                 <th>Expected On</th> 
-                                <th>Amount</th>
+                                <th style="text-align: right;">Amount</th>
                                 <th style="width:100px;">Status</th> 
                                 <th>Created By</th> 
                             </tr>
                             <tr class="filters" style="display:none;">
+                                <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
@@ -262,6 +264,10 @@
                 'orderable': true 
             },
             { 
+                'data': 'state',
+                'orderable': true 
+            },
+            { 
                 'data': 'blocked_at',
                 'orderable': true 
             },
@@ -283,6 +289,9 @@
             }
             
         ],
+        columnDefs: [
+            { className: "dt-right", "targets": [6] },
+        ],        
         "select": {
             "style": "multi"
         },
