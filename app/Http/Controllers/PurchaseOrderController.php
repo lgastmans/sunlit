@@ -199,8 +199,8 @@ class PurchaseOrderController extends Controller
             $filter_to = $request->get('filter_to');
 
             if ((!is_null($filter_from)) && (!is_null($filter_to))) {
-                $filter_from = Carbon::createFromFormat('Y-m-d', $filter_from);
-                $filter_to = Carbon::createFromFormat('Y-m-d', $filter_to);                
+                $filter_from = Carbon::createFromFormat('Y-m-d', $filter_from)->toDateString();
+                $filter_to = Carbon::createFromFormat('Y-m-d', $filter_to)->toDateString();                
 
                 if ($filter_column=='ordered')
                     $query->whereBetween('purchase_orders.ordered_at', [$filter_from, $filter_to]);

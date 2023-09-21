@@ -6,6 +6,7 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Models\Activity;
 
 use PDF;
+use Carbon\Carbon;
 use App\Models\Product;
 use App\Models\Inventory;
 use Illuminate\Http\Request;
@@ -118,6 +119,22 @@ class PurchaseOrderInvoiceController extends Controller
                     ->orWhere('suppliers.company', 'like', '%'.$search.'%')
                     ->orWhere('users.name', 'like', '%'.$search.'%');
             });    
+        }
+
+        if ($request->has('filter_column')) {
+            $filter_column = $request->get('filter_column');
+            $filter_from = $request->get('filter_from');
+            $filter_to = $request->get('filter_to');
+
+            if ((!is_null($filter_from)) && (!is_null($filter_to))) {
+                $filter_from = Carbon::createFromFormat('Y-m-d', $filter_from)->toDateString();
+                $filter_to = Carbon::createFromFormat('Y-m-d', $filter_to)->toDateString();                
+                //$filter_from = Carbon::parse('Y-m-d', $filter_from)->toDateString();
+                //$filter_to = Carbon::parse('Y-m-d', $filter_to)->toDateString();                
+
+                if ($filter_column=='shipped')
+                    $query->whereBetween('purchase_order_invoices.shipped_at', [$filter_from, $filter_to]);
+            }
         }
 
         $totalRecordswithFilter = $query->count();

@@ -167,8 +167,8 @@ class SaleOrderController extends Controller
             $filter_to = $request->get('filter_to');
 
             if ((!is_null($filter_from)) && (!is_null($filter_to))) {
-                $filter_from = Carbon::createFromFormat('Y-m-d', $filter_from);
-                $filter_to = Carbon::createFromFormat('Y-m-d', $filter_to);                
+                $filter_from = Carbon::createFromFormat('Y-m-d', $filter_from)->toDateString();
+                $filter_to = Carbon::createFromFormat('Y-m-d', $filter_to)->toDateString();                
 
                 if ($filter_column=='blocked')
                     $query->whereBetween('sale_orders.blocked_at', [$filter_from, $filter_to]);
