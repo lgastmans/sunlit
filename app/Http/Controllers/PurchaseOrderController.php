@@ -112,9 +112,9 @@ class PurchaseOrderController extends Controller
             $search = $search_arr['value'];
         }
 
+
         $totalRecords = PurchaseOrder::count();
         
-
         $query = PurchaseOrder::query();
         $query->join('suppliers', 'suppliers.id', '=', 'supplier_id');
         $query->join('warehouses', 'warehouses.id', '=', 'warehouse_id');
@@ -192,6 +192,24 @@ class PurchaseOrderController extends Controller
             });    
         }
 
+
+        if ($request->has('filter_column')) {
+            $filter_column = $request->get('filter_column');
+            $filter_from = $request->get('filter_from');
+            $filter_to = $request->get('filter_to');
+
+            if ((!is_null($filter_from)) && (!is_null($filter_to))) {
+                $filter_from = Carbon::createFromFormat('Y-m-d', $filter_from);
+                $filter_to = Carbon::createFromFormat('Y-m-d', $filter_to);                
+
+                if ($filter_column=='ordered')
+                    $query->whereBetween('purchase_orders.ordered_at', [$filter_from, $filter_to]);
+                else
+                    $query->whereBetween('purchase_orders.due_at', [$filter_from, $filter_to]);
+            }
+        }
+
+        
         $totalRecordswithFilter = $query->count();
 
 
