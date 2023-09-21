@@ -879,6 +879,8 @@ class SaleOrderController extends Controller
     {
         $validatedData = $request->validated();
 
+//dd($validatedData);
+
         $order = SaleOrder::create($validatedData);
 
         if ($order) {
