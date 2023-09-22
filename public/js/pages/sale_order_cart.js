@@ -103,12 +103,15 @@ $(document).ready(function () {
   });
   function formatProduct(el) {
     var item = "<div><h5>" + el.text + "</h5>";
+    var notes = '';
     var sa = 0;
     var sb = 0;
     var so = 0;
+    if (el.notes != undefined) notes = el.notes;
     if (el.stock_available != undefined) sa = el.stock_available;
     if (el.stock_booked != undefined) sb = el.stock_booked;
     if (el.stock_ordered != undefined) so = el.stock_ordered;
+    item += "<small>" + notes + "</small><br>";
     item += "<small><strong>Available:</strong> " + sa + "</small>";
     item += "<small><strong> / Booked:</strong> " + sb + "</small>";
     item += "<small><strong> / Ordered:</strong> " + so + "</small>";

@@ -332,9 +332,10 @@ class ProductController extends Controller
         $query->where('inventories.warehouse_id', '=', $warehouse);
 
         if ($request->has('q')){
-            $query->where('part_number', 'like', '%'.$request->get('q').'%');
+            $query->where('part_number', 'like', '%'.$request->get('q').'%')
+                ->orWhere('notes', 'like', '%'.$request->get('q').'%');
         }
-        $products = $query->select('products.id', 'products.part_number as text', 'inventories.stock_available as stock_available', 'inventories.stock_booked as stock_booked', 'inventories.stock_ordered as stock_ordered')->get();
+        $products = $query->select('products.id', 'products.part_number as text', 'products.notes as notes', 'inventories.stock_available as stock_available', 'inventories.stock_booked as stock_booked', 'inventories.stock_ordered as stock_ordered')->get();
         return ['results' => $products];  
     }
 
@@ -348,9 +349,10 @@ class ProductController extends Controller
     {
         $query = Product::query();
         if ($request->has('q')){
-            $query->where('part_number', 'like', '%'.$request->get('q').'%');
+            $query->where('part_number', 'like', '%'.$request->get('q').'%')
+                ->orWhere('notes', 'like', '%'.$request->get('q').'%');
         }
-        $products = $query->select('products.id', 'products.part_number as text')->get();
+        $products = $query->select('products.id', 'products.part_number as text', 'products.notes as notes')->get();
         return ['results' => $products];
     }
 

@@ -414,13 +414,17 @@
 
     function formatProduct(el){
             var item = "<div><h5>" + el.text + "</h5>";
+            var notes = '';
             var in_l = out_l = kw = "0";
+                if (el.notes != undefined)
+                    notes = el.notes;
                 if (el.cable_length_input != undefined)
                     in_l = el.cable_length_input;
                 if (el.cable_length_output != undefined)
                     out_l = el.cable_length_output;
                 if (el.kw_rating != undefined)
                     kw = el.kw_rating;
+                item += "<small>"+ notes + "</small><br>"
                 item += "<small><strong>Input:</strong> "+ in_l + "m</small>"
                 item += "<small><strong> / Output:</strong> "+ out_l + "m</small>"
                 item += "<small><strong> / KW:</strong> "+ kw + "KW</small>"
