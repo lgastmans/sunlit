@@ -295,7 +295,7 @@
         "select": {
             "style": "multi"
         },
-        "aaSorting": [[3, "desc"]],
+        "aaSorting": [[4, "desc"]],
         "drawCallback": function () {
             $('.dataTables_paginate > .pagination').addClass('pagination-rounded');           
         },
