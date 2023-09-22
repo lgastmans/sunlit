@@ -133,14 +133,14 @@ class InventoryMovementController extends Controller
 
         $query->with(['product','warehouse'])
                 ->join('users', 'users.id', '=', 'user_id')
-                //->leftJoin('purchase_orders', 'purchase_orders.id', '=', 'purchase_order_id')
+                ->select('inventory_movements.*', 'dealers.company as dealer_company', 'sale_orders.courier', 'sale_orders.tracking_number')
+                ->selectRaw('IF(ISNULL(purchase_order_invoice_id), sale_orders.order_number, purchase_order_invoices.invoice_number) AS invoice_number')
+                ->selectRaw('IF(ISNULL(purchase_order_invoice_id), sale_orders.order_number_slug, purchase_order_invoices.invoice_number_slug) AS invoice_number_slug')
                 ->leftJoin('purchase_order_invoices', 'purchase_order_invoices.id', '=', 'purchase_order_invoice_id')
                 ->leftJoin('sale_orders', 'sale_orders.id', '=', 'sales_order_id')
+                ->leftJoin('dealers', 'dealers.id', '=', 'sale_orders.dealer_id')
                 ->join('warehouses', 'warehouses.id', '=', 'inventory_movements.warehouse_id')
-                ->join('products', 'products.id', '=', 'inventory_movements.product_id')
-                ->select('inventory_movements.*')
-                ->selectRaw('IF(ISNULL(purchase_order_invoice_id), sale_orders.order_number, purchase_order_invoices.invoice_number) AS invoice_number');
-                //->selectRaw('purchase_order_invoices.invoice_number AS invoice_number');
+                ->join('products', 'products.id', '=', 'inventory_movements.product_id');
 
         if ($request->has('filter_product_id'))
             $query->where('inventory_movements.product_id', '=', $request->filter_product_id);
@@ -206,10 +206,12 @@ class InventoryMovementController extends Controller
                 "id" => $record->id,
                 "created_at" => $record->display_created_at,
                 "order_number" => $record->invoice_number,
+                "order_number_slug" => $record->invoice_number_slug,
                 "quantity" => $record->quantity,
                 "entry_type" => $record->display_movement_type,
-                "warehouse" => $record->warehouse->name,
+                "company" => $record->dealer_company, //$record->warehouse->name,
                 "product" => $record->product->part_number,
+                "courier" => $record->courier."\n".$record->tracking_number,
                 "user" => $record->user->display_name,
             );
         }

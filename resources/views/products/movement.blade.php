@@ -8,13 +8,14 @@
                         <thead class="table-light">
                             <tr>
                                 <th>Order #</th>
-                                <th>Warehouse</th>
+                                <th>Company</th>
                                 <th>Quantity</th>
                                 <th>Entry</th>
                                 <th>Ordered on</th>
+                                <th>Courier</th>
                                 <th>Created by</th>
                             </tr>
-                            <tr class="filters" style="display:none;"> 
+                            <tr class="filters"> 
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>      
                                 <th><input type="text" class="form-control"></th>
@@ -25,11 +26,10 @@
                                     data-date-container="#created_at"
                                     data-date-autoclose="true"
                                     data-date-format="M d, yyyy"
-                                    data-date-start-date="-1d"
-                                    data-date-end-date="+6m"
                                     data-date-today-highlight="true"
                                     required>
                                 </th>                          
+                                <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
                             </tr>
                         </thead>
@@ -116,10 +116,14 @@
         "columns": [
             { 
                 'data': 'order_number',
-                'orderable': true
+                'orderable': true,
+                "render": function(data, type, row, meta){
+                    data = '<a href="/sale-orders/' + row.order_number_slug + '" target="_blank">' + data + '</a>';
+                    return data;
+                }
             },
             { 
-                'data': 'warehouse',
+                'data': 'company',
                 'orderable': true
             },
             { 
@@ -135,12 +139,16 @@
                 'orderable': true 
             },
             { 
+                'data': 'courier',
+                'orderable': false
+            },
+            { 
                 'data': 'user',
                 'orderable': true
             }
         ],
         
-        "order": [[4, "desc"]],
+        "aaSorting": [[4, "desc"]],
         "drawCallback": function () {
             $('.dataTables_paginate > .pagination').addClass('pagination-rounded');
             $('#movement-datatable_length label').addClass('form-label');
