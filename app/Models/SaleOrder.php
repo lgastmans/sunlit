@@ -997,7 +997,7 @@ class SaleOrder extends Model
     public static function getStatusList()
     {
         return [
-            SaleOrder::DRAFT => 'Draft', 
+            //SaleOrder::DRAFT => 'Draft', 
             SaleOrder::BLOCKED => 'Blocked', 
             SaleOrder::BOOKED => 'Booked',
             SaleOrder::DISPATCHED => 'Dispatched'
