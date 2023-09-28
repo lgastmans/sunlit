@@ -87,11 +87,16 @@ class UserController extends Controller
                
         $arr = array();
         foreach($users as $user){
+
+            $user_role = 'undefined';
+            if ($user->role)
+                $user_role = $user->role;
+
             $arr[] = array(
                 "id" => $user->id,
                 "name" => $user->name,
                 "email" => $user->email,
-                "role" => $user->role,
+                "role" => $user_role,
                 "status" => ($user->deleted_at) ? 'disabled' : 'enabled'
             );
         }

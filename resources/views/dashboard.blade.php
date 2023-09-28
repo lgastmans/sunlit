@@ -4,6 +4,95 @@
 
 @section('content')
 
+
+
+<!-- 
+
+    Category-wise Sales Totals 
+
+-->
+<div class="row">
+    <div class="col-xl-12 col-lg-12 ">
+        <div class="card border-primary mb-3">
+            <div class="card-header">
+                <h4>Category-wise Sales Totals</h4>
+                <div class="row justify-content-start">
+                    <span class="col-1 pt-1">Period</span>
+                    <div class="col-2">
+                        <select class="period-select form-control" name="period_id" id="select_period">
+                            <option value="period_monthly" selected>Monthly</option>
+                            <option value="period_quarterly">Quarterly</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-2" id="display_monthly_year">
+                        <input type="text" class="form-control " id="year_id" value="{{ date('Y') }}" required data-provide="datepicker" 
+                        data-date-container="#display_monthly_year">
+                    </div>  
+                </div>              
+            </div>
+            <div class="card-body" id="table-sales-tables-container"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<!--
+
+    Inventory 
+
+-->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row mb-2">
+                    <h4 class="header-title mb-3">Inventory</h4>
+                    <div class="table-responsive">
+                        <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap table-has-dlb-click" id="inventory-datatable">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Warehouses</th>
+                                    <th>Category</th>
+                                    <th>Supplier</th>
+                                    <th>Part Number</th>
+                                    <th>Available</th>
+                                    <th>Ordered</th>
+                                    <th>Blocked</th>
+                                    <th>Booked</th>
+                                    <th>Projected</th>
+                                </tr>
+                                <tr class="filters" style="display: none;">
+                                    <th><input type="text" class="form-control"></th>
+                                    <th><input type="text" class="form-control"></th>
+                                    <th><input type="text" class="form-control"></th>
+                                    <th><input type="text" class="form-control"></th>
+                                    {{-- <th><input type="text" class="form-control"></th> --}}
+                                    <th><select class="form-control available-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
+                                    <th><select class="form-control ordered-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
+                                    <th><select class="form-control blocked-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
+                                    <th><select class="form-control booked-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
+                                    <th><select class="form-control projected-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }} >{{ $v }}</option> @endforeach</select></th>
+                                    {{-- <th class="no-filter"><select disabled class="form-control projected-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th> --}}
+                                </tr>                            
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+            </div> <!-- end card-body-->
+        </div> <!-- end card-->
+    </div> <!-- end col -->
+</div>
+
+
+<!-- 
+
+    Product-wise Sales Totals 
+
+-->
 <div class="row">
     <div class="col-xl-12 col-lg-12 ">
 
@@ -68,34 +157,11 @@
 </div>
 
 
-<div class="row">
-    <div class="col-xl-12 col-lg-12 ">
+<!--
 
-        <div class="card border-primary mb-3">
-            <div class="card-header">
-                <h4>Category-wise Sales Totals</h4>
-                <div class="row justify-content-start">
-                    <span class="col-1 pt-1">Period</span>
-                    <div class="col-2">
-                        <select class="period-select form-control" name="period_id" id="select_period">
-                            <option value="period_monthly" selected>Monthly</option>
-                            <option value="period_quarterly">Quarterly</option>
-                        </select>
-                    </div>
-                    
-                    <div class="col-2" id="display_monthly_year">
-                        <input type="text" class="form-control " id="year_id" value="{{ date('Y') }}" required data-provide="datepicker" 
-                        data-date-container="#display_monthly_year">
-                    </div>  
-                </div>              
-            </div>
-            <div class="card-body" id="table-sales-tables-container"></div>
-        </div>
+    State-wise Sales Totals 
 
-    </div>
-</div>
-
-
+-->
 <div class="row">
     <div class="col-xl-12 col-lg-12 ">
 
@@ -123,12 +189,14 @@
     </div>
 </div>
 
+
+<!--
+
+    Current exchange rate
+
+ -->
 <div class="row">
     <div class="col-xl-3 col-lg-4 ">
-
-
-
-
         <div class="card cta-box overflow-hidden">
             <div class="card-body">
                 <div class="float-end">
@@ -150,60 +218,9 @@
             <!-- end card-body -->
         </div>
     </div> <!-- end col -->
-
-    
 </div>
 
 
-
-
-
-
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="row mb-2">
-                    <h4 class="header-title mb-3">Products with negative stock</h4>
-                    <div class="table-responsive">
-                        <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap table-has-dlb-click" id="inventory-datatable">
-                            <thead class="table-light">
-                                <tr>
-
-                                    <th>Warehouses</th>
-                                    <th>Category</th>
-                                    <th>Supplier</th>
-                                    <th>Part Number</th>
-                                    <th>Available</th>
-                                    <th>Ordered</th>
-                                    <th>Blocked</th>
-                                    <th>Booked</th>
-                                    <th>Projected</th>
-                                </tr>
-                                <tr class="filters" style="display: none;">
-                                    <th><input type="text" class="form-control"></th>
-                                    <th><input type="text" class="form-control"></th>
-                                    <th><input type="text" class="form-control"></th>
-                                    <th><input type="text" class="form-control"></th>
-                                    {{-- <th><input type="text" class="form-control"></th> --}}
-                                    <th><select class="form-control available-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
-                                    <th><select class="form-control ordered-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
-                                    <th><select class="form-control blocked-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
-                                    <th><select class="form-control booked-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
-                                    <th><select class="form-control projected-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }} >{{ $v }}</option> @endforeach</select></th>
-                                    {{-- <th class="no-filter"><select disabled class="form-control projected-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th> --}}
-                                </tr>                            
-                            </thead>
-                            <tbody>
-
-                            </tbody>
-                        </table>
-                    </div>
-            </div> <!-- end card-body-->
-        </div> <!-- end card-->
-    </div> <!-- end col -->
-</div>
-<!-- end row -->
 
 @endsection
 
