@@ -249,14 +249,14 @@ class PurchaseOrder extends Model
     public static function getStatusList()
     {
         return [
-            PurchaseOrder::DRAFT => 'Draft', 
+            //PurchaseOrder::DRAFT => 'Draft', 
             PurchaseOrder::ORDERED => 'Ordered', 
             PurchaseOrder::CONFIRMED => 'Confirmed',
             PurchaseOrder::SHIPPED => 'Shipped', 
-            PurchaseOrder::CUSTOMS => 'Customs', 
-            PurchaseOrder::CLEARED => 'Cleared',
+            //PurchaseOrder::CUSTOMS => 'Customs', 
+            //PurchaseOrder::CLEARED => 'Cleared',
             PurchaseOrder::RECEIVED => 'Received',
-            PurchaseOrder::PAID => 'Paid'
+            //PurchaseOrder::PAID => 'Paid'
         ];
     }
 

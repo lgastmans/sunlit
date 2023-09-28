@@ -254,12 +254,12 @@ class PurchaseOrderInvoice extends Model
     public static function getStatusList()
     {
         return [
-            PurchaseOrderInvoice::DRAFT => 'Draft', 
-            PurchaseOrderInvoice::ORDERED => 'Ordered', 
-            PurchaseOrderInvoice::CONFIRMED => 'Confirmed',
+            //PurchaseOrderInvoice::DRAFT => 'Draft', 
+            //PurchaseOrderInvoice::ORDERED => 'Ordered', 
+            //PurchaseOrderInvoice::CONFIRMED => 'Confirmed',
             PurchaseOrderInvoice::SHIPPED => 'Shipped', 
-            PurchaseOrderInvoice::CUSTOMS => 'Customs', 
-            PurchaseOrderInvoice::CLEARED => 'Cleared',
+            //PurchaseOrderInvoice::CUSTOMS => 'Customs', 
+            //PurchaseOrderInvoice::CLEARED => 'Cleared',
             PurchaseOrderInvoice::RECEIVED => 'Received',
             PurchaseOrderInvoice::PAID => 'Paid'
         ];

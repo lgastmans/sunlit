@@ -65,11 +65,11 @@
                                 <th style="width:100px;">Status</th> 
                                 <th>Created By</th> 
                             </tr>
-                            <tr class="filters" style="display: none;" >
+                            <tr class="filters">
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
-                                <th id="shipped_at" class="position-relative">
+                                <th id="shipped_at" class="position-relative no-filter">
                                     <input type="text" class="form-control" name="shipped_at" 
                                     data-provide="datepicker" 
                                     data-date-container="#shipped_at"
@@ -80,7 +80,7 @@
                                     data-date-today-highlight="true"
                                     required>
                                 </th>
-                                <th><input type="text" class="form-control"></th>
+                                <th class="no-filter"><input type="text" class="form-control"></th>
                                 <th><select class="form-control status-select"><option value="all">All</option>@foreach($status as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
                                 <th><input type="text" class="form-control"></th>
                             </tr>
@@ -162,9 +162,9 @@
     });
 
 
-    $('.status-select').select2({
-        minimumResultsForSearch: Infinity,
-    });
+    // $('.status-select').select2({
+    //     minimumResultsForSearch: Infinity,
+    // });
 
     // Default Datatable
     var table = $('#purchase-order-invoices-datatable').DataTable({
