@@ -23,12 +23,12 @@
                                 <th>Tax</th>
                                 <th>Actions</th>
                             </tr>
-                            <tr class="filters" style="display:none;">
+                            <tr class="filters">
                                 <th></th>
                                 <th></th>
                                 <th></th>
-                                <th></th>
-                                <th></th>
+                                <th class="no-filter"></th>
+                                <th class="no-filter"></th>
                                 <th class="no-filter"></th>
                             </tr>
                         </thead>
@@ -83,18 +83,18 @@
                 className: 'btn btn-warning',
                 download: 'open'
             },
-            {
-                extend: 'colvis',
-                columns: ':not(.noVis)',
-                className: 'btn btn-info'
-            },
-            {
-                text: '<i class="mdi mdi-filter"></i>&nbsp;Filter',
-                // className: 'btn btn-light',
-                action: function ( e, dt, node, config ) {
-                    $( ".filters" ).slideToggle('slow');
-                }
-            }
+            // {
+            //     extend: 'colvis',
+            //     columns: ':not(.noVis)',
+            //     className: 'btn btn-info'
+            // },
+            // {
+            //     text: '<i class="mdi mdi-filter"></i>&nbsp;Filter',
+            //     // className: 'btn btn-light',
+            //     action: function ( e, dt, node, config ) {
+            //         $( ".filters" ).slideToggle('slow');
+            //     }
+            // }
         ],
         processing: true,
         serverSide: true,
