@@ -68,11 +68,11 @@
                                 <th>Created By</th> 
                                 <th>Order Slug</th> 
                             </tr>
-                            <tr class="filters" style="display: none;" >
+                            <tr class="filters">
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
-                                <th id="ordered_at" class="position-relative">
+                                <th id="ordered_at" class="position-relative no-filter">
                                     <input type="text" class="form-control" name="ordered_at" 
                                     data-provide="datepicker" 
                                     data-date-container="#ordered_at"
@@ -83,7 +83,7 @@
                                     data-date-today-highlight="true"
                                     required>
                                 </th>
-                                <th id="due_at" class="position-relative">
+                                <th id="due_at" class="position-relative no-filter">
                                     <input type="text" class="form-control" name="due_at" 
                                     data-provide="datepicker" 
                                     data-date-container="#due_at"
@@ -94,7 +94,7 @@
                                     data-date-today-highlight="true"
                                     required>
                                 </th>
-                                <th><input type="text" class="form-control"></th>
+                                <th class="no-filter"><input type="text" class="form-control"></th>
                                 <th><select class="form-control status-select"><option value="all">All</option>@foreach($status as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
@@ -177,9 +177,9 @@
     });
 
 
-    $('.status-select').select2({
-        minimumResultsForSearch: Infinity,
-    });
+    // $('.status-select').select2({
+    //     minimumResultsForSearch: Infinity,
+    // });
 
     // Default Datatable
     var table = $('#purchase-orders-datatable').DataTable({
