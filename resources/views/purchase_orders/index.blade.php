@@ -210,18 +210,18 @@
                 className: 'btn btn-warning',
                 download: 'open'
             },
-            {
-                extend: 'colvis',
-                columns: ':not(.noVis)',
-                className: 'btn btn-info'
-            },
-            {
-                text: '<i class="mdi mdi-filter"></i>&nbsp;Filter',
-                // className: 'btn btn-light',
-                action: function ( e, dt, node, config ) {
-                    $( ".filters" ).slideToggle('slow');
-                }
-            }
+            // {
+            //     extend: 'colvis',
+            //     columns: ':not(.noVis)',
+            //     className: 'btn btn-info'
+            // },
+            // {
+            //     text: '<i class="mdi mdi-filter"></i>&nbsp;Filter',
+            //     // className: 'btn btn-light',
+            //     action: function ( e, dt, node, config ) {
+            //         $( ".filters" ).slideToggle('slow');
+            //     }
+            // }
         ],
         orderCellsTop: true,
         fixedHeader: true,
@@ -292,7 +292,7 @@
             },
             { 
                 'data': 'order_number_slug',
-                'visible': true,
+                'visible': false,
             }
             
         ],
