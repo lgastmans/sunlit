@@ -18,7 +18,7 @@
                 <x-forms.errors class="mb-4" :errors="$errors" />
                     <form action="{{ route('sale-orders.store') }}" method="POST" class="needs-validation" novalidate>
                         @csrf()
-                        <div class="mb-12">
+                        <div class="mb-3">
                             <label class="form-label" for="order_number">Order #</label>
 <!--                             <input type="hidden" name="order_number" id="order_number" value="{{ $order_number }}"> -->
                             <div class="input-group">
