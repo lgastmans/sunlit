@@ -83,7 +83,7 @@ class InventoryController extends Controller
 
         $query->with(['product','warehouse'])
                 ->select('inventories.*', 'products.code', 'products.notes', 'products.name AS products_name', 'products.minimum_quantity', 'suppliers.company', 'categories.name AS categories_name', 'warehouses.name AS warehouses_name')
-                ->addSelect(DB::raw('(inventories.stock_available + inventories.stock_ordered - inventories.stock_blocked - inventories.stock_booked) AS projected'))
+                ->addSelect(DB::raw('(inventories.stock_available + inventories.stock_ordered - inventories.stock_booked) AS projected'))
                 ->join('products', 'products.id', '=', 'product_id')
                 ->join('warehouses', 'warehouses.id', '=', 'warehouse_id')
                 ->join('categories', 'categories.id', '=', 'products.category_id')
