@@ -44,9 +44,11 @@
                         <li>
                             <a href="{{ route('reports.closing-stock')}}">Closing Stock</a>
                         </li>
+                        @if (Auth::user()->hasRole('super-admin'))
                         <li>
                             <a href="{{ route('reports.sales-product-totals')}}">Product-wise Sales Totals</a>
                         </li>
+                        @endif
                     </ul>
                 </div>                
             </li>
@@ -65,6 +67,7 @@
                         <li>
                             <a href="{{ route('sale-orders')}}">Invoices</a>
                         </li>
+                        @if (Auth::user()->hasRole('super-admin'))
                         <li>
                             <a href="{{ route('sale-orders.report')}}">Report</a>
                         </li>
@@ -74,6 +77,7 @@
                         <li>
                             <a href="{{ route('sale-orders.state-report')}}">State-Wise Report</a>
                         </li>
+                        @endif
                     </ul>
                 </div>                
             </li>

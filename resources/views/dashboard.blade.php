@@ -5,16 +5,16 @@
 @section('content')
 
 
-
 <!-- 
 
     Category-wise Sales Totals 
 
 -->
+@if ($userrole === 'Super-admin')
 <div class="row">
     <div class="col-xl-12 col-lg-12 ">
         <div class="card border-primary mb-3">
-            <div class="card-header">
+            <div class="card-body">
                 <h4>Category-wise Sales Totals</h4>
                 <div class="row justify-content-start">
                     <span class="col-1 pt-1">Period</span>
@@ -36,7 +36,7 @@
 
     </div>
 </div>
-
+@endif
 
 <!--
 
@@ -63,7 +63,7 @@
                                     <th>Booked</th>
                                     <th>Projected</th>
                                 </tr>
-                                <tr class="filters" style="display: none;">
+<!--                                 <tr class="filters" style="display: none;">
                                     <th><input type="text" class="form-control"></th>
                                     <th><input type="text" class="form-control"></th>
                                     <th><input type="text" class="form-control"></th>
@@ -76,7 +76,7 @@
                                     <th><select class="form-control projected-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }} >{{ $v }}</option> @endforeach</select></th>
                                     {{-- <th class="no-filter"><select disabled class="form-control projected-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th> --}}
                                 </tr>                            
-                            </thead>
+ -->                            </thead>
                             <tbody>
 
                             </tbody>
@@ -93,11 +93,12 @@
     Product-wise Sales Totals 
 
 -->
+@if ($userrole === 'Super-admin')
 <div class="row">
     <div class="col-xl-12 col-lg-12 ">
 
         <div class="card border-primary mb-3">
-            <div class="card-header">
+            <div class="card-body">
                 <h4>Product-wise Sales Totals <small>(Top 5 products)</small></h4>
 
                 <div class="row justify-content-start">
@@ -107,8 +108,6 @@
                         data-date-container="#display_product_year">
                     </div>  
                 </div>              
-            </div>
-            <div class="card-body">
                 <div class="table-responsive">
                     <table id="table-product-sales" class="table table-striped table-condensed" cellspacing="0" width="100%">
                         <thead>
@@ -155,6 +154,7 @@
 
     </div>
 </div>
+@endif
 
 
 <!--
@@ -162,11 +162,12 @@
     State-wise Sales Totals 
 
 -->
+@if ($userrole === 'Super-admin')
 <div class="row">
     <div class="col-xl-12 col-lg-12 ">
 
         <div class="card border-primary mb-3">
-            <div class="card-header">
+            <div class="card-body">
                 <h4>State-wise Sales Totals</h4>
                 <div class="row justify-content-start">
                     <span class="col-1 pt-1">Period</span>
@@ -180,7 +181,7 @@
                         <input type="text" class="form-control " id="state_year_id" value="{{ date('Y') }}" required data-provide="datepicker" 
                         data-date-container="#display_state_year">
                     </div>                
-    
+                        
                 </div>
             </div>
             <div class="card-body" id="table-state-tables-container"></div>
@@ -188,7 +189,7 @@
 
     </div>
 </div>
-
+@endif
 
 <!--
 
@@ -445,7 +446,7 @@ $(document).ready(function () {
     }
 
     /**
-     *  datatables for negative stock
+     *  Inventory
      * 
      */
     $('.toggle-filters').on('click', function(e) {
@@ -453,37 +454,37 @@ $(document).ready(function () {
     });
 
     var table = $('#inventory-datatable').DataTable({
-        dom: 'Bfrtip',
+        dom: 'frtip',
         stateSave: true,
-        buttons: [
-            {
-                extend: 'excelHtml5',
-                exportOptions: {
-                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ]
-                },
-                className: 'btn btn-success'
-            },
-            {
-                extend: 'pdfHtml5',
-                exportOptions: {
-                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ]
-                },
-                className: 'btn btn-warning',
-                download: 'open'
-            },
-            {
-                extend: 'colvis',
-                columns: ':not(.noVis)',
-                className: 'btn btn-info'
-            },
-            {
-                text: '<i class="mdi mdi-filter"></i>&nbsp;Filter',
-                // className: 'btn btn-light',
-                action: function ( e, dt, node, config ) {
-                    $( ".filters" ).slideToggle('slow');
-                }
-            }
-        ],
+        // buttons: [
+        //     {
+        //         extend: 'excelHtml5',
+        //         exportOptions: {
+        //             columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ]
+        //         },
+        //         className: 'btn btn-success'
+        //     },
+        //     {
+        //         extend: 'pdfHtml5',
+        //         exportOptions: {
+        //             columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ]
+        //         },
+        //         className: 'btn btn-warning',
+        //         download: 'open'
+        //     },
+        //     {
+        //         extend: 'colvis',
+        //         columns: ':not(.noVis)',
+        //         className: 'btn btn-info'
+        //     },
+        //     {
+        //         text: '<i class="mdi mdi-filter"></i>&nbsp;Filter',
+        //         // className: 'btn btn-light',
+        //         action: function ( e, dt, node, config ) {
+        //             $( ".filters" ).slideToggle('slow');
+        //         }
+        //     }
+        // ],
         processing: true,
         serverSide: true,
         orderCellsTop: true,

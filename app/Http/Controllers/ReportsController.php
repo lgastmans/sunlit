@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use NumberFormatter;
 use App\Models\SaleOrder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReportsController extends Controller
 {
@@ -24,7 +25,11 @@ class ReportsController extends Controller
         /*
             final code 
         */
-        return view('reports.sales-product-totals');
+        $user = Auth::user();
+        if ($user->hasRole('super-admin'))
+            return view('reports.sales-product-totals');
+
+        return abort(403, trans('error.unauthorized'));
     }
 
 

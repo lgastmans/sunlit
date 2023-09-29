@@ -39,7 +39,7 @@ class DashboardController extends Controller
 
             $state_totals = $sale_order->calculateStateSalesTotals("period_monthly",$cur_year);
 
-            return view('dashboard', ['stock_filter' => $stock_filter,'due_orders' => $due_orders, 'overdue_orders' => $overdue_orders, 'exchange_rate_update_ago' => $exchange_rate_update_ago, 'sale_order_totals'=> $sale_order_totals, 'state_totals'=>$state_totals]);
+            return view('dashboard', ['stock_filter' => $stock_filter,'due_orders' => $due_orders, 'overdue_orders' => $overdue_orders, 'exchange_rate_update_ago' => $exchange_rate_update_ago, 'sale_order_totals'=> $sale_order_totals, 'state_totals'=>$state_totals, 'userrole'=>$user->role]);
         }
         return abort(403, trans('error.unauthorized'));
     }

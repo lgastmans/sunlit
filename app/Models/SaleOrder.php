@@ -505,6 +505,8 @@ class SaleOrder extends Model
             }
         }
 
+        uasort($res, fn($a, $b) => $b['row_total'] <=> $a['row_total']);
+
         $res['column_total'] = $totals;
 
         return $res;
@@ -734,7 +736,9 @@ class SaleOrder extends Model
                     $res[$row->name][$quarter] = $this->calculateQuarterStateSalesTotals($quarter, $year, $row->id);
             }
         }
-
+        
+        uasort($res, fn($a, $b) => $b['row_total'] <=> $a['row_total']);
+        
         $res['column_total'] = $totals;
 
         return $res;

@@ -1319,18 +1319,27 @@ class SaleOrderController extends Controller
 
     public function report()
     {
-        return view('sale_orders.report');
+        $user = Auth::user();
+        if ($user->hasRole('super-admin'))
+            return view('sale_orders.report');
+        return abort(403, trans('error.unauthorized'));
     }
 
     public function dealerReport()
     {
         //$dealer = Dealer::all();
-
-        return view('sale_orders.dealer-report');//, ['dealer' => $dealer ]);
+    
+        $user = Auth::user();
+        if ($user->hasRole('super-admin'))
+            return view('sale_orders.dealer-report');//, ['dealer' => $dealer ]);
+        return abort(403, trans('error.unauthorized'));
     }
 
     public function stateReport()
     {
-        return view('sale_orders.state-report');   
+        $user = Auth::user();
+        if ($user->hasRole('super-admin'))
+            return view('sale_orders.state-report');   
+        return abort(403, trans('error.unauthorized'));
     }
 }
