@@ -126,6 +126,24 @@ class SaleOrder extends Model
      * Calculate the sales totals per product
      * 
      */
+    public function calculateProductOverallSales($product_id)
+    {
+        $query = SaleOrder::query();
+
+        $query->select('products.id', 'products.part_number')
+            ->selectRaw('SUM(sale_order_items.quantity_ordered) AS quantity_sold')
+            ->selectRaw('SUM(sale_order_items.selling_price * sale_order_items.quantity_ordered) / SUM(sale_order_items.quantity_ordered) AS avg_selling_price')
+            ->join('sale_order_items', 'sale_order_items.sale_order_id', '=', 'sale_orders.id')
+            ->join('products', 'products.id', '=', 'sale_order_items.product_id')
+            ->where('products.id', '=', intval($product_id))
+            ->where('sale_orders.status', '>=', SaleOrder::DISPATCHED)
+            ->whereNull('sale_order_items.deleted_at');
+
+        $res = $query->get()->first();
+        
+        return ($res->quantity_sold * $res->avg_selling_price);
+    }   
+     
     public function calculateProductMonthSalesTotals($month="", $year="", $part_number="_ALL")
     {
 

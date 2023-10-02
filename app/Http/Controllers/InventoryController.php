@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use NumberFormatter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Product;
 use App\Models\Inventory;
+use App\Models\SaleOrder;
 use App\Exports\InventoryExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
@@ -27,6 +29,8 @@ class InventoryController extends Controller
 
     public function getListForDatatables(Request $request)
     {
+        $sale_order = new SaleOrder();
+
         $draw = 1;
         if ($request->has('draw'))
             $draw = $request->get('draw');
@@ -208,12 +212,17 @@ class InventoryController extends Controller
         // $inventory = $query->toSql();dd($inventory);
         $inventory = $query->get();
 
+        $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
+        $fmt->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 0);
+
         $arr = array();
         foreach ($inventory as $record)
         {
+            $overall_sales = $sale_order->calculateProductOverallSales($record->id);
 
             $arr[] = array(
                 "id" => $record->id,
+                "total_sales" => intval($overall_sales), 
                 "supplier" => $record->company,
                 "warehouse" => $record->warehouses_name, //$record->warehouse->name,
                 "category" => $record->categories_name, //$record->product->category->name,
@@ -228,8 +237,12 @@ class InventoryController extends Controller
                 "minimum_quantity" => (object)$record->minimum_quantity,
                 "product_id" => $record->product->id
             );
-
         }
+        
+        usort($arr, fn($a, $b) => $b['total_sales'] <=> $a['total_sales']);
+
+        for ($i=0;$i<count($arr);$i++)
+            $arr[$i]["total_sales"] = $fmt->formatCurrency(intval($arr[$i]["total_sales"]), "INR");
 
         $response = array(
             "draw" => $draw,

@@ -48,7 +48,11 @@
         <div class="card">
             <div class="card-body">
                 <div class="row mb-2">
-                    <h4 class="header-title mb-3">Inventory</h4>
+                    <h4 class="header-title mb-3">Inventory</h4><h5>Listed by highest selling products first</h5>
+                    <p><small>
+                        The <strong>Available</strong> column shows the actual, physical stock, regardless of the <strong>Blocked</strong> or <strong>Booked</strong> columns.<br>
+                        The <strong>Blocked</strong> and <strong>Booked</strong> columns only affect the <strong>Projected</strong> column. The <strong>Projected</strong> column is calculated as <i>Projected = Available + Ordered - Booked</i>
+                    </small></p>
                     <div class="table-responsive">
                         <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap table-has-dlb-click" id="inventory-datatable">
                             <thead class="table-light">
@@ -62,6 +66,7 @@
                                     <th>Blocked</th>
                                     <th>Booked</th>
                                     <th>Projected</th>
+                                    <th>Total Sales</th>
                                 </tr>
 <!--                                 <tr class="filters" style="display: none;">
                                     <th><input type="text" class="form-control"></th>
@@ -489,6 +494,8 @@ $(document).ready(function () {
         serverSide: true,
         orderCellsTop: true,
         fixedHeader: true,
+        scrollY: "500px",
+        paging: false,        
         ajax      : 
             {
                 url   : "{{ route('inventory.datatables') }}",
@@ -558,12 +565,19 @@ $(document).ready(function () {
                 'data': 'projected',
                 'orderable': false
             },
+            { 
+                'data': 'total_sales',
+                'orderable': false
+            },            
         ],
         
         // "select": {
         //     "style": "multi"
         // },
         "order": [[3, "asc"]],
+        columnDefs: [
+            { className: "dt-right", "targets": [4,5,6,7,8,9] },   //'_all' }
+        ],        
         "drawCallback": function () {
             $('.dataTables_paginate > .pagination').addClass('pagination-rounded');
             $('#inventory-datatable_length label').addClass('form-label');
