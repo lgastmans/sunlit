@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use DateTime;
+use app\Helpers;
 use Carbon\Carbon;
 use NumberFormatter;
 use App\Models\Dealer;
@@ -144,6 +145,22 @@ class DealerController extends Controller
             $dealer_id = $request->get("dealer_id");
         }
 
+        $select_period = 'period_monthly';
+        if ($request->has('select_period'))
+            $select_period = $request->get('select_period');
+
+        $month = date('n');
+        if ($request->has('month_id'))
+            $month = $request->get('month_id');
+            
+        $year = date('Y');
+        if ($request->has('year_id'))
+            $year = $request->get('year_id');
+        
+        $quarter = '';
+        if ($request->has('quarterly_id'))
+            $quarter = $request->get('quarterly_id');        
+
         /**
          * get the dealer's invoices
         */
@@ -151,8 +168,47 @@ class DealerController extends Controller
         $query->select('sale_orders.id', 'sale_orders.dispatched_at', 'sale_orders.order_number_slug', 'sale_orders.amount', 'sale_orders.transport_charges');
         $query->where('sale_orders.status', '>=', '4');
         $query->where('sale_orders.dealer_id', '=', $dealer_id);
+
+        if ($select_period=='period_monthly')
+        {
+            $query->whereYear('sale_orders.dispatched_at', '=', $year);
+            $query->whereMonth('sale_orders.dispatched_at', '=', $month);
+        }
+        elseif ($select_period=='period_quarterly')
+        {
+            if ($quarter=='Q1')
+            {
+                $from = date($year.'-01-01');
+                $to = date($year.'-03-31');
+                $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
+            }
+            elseif ($quarter=='Q2')
+            {
+                $from = date($year.'-04-01');
+                $to = date($year.'-06-30');
+                $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
+            }
+            elseif ($quarter=='Q3')
+            {
+                $from = date($year.'-07-01');
+                $to = date($year.'-09-30');
+                $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
+            }
+            elseif ($quarter=='Q4')
+            {
+                $from = date($year.'-10-01');
+                $to = date($year.'-12-31');
+                $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
+            }
+        }
+        elseif ($select_period=='period_yearly') {
+            $query->whereYear('sale_orders.dispatched_at', '=', $year);
+        }
+
+
         $query->orderBy('sale_orders.dispatched_at','ASC');
         $query->orderBy('sale_orders.order_number_slug','ASC');        
+//dd($query->toSql());
         $rows = $query->get();
 
         $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
@@ -235,6 +291,22 @@ class DealerController extends Controller
 
     public function getListForLedgerSummary(Request $request)
     {
+        $select_period = 'period_monthly';
+        if ($request->has('select_period'))
+            $select_period = $request->get('select_period');
+
+        $month = date('n');
+        if ($request->has('month_id'))
+            $month = $request->get('month_id');
+            
+        $year = date('Y');
+        if ($request->has('year_id'))
+            $year = $request->get('year_id');
+        
+        $quarter = '';
+        if ($request->has('quarterly_id'))
+            $quarter = $request->get('quarterly_id'); 
+
         $vdata = array();
 
         $ret = array(
@@ -286,6 +358,42 @@ class DealerController extends Controller
             //$query = SaleOrder::select(DB::raw('SUM(sale_orders.amount + sale_orders.transport_charges) AS dealer_debit'));
             $query->where('sale_orders.status', '>=', '4');
             $query->where('sale_orders.dealer_id', '=', $dealer->id);
+
+            if ($select_period=='period_monthly')
+            {
+                $query->whereYear('sale_orders.dispatched_at', '=', $year);
+                $query->whereMonth('sale_orders.dispatched_at', '=', $month);
+            }
+            elseif ($select_period=='period_quarterly')
+            {
+                if ($quarter=='Q1')
+                {
+                    $from = date($year.'-01-01');
+                    $to = date($year.'-03-31');
+                    $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
+                }
+                elseif ($quarter=='Q2')
+                {
+                    $from = date($year.'-04-01');
+                    $to = date($year.'-06-30');
+                    $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
+                }
+                elseif ($quarter=='Q3')
+                {
+                    $from = date($year.'-07-01');
+                    $to = date($year.'-09-30');
+                    $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
+                }
+                elseif ($quarter=='Q4')
+                {
+                    $from = date($year.'-10-01');
+                    $to = date($year.'-12-31');
+                    $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
+                }
+            }
+            elseif ($select_period=='period_yearly') {
+                $query->whereYear('sale_orders.dispatched_at', '=', $year);
+            }
 
             //$query->groupBy('sale_orders.dealer_id');
             //$ret = $query->toSql(); print_r($ret);die();
@@ -361,17 +469,19 @@ class DealerController extends Controller
 
     public function ledger(Request $request)
     {
+        $curQuarter = getCurrentQuarter();
         $dealer_id = null;
         if ($request->has('id'))
             $dealer_id = $request->get('id');
 
-        return view('dealers.ledger', ['dealer_id'=>$dealer_id]);
+        return view('dealers.ledger', ['dealer_id'=>$dealer_id, 'curQuarter'=>$curQuarter, 'dealer_id'=>0]);
     }
 
 
     public function ledgerSummary(Request $request)
     {
-        return view("dealers.ledger-summary");
+        $curQuarter = getCurrentQuarter();
+        return view("dealers.ledger-summary", ['curQuarter'=>$curQuarter]);
     }
 
     /**
