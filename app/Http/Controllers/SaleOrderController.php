@@ -252,7 +252,11 @@ class SaleOrderController extends Controller
 
         $query = SaleOrder::query();
 
-        $query->select('categories.name', 'products.id', 'products.part_number', 'products.model', 'products.kw_rating', DB::raw('SUM(sale_order_items.quantity_ordered) AS quantity_ordered'), DB::raw('SUM(sale_order_items.selling_price * sale_order_items.quantity_ordered) / SUM(sale_order_items.quantity_ordered) AS avg_selling_price'), 'sale_order_items.tax');
+        $query->select('categories.name', 'products.id', 'products.part_number', 'products.model', 'products.kw_rating', 
+            DB::raw('@qty_ord := SUM(sale_order_items.quantity_ordered) AS quantity_ordered'), 
+            DB::raw('@avg_price := SUM(sale_order_items.selling_price * sale_order_items.quantity_ordered) / SUM(sale_order_items.quantity_ordered) AS avg_selling_price'),
+            DB::raw('SUM(sale_order_items.quantity_ordered) * SUM(sale_order_items.selling_price * sale_order_items.quantity_ordered) / SUM(sale_order_items.quantity_ordered) AS total_amount'),
+             'sale_order_items.tax');
 
         $query->join('sale_order_items', 'sale_order_items.sale_order_id', '=', 'sale_orders.id');
         $query->join('products', 'products.id', '=', 'sale_order_items.product_id');
@@ -314,7 +318,9 @@ class SaleOrderController extends Controller
         //$query->groupBy('products.id', 'sale_order_items.selling_price');
         $query->groupBy('products.id');
         $query->orderBy('categories.name','ASC');
-        $query->orderBy('products.part_number', 'ASC');
+        //$query->orderBy('products.part_number', 'ASC');
+        $query->orderBy('total_amount', 'DESC');
+        
 
         //dd($query->toSql());
         $rows = $query->get();
@@ -360,7 +366,7 @@ class SaleOrderController extends Controller
             $taxable_value = $fmt->formatCurrency(($row->avg_selling_price * $row->quantity_ordered), "INR");
             $tax_amount = $fmt->formatCurrency(($row->avg_selling_price * $row->quantity_ordered) * ($row->tax/100), "INR");
             //$amount = $fmt->formatCurrency(($row->avg_selling_price * $row->quantity_ordered * (1+$row->tax/100)), "INR");
-            $amount = $fmt->formatCurrency(((int)$row->avg_selling_price * (int)$row->quantity_ordered), "INR");
+            $amount = $fmt->formatCurrency($row->total_amount, "INR"); //$fmt->formatCurrency(((int)$row->avg_selling_price * (int)$row->quantity_ordered), "INR");
 
             $arr[] = array(
                 "id" => $row->id,
