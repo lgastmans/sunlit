@@ -29,7 +29,7 @@
                             <select class="period-select form-control" name="period_id" id="select_period">
                                 <option value="period_monthly" selected>Monthly</option>
                                 <option value="period_quarterly">Quarterly</option>
-                                <!-- <option value="period_yearly">Yearly</option> -->
+                                <option value="period_yearly">Yearly</option>
                             </select>
                         </div>
 
@@ -176,7 +176,7 @@
             else if ($(this).val()=='period_yearly')
             {
                 $(" #display_monthly_month ").hide();
-                $(" #display_monthly_year ").hide();
+                $(" #display_monthly_year ").show();
                 $(" #display_period_quarterly ").hide();
             }
         });

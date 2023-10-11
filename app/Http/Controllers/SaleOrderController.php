@@ -306,6 +306,10 @@ class SaleOrderController extends Controller
                 $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
             }
         }
+        elseif ($select_period=='period_yearly')
+        {
+            $query->whereYear('sale_orders.dispatched_at', '=', $year);
+        }
 
         //$query->groupBy('products.id', 'sale_order_items.selling_price');
         $query->groupBy('products.id');
@@ -525,6 +529,10 @@ class SaleOrderController extends Controller
                 $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
             }
         }
+        elseif ($select_period=='period_yearly')
+        {
+            $query->whereYear('sale_orders.dispatched_at', '=', $year);
+        }
 
         if ($select_format=='format_datewise')
         {
@@ -709,6 +717,10 @@ class SaleOrderController extends Controller
                 $to = date($year.'-12-31');
                 $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
             }
+        }
+        elseif ($select_period=='period_yearly')
+        {
+            $query->whereYear('sale_orders.dispatched_at', '=', $year);
         }
 
         //$query->groupBy('products.id', 'sale_order_items.selling_price');
