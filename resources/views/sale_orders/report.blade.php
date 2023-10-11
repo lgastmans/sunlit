@@ -84,7 +84,7 @@
                             <th>Model</th>
                             <th>KW Rating</th>
                             <th style="text-align: right;">Quantity</th>
-                            <th style="text-align: right;">Price</th>
+                            <th style="text-align: right;">Avg. Price</th>
                             <!-- <th>Taxable Value</th> -->
                             <!-- <th>Tax</th> -->
                             <!-- <th>Tax Amount</th> -->
