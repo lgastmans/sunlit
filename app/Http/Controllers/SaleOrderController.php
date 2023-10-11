@@ -1320,9 +1320,10 @@ class SaleOrderController extends Controller
 
     public function report()
     {
+        $curQuarter = getCurrentQuarter();
         $user = Auth::user();
         if ($user->hasRole('super-admin'))
-            return view('sale_orders.report');
+            return view('sale_orders.report', ['curQuarter' => $curQuarter]);
         return abort(403, trans('error.unauthorized'));
     }
 
