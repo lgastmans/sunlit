@@ -7,6 +7,7 @@ use Spatie\Activitylog\Models\Activity;
 
 use DB;
 use PDF;
+use app\Helpers;
 use Carbon\Carbon;
 use NumberFormatter;
 use App\Models\Dealer;
@@ -1328,18 +1329,19 @@ class SaleOrderController extends Controller
     public function dealerReport()
     {
         //$dealer = Dealer::all();
-    
+        $curQuarter = getCurrentQuarter();
         $user = Auth::user();
         if ($user->hasRole('super-admin'))
-            return view('sale_orders.dealer-report');//, ['dealer' => $dealer ]);
+            return view('sale_orders.dealer-report', ['curQuarter' => $curQuarter]);
         return abort(403, trans('error.unauthorized'));
     }
 
     public function stateReport()
     {
+        $curQuarter = getCurrentQuarter();
         $user = Auth::user();
         if ($user->hasRole('super-admin'))
-            return view('sale_orders.state-report');   
+            return view('sale_orders.state-report', ['curQuarter' => $curQuarter]);   
         return abort(403, trans('error.unauthorized'));
     }
 }

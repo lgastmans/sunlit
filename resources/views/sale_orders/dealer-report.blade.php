@@ -59,10 +59,10 @@
                         <div class="col-xl-2" id="display_period_quarterly" style="display:none">
                             <label class="form-label">&nbsp;</label>
                             <select class="quaterly-select form-control" id="quarterly_id">
-                                <option value="Q1">January 1 – March 31</option>
-                                <option value="Q2">April 1 – June 30</option>
-                                <option value="Q3">July 1 – September 30</option>
-                                <option value="Q4">October 1 – December 31</option>
+                                <option value="Q1" @if ($curQuarter=='Q1') selected @endif>January 1 – March 31</option>
+                                <option value="Q2" @if ($curQuarter=='Q2') selected @endif>April 1 – June 30</option>
+                                <option value="Q3" @if ($curQuarter=='Q3') selected @endif>July 1 – September 30</option>
+                                <option value="Q4" @if ($curQuarter=='Q4') selected @endif>October 1 – December 31</option>
                             </select>
                         </div>
 
@@ -234,6 +234,10 @@
                 $(" #display_monthly_month ").hide();
                 $(" #display_monthly_year ").show();
                 $(" #display_period_quarterly ").show();
+                
+                //$("#quarterly_id").val({{$curQuarter}});
+                //$('#id_100 option[value=val2]').attr('selected','selected');
+             
             }
             else if ($(this).val()=='period_yearly')
             {
