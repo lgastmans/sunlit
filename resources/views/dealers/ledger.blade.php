@@ -77,7 +77,12 @@
         dealerSelect.select2({
             ajax: {
                 url: '{{route('ajax.dealers')}}',
-                dataType: 'json'
+                dataType: 'json',
+                data: function (term, page) {
+                    term.q = term, // search term
+                    term.dealer_id = {{ $dealer_id }},
+                    term.page_limit = 10
+                }
             }
         });
 
@@ -111,13 +116,6 @@
                     },
                     className: 'btn btn-warning',
                     download: 'open'
-                },
-                {
-                    text: '<i class="mdi mdi-filter"></i>&nbsp;Filter',
-                    // className: 'btn btn-light',
-                    action: function ( e, dt, node, config ) {
-                        $( ".filters-datewise" ).slideToggle('slow');
-                    }
                 }
             ],
             ajax            : 
@@ -135,7 +133,7 @@
                 { data: 'vch_type', orderable : false},
                 { data: 'vch_no', orderable : false},
                 { data: 'debit', orderable : false},
-                { data: 'credit', orderable : false}
+                { data: 'credit', orderable : false, visible: false}
             ],
             "columnDefs": [
                 { className: "dt-right", "targets": [4,5] },  //'_all' }

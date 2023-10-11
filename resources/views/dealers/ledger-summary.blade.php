@@ -4,7 +4,7 @@
     @parent() | Dealer Ledger
 @endsection
 
-@section('page-title', 'Dealer Ledger')
+@section('page-title', 'Dealer Total Sales Summary')
 
 @section('content')
 
@@ -17,9 +17,15 @@
                             <th>SN</th>
                             <th>Client</th>
                             <th>Debit</th>
-                            <th>Credit</th>
+<!--                             <th>Credit</th>
                             <th>Balance</th>
+ -->                        
                         </tr>
+                        <tr class="filters-category">
+                            <th class="no-filter"></th>
+                            <th><input type="text" class="form-control" value=""></th>
+                            <th class="no-filter"></th>
+                        </tr>                        
                     </thead>
                     <tbody></tbody>
                     <tfoot>
@@ -27,8 +33,9 @@
                             <th></th>
                             <th></th>
                             <th></th>
+<!--                             <th></th>
                             <th></th>
-                            <th></th>
+ -->                        
                         </tr>
                     </tfoot>
                 </table>
@@ -74,13 +81,13 @@
                     className: 'btn btn-warning',
                     download: 'open'
                 },
-                {
-                    text: '<i class="mdi mdi-filter"></i>&nbsp;Filter',
-                    // className: 'btn btn-light',
-                    action: function ( e, dt, node, config ) {
-                        $( ".filters-datewise" ).slideToggle('slow');
-                    }
-                }
+                // {
+                //     text: '<i class="mdi mdi-filter"></i>&nbsp;Filter',
+                //     // className: 'btn btn-light',
+                //     action: function ( e, dt, node, config ) {
+                //         $( ".filters-datewise" ).slideToggle('slow');
+                //     }
+                // }
             ],
             ajax            : 
             {
@@ -92,15 +99,23 @@
                 // }
             },            
             columns   : [
-                { data: 'serial_number', orderable : false},
-                { data: 'dealer', orderable : false},
-                { data: 'debit', orderable : false},
-                { data: 'credit', orderable : false},
-                { data: 'balance', orderable : false}
+                { data: 'serial_number', orderable : false, visible: false},
+                { 
+                    data: 'dealer', 
+                    orderable : false,
+                    "render": function(data, type, row, meta){
+                        data = '<a href="/dealers/ledger?id=' + row.dealer_id + '" target="_blank">' + data + '</a>';
+                        return data;
+                    }
+                },
+                { data: 'debit', orderable : true},
+                { data: 'credit', orderable : false, visible: false},
+                { data: 'balance', orderable : false, visible: false}
             ],
             "columnDefs": [
                 { className: "dt-right", "targets": [2,3,4] },  //'_all' }
             ],
+            "aaSorting": [[2, "desc"]],            
             oLanguage : {
                 "sInfo": "", //"_TOTAL_ entries",
                 "sInfoEmpty": "No entries",
@@ -154,7 +169,7 @@
                 $(cell).html('&nbsp');
             }
             else{
-                $('input', $('.filters-datewise th').eq($(ledgerTable.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
+                $('input', $('.filters-category th').eq($(ledgerTable.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
                     e.stopPropagation();
                     $(this).attr('title', $(this).val());
                     ledgerTable

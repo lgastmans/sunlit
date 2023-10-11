@@ -252,14 +252,23 @@ class DealerController extends Controller
         $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
         //$fmt->setSymbol(NumberFormatter::CURRENCY_SYMBOL, ''); 
 
-        $dealers = Dealer::all();
+        $column_arr = $request->get('columns');
+        if (!empty($column_arr[1]['search']['value'])){
+            $query = Dealer::select('*');
+            $query->where('dealers.company', 'like', '%'.$column_arr[1]['search']['value'].'%');
+            $dealers = $query->get();
+        }
+        else
+            $dealers = Dealer::all();
 
         foreach ($dealers as $dealer)
         {
             $row = array();
 
-            $row['serial_number']      = $serial;
+            $row['dealer_id']   = $dealer->id;
+            $row['serial_number'] = $serial;
             $row['dealer']      = $dealer->company.", ".$dealer->address." - ".$dealer->city."-".$dealer->zip_code;
+            $row['debit_unfmt'] = 0;
             $row['debit']       = 0;
             $row['credit']      = 0;
             $row['balance']     = 0;
@@ -277,6 +286,7 @@ class DealerController extends Controller
             //$query = SaleOrder::select(DB::raw('SUM(sale_orders.amount + sale_orders.transport_charges) AS dealer_debit'));
             $query->where('sale_orders.status', '>=', '4');
             $query->where('sale_orders.dealer_id', '=', $dealer->id);
+
             //$query->groupBy('sale_orders.dealer_id');
             //$ret = $query->toSql(); print_r($ret);die();
             //$sale_order = $query->first();
@@ -292,7 +302,10 @@ class DealerController extends Controller
 
             /**
              * get the payments total
+             * 
+             * October 2023: Rishi requested to remove the credit and balance columns
              */
+            /*
             $query = SaleOrderPayment::select(DB::raw('SUM(amount) AS dealer_credit'));
             $query->where('sale_order_payments.dealer_id', '=', $dealer->id);
             $query->groupBy('sale_order_payments.dealer_id');
@@ -305,26 +318,31 @@ class DealerController extends Controller
             }
 
             $balance_total = $debit_total - $credit_total;
+            */
 
-            if ($balance_total > 0)
-            {
+
+            // if ($balance_total > 0)
+            // {
+                $row['debit_unfmt'] = intval($debit_total);
                 $row['debit'] = $fmt->formatCurrency($debit_total, "INR");
-                $row['credit'] = $fmt->formatCurrency($credit_total, "INR");
-                $row['balance'] = $fmt->formatCurrency($balance_total, "INR");
+                $row['credit'] = 0; //$fmt->formatCurrency($credit_total, "INR");
+                $row['balance'] = 0; //$fmt->formatCurrency($balance_total, "INR");
 
                 $vdata[] = $row;
                 $serial++;
 
                 $debit_grand_total += $debit_total;
-                $credit_grand_total += $credit_total;
-                $balance_grand_total += $balance_total;                
-            }
+                //$credit_grand_total += $credit_total;
+                //$balance_grand_total += $balance_total;                
+            // }
 
         }
 
+        usort($vdata, fn($a, $b) => $b['debit_unfmt'] <=> $a['debit_unfmt']);
+
         $debit_grand_total = $fmt->formatCurrency($debit_grand_total, "INR");
-        $credit_grand_total = $fmt->formatCurrency($credit_grand_total, "INR");
-        $balance_grand_total = $fmt->formatCurrency($balance_grand_total, "INR");
+        $credit_grand_total = 0;//$fmt->formatCurrency($credit_grand_total, "INR");
+        $balance_grand_total = 0;//$fmt->formatCurrency($balance_grand_total, "INR");
 
         $response = array(
             //"draw" => $draw,
@@ -343,7 +361,11 @@ class DealerController extends Controller
 
     public function ledger(Request $request)
     {
-        return view('dealers.ledger');
+        $dealer_id = null;
+        if ($request->has('id'))
+            $dealer_id = $request->get('id');
+
+        return view('dealers.ledger', ['dealer_id'=>$dealer_id]);
     }
 
 
@@ -443,6 +465,11 @@ class DealerController extends Controller
         $query = Dealer::query();
         if ($request->has('q')){
             $query->where('company', 'like', $request->get('q').'%');
+        }
+        elseif ($request->has('dealer_id')) {
+            $dealer_id = $request->get('dealer_id');
+            if (!is_null($dealer_id))
+                $query->where('id','=',$request->get('dealer_id'));
         }
         $dealers = $query->select('id', 'company as text')->get();
         return ['results' => $dealers];
