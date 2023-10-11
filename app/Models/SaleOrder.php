@@ -734,19 +734,19 @@ class SaleOrder extends Model
                     $row_total = 0;
                     $res[$row->name]['Q1'] = $this->calculateQuarterStateSalesTotals('Q1', $year, $row->id);
                     $row_total += (float)$res[$row->name]['Q1']['total_amount_unfmt'];
-                    $totals['Q1'] += (float)$res[$category->name]['Q1']['total_amount_unfmt'];
+                    $totals['Q1'] += (float)$res[$row->name]['Q1']['total_amount_unfmt'];
 
                     $res[$row->name]['Q2'] = $this->calculateQuarterStateSalesTotals('Q2', $year, $row->id);
                     $row_total += (float)$res[$row->name]['Q2']['total_amount_unfmt'];
-                    $totals['Q1'] += (float)$res[$category->name]['Q1']['total_amount_unfmt'];
+                    $totals['Q1'] += (float)$res[$row->name]['Q1']['total_amount_unfmt'];
 
                     $res[$row->name]['Q3'] = $this->calculateQuarterStateSalesTotals('Q3', $year, $row->id);
                     $row_total += (float)$res[$row->name]['Q3']['total_amount_unfmt'];
-                    $totals['Q1'] += (float)$res[$category->name]['Q1']['total_amount_unfmt'];
+                    $totals['Q1'] += (float)$res[$row->name]['Q1']['total_amount_unfmt'];
 
                     $res[$row->name]['Q4'] = $this->calculateQuarterStateSalesTotals('Q4', $year, $row->id);
                     $row_total += (float)$res[$row->name]['Q4']['total_amount_unfmt'];
-                    $totals['Q1'] += (float)$res[$category->name]['Q1']['total_amount_unfmt'];
+                    $totals['Q1'] += (float)$res[$row->name]['Q1']['total_amount_unfmt'];
                     
                     $res[$row->name]['row_total'] = $row_total;
                 }
