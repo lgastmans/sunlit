@@ -50,7 +50,7 @@
                     </div>
                     <div class="col-2">
                         <button type="button" class="btn btn-info" id="btn-apply-filter">Apply</button>
-                        <button type="button" class="btn btn-danger" id="btn-clear-filter">Clear</button>
+                        <button type="button" class="btn btn-danger" id="btn-clear-filter">Clear All Filters</button>
                     </div>
                 </div>
                 <div class="table-responsive">
@@ -166,6 +166,15 @@
         $("#filter-to").val('')
         filter_from_val = null
         filter_to_val = null
+
+        // clears the search values
+        table.search('').columns().search('')
+        
+        // clears the text from the input fields
+        table.columns().eq(0).each(function(colIdx) {
+            $('input', $('.filters th').eq($(table.column(colIdx).header()).index()) ).val('')
+        })
+
         table.ajax.reload();
     })
 
