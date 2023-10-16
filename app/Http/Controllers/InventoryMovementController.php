@@ -267,12 +267,12 @@ class InventoryMovementController extends Controller
             }
             $order_dir = $order_arr[0]['dir'];
         }
-
-        $search = '';
-        if ($request->has('search')) {
-            $search_arr = $request->get('search');
-            $search = $search_arr['value'];
-        }
+        
+        // $search = '';
+        // if ($request->has('search')) {
+        //     $search_arr = $request->get('search');
+        //     $search = $search_arr['value'];
+        // }
 
         $arr = array();
 
@@ -311,6 +311,20 @@ class InventoryMovementController extends Controller
             ->join('warehouses', 'warehouses.id', '=', 'inventory_movements.warehouse_id')
             ->join('products', 'products.id', '=', 'inventory_movements.product_id')
             ->groupBy('warehouse_id','product_id');
+
+        if ($request->has('columns')) {
+            $columns = $request->get('columns');
+            if (!empty($columns[1]['search']['value'])){
+                $query->where('products.part_number', 'like', '%'.$columns[1]['search']['value'].'%');
+            }
+        }
+
+        if ($request->has('search')){
+            $search = $request->get('search')['value'];
+            $query->where( function ($q) use ($search){
+                $q->where('products.part_number', 'like', '%'.$search.'%');
+            });    
+        }
 
         /*
         if ($request->has('source') && $request->source == "warehouses"){
