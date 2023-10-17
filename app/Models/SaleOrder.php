@@ -523,6 +523,17 @@ class SaleOrder extends Model
             }
         }
 
+        $totals['grand_total'] = 0;
+        if ($select_period=='period_monthly')
+        {
+            for ($i=1;$i<=12;$i++)
+                $totals['grand_total'] += $totals[$i];
+        } 
+        else {
+            $totals['grand_total'] = $totals['Q1'] + $totals['Q2'] + $totals['Q3'] + $totals['Q4'];
+        }
+
+
         uasort($res, fn($a, $b) => $b['row_total'] <=> $a['row_total']);
 
         $res['column_total'] = $totals;
