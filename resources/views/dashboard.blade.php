@@ -126,16 +126,25 @@
 
 
 <ul id="nav-dashboard" class="nav nav-tabs nav-bordered mb-3">
+    @if ($userrole === 'Super-admin')
     <li class="nav-item">
         <a href="#" data-related="dashboard-category" data-bs-toggle="tab" aria-expanded="false" class="nav-link active">
             Category-wise Sales Totals
         </a>
     </li>
+    @endif
     <li class="nav-item">
+        @if ($userrole==='Super-admin')
         <a href="#" data-related="dashboard-inventory" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
             Inventory
         </a>
+        @else
+        <a href="#" data-related="dashboard-inventory" data-bs-toggle="tab" aria-expanded="false" class="nav-link active">
+            Inventory
+        </a>
+        @endif
     </li>
+    @if ($userrole === 'Super-admin')
     <li class="nav-item">
         <a href="#" data-related="dashboard-product" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
             Product-wise Sales Totals
@@ -146,6 +155,7 @@
             State-wise Sales Totals
         </a>
     </li>
+    @endif
 </ul> <!-- end nav-->
 
 <div class="tab-content">
@@ -184,7 +194,11 @@
     </div> <!-- dashboard-category -->
 
 
+    @if ($userrole === 'Super-admin')
     <div class="tab-pane show" id="dashboard-inventory">
+    @else
+    <div class="tab-pane show active" id="dashboard-inventory">
+    @endif
         <!--
             Inventory 
         -->
