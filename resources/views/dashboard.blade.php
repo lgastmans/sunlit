@@ -5,125 +5,6 @@
 @section('content')
 
 
-<!--
-
-    Current exchange rate
-
- -->
-<div class="row">
-    <div class="col-xl-3 col-lg-4 ">
-        <div class="card cta-box overflow-hidden">
-            <div class="card-body">
-                <div class="float-end">
-                    <i class="mdi mdi-currency-usd widget-icon"></i>
-                </div>
-                <h5 class="text-muted fw-normal mt-0" title="Growth">Current exchange rate</h5>
-                <h3 class="mt-3 mb-3 text-warning">{{ __('app.currency_symbol_inr')}} {{ number_format(\Setting::get('purchase_order.exchange_rate'),2) }}</h3>
-                <p class="mb-0 text-muted">
-                    @if (str_contains($exchange_rate_update_ago, 'days'))
-                        <a href="javascript:void(0);" class="update-echange-rate">
-                            <span class="text-success me-2"><i class="mdi mdi-refresh"></i> last update</span>
-                        </a>
-                    @else
-                        <span class="text-success me-2"><i class="mdi mdi-refresh"></i> last update</span>
-                    @endif
-                    <span id="currency-rate" class="text-nowrap"><a href="#" data-bs-container="#currency-rate" data-bs-toggle="tooltip" title="{{ \Carbon\Carbon::parse( \Setting::get('exchange_rate_updated_at') )->toDayDateTimeString() }}">{{ $exchange_rate_update_ago }}</a></span>
-                </p>
-            </div>
-            <!-- end card-body -->
-        </div>
-    </div> <!-- end col -->
-
-{{--
-    <div class="col-lg-4">
-        <div class="card cta-box">
-            <div class="d-flex card-header justify-content-between align-items-center">
-                <h4 class="header-title">Revenue By Location</h4>
-            </div>
-
-            <div class="card-body pt-0">
-                <div class="mb-4 mt-3">
-                    <!-- <div id="world-map-markers" style="height: 217px"></div> -->
-                    <div id="india-vectormap" style="height: 217px"></div>
-                </div>    
-            </div>
-        </div>
-    </div>
---}}
-{{-- 
-    <div class="col-xl-5 col-lg-6">
-       <div class="row">
-            <div class="col-sm-6">
-                <div class="card widget-flat">
-                    <div class="card-body">
-                        <div class="float-end">
-                            <i class="mdi mdi-account-multiple widget-icon"></i>
-                        </div>
-                        <h5 class="text-muted fw-normal mt-0" title="Number of Customers">Customers</h5>
-                        <h3 class="mt-3 mb-3">36,254</h3>
-                        <p class="mb-0 text-muted">
-                            <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 5.27%</span>
-                            <span class="text-nowrap">Since last month</span>  
-                        </p>
-                    </div> <!-- end card-body-->
-                </div> <!-- end card-->
-            </div> <!-- end col-->
-
-            <div class="col-sm-6">
-                <div class="card widget-flat">
-                    <div class="card-body">
-                        <div class="float-end">
-                            <i class="mdi mdi-cart-plus widget-icon bg-success-lighten text-success"></i>
-                        </div>
-                        <h5 class="text-muted fw-normal mt-0" title="Number of Orders">Orders</h5>
-                        <h3 class="mt-3 mb-3">5,543</h3>
-                        <p class="mb-0 text-muted">
-                            <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 1.08%</span>
-                            <span class="text-nowrap">Since last month</span>
-                        </p>
-                    </div> <!-- end card-body-->
-                </div> <!-- end card-->
-            </div> <!-- end col-->
-        </div> <!-- end row -->
-
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="card widget-flat">
-                    <div class="card-body">
-                        <div class="float-end">
-                            <i class="mdi mdi-currency-usd widget-icon bg-success-lighten text-success"></i>
-                        </div>
-                        <h5 class="text-muted fw-normal mt-0" title="Average Revenue">Revenue</h5>
-                        <h3 class="mt-3 mb-3">$6,254</h3>
-                        <p class="mb-0 text-muted">
-                            <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 7.00%</span>
-                            <span class="text-nowrap">Since last month</span>
-                        </p>
-                    </div> <!-- end card-body-->
-                </div> <!-- end card-->
-            </div> <!-- end col-->
-
-            <div class="col-sm-6">
-                <div class="card widget-flat">
-                    <div class="card-body">
-                        <div class="float-end">
-                            <i class="mdi mdi-pulse widget-icon"></i>
-                        </div>
-                        <h5 class="text-muted fw-normal mt-0" title="Growth">Growth</h5>
-                        <h3 class="mt-3 mb-3">+ 30.56%</h3>
-                        <p class="mb-0 text-muted">
-                            <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 4.87%</span>
-                            <span class="text-nowrap">Since last month</span>
-                        </p>
-                    </div> <!-- end card-body-->
-                </div> <!-- end card-->
-            </div> <!-- end col-->
-        </div> <!-- end row -->
-    </div> <!-- end col -->
---}}
-
-</div>
-
 
 <ul id="nav-dashboard" class="nav nav-tabs nav-bordered mb-3">
     @if ($userrole === 'Super-admin')
@@ -345,6 +226,127 @@
     </div> <!-- dashboard-state -->
 
 </div> <!-- tab-content -->
+
+
+<!--
+
+    Current exchange rate
+
+ -->
+<div class="row">
+    <div class="col-xl-3 col-lg-4 ">
+        <div class="card cta-box overflow-hidden">
+            <div class="card-body">
+                <div class="float-end">
+                    <i class="mdi mdi-currency-usd widget-icon"></i>
+                </div>
+                <h5 class="text-muted fw-normal mt-0" title="Growth">Current exchange rate</h5>
+                <h3 class="mt-3 mb-3 text-warning">{{ __('app.currency_symbol_inr')}} {{ number_format(\Setting::get('purchase_order.exchange_rate'),2) }}</h3>
+                <p class="mb-0 text-muted">
+                    @if (str_contains($exchange_rate_update_ago, 'days'))
+                        <a href="javascript:void(0);" class="update-echange-rate">
+                            <span class="text-success me-2"><i class="mdi mdi-refresh"></i> last update</span>
+                        </a>
+                    @else
+                        <span class="text-success me-2"><i class="mdi mdi-refresh"></i> last update</span>
+                    @endif
+                    <span id="currency-rate" class="text-nowrap"><a href="#" data-bs-container="#currency-rate" data-bs-toggle="tooltip" title="{{ \Carbon\Carbon::parse( \Setting::get('exchange_rate_updated_at') )->toDayDateTimeString() }}">{{ $exchange_rate_update_ago }}</a></span>
+                </p>
+            </div>
+            <!-- end card-body -->
+        </div>
+    </div> <!-- end col -->
+
+{{--
+    <div class="col-lg-4">
+        <div class="card cta-box">
+            <div class="d-flex card-header justify-content-between align-items-center">
+                <h4 class="header-title">Revenue By Location</h4>
+            </div>
+
+            <div class="card-body pt-0">
+                <div class="mb-4 mt-3">
+                    <!-- <div id="world-map-markers" style="height: 217px"></div> -->
+                    <div id="india-vectormap" style="height: 217px"></div>
+                </div>    
+            </div>
+        </div>
+    </div>
+--}}
+{{-- 
+    <div class="col-xl-5 col-lg-6">
+       <div class="row">
+            <div class="col-sm-6">
+                <div class="card widget-flat">
+                    <div class="card-body">
+                        <div class="float-end">
+                            <i class="mdi mdi-account-multiple widget-icon"></i>
+                        </div>
+                        <h5 class="text-muted fw-normal mt-0" title="Number of Customers">Customers</h5>
+                        <h3 class="mt-3 mb-3">36,254</h3>
+                        <p class="mb-0 text-muted">
+                            <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 5.27%</span>
+                            <span class="text-nowrap">Since last month</span>  
+                        </p>
+                    </div> <!-- end card-body-->
+                </div> <!-- end card-->
+            </div> <!-- end col-->
+
+            <div class="col-sm-6">
+                <div class="card widget-flat">
+                    <div class="card-body">
+                        <div class="float-end">
+                            <i class="mdi mdi-cart-plus widget-icon bg-success-lighten text-success"></i>
+                        </div>
+                        <h5 class="text-muted fw-normal mt-0" title="Number of Orders">Orders</h5>
+                        <h3 class="mt-3 mb-3">5,543</h3>
+                        <p class="mb-0 text-muted">
+                            <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 1.08%</span>
+                            <span class="text-nowrap">Since last month</span>
+                        </p>
+                    </div> <!-- end card-body-->
+                </div> <!-- end card-->
+            </div> <!-- end col-->
+        </div> <!-- end row -->
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card widget-flat">
+                    <div class="card-body">
+                        <div class="float-end">
+                            <i class="mdi mdi-currency-usd widget-icon bg-success-lighten text-success"></i>
+                        </div>
+                        <h5 class="text-muted fw-normal mt-0" title="Average Revenue">Revenue</h5>
+                        <h3 class="mt-3 mb-3">$6,254</h3>
+                        <p class="mb-0 text-muted">
+                            <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 7.00%</span>
+                            <span class="text-nowrap">Since last month</span>
+                        </p>
+                    </div> <!-- end card-body-->
+                </div> <!-- end card-->
+            </div> <!-- end col-->
+
+            <div class="col-sm-6">
+                <div class="card widget-flat">
+                    <div class="card-body">
+                        <div class="float-end">
+                            <i class="mdi mdi-pulse widget-icon"></i>
+                        </div>
+                        <h5 class="text-muted fw-normal mt-0" title="Growth">Growth</h5>
+                        <h3 class="mt-3 mb-3">+ 30.56%</h3>
+                        <p class="mb-0 text-muted">
+                            <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 4.87%</span>
+                            <span class="text-nowrap">Since last month</span>
+                        </p>
+                    </div> <!-- end card-body-->
+                </div> <!-- end card-->
+            </div> <!-- end col-->
+        </div> <!-- end row -->
+    </div> <!-- end col -->
+--}}
+
+</div>
+
 
 
 
