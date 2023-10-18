@@ -25,6 +25,12 @@
 
 <script src="{{ asset('/js/app.js') }}"></script>
 
+<!-- 
+<script src="{{ asset('/js/jquery-jvectormap-1.2.2.min.js') }}"></script>
+<script src="{{ asset('/js/jquery-jvectormap-world-mill-en.js') }}"></script>
+<script src="{{ asset('/js/jquery-jvectormap-in-mill-en.js') }}"></script>
+<script src="{{ asset('/js/demo.vector-maps.js') }}"></script>
+ -->
 @stack('page-scripts')
 
 @yield('page-scripts')
