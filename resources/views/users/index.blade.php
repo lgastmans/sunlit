@@ -61,6 +61,7 @@
         scrollY: "500px",
         paging: false,
         buttons: [
+            @if (Auth::user()->hasRole('super-admin'))
             {
                 text: '<i class="mdi mdi-plus-circle me-2"></i> {{ __('app.add_title', ['field' => 'user']) }}',
                 className: 'btn btn-light   ',
@@ -68,6 +69,7 @@
                     window.location.href="{{ route('users.create') }}"
                 }
             },
+            @endif
             {
                 extend: 'excelHtml5',
                 exportOptions: {
