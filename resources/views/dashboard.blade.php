@@ -5,197 +5,6 @@
 @section('content')
 
 
-<!-- 
-
-    Category-wise Sales Totals 
-
--->
-@if ($userrole === 'Super-admin')
-<div class="row">
-    <div class="col-xl-12 col-lg-12 ">
-        <div class="card border-primary mb-3">
-            <div class="card-body">
-                <h4>Category-wise Sales Totals</h4>
-                <div class="row justify-content-start">
-                    <span class="col-1 pt-1">Period</span>
-                    <div class="col-2">
-                        <select class="period-select form-control" name="period_id" id="select_period">
-                            <option value="period_monthly" selected>Monthly</option>
-                            <option value="period_quarterly">Quarterly</option>
-                        </select>
-                    </div>
-                    
-                    <div class="col-2" id="display_monthly_year">
-                        <input type="text" class="form-control " id="year_id" value="{{ date('Y') }}" required data-provide="datepicker" 
-                        data-date-container="#display_monthly_year">
-                    </div>  
-                </div>              
-            </div>
-            <div class="card-body" id="table-sales-tables-container"></div>
-        </div>
-
-    </div>
-</div>
-@endif
-
-<!--
-
-    Inventory 
-
--->
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="row mb-2">
-                    <h4 class="header-title mb-3">Inventory</h4><h5>Listed by highest selling products first</h5>
-                    <p><small>
-                        The <strong>Available</strong> column shows the actual, physical stock, regardless of the <strong>Blocked</strong> or <strong>Booked</strong> columns.<br>
-                        The <strong>Blocked</strong> and <strong>Booked</strong> columns only affect the <strong>Projected</strong> column. The <strong>Projected</strong> column is calculated as <i>Projected = Available + Ordered - Booked</i>
-                    </small></p>
-                    <div class="table-responsive">
-                        <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap table-has-dlb-click" id="inventory-datatable">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Warehouses</th>
-                                    <th>Category</th>
-                                    <th>Supplier</th>
-                                    <th>Part Number</th>
-                                    <th>Available</th>
-                                    <th>Ordered</th>
-                                    <th>Blocked</th>
-                                    <th>Booked</th>
-                                    <th>Projected</th>
-                                    <th>Total Sales</th>
-                                </tr>
-<!--                                 <tr class="filters" style="display: none;">
-                                    <th><input type="text" class="form-control"></th>
-                                    <th><input type="text" class="form-control"></th>
-                                    <th><input type="text" class="form-control"></th>
-                                    <th><input type="text" class="form-control"></th>
-                                    {{-- <th><input type="text" class="form-control"></th> --}}
-                                    <th><select class="form-control available-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
-                                    <th><select class="form-control ordered-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
-                                    <th><select class="form-control blocked-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
-                                    <th><select class="form-control booked-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
-                                    <th><select class="form-control projected-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }} >{{ $v }}</option> @endforeach</select></th>
-                                    {{-- <th class="no-filter"><select disabled class="form-control projected-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th> --}}
-                                </tr>                            
- -->                            </thead>
-                            <tbody>
-
-                            </tbody>
-                        </table>
-                    </div>
-            </div> <!-- end card-body-->
-        </div> <!-- end card-->
-    </div> <!-- end col -->
-</div>
-
-
-<!-- 
-
-    Product-wise Sales Totals 
-
--->
-@if ($userrole === 'Super-admin')
-<div class="row">
-    <div class="col-xl-12 col-lg-12 ">
-
-        <div class="card border-primary mb-3">
-            <div class="card-body">
-                <h4>Product-wise Sales Totals <small>(Top 5 products)</small></h4>
-
-                <div class="row justify-content-start">
-                    <span class="col-1 pt-1">Year</span>
-                    <div class="col-2" id="display_product_year">
-                        <input type="text" class="form-control " id="product_year_id" value="{{ date('Y') }}" required data-provide="datepicker" 
-                        data-date-container="#display_product_year">
-                    </div>  
-                </div>              
-                <div class="table-responsive">
-                    <table id="table-product-sales" class="table table-striped table-condensed" cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <th>Part Number</th>
-                                <th style="text-align: right;">January</th>
-                                <th style="text-align: right;">February</th>
-                                <th style="text-align: right;">March</th>
-                                <th style="text-align: right;">April</th>
-                                <th style="text-align: right;">May</th>
-                                <th style="text-align: right;">June</th>
-                                <th style="text-align: right;">July</th>
-                                <th style="text-align: right;">August</th>
-                                <th style="text-align: right;">September</th>
-                                <th style="text-align: right;">October</th>
-                                <th style="text-align: right;">November</th>
-                                <th style="text-align: right;">December</th>
-                                <th style="text-align: right;">Total</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                        <tfoot>
-                            <tr>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div> {{-- table-responsive --}}
-            </div>
-        </div>
-
-    </div>
-</div>
-@endif
-
-
-<!--
-
-    State-wise Sales Totals 
-
--->
-@if ($userrole === 'Super-admin')
-<div class="row">
-    <div class="col-xl-12 col-lg-12 ">
-
-        <div class="card border-primary mb-3">
-            <div class="card-body">
-                <h4>State-wise Sales Totals</h4>
-                <div class="row justify-content-start">
-                    <span class="col-1 pt-1">Period</span>
-                    <div class="col-2">
-                        <select class="period-state form-control" name="state_period_id" id="select_state_period">
-                            <option value="period_monthly" selected>Monthly</option>
-                            <option value="period_quarterly">Quarterly</option>
-                        </select>
-                    </div>
-                    <div class="col-2" id="display_state_year">
-                        <input type="text" class="form-control " id="state_year_id" value="{{ date('Y') }}" required data-provide="datepicker" 
-                        data-date-container="#display_state_year">
-                    </div>                
-                        
-                </div>
-            </div>
-            <div class="card-body" id="table-state-tables-container"></div>
-        </div>
-
-    </div>
-</div>
-@endif
-
 <!--
 
     Current exchange rate
@@ -227,6 +36,214 @@
 </div>
 
 
+<ul id="nav-dashboard" class="nav nav-tabs nav-bordered mb-3">
+    <li class="nav-item">
+        <a href="#" data-related="dashboard-category" data-bs-toggle="tab" aria-expanded="false" class="nav-link active">
+            Category-wise Sales Totals
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="#" data-related="dashboard-inventory" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
+            Inventory
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="#" data-related="dashboard-product" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
+            Product-wise Sales Totals
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="#" data-related="dashboard-state" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
+            State-wise Sales Totals
+        </a>
+    </li>
+</ul> <!-- end nav-->
+
+<div class="tab-content">
+
+    <div class="tab-pane show active" id="dashboard-category">
+        <!-- 
+            Category-wise Sales Totals 
+        -->
+        @if ($userrole === 'Super-admin')
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 ">
+                <div class="card border-primary mb-3">
+                    <div class="card-body">
+                        <h4>Category-wise Sales Totals</h4>
+                        <div class="row justify-content-start">
+                            <span class="col-1 pt-1">Period</span>
+                            <div class="col-2">
+                                <select class="period-select form-control" name="period_id" id="select_period">
+                                    <option value="period_monthly" selected>Monthly</option>
+                                    <option value="period_quarterly">Quarterly</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-2" id="display_monthly_year">
+                                <input type="text" class="form-control " id="year_id" value="{{ date('Y') }}" required data-provide="datepicker" 
+                                data-date-container="#display_monthly_year">
+                            </div>  
+                        </div>              
+                    </div>
+                    <div class="card-body" id="table-sales-tables-container"></div>
+                </div>
+
+            </div>
+        </div>
+        @endif
+    </div> <!-- dashboard-category -->
+
+
+    <div class="tab-pane show" id="dashboard-inventory">
+        <!--
+            Inventory 
+        -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row mb-2">
+                            <h4 class="header-title mb-3">Inventory</h4><h5>Listed by highest selling products first</h5>
+                            <p><small>
+                                The <strong>Available</strong> column shows the actual, physical stock, regardless of the <strong>Blocked</strong> or <strong>Booked</strong> columns.<br>
+                                The <strong>Blocked</strong> and <strong>Booked</strong> columns only affect the <strong>Projected</strong> column. The <strong>Projected</strong> column is calculated as <i>Projected = Available + Ordered - Booked</i>
+                            </small></p>
+                            <div class="table-responsive">
+                                <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap table-has-dlb-click" id="inventory-datatable">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Warehouses</th>
+                                            <th>Category</th>
+                                            <th>Supplier</th>
+                                            <th>Part Number</th>
+                                            <th>Available</th>
+                                            <th>Ordered</th>
+                                            <th>Blocked</th>
+                                            <th>Booked</th>
+                                            <th>Projected</th>
+                                            <th>Total Sales</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div> <!-- end card-body-->
+                </div> <!-- end card-->
+            </div> <!-- end col -->
+        </div>
+    </div> <!-- dashboard-inventory -->
+
+
+    <div class="tab-pane show" id="dashboard-product">
+        <!-- 
+            Product-wise Sales Totals 
+        -->
+        @if ($userrole === 'Super-admin')
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 ">
+
+                <div class="card border-primary mb-3">
+                    <div class="card-body">
+                        <h4>Product-wise Sales Totals <small>(Top 5 products)</small></h4>
+
+                        <div class="row justify-content-start">
+                            <span class="col-1 pt-1">Year</span>
+                            <div class="col-2" id="display_product_year">
+                                <input type="text" class="form-control " id="product_year_id" value="{{ date('Y') }}" required data-provide="datepicker" 
+                                data-date-container="#display_product_year">
+                            </div>  
+                        </div>              
+                        <div class="table-responsive">
+                            <table id="table-product-sales" class="table table-striped table-condensed" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Part Number</th>
+                                        <th style="text-align: right;">January</th>
+                                        <th style="text-align: right;">February</th>
+                                        <th style="text-align: right;">March</th>
+                                        <th style="text-align: right;">April</th>
+                                        <th style="text-align: right;">May</th>
+                                        <th style="text-align: right;">June</th>
+                                        <th style="text-align: right;">July</th>
+                                        <th style="text-align: right;">August</th>
+                                        <th style="text-align: right;">September</th>
+                                        <th style="text-align: right;">October</th>
+                                        <th style="text-align: right;">November</th>
+                                        <th style="text-align: right;">December</th>
+                                        <th style="text-align: right;">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div> {{-- table-responsive --}}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        @endif
+    </div> <!-- dashboard-product -->
+
+
+    <div class="tab-pane show" id="dashboard-state">
+        <!--
+            State-wise Sales Totals 
+        -->
+        @if ($userrole === 'Super-admin')
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 ">
+
+                <div class="card border-primary mb-3">
+                    <div class="card-body">
+                        <h4>State-wise Sales Totals</h4>
+                        <div class="row justify-content-start">
+                            <span class="col-1 pt-1">Period</span>
+                            <div class="col-2">
+                                <select class="period-state form-control" name="state_period_id" id="select_state_period">
+                                    <option value="period_monthly" selected>Monthly</option>
+                                    <option value="period_quarterly">Quarterly</option>
+                                </select>
+                            </div>
+                            <div class="col-2" id="display_state_year">
+                                <input type="text" class="form-control " id="state_year_id" value="{{ date('Y') }}" required data-provide="datepicker" 
+                                data-date-container="#display_state_year">
+                            </div>                
+                                
+                        </div>
+                    </div>
+                    <div class="card-body" id="table-state-tables-container"></div>
+                </div>
+
+            </div>
+        </div>
+        @endif
+    </div> <!-- dashboard-state -->
+
+</div> <!-- tab-content -->
+
+
 
 @endsection
 
@@ -236,7 +253,20 @@
 
 $(document).ready(function () {
     "use strict";
-    
+
+    // $("#nav-dashboard li").on("click", function(){
+    //     console.log($(this).val());
+    // });
+
+    $("#nav-dashboard li a").on("click", function() {
+        $("div[id=dashboard-category]").hide();
+        $("div[id=dashboard-inventory]").hide();
+        $("div[id=dashboard-product]").hide();
+        $("div[id=dashboard-state]").hide();
+        $("div[id=" + $(this).attr("data-related") + "]").show();
+        
+    });    
+
     drawSalesTotals();
     drawStateTotals();
 
