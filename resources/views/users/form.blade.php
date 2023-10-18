@@ -25,6 +25,7 @@
                             <div class="col-5">
                                 <x-forms.input label="Name" name="name" value="{{ old('name', $user->name) }}" required="true"/>
                             </div>
+                            @if (Auth::user()->hasRole('super-admin'))
                             <div class="col-3">
                                 <label class="form-label" for="role-select">Role</label>
                                 <select class="role-select form-control" name="role-select" required>
@@ -36,6 +37,7 @@
                                     {{ __('error.form_invalid_field', ['field' => 'role']) }}
                                 </div>
                             </div>
+                            @endif
                         </div>
                         
                         <div class="row mb-3">
@@ -50,7 +52,17 @@
                                 </div>
                             </div>
                         </div>
-                        
+
+<!--
+                        <div class="row mb-3">
+                            <div class="col-8">
+                                <div class="form-check form-switch">
+                                    <input type="checkbox" class="form-check-input" id="canViewReports">
+                                    <label class="form-check-label" for="canViewReports">Can view reports</label>
+                                </div>
+                            </div>
+                        </div> 
+-->
                        
                         <button class="btn btn-primary" type="submit">@if ($user->id) {{ __('app.edit_title', ['field' => 'user']) }} @else {{ __('app.add_title', ['field' => 'user']) }} @endif</button>
 
