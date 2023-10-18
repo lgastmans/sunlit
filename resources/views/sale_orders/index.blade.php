@@ -65,6 +65,7 @@
                                 <th>Expected On</th> 
                                 <th style="text-align: right;">Amount</th>
                                 <th style="width:100px;">Status</th> 
+                                <th>Created On</th>
                                 <th>Created By</th> 
                             </tr>
                             <tr class="filters">
@@ -96,6 +97,7 @@
                                 </th>
                                 <th class="no-filter"><input type="text" class="form-control"></th>
                                 <th><select class="form-control status-select"><option value="all">All</option>@foreach($status as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
+                                <th class="no-filter"><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
                             </tr>
                         </thead>
@@ -291,6 +293,10 @@
                 'data': 'status',
                 'orderable': true
             },
+            {
+                'data': 'created_at',
+                'orderable': true
+            },
             { 
                 'data': 'user',
                 'orderable': true 
@@ -303,7 +309,7 @@
         "select": {
             "style": "multi"
         },
-        "aaSorting": [[4, "desc"]],
+        "aaSorting": [[8, "desc"]],
         "drawCallback": function () {
             $('.dataTables_paginate > .pagination').addClass('pagination-rounded');           
         },

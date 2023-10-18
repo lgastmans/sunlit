@@ -83,7 +83,7 @@ class SaleOrderController extends Controller
                     case 3:
                         $order_column = "states.name";
                         break;
-                    case 8:
+                    case 9:
                         $order_column = "users.name";
                         break;
                     default:
@@ -192,6 +192,7 @@ class SaleOrderController extends Controller
             $query->skip($start)->take($length);
 
         $query->orderBy($order_column, $order_dir);
+        //$sql = $query->toSql();dd($sql);
         $orders = $query->get(['sale_orders.*', 'warehouses.name', 'dealers.company', 'users.name']);
 
         $arr = array();
@@ -216,6 +217,7 @@ class SaleOrderController extends Controller
                 //(isset($order->amount)) ? trans('app.currency_symbol_inr')." ".$order->amount : "",
                 "amount" => $total_amount, 
                 "status" => $order->display_status,
+                "created_at" => $order->created_at->toDateString(),
                 "user" => $order->user->display_name
             );
         }
