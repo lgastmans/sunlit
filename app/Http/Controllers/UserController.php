@@ -118,8 +118,13 @@ class UserController extends Controller
      */
     public function create()
     {
-        $user = new User();
-        return view('users.form', ['user' => $user]);
+        $user = Auth::user();
+        if ($user->hasRole('super-admin'))
+        {
+            $user = new User();
+            return view('users.form', ['user' => $user]);
+        }
+        return abort(403, trans('error.unauthorized'));
     }
 
     /**
