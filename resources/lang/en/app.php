@@ -22,4 +22,5 @@ return [
     'currency_symbol_inr' => '₹',
     'currency_symbol_usd' => '$',
     'currency_symbol_eur' => '€',
+    'foreign_key_constraints' => 'Cannot delete. :field exist for this :model',
 ];

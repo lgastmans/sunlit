@@ -30,4 +30,8 @@ class Dealer extends Model
         return $this->belongsTo(State::class);
     }
 
+    public function sale_orders()
+    {
+        return $this->hasMany(SaleOrder::class);
+    }
 }

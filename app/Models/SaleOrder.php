@@ -838,12 +838,12 @@ class SaleOrder extends Model
         $this->total_advance = 0;
         $this->balance_due = 0;
 
-
-        if ($this->dealer->state->freight_zone_id)
-        {
-            $zone = FreightZone::find($this->dealer->state->freight_zone_id);
-            $rate_per_kg = $zone->rate_per_kg;
-        }
+        if ($this->dealer)
+            if ($this->dealer->state->freight_zone_id)
+            {
+                $zone = FreightZone::find($this->dealer->state->freight_zone_id);
+                $rate_per_kg = $zone->rate_per_kg;
+            }
 
 
         /**

@@ -596,8 +596,16 @@ class DealerController extends Controller
     {
         $user = Auth::user();
         if ($user->can('delete dealers')){
-            Dealer::destroy($id);
-            return redirect(route('dealers'))->with('success', trans('app.record_deleted', ['field' => 'dealers']));
+
+            $dealer = Dealer::find($id);
+
+            if ($dealer->sale_orders()->exists()) {
+                return redirect(route('dealers'))->with('error', trans('app.foreign_key_constraints', ['field' => 'Invoices', 'model'=>'dealer']));
+            }
+            else {
+                Dealer::destroy($id);
+                return redirect(route('dealers'))->with('success', trans('app.record_deleted', ['field' => 'dealers']));
+            }
         }
         return abort(403, trans('error.unauthorized'));
     }
