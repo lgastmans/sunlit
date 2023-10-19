@@ -121,6 +121,35 @@ class SaleOrder extends Model
         return $response;
     }
 
+
+    /**
+     * 
+     * Duplicate a Sales Order
+     * 
+     */
+    public function duplicateOrder()
+    {
+        $clone = $this->replicate();
+        $clone->push();
+
+        foreach ($this->items as $item)
+        {
+            $newItem = $item->replicate()->fill(['sale_order_id' => $clone->id]);
+            $newItem->save();
+            //$clone->items()->attach($item);
+        }
+
+        $clone->created_at = Carbon::now();
+        $clone->status = SaleOrder::DRAFT;
+        $clone->order_number = $this->order_number."-duplicate";
+        $clone->order_number_slug = $this->order_number_slug."-duplicate";
+
+        $clone->save();
+
+        return $clone;
+    }
+
+
     /**
      * 
      * Calculate the sales totals per product

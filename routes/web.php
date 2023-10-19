@@ -70,6 +70,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('/sale-orders/{id}/booked', [SaleOrderController::class, 'booked'])->name('sale-orders.booked');
     Route::put('/sale-orders/{id}/dispatched', [SaleOrderController::class, 'dispatched'])->name('sale-orders.dispatched');
     Route::put('/sale-orders/{id}/delivered', [SaleOrderController::class, 'delivered'])->name('sale-orders.delivered');
+    Route::put('/sale-orders/{id}/duplicate', [SaleOrderController::class, 'duplicate'])->name('sale-orders.duplicate');
     Route::put('/sale-orders/{id}', [SaleOrderController::class, 'update'])->name('sale-orders.update');
     Route::delete('/sale-orders/{id}', [SaleOrderController::class, 'destroy'])->name('sale-orders.delete');
 

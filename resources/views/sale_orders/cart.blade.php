@@ -136,7 +136,7 @@
                                         <button class="btn btn-danger btn-sm edit-order-number-cancel" type="button">Cancel</button>
                                     </div>
                                     <div class="invalid-feedback">
-                                        Order number already exist
+                                        Order number already exists
                                     </div>
                                 </form>
                                 

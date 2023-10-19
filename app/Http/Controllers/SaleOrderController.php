@@ -1042,6 +1042,18 @@ class SaleOrderController extends Controller
         //
     }
 
+    public function duplicate(Request $request, $id)
+    {
+
+        $order = SaleOrder::find($id);
+        if ($order) {
+            $clone = $order->duplicateOrder();
+            return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'field' => $clone->order_number]);
+        }
+
+        return response()->json(['success'=>'false', 'message'=> 'Sales Order not found', 'field' => null]);
+    }
+
     /**
      * Update the specified resource in storage.
      *

@@ -234,6 +234,14 @@
             <div class="mt-4 mt-lg-0 rounded">
                 <div class="card mt-4 border">
                     <div class="card-body">
+                        <button id="btn-duplicate-order" class="col-lg-12 text-center btn btn-warning" name="duplicate_order">Duplicate order</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-4 mt-lg-0 rounded">
+                <div class="card mt-4 border">
+                    <div class="card-body">
                         <button id="{{ $order->id }}" class="col-lg-12 text-center btn btn-danger" type="submit" name="delete_order" data-bs-toggle="modal" data-bs-target="#delete-modal-order"><i class="mdi mdi-delete"></i> Delete order</button>
                     </div>
                 </div>
@@ -373,6 +381,36 @@
                 });        
 
             }); // transport charges            
+
+
+            $("#btn-duplicate-order").on("click", function(e){
+                //e.preventDefault();
+                
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                    }
+                }); 
+
+                var order_id = $('#sale-order-id').val()
+                var route = '{{ route("sale-orders.duplicate", ":id") }}';
+                route = route.replace(':id', order_id);
+
+                $.ajax({
+                    type: 'POST',
+                    url: route,
+                    dataType: 'json',
+                    data: { 
+                        'order_id' : order_id, 
+                        '_method': 'PUT'
+                    },
+                    success : function(result){
+                        console.log(result);
+                        $.NotificationApp.send("Success","Duplicate order "+result.field+" created ","top-right","","success")
+                    }
+                });
+            }); // duplicate order
+
 
         }); //document ready
 
