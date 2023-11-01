@@ -230,7 +230,7 @@
         @include('sale_orders.payments')
     </div>
     <div class="col-lg-4">
-        @if ($order->status >= 2 && $order->status <= 3)
+        @if ($order->status >= 2 && $order->status <= 4)
             <div class="mt-4 mt-lg-0 rounded">
                 <div class="card mt-4 border">
                     <div class="card-body">
@@ -238,7 +238,8 @@
                     </div>
                 </div>
             </div>
-            
+        @endif            
+        @if ($order->status >= 2 && $order->status <= 3)            
             <div class="mt-4 mt-lg-0 rounded">
                 <div class="card mt-4 border">
                     <div class="card-body">
