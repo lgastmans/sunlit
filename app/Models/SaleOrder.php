@@ -523,27 +523,45 @@ class SaleOrder extends Model
             }
             else
             {
-
-
                 if ($quarter=="_ALL")
                 {
                     $row_total = 0;
                     
-                    $res[$category->name]['Q1'] = $this->calculateQuarterSalesTotals('Q1', $year, $category->id);
-                    $row_total += (float)$res[$category->name]['Q1']['total_amount_unfmt'];
-                    $totals['Q1'] += (float)$res[$category->name]['Q1']['total_amount_unfmt'];
+                    if ($select_period=='period_quarterly') {
+                        $res[$category->name]['Q1'] = $this->calculateQuarterSalesTotals('Q1', $year, $category->id);
+                        $row_total += (float)$res[$category->name]['Q1']['total_amount_unfmt'];
+                        $totals['Q1'] += (float)$res[$category->name]['Q1']['total_amount_unfmt'];
 
-                    $res[$category->name]['Q2'] = $this->calculateQuarterSalesTotals('Q2', $year, $category->id);
-                    $row_total += (float)$res[$category->name]['Q2']['total_amount_unfmt'];
-                    $totals['Q2'] += (float)$res[$category->name]['Q2']['total_amount_unfmt'];
+                        $res[$category->name]['Q2'] = $this->calculateQuarterSalesTotals('Q2', $year, $category->id);
+                        $row_total += (float)$res[$category->name]['Q2']['total_amount_unfmt'];
+                        $totals['Q2'] += (float)$res[$category->name]['Q2']['total_amount_unfmt'];
 
-                    $res[$category->name]['Q3'] = $this->calculateQuarterSalesTotals('Q3', $year, $category->id);
-                    $row_total += (float)$res[$category->name]['Q3']['total_amount_unfmt'];
-                    $totals['Q3'] += (float)$res[$category->name]['Q3']['total_amount_unfmt'];
+                        $res[$category->name]['Q3'] = $this->calculateQuarterSalesTotals('Q3', $year, $category->id);
+                        $row_total += (float)$res[$category->name]['Q3']['total_amount_unfmt'];
+                        $totals['Q3'] += (float)$res[$category->name]['Q3']['total_amount_unfmt'];
 
-                    $res[$category->name]['Q4'] = $this->calculateQuarterSalesTotals('Q4', $year, $category->id);
-                    $row_total += (float)$res[$category->name]['Q4']['total_amount_unfmt'];
-                    $totals['Q4'] += (float)$res[$category->name]['Q4']['total_amount_unfmt'];
+                        $res[$category->name]['Q4'] = $this->calculateQuarterSalesTotals('Q4', $year, $category->id);
+                        $row_total += (float)$res[$category->name]['Q4']['total_amount_unfmt'];
+                        $totals['Q4'] += (float)$res[$category->name]['Q4']['total_amount_unfmt'];
+                    }
+                    else {
+                        $res[$category->name]['Q1'] = $this->calculateQuarterSalesTotals('Q2', $year, $category->id);
+                        $row_total += (float)$res[$category->name]['Q1']['total_amount_unfmt'];
+                        $totals['Q1'] += (float)$res[$category->name]['Q1']['total_amount_unfmt'];
+
+                        $res[$category->name]['Q2'] = $this->calculateQuarterSalesTotals('Q3', $year, $category->id);
+                        $row_total += (float)$res[$category->name]['Q2']['total_amount_unfmt'];
+                        $totals['Q2'] += (float)$res[$category->name]['Q2']['total_amount_unfmt'];
+
+                        $res[$category->name]['Q3'] = $this->calculateQuarterSalesTotals('Q4', $year, $category->id);
+                        $row_total += (float)$res[$category->name]['Q3']['total_amount_unfmt'];
+                        $totals['Q3'] += (float)$res[$category->name]['Q3']['total_amount_unfmt'];
+
+                        $res[$category->name]['Q4'] = $this->calculateQuarterSalesTotals('Q1', $year, $category->id);
+                        $row_total += (float)$res[$category->name]['Q4']['total_amount_unfmt'];
+                        $totals['Q4'] += (float)$res[$category->name]['Q4']['total_amount_unfmt'];
+
+                    }
 
                     $res[$category->name]['row_total'] = $row_total;
                 }

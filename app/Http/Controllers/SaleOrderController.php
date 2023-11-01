@@ -728,6 +728,33 @@ class SaleOrderController extends Controller
                 $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
             }
         }
+        elseif ($select_period=='period_quarterly_ind')
+        {
+            if ($quarter=='Q1')
+            {
+                $from = date($year.'-04-01');
+                $to = date($year.'-06-30');
+                $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
+            }
+            elseif ($quarter=='Q2')
+            {
+                $from = date($year.'-07-01');
+                $to = date($year.'-09-30');
+                $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
+            }
+            elseif ($quarter=='Q3')
+            {
+                $from = date($year.'-10-01');
+                $to = date($year.'-12-31');
+                $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
+            }
+            elseif ($quarter=='Q4')
+            {
+                $from = date($year.'-01-01');
+                $to = date($year.'-03-31');
+                $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
+            }
+        }        
         elseif ($select_period=='period_yearly')
         {
             $query->whereYear('sale_orders.dispatched_at', '=', $year);

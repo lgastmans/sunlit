@@ -20,13 +20,22 @@
                     <th>December</th>
                     <th>Total</th>
                 </tr>
-            @else
+            @elseif($period == "period_quarterly")
                 <tr style="text-align: right;">
                     <th style="text-align:left">{{ ucfirst($type) }}</th>
-                    <th>1st Quarter</th>
-                    <th>2nd Quarter</th>
-                    <th>3rd Quarter</th>
-                    <th>4th Quarter</th>
+                    <th>1st Quarter<br>Jan - Mar</th>
+                    <th>2nd Quarter<br>Apr - Jun</th>
+                    <th>3rd Quarter<br>Jul - Sep</th>
+                    <th>4th Quarter<br>Oct - Dec</th>
+                    <th>Total</th>
+                </tr>
+            @elseif($period == "period_quarterly_ind")
+                <tr style="text-align: right;">
+                    <th style="text-align:left">{{ ucfirst($type) }}</th>
+                    <th>1st Quarter<br>Apr - Jun</th>
+                    <th>2nd Quarter<br>Jul - Sep</th>
+                    <th>3rd Quarter<br>Oct - Dec</th>
+                    <th>4th Quarter<br>Jan - Mar</th>
                     <th>Total</th>
                 </tr>
             @endif
