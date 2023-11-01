@@ -120,8 +120,12 @@
         "columns": [
             { 
                 'data': 'order_number',
-                'orderable': true 
-            },
+                'orderable': true,
+                "render": function(data, type, row, meta){
+                    data = '<a href="/purchase-orders/' + row.order_number_slug + '" target="_blank">' + data + '</a>';
+                    return data;
+                }
+            },            
             { 
                 'data': 'warehouse',
                 'orderable': true
