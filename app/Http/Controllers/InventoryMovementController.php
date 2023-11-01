@@ -172,7 +172,8 @@ class InventoryMovementController extends Controller
                     $query->where('order_number', 'like', '%'.$column_arr[0]['search']['value'].'%');
 
             if (!empty($column_arr[1]['search']['value'])){
-                $query->where('warehouses.name', 'LIKE', $column_arr[1]['search']['value'].'%');
+                //$query->where('warehouses.name', 'LIKE', $column_arr[1]['search']['value'].'%');
+                $query->where('dealers.company', 'LIKE', $column_arr[1]['search']['value'].'%');
             }
             
             if (!empty($column_arr[2]['search']['value']))
