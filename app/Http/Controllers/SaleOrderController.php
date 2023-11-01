@@ -181,8 +181,10 @@ class SaleOrderController extends Controller
 
                 if ($filter_column=='blocked')
                     $query->whereBetween('sale_orders.blocked_at', [$filter_from, $filter_to]);
-                else
+                elseif ($filter_column=='expected')
                     $query->whereBetween('sale_orders.due_at', [$filter_from, $filter_to]);
+                else
+                    $query->whereBetween('sale_orders.created_at', [$filter_from, $filter_to]);
             }
         }
 

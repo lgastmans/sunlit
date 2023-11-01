@@ -25,6 +25,7 @@
                         <select class="date-filter-select form-control" id="filter-column">
                             <option value="blocked">Blocked on</option>
                             <option value="expected">Expected on</option>
+                            <option value="created">Created on</option>
                         </select>
                     </div>
                     <div class="col-2 position-relative" id="filter_from">
