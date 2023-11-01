@@ -134,7 +134,7 @@ class SaleOrderItemController extends Controller
                 "selling_price" => $order->selling_price,
                 "status" => $order->sale_order->display_status,
                 "warehouse" => $order->sale_order->warehouse->name,
-                "dealer" => $order->sale_order->dealer->company,
+                "dealer" => (isset($order->sale_order->dealer) ? $order->sale_order->dealer->company : 'not specified'),
                 "user" => $order->sale_order->user->display_name
             );
         }
