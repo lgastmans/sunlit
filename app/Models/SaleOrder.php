@@ -560,7 +560,6 @@ class SaleOrder extends Model
                         $res[$category->name]['Q4'] = $this->calculateQuarterSalesTotals('Q1', ($year+1), $category->id);
                         $row_total += (float)$res[$category->name]['Q4']['total_amount_unfmt'];
                         $totals['Q4'] += (float)$res[$category->name]['Q4']['total_amount_unfmt'];
-
                     }
 
                     $res[$category->name]['row_total'] = $row_total;
@@ -790,22 +789,42 @@ class SaleOrder extends Model
                 if ($quarter=="_ALL")
                 {
                     $row_total = 0;
-                    $res[$row->name]['Q1'] = $this->calculateQuarterStateSalesTotals('Q1', $year, $row->id);
-                    $row_total += (float)$res[$row->name]['Q1']['total_amount_unfmt'];
-                    $totals['Q1'] += (float)$res[$row->name]['Q1']['total_amount_unfmt'];
 
-                    $res[$row->name]['Q2'] = $this->calculateQuarterStateSalesTotals('Q2', $year, $row->id);
-                    $row_total += (float)$res[$row->name]['Q2']['total_amount_unfmt'];
-                    $totals['Q1'] += (float)$res[$row->name]['Q1']['total_amount_unfmt'];
+                    if ($select_period=='period_quarterly') {
+                        $res[$row->name]['Q1'] = $this->calculateQuarterStateSalesTotals('Q1', $year, $row->id, $select_period);
+                        $row_total += (float)$res[$row->name]['Q1']['total_amount_unfmt'];
+                        $totals['Q1'] += (float)$res[$row->name]['Q1']['total_amount_unfmt'];
 
-                    $res[$row->name]['Q3'] = $this->calculateQuarterStateSalesTotals('Q3', $year, $row->id);
-                    $row_total += (float)$res[$row->name]['Q3']['total_amount_unfmt'];
-                    $totals['Q1'] += (float)$res[$row->name]['Q1']['total_amount_unfmt'];
+                        $res[$row->name]['Q2'] = $this->calculateQuarterStateSalesTotals('Q2', $year, $row->id, $select_period);
+                        $row_total += (float)$res[$row->name]['Q2']['total_amount_unfmt'];
+                        $totals['Q2'] += (float)$res[$row->name]['Q2']['total_amount_unfmt'];
 
-                    $res[$row->name]['Q4'] = $this->calculateQuarterStateSalesTotals('Q4', $year, $row->id);
-                    $row_total += (float)$res[$row->name]['Q4']['total_amount_unfmt'];
-                    $totals['Q1'] += (float)$res[$row->name]['Q1']['total_amount_unfmt'];
-                    
+                        $res[$row->name]['Q3'] = $this->calculateQuarterStateSalesTotals('Q3', $year, $row->id, $select_period);
+                        $row_total += (float)$res[$row->name]['Q3']['total_amount_unfmt'];
+                        $totals['Q3'] += (float)$res[$row->name]['Q3']['total_amount_unfmt'];
+
+                        $res[$row->name]['Q4'] = $this->calculateQuarterStateSalesTotals('Q4', $year, $row->id, $select_period);
+                        $row_total += (float)$res[$row->name]['Q4']['total_amount_unfmt'];
+                        $totals['Q4'] += (float)$res[$row->name]['Q4']['total_amount_unfmt'];
+                    }
+                    else {
+                        $res[$row->name]['Q1'] = $this->calculateQuarterStateSalesTotals('Q2', $year, $row->id, $select_period);
+                        $row_total += (float)$res[$row->name]['Q1']['total_amount_unfmt'];
+                        $totals['Q1'] += (float)$res[$row->name]['Q1']['total_amount_unfmt'];
+
+                        $res[$row->name]['Q2'] = $this->calculateQuarterStateSalesTotals('Q3', $year, $row->id, $select_period);
+                        $row_total += (float)$res[$row->name]['Q2']['total_amount_unfmt'];
+                        $totals['Q2'] += (float)$res[$row->name]['Q2']['total_amount_unfmt'];
+
+                        $res[$row->name]['Q3'] = $this->calculateQuarterStateSalesTotals('Q4', $year, $row->id, $select_period);
+                        $row_total += (float)$res[$row->name]['Q3']['total_amount_unfmt'];
+                        $totals['Q3'] += (float)$res[$row->name]['Q3']['total_amount_unfmt'];
+
+                        $res[$row->name]['Q4'] = $this->calculateQuarterStateSalesTotals('Q1', ($year+1), $row->id, $select_period);
+                        $row_total += (float)$res[$row->name]['Q4']['total_amount_unfmt'];
+                        $totals['Q4'] += (float)$res[$row->name]['Q4']['total_amount_unfmt'];
+                    }
+
                     $res[$row->name]['row_total'] = $row_total;
                 }
                 else
