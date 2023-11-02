@@ -148,7 +148,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/reports', [ReportsController::class, 'index'])->name('reports');
     Route::get('/reports/closing-stock', [ReportsController::class, 'closingStock'])->name('reports.closing-stock');
-    Route::get('/reports/sales-product-totals', [ReportsController::class, 'salesProductTotals'])->name('reports.sales-product-totals');
+    Route::get('/reports/sales-product-totals/{report_format?}', [ReportsController::class, 'salesProductTotals'])->name('reports.sales-product-totals');
 
     Route::get('/products', [ProductController::class, 'index'])->name('products');
     Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');

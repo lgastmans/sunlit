@@ -1,10 +1,18 @@
 @extends('layouts.app')
 
 @section('title')
-    @parent() | Product-wise Sales Total
+    @if ($report_format=='sales')
+        @parent() | Product Sales Total
+    @else
+        @parent() | Product Quantity Total
+    @endif
 @endsection
 
-@section('page-title', 'Product-wise Sales Total')
+@if ($report_format=='sales')
+    @section('page-title', 'Product Sales Total')
+@else
+    @section('page-title', 'Product Quantity Total')
+@endif
 
 @section('content')
     <div class="row">
@@ -105,6 +113,7 @@
             ajax      : {
                 url   : "{{ route('ajax.sales-product-totals') }}",
                 "data": function ( d ) {
+                    d.report_format = '{{ $report_format }}',
                     d.year = $(" #product_year_id ").val()
                 },
             }, 

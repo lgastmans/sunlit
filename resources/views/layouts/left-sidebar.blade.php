@@ -46,9 +46,12 @@
                         </li>
                         @if (Auth::user()->hasRole('super-admin'))
                         <li>
-                            <a href="{{ route('reports.sales-product-totals')}}">Product-wise Sales Totals</a>
+                            <a href="{{ route('reports.sales-product-totals','sales')}}">Product Sales Totals</a>
                         </li>
                         @endif
+                        <li>
+                            <a href="{{ route('reports.sales-product-totals','quantity')}}">Product Quantity Totals</a>
+                        </li>
                     </ul>
                 </div>                
             </li>
