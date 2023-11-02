@@ -23,19 +23,19 @@
             @elseif($period == "period_quarterly")
                 <tr style="text-align: right;">
                     <th style="text-align:left">{{ ucfirst($type) }}</th>
-                    <th>1st Quarter<br>Jan - Mar</th>
-                    <th>2nd Quarter<br>Apr - Jun</th>
-                    <th>3rd Quarter<br>Jul - Sep</th>
-                    <th>4th Quarter<br>Oct - Dec</th>
+                    <th>1st Quarter<br><span id="Q1">Jan - Mar</span></th>
+                    <th>2nd Quarter<br><span id="Q2">Apr - Jun</span></th>
+                    <th>3rd Quarter<br><span id="Q3">Jul - Sep</span></th>
+                    <th>4th Quarter<br><span id="Q4">Oct - Dec</span></th>
                     <th>Total</th>
                 </tr>
             @elseif($period == "period_quarterly_ind")
                 <tr style="text-align: right;">
                     <th style="text-align:left">{{ ucfirst($type) }}</th>
-                    <th>1st Quarter<br>Apr - Jun</th>
-                    <th>2nd Quarter<br>Jul - Sep</th>
-                    <th>3rd Quarter<br>Oct - Dec</th>
-                    <th>4th Quarter<br>Jan - Mar</th>
+                    <th>1st Quarter<br><span id="Q1-ind">Apr - Jun</span></th>
+                    <th>2nd Quarter<br><span id="Q2-ind">Jul - Sep</span></th>
+                    <th>3rd Quarter<br><span id="Q3-ind">Oct - Dec</span></th>
+                    <th>4th Quarter<br><span id="Q4-ind">Jan - Mar</span></th>
                     <th>Total</th>
                 </tr>
             @endif
@@ -56,7 +56,7 @@
                         @endforeach
                     </tr>
                 @else
-                    @if ($total['row_total'] > 0)
+                    <!-- @if ($total['row_total'] > 0) -->
                         <tr>
                             <td>{{ $label }}</td>
                             @foreach ($total as $key=>$month)
@@ -73,7 +73,7 @@
                                 @endif
                             @endforeach
                         </tr>
-                    @endif
+                    <!-- @endif -->
                 @endif
             @endforeach
         </tbody>

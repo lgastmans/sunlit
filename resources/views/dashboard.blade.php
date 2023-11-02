@@ -538,6 +538,21 @@ $(document).ready(function () {
             success : function(result)
             {
                 $("#table-sales-tables-container").html(result);
+
+                let year = parseInt($(" #year_id ").val());
+
+                if ($(" #select_period ").val() == 'period_quarterly') {
+                    $("#Q1").html("Jan-Mar, "+year);
+                    $("#Q2").html("Apr-Jun, "+year);
+                    $("#Q3").html("Jul-Sep, "+year);
+                    $("#Q4").html("Oct-Dec, "+year);
+                }
+                else {
+                    $("#Q1-ind").html("Apr-Jun, "+year);
+                    $("#Q2-ind").html("Jul-Sep, "+year);
+                    $("#Q3-ind").html("Oct-Dec, "+year);
+                    $("#Q4-ind").html("Jan-Mar, "+(year+1));
+                }
             }
         });
     }

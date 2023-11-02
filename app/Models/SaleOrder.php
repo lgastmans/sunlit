@@ -557,7 +557,7 @@ class SaleOrder extends Model
                         $row_total += (float)$res[$category->name]['Q3']['total_amount_unfmt'];
                         $totals['Q3'] += (float)$res[$category->name]['Q3']['total_amount_unfmt'];
 
-                        $res[$category->name]['Q4'] = $this->calculateQuarterSalesTotals('Q1', $year, $category->id);
+                        $res[$category->name]['Q4'] = $this->calculateQuarterSalesTotals('Q1', ($year+1), $category->id);
                         $row_total += (float)$res[$category->name]['Q4']['total_amount_unfmt'];
                         $totals['Q4'] += (float)$res[$category->name]['Q4']['total_amount_unfmt'];
 
