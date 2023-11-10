@@ -63,3 +63,46 @@ use Carbon\Carbon;
 
         return $res;
     }
+
+    /**
+     * 
+     * use as follows: echo StaticArray::$month_short[1];
+     * 
+     */
+    class StaticArray
+    {
+
+        public static $month_short = array(
+          'Jan', 
+          'Feb', 
+          'Mar', 
+          'Apr', 
+          'May', 
+          'Jun', 
+          'Jul', 
+          'Aug', 
+          'Sep', 
+          'Oct', 
+          'Nov', 
+          'Dec'
+        );
+
+
+        public static $month_long = array(
+          'January', 
+          'February', 
+          'March', 
+          'April', 
+          'May', 
+          'June', 
+          'July', 
+          'August', 
+          'September', 
+          'October', 
+          'November', 
+          'December'
+        );        
+
+    }
+
+

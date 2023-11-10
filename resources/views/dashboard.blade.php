@@ -396,6 +396,7 @@ $(document).ready(function () {
     });
 
     var productSalesTable = $('#table-product-sales').DataTable({
+        dom: 'ft',
         processing: true,
         serverSide: true,
         orderCellsTop: true,
@@ -406,7 +407,9 @@ $(document).ready(function () {
         ajax      : {
             url   : "{{ route('ajax.sales-product-totals') }}",
             "data": function ( d ) {
+                d.report_format = 'sales',
                 d.limit = 5,
+                d.select_period = 'period_yearly',
                 d.year = $(" #product_year_id ").val()
             },
         }, 
@@ -429,51 +432,51 @@ $(document).ready(function () {
                 'orderable': false 
             },
             { 
-                'data': 'jan',
+                'data': 1,
                 'orderable': false
             },
             { 
-                'data': 'feb',
+                'data': 2,
                 'orderable': false
             },
             { 
-                'data': 'mar',
+                'data': 3,
                 'orderable': false
             },
             { 
-                'data': 'apr',
+                'data': 4,
                 'orderable': false
             },
             { 
-                'data': 'may',
+                'data': 5,
                 'orderable': false
             },
             { 
-                'data': 'jun',
+                'data': 6,
                 'orderable': false 
             },
             { 
-                'data': 'jul',
+                'data': 7,
                 'orderable': false 
             },
             { 
-                'data': 'aug',
+                'data': 8,
                 'orderable': false 
             },
             { 
-                'data': 'sep',
+                'data': 9,
                 'orderable': false 
             },
             { 
-                'data': 'oct',
+                'data': 10,
                 'orderable': false 
             },
             { 
-                'data': 'nov',
+                'data': 11,
                 'orderable': false 
             },
             { 
-                'data': 'dec',
+                'data': 12,
                 'orderable': false 
             },
             { 
@@ -603,6 +606,8 @@ $(document).ready(function () {
             success : function(result)
             {
                 $("#table-state-tables-container").html(result);
+
+                let year = parseInt($(" #year_id ").val());
 
                 if ($(" #select_period ").val() == 'period_quarterly') {
                     $("#Q1").html("Jan-Mar, "+year);

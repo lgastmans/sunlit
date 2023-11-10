@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use app\Helpers;
+use Carbon\Carbon;
 use NumberFormatter;
 use App\Models\SaleOrder;
 use Illuminate\Http\Request;
+use App\Http\Controllers\DateTime;
 use Illuminate\Support\Facades\Auth;
 
 class ReportsController extends Controller
@@ -24,16 +27,15 @@ class ReportsController extends Controller
 
     public function salesProductTotals(?string $report_format="quantity")
     {
-        /*
-            final code 
-        */
+        $curQuarter = getCurrentQuarter();
+        
         if ($report_format=="sales") {
             $user = Auth::user();
             if ($user->hasRole('super-admin'))
-                return view('reports.sales-product-totals', ['report_format' => 'sales']);
+                return view('reports.sales-product-totals', ['report_format' => 'sales', 'curQuarter' => $curQuarter]);
         }
         elseif ($report_format=="quantity")
-            return view('reports.sales-product-totals', ['report_format' => 'quantity']);
+            return view('reports.sales-product-totals', ['report_format' => 'quantity', 'curQuarter' => $curQuarter]);
 
         return abort(403, trans('error.unauthorized'));
     }
@@ -46,6 +48,21 @@ class ReportsController extends Controller
     */
     public function getSalesProductTotals(Request $request)
     {
+
+        $month_short = array(
+          1=>'Jan', 
+          2=>'Feb', 
+          3=>'Mar', 
+          4=>'Apr', 
+          5=>'May', 
+          6=>'Jun', 
+          7=>'Jul', 
+          8=>'Aug', 
+          9=>'Sep', 
+          10=>'Oct', 
+          11=>'Nov', 
+          12=>'Dec'
+        );
 
         $res = array();
 
@@ -73,30 +90,21 @@ class ReportsController extends Controller
         if ($request->has('report_format'))
             $report_format = $request->get('report_format');
 
-        $period = 'period_monthly';
-        if ($request->has('period'))
-            $period = $request->get('period');
-
-        $year = date('Y');
-        if ($request->has('year'))
-            $year = $request->get('year');
+        $select_period = 'period_monthly';
+        if ($request->has('select_period'))
+            $select_period = $request->get('select_period');
 
         $month = date('n');
-        if ($request->has('month'))
-        {
-            $month = $request->get('month');
-            if (empty($month))
-                $month = date('n');
-        }
+        if ($request->has('month_id'))
+            $month = $request->get('month_id');
 
-        $quarter = 'Q1';
-        if ($request->has('quarter'))
-        {
-            $quarter = $request->get('quarter');
-
-            if (empty($quarter))
-                $quarter = 'Q1';
-        }
+        $year = date('Y');
+        if ($request->has('year_id'))
+            $year = $request->get('year_id');
+        
+        $quarter = '_ALL';
+        if ($request->has('quarterly_id'))
+            $quarter = $request->get('quarterly_id');
 
         $category = "_ALL";
         if ($request->has('category'))
@@ -106,13 +114,17 @@ class ReportsController extends Controller
                 $category = "_ALL";
         }
        
+        //dd($select_period, $year, $month, $quarter, $product);
         $sale_order = new SaleOrder();
-        $res = $sale_order->calculateProductSalesTotals('period_monthly', $year, "_ALL", "_ALL", $product, 0);
-        //dd($res);
+        $res = $sale_order->calculateProductSalesTotals($select_period, $year, $month, $quarter, $product, 0);
+        //dd("res", $res);
 
-        /*
-            iterate through array and sort by part_number=>months
-        */
+        /**
+         * 
+         * iterate through array and sort by part_number => months
+         * or part_number => quarters
+         * 
+         */
         $data = array();
         foreach ($res as $month=>$product_array)
         {
@@ -125,85 +137,110 @@ class ReportsController extends Controller
                 $data[ $product['id'] ][ 'part_number' ] = $product['part_number'];
                 $data[ $product['id'] ][ 'description' ] = $product['description'];
                 
-                if ($month==1)
-                    $data[ $product['id'] ][ 1 ] = ($report_format == 'sales' ? $product['amount_sold'] : $product['quantity_sold']);
-                elseif($month==2)
-                    $data[ $product['id'] ][ 2 ] = ($report_format == 'sales' ? $product['amount_sold'] : $product['quantity_sold']);
-                elseif($month==3)
-                    $data[ $product['id'] ][ 3 ] = ($report_format == 'sales' ? $product['amount_sold'] : $product['quantity_sold']);
-                elseif($month==4)
-                    $data[ $product['id'] ][ 4 ] = ($report_format == 'sales' ? $product['amount_sold'] : $product['quantity_sold']);
-                elseif($month==5)
-                    $data[ $product['id'] ][ 5 ] = ($report_format == 'sales' ? $product['amount_sold'] : $product['quantity_sold']);
-                elseif($month==6)
-                    $data[ $product['id'] ][ 6 ] = ($report_format == 'sales' ? $product['amount_sold'] : $product['quantity_sold']);
-                elseif($month==7)
-                    $data[ $product['id'] ][ 7 ] = ($report_format == 'sales' ? $product['amount_sold'] : $product['quantity_sold']);
-                elseif($month==8)
-                    $data[ $product['id'] ][ 8 ] = ($report_format == 'sales' ? $product['amount_sold'] : $product['quantity_sold']);
-                elseif($month==9)
-                    $data[ $product['id'] ][ 9 ] = ($report_format == 'sales' ? $product['amount_sold'] : $product['quantity_sold']);
-                elseif($month==10)
-                    $data[ $product['id'] ][ 10 ] = ($report_format == 'sales' ? $product['amount_sold'] : $product['quantity_sold']);
-                elseif($month==11)
-                    $data[ $product['id'] ][ 11 ] = ($report_format == 'sales' ? $product['amount_sold'] : $product['quantity_sold']);
-                elseif($month==12)
-                    $data[ $product['id'] ][ 12 ] = ($report_format == 'sales' ? $product['amount_sold'] : $product['quantity_sold']);
+                if ($select_period == 'period_monthly') {
+                    $data[ $product['id'] ][ $month ] = ($report_format == 'sales' ? $product['amount_sold'] : $product['quantity_sold']);
+                }
+                elseif ($select_period == 'period_quarterly') {
+                    $data[ $product['id'] ][ $month ] = ($report_format == 'sales' ? $product['amount_sold'] : $product['quantity_sold']);
+                }
+                elseif ($select_period == 'period_yearly') {
+                    $data[ $product['id'] ][ $month ] = ($report_format == 'sales' ? $product['amount_sold'] : $product['quantity_sold']);
+                }
+
             }
         }
-
+        //dd($data);
         $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
         $fmt->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 0);
 
         $arr = array();
-        //foreach ($data as $part_number=>$month)
-        foreach ($data as $key=>$value)
-        {
-
-            $total = 0;
+        
+        if ($select_period == 'period_monthly') {
             
-            if (array_key_exists(1, $value))
-                $total = (float)$value[1];
-            if (array_key_exists(2, $value))
-                $total += (float)$value[2];
-            if (array_key_exists(3, $value))
-                $total += (float)$value[3];
-            if (array_key_exists(4, $value))
-                $total += (float)$value[4];
-            if (array_key_exists(5, $value))
-                $total += (float)$value[5];
-            if (array_key_exists(6, $value))
-                $total += (float)$value[6];
-            if (array_key_exists(7, $value))
-                $total += (float)$value[7];
-            if (array_key_exists(8, $value))
-                $total += (float)$value[8];
-            if (array_key_exists(9, $value))
-                $total += (float)$value[9];
-            if (array_key_exists(10, $value))
-                $total += (float)$value[10];
-            if (array_key_exists(11, $value))
-                $total += (float)$value[11];
-            if (array_key_exists(12, $value))
-                $total += (float)$value[12];
+            foreach ($data as $key=>$value)
+            {           
+                $total = 0;
 
-            $arr[] = array(
-                "id" => $key,
-                "part_number" => $value['part_number']."<br><small>".$value['description']."</small>",
-                "jan" => (array_key_exists(1, $value) ? ($report_format == 'sales' ? $fmt->formatCurrency($value[1], "INR") : number_format($value[1],0,'.',',')) : 0),
-                "feb" => (array_key_exists(2, $value) ? ($report_format == 'sales' ? $fmt->formatCurrency($value[2], "INR") : number_format($value[2],0,'.',',')) : 0),
-                "mar" => (array_key_exists(3, $value) ? ($report_format == 'sales' ? $fmt->formatCurrency($value[3], "INR") : number_format($value[3],0,'.',',')) : 0),
-                "apr" => (array_key_exists(4, $value) ? ($report_format == 'sales' ? $fmt->formatCurrency($value[4], "INR") : number_format($value[4],0,'.',',')) : 0),
-                "may" => (array_key_exists(5, $value) ? ($report_format == 'sales' ? $fmt->formatCurrency($value[5], "INR") : number_format($value[5],0,'.',',')) : 0),
-                "jun" => (array_key_exists(6, $value) ? ($report_format == 'sales' ? $fmt->formatCurrency($value[6], "INR") : number_format($value[6],0,'.',',')) : 0),
-                "jul" => (array_key_exists(7, $value) ? ($report_format == 'sales' ? $fmt->formatCurrency($value[7], "INR") : number_format($value[7],0,'.',',')) : 0),
-                "aug" => (array_key_exists(8, $value) ? ($report_format == 'sales' ? $fmt->formatCurrency($value[8], "INR") : number_format($value[8],0,'.',',')) : 0),
-                "sep" => (array_key_exists(9, $value) ? ($report_format == 'sales' ? $fmt->formatCurrency($value[9], "INR") : number_format($value[9],0,'.',',')) : 0),
-                "oct" => (array_key_exists(10, $value) ? ($report_format == 'sales' ? $fmt->formatCurrency($value[10], "INR") : number_format($value[10],0,'.',',')) : 0),
-                "nov" => (array_key_exists(11, $value) ? ($report_format == 'sales' ? $fmt->formatCurrency($value[11], "INR") : number_format($value[11],0,'.',',')) : 0),
-                "dec" => (array_key_exists(12, $value) ? ($report_format == 'sales' ? $fmt->formatCurrency($value[12], "INR") : number_format($value[12],0,'.',',')) : 0),
-                "total" => $total
-            );
+                if (array_key_exists($month, $value))
+                    $total = (float)$value[$month];
+
+                $arr[] = array(
+                    //"id" => $key,
+                    "part_number" => $value['part_number']."<br><small>".$value['description']."</small>",
+                    $month => (array_key_exists($month, $value) ? ($report_format == 'sales' ? $fmt->formatCurrency($value[$month], "INR") : number_format($value[$month],0,'.',',')) : 0),
+                    "total" => $total
+                );
+            }
+        }
+        elseif ($select_period == 'period_quarterly') {
+            foreach ($data as $key=>$value)
+            {
+                    $arr[$key] = array(
+                    //"id" => $key,
+                    "part_number" => $value['part_number']."<br><small>".$value['description']."</small>",
+                    'Q1' => 0,
+                    'Q2' => 0,
+                    'Q3' => 0,
+                    'Q4' => 0,
+                    "total" => 0
+                );
+
+                $total = 0;
+                
+                if (array_key_exists('Q1', $value)){
+                    $total += (float)$value['Q1'];
+                    $arr[$key]['Q1'] = ($report_format == 'sales' ? $fmt->formatCurrency($value['Q1'], "INR") : number_format($value['Q1'],0,'.',','));
+                }
+                if (array_key_exists('Q2', $value)){
+                    $total += (float)$value['Q2'];
+                    $arr[$key]['Q2'] = ($report_format == 'sales' ? $fmt->formatCurrency($value['Q2'], "INR") : number_format($value['Q2'],0,'.',','));
+                }
+                if (array_key_exists('Q3', $value)){
+                    $total += (float)$value['Q3'];
+                    $arr[$key]['Q3'] = ($report_format == 'sales' ? $fmt->formatCurrency($value['Q3'], "INR") : number_format($value['Q3'],0,'.',','));
+                }
+                if (array_key_exists('Q4', $value)){
+                    $total += (float)$value['Q4'];
+                    $arr[$key]['Q4'] = ($report_format == 'sales' ? $fmt->formatCurrency($value['Q4'], "INR") : number_format($value['Q4'],0,'.',','));
+                }
+
+                $arr[$key]["total"] = (float)$total;
+            }
+        }
+        else {
+            foreach ($data as $key=>$value)
+            {
+
+                $arr[$key] = array(
+                    //"id" => $key,
+                    "part_number" => $value['part_number']."<br><small>".$value['description']."</small>",
+                    1 => 0,
+                    2 => 0,
+                    3 => 0,
+                    4 => 0,
+                    5 => 0,
+                    6 => 0,
+                    7 => 0,
+                    8 => 0,
+                    9 => 0,
+                    10 => 0,
+                    11 => 0,
+                    12 => 0,
+                    "total" => 0
+                );
+
+                $total = 0;
+                
+                for ($i=1;$i<=12;$i++) {
+                    if (array_key_exists($i, $value)){
+                        $total += (float)$value[$i];
+                        $arr[$key][$i] = ($report_format == 'sales' ? $fmt->formatCurrency($value[$i], "INR") : number_format($value[$i],0,'.',','));
+                    }
+                }
+
+                $arr[$key]["total"] = (float)$total;
+
+            }
         }
 
         /*
@@ -230,15 +267,66 @@ class ReportsController extends Controller
         $totalRecords = count($arr);
         $totalRecordswithFilter = count($arr);
         
-        $response = array(
-            "draw" => $draw,
-            "recordsTotal" => $totalRecords,
-            "recordsFiltered" => $totalRecordswithFilter,
-            "data" => $arr,
-            'error' => null
-        );
 
-        return response()->json($response);
+        $columns = array();
+
+        //$columns[0]['data'] = 'id';
+        //$columns[0]['title'] = 'Id';
+
+        $columns[0]['data'] = 'part_number';
+        $columns[0]['title'] = 'Part Number';
+        //$columns[0]['visible'] = false;
+        //$columns[0]['className'] = "text-end";
+
+        if ($select_period == 'period_monthly') {
+            $columns[1]['data'] = $month;
+            $columns[1]['title'] = $month_short[$month];
+            $columns[1]['className'] = 'text-end';
+
+            $columns[2]['data'] = 'total';
+            $columns[2]['title'] = 'Total<br>(Avg Selling Price)';
+            $columns[2]['className'] = 'text-end';
+        }
+        elseif ($select_period == 'period_quarterly') {
+            $columns[1]['data'] = 'Q1';
+            $columns[1]['title'] = 'January 1 – March 31';
+            $columns[1]['className'] = 'text-end';
+            $columns[2]['data'] = 'Q2';
+            $columns[2]['title'] = 'April 1 – June 30';
+            $columns[2]['className'] = 'text-end';
+            $columns[3]['data'] = 'Q3';
+            $columns[3]['title'] = 'July 1 – September 30';
+            $columns[3]['className'] = 'text-end';
+            $columns[4]['data'] = 'Q4';
+            $columns[4]['title'] = 'October 1 – December 31';
+            $columns[4]['className'] = 'text-end';
+
+            $columns[5]['data'] = 'total';
+            $columns[5]['title'] = 'Total<br>(Avg Selling Price)';
+            $columns[5]['className'] = 'text-end';
+        }
+        elseif ($select_period == 'period_yearly')
+        {
+            for ($i=1;$i<=12;$i++) {
+                $columns[$i]['data'] = $i;
+                $columns[$i]['title'] = $month_short[$i];
+                $columns[$i]['className'] = 'text-end';
+            }
+
+            $columns[13]['data'] = 'total';
+            $columns[13]['title'] = 'Total<br>(Avg Selling Price)';
+            $columns[13]['className'] = 'text-end';
+        }
+
+
+        // $arr = array();
+        // $arr[0]['id'] = '1';
+        // $arr[0]['part_number'] = 'test';
+
+        $response = array("data"=>$arr,"columns"=>$columns,"footer"=>'TOTALS');
+
+        //return response()->json($response);
+        return json_encode($response);
     }
 
 }
