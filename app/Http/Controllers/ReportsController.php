@@ -284,7 +284,7 @@ class ReportsController extends Controller
             $columns[1]['className'] = 'text-end';
 
             $columns[2]['data'] = 'total';
-            $columns[2]['title'] = 'Total<br>(Avg Selling Price)';
+            $columns[2]['title'] = ($report_format == 'sales' ? 'Total<br>(Avg Selling Price)' : 'Total');
             $columns[2]['className'] = 'text-end';
         }
         elseif ($select_period == 'period_quarterly') {
@@ -302,7 +302,7 @@ class ReportsController extends Controller
             $columns[4]['className'] = 'text-end';
 
             $columns[5]['data'] = 'total';
-            $columns[5]['title'] = 'Total<br>(Avg Selling Price)';
+            $columns[5]['title'] = ($report_format == 'sales' ? 'Total<br>(Avg Selling Price)' : 'Total');
             $columns[5]['className'] = 'text-end';
         }
         elseif ($select_period == 'period_yearly')
@@ -314,7 +314,7 @@ class ReportsController extends Controller
             }
 
             $columns[13]['data'] = 'total';
-            $columns[13]['title'] = 'Total<br>(Avg Selling Price)';
+            $columns[13]['title'] = ($report_format == 'sales' ? 'Total<br>(Avg Selling Price)' : 'Total');
             $columns[13]['className'] = 'text-end';
         }
 
