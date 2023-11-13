@@ -6,6 +6,7 @@ use app\Helpers;
 use Carbon\Carbon;
 use NumberFormatter;
 use App\Models\SaleOrder;
+use App\Models\SaleOrderItem;
 use Illuminate\Http\Request;
 use App\Http\Controllers\DateTime;
 use Illuminate\Support\Facades\Auth;
@@ -25,6 +26,12 @@ class ReportsController extends Controller
     }
 
 
+    public function dstr()
+    {
+        return view('reports.dstr');
+    }
+
+
     public function salesProductTotals(?string $report_format="quantity")
     {
         $curQuarter = getCurrentQuarter();
@@ -38,6 +45,95 @@ class ReportsController extends Controller
             return view('reports.sales-product-totals', ['report_format' => 'quantity', 'curQuarter' => $curQuarter]);
 
         return abort(403, trans('error.unauthorized'));
+    }
+
+
+    /*
+        for ajax call from blade file
+        url     : "{{ route('ajax.dstr') }}", 
+
+    */
+    public function getDstr(Request $request)
+    {
+        $arr = array();
+        $columns = array();
+
+        $month = date('n');
+        if ($request->has('month_id'))
+            $month = $request->get('month_id');
+
+        $year = date('Y');
+        if ($request->has('year_id'))
+            $year = $request->get('year_id');
+
+
+        $query = SaleOrderItem::with('sale_order')
+                ->join('sale_orders', 'sale_orders.id', '=', 'sale_order_id')
+                ->join('users', 'users.id', '=', 'sale_orders.user_id')
+                ->join('warehouses', 'warehouses.id', '=', 'sale_orders.warehouse_id')
+                ->join('dealers', 'dealers.id', '=', 'sale_orders.dealer_id')
+                ->join('states', 'states.id', '=', 'dealers.state_id')
+                ->join('products', 'products.id', '=', 'sale_order_items.product_id');
+                // ->where('product_id', '=', $filter_product_id);
+
+
+        $days = cal_days_in_month(CAL_GREGORIAN, $month, $year);
+        $filter_from = date($year.'-'.$month.'-01');
+        $filter_to = date($year.'-'.$month.'-'.$days);
+
+        $query->whereBetween('sale_orders.dispatched_at', [$filter_from, $filter_to]);
+        $query->orderBy('sale_orders.dispatched_at');
+
+        $res = $query->get([
+            'quantity_ordered',
+            'sale_orders.dispatched_at',
+            'dealers.company', 'dealers.city','dealers.zip_code', 'dealers.contact_person', 'dealers.email', 'dealers.email2', 'dealers.email3',
+            'products.part_number','products.notes','products.kw_rating',
+            'states.name'
+        ]);        
+
+
+        $i=0;
+        foreach ($res as $key=>$row)
+        {
+            $arr[$i]['date'] = Carbon::parse($row->dispatched_at)->toFormattedDateString();
+            $arr[$i]['customer'] = $row->company;
+            $arr[$i]['location'] = $row->city." ".$row->zip_code."<br>".$row->name;
+            $arr[$i]['part_number'] = $row->part_number;
+            $arr[$i]['quantity'] = $row->quantity_ordered;
+            $arr[$i]['capacity'] = $row->kw_rating;
+            $arr[$i]['contact'] = $row->contact_person;
+            $arr[$i]['email'] = $row->email."<br>".$row->email2."<br>".$row->email3;
+            $arr[$i]['remarks'] = $row->notes;
+
+            $i++;
+        }
+
+
+        $columns[0]['data'] = 'date';  
+        $columns[0]['title'] = 'Date';
+        $columns[1]['data'] = 'customer'; 
+        $columns[1]['title'] = 'Customer';
+        $columns[2]['data'] = 'location'; 
+        $columns[2]['title'] = 'Delivery Location';
+        $columns[3]['data'] = 'part_number'; 
+        $columns[3]['title'] = 'Part Number';
+        $columns[4]['data'] = 'quantity';  
+        $columns[4]['title'] = 'Quantity';
+        $columns[4]['className'] = 'text-end';
+        $columns[5]['data'] = 'capacity';  
+        $columns[5]['title'] = 'Capacity';
+        $columns[6]['data'] = 'contact';  
+        $columns[6]['title'] = 'Contact';
+        $columns[7]['data'] = 'email';  
+        $columns[7]['title'] = 'Email';
+        $columns[8]['data'] = 'remarks'; 
+        $columns[8]['title'] = 'Remarks';
+        
+        $response = array("data"=>$arr,"columns"=>$columns,"footer"=>'TOTALS');
+
+        //return response()->json($response);
+        return json_encode($response);
     }
 
 

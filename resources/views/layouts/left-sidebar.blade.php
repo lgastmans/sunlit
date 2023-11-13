@@ -52,6 +52,9 @@
                         <li>
                             <a href="{{ route('reports.sales-product-totals','quantity')}}">Product Quantity Totals</a>
                         </li>
+                        <li>
+                            <a href="{{ route('reports.dstr')}}">DSTR</a>
+                        </li>
                     </ul>
                 </div>                
             </li>

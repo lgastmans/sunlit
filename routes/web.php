@@ -149,6 +149,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/reports', [ReportsController::class, 'index'])->name('reports');
     Route::get('/reports/closing-stock', [ReportsController::class, 'closingStock'])->name('reports.closing-stock');
     Route::get('/reports/sales-product-totals/{report_format?}', [ReportsController::class, 'salesProductTotals'])->name('reports.sales-product-totals');
+    Route::get('/reports/dstr', [ReportsController::class, 'dstr'])->name('reports.dstr');
 
     Route::get('/products', [ProductController::class, 'index'])->name('products');
     Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
@@ -264,6 +265,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/sale-orders/sales-state-totals', [SaleOrderController::class, 'getStateSalesTotals'])->name('ajax.sales-state-totals');
         Route::get('/inventory-movement/stock-report', [InventoryMovementController::class, 'getListForClosingStockReport'])->name('ajax.inventory-closing-stock');
         Route::get('/reports/sales-product-totals', [ReportsController::class, 'getSalesProductTotals'])->name('ajax.sales-product-totals');
+        Route::get('/reports/dstr', [ReportsController::class, 'getDstr'])->name('ajax.dstr');
     });
 
 
