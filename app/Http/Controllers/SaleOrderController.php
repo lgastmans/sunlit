@@ -1176,14 +1176,13 @@ class SaleOrderController extends Controller
     }
 
 
-        /**
+    /**
      * Update the blocked_at and status of an order
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    //              blocked     this function should eventually be renamed "blocked"
     public function blocked(Request $request, $id)
     {
         $validated = $request->validate([
@@ -1230,7 +1229,6 @@ class SaleOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-     //             booked      this function should eventually be renamed "booked"
     public function booked(Request $request, $id)
     {
         $validated = $request->validate([
@@ -1261,7 +1259,6 @@ class SaleOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    //              dispatched      this function should eventually be renamed "dispatched"
     public function dispatched(Request $request, $id)
     {
         $validated = $request->validate([

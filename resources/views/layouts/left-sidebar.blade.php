@@ -18,7 +18,7 @@
             @can('view dashboard')
             <li class="side-nav-item {{ (Request::is('dashboard*') ? ' menuitem-active' : '') }}">
                 <a href="{{ route('dashboard')}}" class="side-nav-link {{ (Request::is('dashboard*') ? ' active' : '') }}">
-                    <i class="mdi mdi-view-dashboard"></i>
+                    <i class="mdi mdi-24px mdi-view-dashboard"></i>
                     <span> Dashboard </span>
                 </a>
             </li>
@@ -27,7 +27,7 @@
             @can('list inventories')
             <li class="side-nav-item {{ (Request::is('inventory*') ? ' menuitem-active' : '') }}">
                 <a href="{{ route('inventory')}}" class="side-nav-link {{ (Request::is('inventory*') ? ' active' : '') }}">
-                    <i class="uil-shop"></i>
+                    <i class="mdi mdi-24px mdi-clipboard-list"></i>
                     <span> Inventory </span>
                 </a>
             </li>
@@ -35,7 +35,7 @@
 
             <li class="side-nav-item {{ (Request::is('reports*') ? ' menuitem-active' : '') }}">
                 <a data-bs-toggle="collapse" href="#sidebarReports" aria-expanded="false" aria-controls="sidebarReports" class="side-nav-link">
-                    <i class="mdi mdi-note-outline"></i>
+                    <i class="mdi mdi-24px mdi-note-outline"></i>
                     <span> Reports </span>
                     <span class="menu-arrow"></span>
                 </a>
@@ -61,10 +61,17 @@
 
             <li class="side-nav-title side-nav-item mt-4">Orders</li>
 
+            <li class="side-nav-item {{ (Request::is('quotations*') ? ' menuitem-active' : '') }}">
+                <a href="{{ route('quotations')}}" class="side-nav-link {{ (Request::is('quotations*') ? ' active' : '') }}">
+                    <i class="mdi mdi-24px mdi-pen"></i>
+                    <span> Quotations </span>
+                </a>
+            </li>
+
             @can('list sale orders')
             <li class="side-nav-item {{ (Request::is('sale-orders*') ? ' menuitem-active' : '') }}">
                 <a data-bs-toggle="collapse" href="#sidebarSales" aria-expanded="false" aria-controls="sidebarSales" class="side-nav-link">
-                    <i class="mdi mdi-basket-outline"></i>
+                    <i class="mdi mdi-24px mdi-point-of-sale"></i>
                     <span> Sales </span>
                     <span class="menu-arrow"></span>
                 </a>
@@ -92,7 +99,7 @@
             @can('list purchase orders')
             <li class="side-nav-item {{ (Request::is('purchase-orders*') ? ' menuitem-active' : '') }}">
                 <a data-bs-toggle="collapse" href="#sidebarPurchases" aria-expanded="false" aria-controls="sidebarPurchases" class="side-nav-link">
-                    <i class="mdi mdi-cart-outline"></i>
+                    <i class="mdi mdi-24px mdi-cart-outline"></i>
                     <span> Purchases </span>
                     <span class="menu-arrow"></span>
                 </a>
@@ -123,7 +130,7 @@
             @can('list suppliers')
             <li class="side-nav-item {{ (Request::is('suppliers*') ? ' menuitem-active' : '') }}">
                 <a href="{{ route('suppliers')}}" class="side-nav-link {{ (Request::is('suppliers*') ? ' active' : '') }}">
-                    <i class="uil-truck-loading"></i>
+                    <i class="mdi mdi-24px mdi-truck"></i>
                     <span> Suppliers </span>
                 </a>
             </li>
@@ -140,7 +147,7 @@
  -->
              <li class="side-nav-item {{ (Request::is('dealers*') ? ' menuitem-active' : '') }}">
                 <a data-bs-toggle="collapse" href="#sidebarDealers" aria-expanded="false" aria-controls="sidebarDealers" class="side-nav-link">
-                    <i class="uil-users-alt"></i>
+                    <i class="mdi mdi-24px mdi-account-box-multiple"></i>
                     <span> Dealers </span>
                     <span class="menu-arrow"></span>
                 </a>
@@ -163,7 +170,7 @@
             @can('list warehouses')
             <li class="side-nav-item {{ (Request::is('warehouses*') ? ' menuitem-active' : '') }}">
                 <a href="{{ route('warehouses')}}" class="side-nav-link {{ (Request::is('warehouses*') ? ' active' : '') }}">
-                    <i class="mdi mdi-store"></i>
+                    <i class="mdi mdi-24px mdi-warehouse"></i>
                     <span> Warehouses </span>
                 </a>
             </li>
@@ -171,7 +178,7 @@
 
             <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#sidebarSettings" aria-expanded="false" aria-controls="sidebarSettings" class="side-nav-link">
-                    <i class="uil-server"></i>
+                    <i class="mdi mdi-24px mdi-cog-outline"></i>
                     <span> Settings </span>
                     <span class="menu-arrow"></span>
                 </a>

@@ -9,8 +9,8 @@
                                 <th>Order #</th>
                                 <th>Warehouse</th>
                                 <th>Dealer</th>
-                                <th>Quantity</th>
-                                <th>Price</th>
+                                <th style="text-align: right;">Quantity</th>
+                                <th style="text-align: right;">Price</th>
                                 <th>Status</th>
                                 <th>On</th>
                                 <th>Created by</th>
@@ -156,7 +156,9 @@
                 'orderable': true
             }
         ],
-        
+        columnDefs: [
+            { className: "dt-right", "targets": [3,4] },
+        ],        
         "aaSorting": [[6, "desc"]],
         "drawCallback": function () {
             $('.dataTables_paginate > .pagination').addClass('pagination-rounded');

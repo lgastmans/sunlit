@@ -1,75 +1,23 @@
 /******/ (() => { // webpackBootstrap
 var __webpack_exports__ = {};
-/*!***********************************************!*\
-  !*** ./resources/js/pages/sale_order_cart.js ***!
-  \***********************************************/
+/*!******************************************!*\
+  !*** ./resources/js/pages/quotations.js ***!
+  \******************************************/
 $(document).ready(function () {
   "use strict";
 
   /**
    * the GlobalSettings variable is declared 
-   * in cart.blade.php
+   * in show.blade.php
   */
-  var shippingStateSelect = $(".shipping-state-select").select2();
-  var routeShippingState = globalSettings.sale_order_shipping_state;
-  shippingStateSelect.select2({
-    ajax: {
-      url: routeShippingState,
-      dataType: 'json'
-      // processResults: function (data) {
-      //     return {
-      //         //results: data
-      //     };
-      // }
-    }
-  });
-
-  shippingStateSelect.on("change", function (e) {
-    var lastValue = e.currentTarget.value;
-    var lastText = e.currentTarget.textContent;
-
-    //console.log(lastValue +' :: ' + lastText);
-
-    $.ajaxSetup({
-      headers: {
-        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-      }
-    });
-    var route = globalSettings.sale_order_update;
-    route = route.replace(':id', $('#sale-order-id').val());
-    var field_name = 'shipping_state_id'; //$(this).attr('id');
-    var field_value = lastValue;
-    $.ajax({
-      type: 'POST',
-      url: route,
-      dataType: 'json',
-      data: {
-        'value': field_value,
-        'field': field_name,
-        'item': false,
-        '_method': 'PUT'
-      },
-      success: function success(result) {
-        console.log(result);
-
-        // $(" #transport-charges ").html(result.transport_charges);
-        // $(" #total-cost ").html(result.total);
-
-        // $.NotificationApp.send("Success","Transport Charges saved","top-right","","success")
-      }
-    });
-  });
-
   function recalculateGrandTotal() {
     var grand_total = 0;
     $('.item-total').each(function (index) {
       grand_total = grand_total + parseFloat($(this).html());
     });
     $('#grand-total').html(grand_total.toFixed(2));
-
-    //var route = '{{ route("sale-orders.update", ":id") }}';
-    var route = globalSettings.sale_order_update;
-    route = route.replace(':id', $('#sale-order-id').val());
+    var route = globalSettings.quotation_update;
+    route = route.replace(':id', $('#quotation-id').val());
     $.ajax({
       type: 'POST',
       url: route,
@@ -85,20 +33,9 @@ $(document).ready(function () {
         $("#transport-charges").html(result.transport_charges);
         $("#total-cost").html(result.total_cost);
         console.log('result ' + JSON.stringify(result));
-        //console.log('update' + result.transport_charges)
-        //$(" #total-cost ").html(result.total);                    
       }
     });
   }
-
-  var dealerSelect = $(".dealer-select").select2();
-  dealerSelect.select2({
-    ajax: {
-      //url: '{{route("ajax.dealers")}}',
-      url: globalSettings.ajax_dealers,
-      dataType: 'json'
-    }
-  });
   function formatProduct(el) {
     var item = "<div><h5>" + el.text + "</h5>";
     var notes = '';
@@ -117,7 +54,7 @@ $(document).ready(function () {
     return $(item);
   }
   var productSelect = $(".product-select").select2();
-  var product_route = globalSettings.product_route; //'{{ route("ajax.products.warehouse", [":warehouse_id"]) }}';
+  var product_route = globalSettings.product_route;
   product_route = product_route.replace(':warehouse_id', $('#warehouse-id').val());
   productSelect.select2({
     ajax: {
@@ -125,21 +62,7 @@ $(document).ready(function () {
       dataType: 'json'
     },
     templateResult: formatProduct
-    // templateSelection : formatProduct,
-    //   escapeMarkup: function(m) {
-    //       // Do not escape HTML in the select options text
-    //       return m;
-    //    },
   });
-
-  // productSelect.on("keyup", function (e) { 
-  //     console.log(e.keyCode);
-  //     if (( e.keyCode == 13 ) || ( e.keyCode == 9)) {
-  //         e.preventDefault();
-  //         $("#quantity_ordered").focus();
-  //     }
-  // });
-
   productSelect.on("change", function (e) {
     var product_id = $(".product-select").find(':selected').val();
     var warehouse_id = $(".product-select").find(':selected').val();
@@ -157,17 +80,17 @@ $(document).ready(function () {
         /**
          * default quantity to 1
          */
-        $("#quantity_ordered").val("1");
+        $("#quantity").val("1");
 
         /**
          * suggest price if average selling price not set
          */
         if (parseInt(data.average_selling_price) > 0) {
-          $('#selling_price').val(data.average_selling_price);
+          $('#price').val(data.average_selling_price);
           $(" #suggested_selling_price ").hide();
           $(" #suggested_selling_price ").html('');
         } else {
-          $('#selling_price').val('');
+          $('#price').val('');
           $(" #suggested_selling_price ").show();
           $(" #suggested_selling_price ").html('BP: Rs ' + data.average_buying_price); //.toNumber().formatCurrency());
         }
@@ -195,9 +118,7 @@ $(document).ready(function () {
           'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
         }
       });
-      //var route = '{{ route("sale-orders-items.update", ":id") }}';
-
-      var route = globalSettings.sale_order_items_update;
+      var route = globalSettings.quotation_items_update;
       route = route.replace(':id', item_id);
       $.ajax({
         type: 'POST',
@@ -218,8 +139,7 @@ $(document).ready(function () {
     }
   });
   $('#delete-modal').on('show.bs.modal', function (e) {
-    //var route = '{{ route("sale-orders-items.delete", ":id") }}';
-    var route = globalSettings.sale_order_items_delete;
+    var route = globalSettings.quotation_items_delete;
     var button = e.relatedTarget;
     if (button != null) {
       route = route.replace(':id', button.id);
@@ -227,14 +147,24 @@ $(document).ready(function () {
     }
   });
   $('#delete-modal-order').on('show.bs.modal', function (e) {
-    //var route = '{{ route("sale-orders.delete", ":id") }}';
-    var route = globalSettings.sale_order_delete;
+    var route = globalSettings.quotation_delete;
     var button = e.relatedTarget;
     if (button != null) {
       route = route.replace(':id', button.id);
       $('#delete-order-form').attr('action', route);
     }
   });
+  $('#create-invoice-modal-order').on('show.bs.modal', function (e) {
+    var route = globalSettings.quotation_create_invoice;
+    var button = e.relatedTarget;
+    if (button != null) {
+      route = route.replace(':id', button.id);
+      $('#create-invoice-order-form').attr('action', route);
+    }
+    // put an else here in case the 'cancel' implies 'confirm without invoice'
+    // and pass an additional parameter to the route
+  });
+
   function is_existing_product(product_id) {
     var item_id = 0;
     $('.item').each(function (index) {
@@ -246,8 +176,8 @@ $(document).ready(function () {
   }
   $('.form-product').on('submit', function (e) {
     e.preventDefault();
-    var price = $("#selling_price").val();
-    var asked_quantity = $('#quantity_ordered').val();
+    var price = $("#price").val();
+    var asked_quantity = $('#quantity').val();
     var product_id = $('#product_id').val();
 
     /**
@@ -286,7 +216,7 @@ $(document).ready(function () {
     var existing_item_id = is_existing_product($('#product_id').val());
     if (existing_item_id > 0) {
       var new_quantity = parseInt(asked_quantity) + parseInt($('#item-quantity-' + existing_item_id).val());
-      $('#quantity_ordered').val(new_quantity);
+      $('#quantity').val(new_quantity);
     }
     $.ajaxSetup({
       headers: {
@@ -304,8 +234,8 @@ $(document).ready(function () {
             if ($(this).attr('data-product-id') == data.product.id) {
               var existing_item_id = $(this).attr('data-id');
               var existing_item_quantity = $('#item-quantity-' + existing_item_id).val();
-              $('#item-quantity-' + existing_item_id).val(parseInt(data.item.quantity_ordered));
-              var new_total = data.item.selling_price * getTaxValue(data.item.tax) * parseInt($('#item-quantity-' + existing_item_id).val()).toFixed(2);
+              $('#item-quantity-' + existing_item_id).val(parseInt(data.item.quantity));
+              var new_total = data.item.price * getTaxValue(data.item.tax) * parseInt($('#item-quantity-' + existing_item_id).val()).toFixed(2);
               $('#item-total-' + existing_item_id).html(new_total.toFixed(2));
               var new_product = false;
             }
@@ -320,75 +250,37 @@ $(document).ready(function () {
           item += '</p>';
           item += '</td>';
           item += '<td>';
-          item += '<input id="item-quantity-' + data.item.id + '" type="number" min="1" value="' + data.item.quantity_ordered + '" class="editable-field form-control" data-value="' + data.item.quantity_ordered + '" data-field="quantity" data-item="' + data.item.id + '" placeholder="Qty" style="width: 90px;">';
+          item += '<input id="item-quantity-' + data.item.id + '" type="number" min="1" value="' + data.item.quantity + '" class="editable-field form-control" data-value="' + data.item.quantity + '" data-field="quantity" data-item="' + data.item.id + '" placeholder="Qty" style="width: 120px;">';
           item += '</td>';
           item += '<td>';
           item += '<div class="input-group flex-nowrap">';
           item += '<span class="input-group-text">' + globalSettings.inr_symbol + '</span>';
-          item += '<input id="item-price-' + data.item.id + '" type="text" class="editable-field form-control" data-value="' + data.item.selling_price + '" data-field="price" data-item="' + data.item.id + '" placeholder="" value="' + data.item.selling_price + '">';
+          item += '<input id="item-price-' + data.item.id + '" type="text" class="editable-field form-control" data-value="' + data.item.price + '" data-field="price" data-item="' + data.item.id + '" placeholder="" value="' + data.item.price + '" style="width:150px;">';
           item += '</div>';
           item += '</td>';
           item += '<td>';
           item += '<span id="item-tax-' + data.item.id + '" class="item-tax">' + data.item.tax + '%</span>';
           item += '</td>';
           item += '<td>';
-          item += '<span>' + globalSettings.inr_symbol + '</span><span id="item-total-' + data.item.id + '" class="item-total">' + (data.item.selling_price * getTaxValue(data.item.tax) * parseInt(data.item.quantity_ordered)).toFixed(2) + '</span>';
+          item += '<span>' + globalSettings.inr_symbol + '</span><span id="item-total-' + data.item.id + '" class="item-total">' + (data.item.price * getTaxValue(data.item.tax) * parseInt(data.item.quantity)).toFixed(2) + '</span>';
           item += '</td>';
           item += '<td>';
           item += '<a href="javascript:void(0);" class="action-icon" id="' + data.item.id + '" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>';
           item += '</td>';
           item += '</tr> ';
-          $('#sale-order-items-table > tbody:last-child').append(item);
+          $('#quotation-items-table > tbody:last-child').append(item);
           $('.no-items').remove();
         }
         $('.place-order-form-container').removeClass('d-none');
         recalculateGrandTotal();
         // clear the form
-        $('#quantity_ordered').val('');
-        $('#selling_price').val('');
+        $('#quantity').val('');
+        $('#price').val('');
         $('#product_id').val(null).trigger('change');
       },
       error: function error(xhr, textStatus, thrownError, data) {
         console.log("Error: " + thrownError);
         console.log("Error: " + textStatus);
-      }
-    });
-  });
-  $('.edit-order-number').on('click', function (e) {
-    $(this).hide();
-    $('.edit-order-number-form').slideDown();
-    $('#purchase-order-number').hide();
-  });
-  $('.edit-order-number-cancel').on('click', function (e) {
-    $('.edit-order-number-form').slideUp();
-    $('#purchase-order-number').show();
-    $('.edit-order-number').show();
-  });
-  $('.edit-order-number-form').on('submit', function (e) {
-    e.preventDefault();
-    $.ajaxSetup({
-      headers: {
-        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-      }
-    });
-    $.ajax({
-      type: 'POST',
-      url: $(this).attr("action"),
-      dataType: 'json',
-      data: $(this).serialize(),
-      success: function success(data) {
-        var new_url = "{{ route('sale-orders.cart', ':order_number') }}";
-        new_url = new_url.replace(':order_number', $('#order_number_slug').val());
-        $('.invalid-feedback').hide();
-        $('.edit-order-number-form').slideUp();
-        $('#sale-order-number').show();
-        $('.order-number').html('#' + $('#order_number').val());
-        $('.edit-order-number').show();
-        $('#order_number').val("");
-        window.history.pushState("data", "Title", new_url);
-      },
-      error: function error(xhr, textStatus, thrownError, data) {
-        $('.invalid-feedback').show();
       }
     });
   });

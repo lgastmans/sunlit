@@ -13,18 +13,19 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\SaleOrderController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\FreightZoneController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\SaleOrderItemController;
+use App\Http\Controllers\QuotationItemsController;
 use App\Http\Controllers\SaleOrderPaymentController;
 use App\Http\Controllers\InventoryMovementController;
 use App\Http\Controllers\PurchaseOrderItemController;
 use App\Http\Controllers\PurchaseOrderInvoiceController;
 use App\Http\Controllers\PurchaseOrderInvoiceItemController;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -52,7 +53,21 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 
+    Route::get('/quotations', [QuotationController::class, 'index'])->name('quotations');
+    Route::get('/quotations/create', [QuotationController::class, 'create'])->name('quotations.create');
+    Route::get('/quotations/list', [QuotationController::class, 'getListForDatatables'])->name('quotations.datatables');
+    Route::get('/quotations/{quotation_number}', [QuotationController::class, 'show'])->name('quotations.show');
+    Route::get('/quotations/{quotation_number_slug}/proforma/pdf', [QuotationController::class, 'exportProformaToPdf'])->name('quotations.proforma-pdf');
+    Route::get('/quotations/{quotation_number_slug}/proforma/', [QuotationController::class, 'proforma'])->name('quotations.proforma');    
+    Route::post('/quotations', [QuotationController::class, 'store'])->name('quotations.store');
+    Route::put('/quotations/{id}/pending', [QuotationController::class, 'pending'])->name('quotations.pending');
+    Route::put('/quotations/{id}/confirmed', [QuotationController::class, 'confirmed'])->name('quotations.confirmed');
+    Route::put('/quotations/{id}', [QuotationController::class, 'update'])->name('quotations.update');
+    Route::delete('/quotations/{id}', [QuotationController::class, 'destroy'])->name('quotations.delete');
 
+    Route::post('/quotation-items', [QuotationItemsController::class, 'store'])->name('quotation-items.store');
+    Route::put('/quotation-items/{id}', [QuotationItemsController::class, 'update'])->name('quotation-items.update');
+    Route::delete('/quotation-items/{id}', [QuotationItemsController::class, 'destroy'])->name('quotation-items.delete');
 
     Route::get('/sale-orders', [SaleOrderController::class, 'index'])->name('sale-orders');
     Route::get('/sale-orders/create', [SaleOrderController::class, 'create'])->name('sale-orders.create');

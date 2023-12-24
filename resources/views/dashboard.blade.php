@@ -91,8 +91,8 @@
                         <div class="row mb-2">
                             <h4 class="header-title mb-3">Inventory</h4><h5>Listed by highest selling products first</h5>
                             <p><small>
-                                The <strong>Available</strong> column shows the actual, physical stock, regardless of the <strong>Blocked</strong> or <strong>Booked</strong> columns.<br>
-                                The <strong>Blocked</strong> and <strong>Booked</strong> columns only affect the <strong>Projected</strong> column. The <strong>Projected</strong> column is calculated as <i>Projected = Available + Ordered - Booked</i>
+                                The <strong>Available</strong> column shows the actual, physical stock, regardless of the <strong>Booked</strong> column.<br>
+                                The <strong>Booked</strong> column only affects the <strong>Projected</strong> column. The <strong>Projected</strong> column is calculated as <i>Projected = Available + Ordered - Booked</i>
                             </small></p>
                             <div class="table-responsive">
                                 <table class="table table-centered table-borderless table-hover w-100 dt-responsive nowrap table-has-dlb-click" id="inventory-datatable">
@@ -104,7 +104,7 @@
                                             <th>Part Number</th>
                                             <th>Available</th>
                                             <th>Ordered</th>
-                                            <th>Blocked</th>
+                                            <!-- <th>Blocked</th> -->
                                             <th>Booked</th>
                                             <th>Projected</th>
                                             <th>Total Sales</th>
@@ -677,7 +677,7 @@ $(document).ready(function () {
                 "data": function ( d ) {[
                     d.filter_available = $(" .available-filter ").val(),
                     d.filter_ordered = $(" .ordered-filter ").val(),
-                    d.filter_blocked = $(" .blocked-filter ").val(),
+                    //d.filter_blocked = $(" .blocked-filter ").val(),
                     d.filter_booked = $(" .booked-filter ").val(),
                     d.filter_projected = $(" .projected-filter ").val()
                 ]},
@@ -728,10 +728,10 @@ $(document).ready(function () {
                 'data': 'ordered',
                 'orderable': false
             },
-            { 
-                'data': 'blocked',
-                'orderable': false
-            },
+            // { 
+            //     'data': 'blocked',
+            //     'orderable': false
+            // },
             { 
                 'data': 'booked',
                 'orderable': false
@@ -751,7 +751,7 @@ $(document).ready(function () {
         // },
         "order": [[3, "asc"]],
         columnDefs: [
-            { className: "dt-right", "targets": [4,5,6,7,8,9] },   //'_all' }
+            { className: "dt-right", "targets": [4,5,6,7,8] },   //'_all' }
         ],        
         "drawCallback": function () {
             $('.dataTables_paginate > .pagination').addClass('pagination-rounded');

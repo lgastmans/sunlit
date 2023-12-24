@@ -10,7 +10,7 @@ class SaleOrderItem extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    protected $fillable = ['sale_order_id'];
+    protected $fillable = ['sale_order_id', 'product_id', 'quantity_ordered', 'selling_price', 'tax'];
 
     protected $with = ['product', 'product.tax'];
 

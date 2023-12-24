@@ -27,17 +27,17 @@
                         <thead class="table-light">
                             <tr>
 
-                                <th>Warehouses</th>
+                                <th>Warehouse</th>
                                 <th>Category</th>
                                 <th>Supplier</th>
                                 <th>Part Number</th>
-                                <th>Available</th>
-                                <th>Ordered</th>
-                                <th>Blocked</th>
-                                <th>Booked</th>
-                                <th>Projected</th>
+                                <th style="text-align: right;">Available</th>
+                                <th style="text-align: right;">Ordered</th>
+                                <!-- <th>Blocked</th> -->
+                                <th style="text-align: right;">Booked</th>
+                                <th style="text-align: right;">Projected</th>
                             </tr>
-                            <tr class="filters" style="display: none;">
+                            <tr class="filters">
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
@@ -45,7 +45,7 @@
                                 {{-- <th><input type="text" class="form-control"></th> --}}
                                 <th><select class="form-control available-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
                                 <th><select class="form-control ordered-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
-                                <th><select class="form-control blocked-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
+                                {{--<th><select class="form-control blocked-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th> --}}
                                 <th><select class="form-control booked-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
                                 <th><select class="form-control projected-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
                                 {{-- <th class="no-filter"><select disabled class="form-control projected-filter">@foreach($stock_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th> --}}
@@ -88,30 +88,30 @@
             {
                 extend: 'excelHtml5',
                 exportOptions: {
-                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ]
+                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
                 },
                 className: 'btn btn-success'
             },
             {
                 extend: 'pdfHtml5',
                 exportOptions: {
-                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8 ]
+                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
                 },
                 className: 'btn btn-warning',
                 download: 'open'
             },
-            {
-                extend: 'colvis',
-                columns: ':not(.noVis)',
-                className: 'btn btn-info'
-            },
-            {
-                text: '<i class="mdi mdi-filter"></i>&nbsp;Filter',
-                // className: 'btn btn-light',
-                action: function ( e, dt, node, config ) {
-                    $( ".filters" ).slideToggle('slow');
-                }
-            }
+            // {
+            //     extend: 'colvis',
+            //     columns: ':not(.noVis)',
+            //     className: 'btn btn-info'
+            // },
+            // {
+            //     text: '<i class="mdi mdi-filter"></i>&nbsp;Filter',
+            //     // className: 'btn btn-light',
+            //     action: function ( e, dt, node, config ) {
+            //         $( ".filters" ).slideToggle('slow');
+            //     }
+            // }
         ],
         processing: true,
         serverSide: true,
@@ -123,7 +123,7 @@
                 "data": function ( d ) {[
                     d.filter_available = $(" .available-filter ").val(),
                     d.filter_ordered = $(" .ordered-filter ").val(),
-                    d.filter_blocked = $(" .blocked-filter ").val(),
+                    //d.filter_blocked = $(" .blocked-filter ").val(),
                     d.filter_booked = $(" .booked-filter ").val(),
                     d.filter_projected = $(" .projected-filter ").val()
                 ]},
@@ -174,10 +174,10 @@
                 'data': 'ordered',
                 'orderable': false
             },
-            { 
-                'data': 'blocked',
-                'orderable': false
-            },
+            // { 
+            //     'data': 'blocked',
+            //     'orderable': false
+            // },
             { 
                 'data': 'booked',
                 'orderable': false
@@ -187,7 +187,9 @@
                 'orderable': false
             },
         ],
-        
+        columnDefs: [
+            { className: "dt-right", "targets": [4,5,6,7] },
+        ],         
         // "select": {
         //     "style": "multi"
         // },

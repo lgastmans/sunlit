@@ -62,12 +62,119 @@
                     </div>
                 </div> <!-- end card-body-->
             </div> <!-- end card-->
+
+
+            <!-- Purchase Order -->
+
+            <div class="card  d-none">
+                <div class="card-body">
+                    <div class="row ">
+                        <div class="col-sm-12">
+                            <h4 class="mb-4">Purchase Order</h4>
+                                <div class="mb-3 row">
+                                    <div class="mt-sm-3 mt-xl-0 col-xl-4">
+                                        <label class="form-label" for="igst">IGST</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="purchase_order__igst" id="igst" placeholder="" value="{{ $settings['purchase_order']['igst'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
+                                            <span class="input-group-text" id="inputGroupPrepend">%</span>
+                                        </div>
+
+                                    </div>
+                                    <div class="mt-sm-3 mt-xl-0 col-xl-4">
+                                        <label class="form-label" for="transport">Transport</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="purchase_order__transport" id="transport" placeholder="" value="{{ $settings['purchase_order']['transport'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
+                                            <span class="input-group-text" id="inputGroupPrepend">%</span>
+                                        </div>
+                                    </div>
+                                    <div class="mt-sm-3 mt-xl-0 col-xl-4">
+                                        <label class="form-label" for="customs_duty">Customs Duty</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="purchase_order__customs_duty" id="customs_duty" placeholder="" value="{{ $settings['purchase_order']['customs_duty'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
+                                            <span class="input-group-text" id="inputGroupPrepend">%</span>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="mb-3 row">
+                                    <div class="mt-sm-3 mt-xl-0 col-xl-6">
+                                        <label class="form-label" for="social_welfare_surcharge">Social Welfare Surcharge</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="purchase_order__social_welfare_surcharge" id="social_welfare_surcharge" placeholder="" value="{{ $settings['purchase_order']['social_welfare_surcharge'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
+                                            <span class="input-group-text" id="inputGroupPrepend">%</span>
+                                        </div>
+                                    </div>
+                                    <div class="mt-sm-3 mt-xl-0 col-xl-6">
+                                        <label class="form-label" for="exchange_rate">Exchange Rate</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="inputGroupPrepend">{{ __('app.currency_symbol_inr')}}</span>
+                                        <input type="text" class="form-control" name="purchase_order__exchange_rate" id="exchange_rate" placeholder="" value="{{ $settings['purchase_order']['exchange_rate'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
+                                    </div>
+                                    </div>
+                                </div>
+                        </div><!-- end col-->
+                    </div>
+                </div> <!-- end card-body-->
+            </div> <!-- end card-->
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="row ">
+                        <div class="col-sm-12">
+                            <h4 class="mb-4">Quotations</h4>
+                                <div class="mb-3 row">
+                                    <div class="mt-sm-3 mt-xl-0 col-xl-4">
+                                        <label class="form-label" for="po_prefix">Quotation Prefix</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="quotation__prefix" id="qt_prefix" placeholder="" value="{{ $settings['quotation']['prefix'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
+                                        </div>
+                                    </div>
+                                    <div class="mt-sm-3 mt-xl-0 col-xl-4">
+                                        <label class="form-label" for="po_suffix">Quotation Suffix</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="quotation__suffix" id="qt_suffix" placeholder="" value="{{ $settings['quotation']['suffix'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
+                                        </div>
+                                    </div>
+                                    <div class="mt-sm-3 mt-xl-0 col-xl-4">
+                                        <label class="form-label" for="po_order_number">Quotation Number</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="quotation__quotation_number" id="qt_quotation_number" placeholder="" value="{{ $settings['quotation']['quotation_number'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
+                                        </div>
+                                    </div>
+                                   <br>&nbsp;
+                                    <div class="mb-3">
+                                        <label for="poi_terms" class="form-label">Payment & Delivery Terms</label>
+                                        <textarea class="form-control" name="quotation__terms" id="qt_terms">{!! $settings['quotation']['terms'] !!}</textarea>
+                                    </div>                                    
+                                </div>
+                        </div><!-- end col-->
+                    </div>
+                </div> <!-- end card-body-->
+            </div> <!-- end card-->
+
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h4 class="mb-4">UI Settings</h4>
+                                <div class="mb-3 row">
+                                    <div class="mt-sm-3 mt-xl-0 col-xl-3">
+                                        <label class="form-label" for="grid_rows">Grid rows</label>
+                                        <input type="text" class="form-control" name="general__grid_rows" id="grid_rows" placeholder="" value="{{ $settings['general']['grid_rows'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
+                                    </div>
+                                </div>
+                        </div><!-- end col-->
+                    </div>
+                </div> <!-- end card-body-->
+            </div> <!-- end card-->
+
         </div>
         <div class="col-lg-6">
 
             <!-- Purchase Order -->
 
-            <div class="card  d-none">
+            <div class="card d-none">
                 <div class="card-body">
                     <div class="row ">
                         <div class="col-sm-12">
@@ -190,21 +297,6 @@
             </div> <!-- end card-->
 
 
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <h4 class="mb-4">UI Settings</h4>
-                                <div class="mb-3 row">
-                                    <div class="mt-sm-3 mt-xl-0 col-xl-3">
-                                        <label class="form-label" for="grid_rows">Grid rows</label>
-                                        <input type="text" class="form-control" name="general__grid_rows" id="grid_rows" placeholder="" value="{{ $settings['general']['grid_rows'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
-                                    </div>
-                                </div>
-                        </div><!-- end col-->
-                    </div>
-                </div> <!-- end card-body-->
-            </div> <!-- end card-->
 
         </div>
         {{-- @foreach ($settings as $group=>$gsettings)
@@ -238,6 +330,12 @@
 
     ClassicEditor
         .create( document.querySelector( '#so_terms' ) )
+        .catch( error => {
+            console.error( error );
+        });
+
+    ClassicEditor
+        .create( document.querySelector( '#qt_terms' ) )
         .catch( error => {
             console.error( error );
         });

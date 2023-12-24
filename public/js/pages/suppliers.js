@@ -111,17 +111,20 @@ $(document).ready(function () {
     "email": "felbye@rediff.com",
     "contact_person": "Fonsie Elby",
     "phone": "8827000251"
-  }]; // Default Datatable
+  }];
 
+  // Default Datatable
   var url = "{{ route('suppliers.list') }}";
   console.log(url);
   var table = $('#suppliers-datatable').DataTable({
     //"data": data,
+
     processing: true,
     serverSide: true,
     //type : "POST",
     //contentType: "json",
     //processData: false,
+
     ajax: url,
     "language": {
       "paginate": {
@@ -139,7 +142,6 @@ $(document).ready(function () {
         if (type === 'display') {
           data = "<div class=\"form-check\"><input type=\"checkbox\" class=\"form-check-input dt-checkboxes\"><label class=\"form-check-label\">&nbsp;</label></div>";
         }
-
         return data;
       },
       'checkboxes': {
