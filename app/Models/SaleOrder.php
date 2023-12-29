@@ -139,10 +139,17 @@ class SaleOrder extends Model
             //$clone->items()->attach($item);
         }
 
+        $order_number_count = \Setting::get('sale_order.order_number') +1;
+        \Setting::set('sale_order.order_number', $order_number_count);
+        \Setting::save();
+
+        $order_number = \Setting::get('sale_order.prefix').$order_number_count.\Setting::get('sale_order.suffix');
+        $order_number_slug = str_replace(array(' ', '/'), '-', $order_number);
+
         $clone->created_at = Carbon::now();
         $clone->status = SaleOrder::DRAFT;
-        $clone->order_number = $this->order_number."-duplicate";
-        $clone->order_number_slug = $this->order_number_slug."-duplicate";
+        $clone->order_number = $order_number;
+        $clone->order_number_slug = $order_number_slug;
 
         $clone->save();
 
