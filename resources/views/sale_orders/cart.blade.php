@@ -120,7 +120,7 @@
 
                     <div class="col-lg-3">
                         <div class="border p-3 mt-4 mt-lg-0 rounded">
-                            <h4 class="header-title mb-3">Order Summary <span class="order-number">#{{ $order->order_number }}</span><i class="mdi mdi-square-edit-outline ms-2 edit-order-number"></i>
+                            <h4 class="header-title mb-3">Order Summary<span class="order-number">#{{ $order->order_number }}</span><i class="mdi mdi-square-edit-outline ms-2 edit-order-number"></i>
                                 <form class="row mt-1 edit-order-number-form" style="display:none" method="POST" action="{{ route('sale-orders.update', $order->id) }}">
                                     @csrf()
                                     @method('PUT')
@@ -136,7 +136,7 @@
                                         <button class="btn btn-danger btn-sm edit-order-number-cancel" type="button">Cancel</button>
                                     </div>
                                     <div class="invalid-feedback">
-                                        Order number already exists
+                                        Order number already exists 
                                     </div>
                                 </form>
                                 
@@ -273,6 +273,7 @@
         let globalSettings = 
             {
                 sale_order_update : '{{ route("sale-orders.update", ":id") }}',
+                sale_order_cart : '{{ route("sale-orders.cart", ":order_number") }}',
                 ajax_dealers : '{{route("ajax.dealers")}}',
                 product_json : '{{ route("product.json", [":id", ":warehouse_id"]) }}',
                 sale_order_items_update : '{{ route("sale-orders-items.update", ":id") }}',

@@ -1102,15 +1102,24 @@ class SaleOrderController extends Controller
             }
             $order = SaleOrder::find($id);
             $order->order_number = $request->get('order_number');
+            $order->order_number_slug = str_replace(array(' ', '/'), '-', $request->get('order_number'));
 
             activity()
                ->performedOn($order)
                ->withProperties(['order_number' => $order->order_number, 'status' => $order->status])
-               ->log('Proforma Invoice updated to '.$order->order_number);
+               ->log('PI number updated to '.$order->order_number);
 
 
             $order->update();
-            return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'field' => $request->get('field')]);
+
+            return response()->json([
+                'success'=>'true',
+                'code'=>200, 
+                'message'=> 'OK', 
+                'field' => $request->get('field'), 
+                'slug' => $order->order_number_slug, 
+                'order_number' => $order->order_number
+            ]);
         }
 
         if (($request->get('field') == "amount") || ($request->get('field') == "quantity"))

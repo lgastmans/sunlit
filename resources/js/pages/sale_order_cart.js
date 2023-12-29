@@ -420,6 +420,7 @@ $(document).ready(function () {
 
     $('.edit-order-number-form').on('submit', function(e){
         e.preventDefault();       
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
@@ -431,14 +432,15 @@ $(document).ready(function () {
             dataType: 'json',
             data: $( this ).serialize(),
             success: function (data) {
-                var new_url = "{{ route('sale-orders.cart', ':order_number') }}";
-                new_url = new_url.replace(':order_number', $('#order_number_slug').val());
+                var new_url = globalSettings.sale_order_cart ;
+                new_url = new_url.replace(':order_number', data.slug);
+
                 $('.invalid-feedback').hide();
                 $('.edit-order-number-form').slideUp();
                 $('#sale-order-number').show();
-                $('.order-number').html('#'+$('#order_number').val());
+                $('.order-number').html('#'+data.slug);
                 $('.edit-order-number').show();
-                $('#order_number').val("");
+                $('#order_number').val(data.order_number);
                 window.history.pushState("data","Title",new_url);
             },
             error:function(xhr, textStatus, thrownError, data)
