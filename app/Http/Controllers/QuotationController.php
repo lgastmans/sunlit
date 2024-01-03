@@ -412,6 +412,7 @@ class QuotationController extends Controller
             'status' => SaleOrder::DRAFT,
             'user_id' => $quote->user_id,
             'amount' => $quote->amount,
+            'transport_charges' => $quote->transport_charges,
             'payment_terms' => \Setting::get('sale_order.terms')
         ]);
 
