@@ -4,10 +4,15 @@
             <div class="col-lg-7 col-md-10 col-sm-11">
                 <div class="horizontal-steps mt-4 mb-4 pb-5" id="tooltip-container">
                     <div class="horizontal-steps-content">
-                        <div class="step-item @if ($order->status == 2) current @endif">
+                        <div class="step-item @if ($order->status == 1) current @endif">
+                            <span data-bs-container="#tooltip-container" data-bs-toggle="tooltip"
+                                data-bs-placement="bottom" title="{{ $order->display_created_at }}">Draft</span>
+                        </div>                        
+{{--                        <div class="step-item @if ($order->status == 2) current @endif">
                             <span data-bs-container="#tooltip-container" data-bs-toggle="tooltip"
                                 data-bs-placement="bottom" title="{{ $order->display_blocked_at }}">Blocked</span>
                         </div>
+--}}
                         <div class="step-item @if ($order->status == 3) current @endif">
                             <span data-bs-container="#tooltip-container" data-bs-toggle="tooltip"
                                 data-bs-placement="bottom" title="{{ $order->display_booked_at }}">Booked</span>
@@ -25,9 +30,13 @@
                     </div>
                     <div class="process-line"
                     @switch($order->status)
-                        @case(2)
+                        @case(1)
+                            style="width:0%;"
+                            @break                    
+{{--                    @case(2)
                             style="width:0%;"
                             @break
+--}}
                         @case(3)
                             style="width:50%;"
                             @break

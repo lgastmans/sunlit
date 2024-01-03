@@ -10,6 +10,8 @@
 
 @section('content')
 
+@include('sale_orders.steps')
+
 <div class="row">
     <div class="col-12">
         <div class="card">
@@ -158,6 +160,8 @@
                             </div>
                             <!-- end table-responsive -->
                         </div>
+
+                        {{-- 
                         <div class="place-order-form-container mt-4 mt-lg-0 rounded @if (count($order->items)==0) d-none @endif">
                             <div class="card mt-4 border">
                                 <div class="card-body">
@@ -185,6 +189,11 @@
 
                                 </div>
                             </div>
+                        </div>
+                        --}}
+
+                        <div class="col-lg-12">
+                            @include('sale_orders.status_update')
                         </div>
 
                         <div class="mt-4 mt-lg-0 rounded">

@@ -1,6 +1,6 @@
 
-{{-- confirmed --}}
-<div class="mt-lg-0 rounded @if ($order->status != 2) d-none @endif">
+{{-- booked --}}
+<div class="mt-lg-0 rounded @if ($order->status != 1) d-none @endif">
     <div class="card border">
         <div class="card-body">
             <form name="confirm-order-form" class="needs-validation" novalidate
