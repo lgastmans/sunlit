@@ -90,7 +90,7 @@
                             <th>Category</th>
                             <th>Part Number</th>
                             <th>Model</th>
-                            <th>KW Rating</th>
+                            <th style="text-align: right;">KW Rating</th>
                             <th style="text-align: right;">Quantity</th>
                             <th style="text-align: right;">Avg. Price</th>
                             <!-- <th>Taxable Value</th> -->
@@ -263,7 +263,7 @@
                 { data: 'amount', orderable : false}
             ],
             columnDefs: [
-                { className: "dt-right", "targets": [3,4,5,6,7] },   //'_all' }
+                { className: "dt-right", "targets": [4,5,6,7] },   //'_all' }
                 { visible: false, "targets": [0] },
             ],
             oLanguage : {
