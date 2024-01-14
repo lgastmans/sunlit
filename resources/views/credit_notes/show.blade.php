@@ -79,11 +79,12 @@
                     <table class="table mb-0" id="credit-note-items-table">
                         <thead class="table-light">
                             <tr>
-                                <th class="col-5">Product</th>
+                                <th class="col-4">Product</th>
                                 <th class="col-2" style="text-align: right;">Quantity</th>
                                 <th class="col-2" style="text-align: right;">Price</th>
                                 <th class="col-1" style="text-align: right;">Tax</th>
                                 <th class="col-2" style="text-align: right;">Total</th>
+                                <th class="col-1" style="text-align: right;"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -95,6 +96,7 @@
                                         <td style="text-align: right;">{{ __('app.currency_symbol_inr')}}{{ number_format($item->price,2) }}</td>
                                         <td style="text-align: right;">{{ number_format($item->tax,2) }}%</td>
                                         <td style="text-align: right;">{{ __('app.currency_symbol_inr')}}{{ $item->total_price }}</td>
+                                        <td></td>
                                     </tr>
                                 @else
                                     <tr class="item" data-id="{{$item->id}}" data-product-id="{{ $item->product->id }}">
@@ -107,8 +109,10 @@
                                             </p>
                                         </td>
                                         <td>
-                                            <input id="item-quantity-{{ $item->id }}" type="number" min="1" value="{{ $item->quantity }}" class="editable-field form-control" data-value="{{ $item->quantity }}" data-field="quantity" data-item="{{ $item->id }}"
+                                            <div class="input-group flex-nowrap">
+                                                <input id="item-quantity-{{ $item->id }}" type="number" min="1" value="{{ $item->quantity }}" class="editable-field form-control" data-value="{{ $item->quantity }}" data-field="quantity" data-item="{{ $item->id }}"
                                                 placeholder="Qty" style="width: 120px;">
+                                            </div>
                                         </td>
                                         <td>
                                             <div class="input-group flex-nowrap">
@@ -116,10 +120,10 @@
                                                 <input id="item-price-{{ $item->id }}" type="text" class="editable-field form-control" data-value="{{ $item->price }}" data-field="price" data-item="{{ $item->id }}" placeholder="" value="{{ $item->price }}" style="width: 150px;">
                                             </div>
                                         </td>
-                                        <td>
+                                        <td style="text-align: right;">
                                             <span id="item-tax-{{ $item->id }}">@if ($item->tax){{ $item->tax }}@else 0.00 @endif%</span>
                                         </td>
-                                        <td>
+                                        <td style="text-align: right;">
                                             <span>{{ __('app.currency_symbol_inr')}}</span>
                                             <span id="item-total-{{ $item->id }}" class="item-total">{{ $item->total_price }}</span>
                                         </td>
@@ -298,8 +302,10 @@
             //credit_note_confirm: '{{ route("credit-notes.confirmed", ":id") }}'
         };
 
+
+
         $(document).ready(function () {
-            "use strict";        
+            "use strict";
 
         }); //document ready
 
