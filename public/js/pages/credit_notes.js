@@ -103,7 +103,8 @@ $(document).ready(function () {
     return tax;
   }
   $('[id^=item-quantity-]').on("click", function (event) {
-    var item_id = $(this).parent().parent().attr('data-id');
+    var item_id = $(this).parent().parent().parent().attr('data-id');
+    console.log('item_id', item_id);
     var total = $('#item-price-' + item_id).val() * getTaxValue($('#item-tax-' + item_id).html()) * $('#item-quantity-' + item_id).val();
     $('#item-total-' + item_id).html(total.toFixed(2));
     $.ajaxSetup({
@@ -135,7 +136,7 @@ $(document).ready(function () {
       if ($(this).attr('data-field') == "price") {
         item_id = $(this).parent().parent().parent().attr('data-id');
       } else {
-        var item_id = $(this).parent().parent().attr('data-id');
+        var item_id = $(this).parent().parent().parent().attr('data-id');
       }
       var total = $('#item-price-' + item_id).val() * getTaxValue($('#item-tax-' + item_id).html()) * $('#item-quantity-' + item_id).val();
       $('#item-total-' + item_id).html(total.toFixed(2));
