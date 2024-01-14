@@ -133,12 +133,25 @@ class InventoryMovementController extends Controller
 
         $query->with(['product','warehouse'])
                 ->join('users', 'users.id', '=', 'user_id')
-                ->select('inventory_movements.*', 'dealers.company as dealer_company', 'sale_orders.courier', 'sale_orders.tracking_number')
-                ->selectRaw('IF(ISNULL(purchase_order_invoice_id), sale_orders.order_number, purchase_order_invoices.invoice_number) AS invoice_number')
-                ->selectRaw('IF(ISNULL(purchase_order_invoice_id), sale_orders.order_number_slug, purchase_order_invoices.invoice_number_slug) AS invoice_number_slug')
+                ->select('inventory_movements.*', 'sale_orders.courier', 'sale_orders.tracking_number')
+                ->selectRaw('IF(ISNULL(purchase_order_invoice_id), dealers.company, suppliers.company) AS company')
+                ->selectRaw('IF(ISNULL(purchase_order_invoice_id), IF(ISNULL(sales_order_id), credit_notes.credit_note_number, sale_orders.order_number), purchase_order_invoices.invoice_number) AS invoice_number')
+                ->selectRaw('IF(ISNULL(purchase_order_invoice_id), IF(ISNULL(sales_order_id), credit_notes.credit_note_number_slug, sale_orders.order_number_slug), purchase_order_invoices.invoice_number_slug) AS invoice_number_slug')
                 ->leftJoin('purchase_order_invoices', 'purchase_order_invoices.id', '=', 'purchase_order_invoice_id')
+                ->leftJoin('purchase_orders', 'purchase_orders.id', '=', 'inventory_movements.purchase_order_id')
                 ->leftJoin('sale_orders', 'sale_orders.id', '=', 'sales_order_id')
-                ->leftJoin('dealers', 'dealers.id', '=', 'sale_orders.dealer_id')
+                ->leftJoin('credit_notes', 'credit_notes.id', '=', 'credit_note_id')
+
+                ->leftJoin('dealers', function($join)
+                    {
+                        $join->on('dealers.id', '=', 'sale_orders.dealer_id');
+                        $join->orOn('dealers.id', '=', 'credit_notes.dealer_id');
+                    })
+
+                //->leftJoin('dealers', 'dealers.id', '=', 'sale_orders.dealer_id')
+                //->leftJoin('dealers', 'dealers.id', '=', 'credit_notes.dealer_id')
+
+                ->leftJoin('suppliers', 'suppliers.id', '=', 'purchase_orders.supplier_id')
                 ->join('warehouses', 'warehouses.id', '=', 'inventory_movements.warehouse_id')
                 ->join('products', 'products.id', '=', 'inventory_movements.product_id');
 
@@ -210,7 +223,8 @@ class InventoryMovementController extends Controller
                 "order_number_slug" => $record->invoice_number_slug,
                 "quantity" => $record->quantity,
                 "entry_type" => $record->display_movement_type,
-                "company" => $record->dealer_company, //$record->warehouse->name,
+                "source" => (is_null($record->purchase_order_invoice_id) ? ( (is_null($record->sales_order_id) ? "CREDITNOTE" : "SALESORDER") ) : "PURCHASE"),
+                "company" => $record->company, //$record->warehouse->name,
                 "product" => $record->product->part_number,
                 "courier" => $record->courier."\n".$record->tracking_number,
                 "user" => $record->user->display_name,
@@ -380,7 +394,9 @@ class InventoryMovementController extends Controller
                 "warehouse" => $record->name,
                 "part_number" => $record->part_number,
                 "description" => $record->notes,
-                "closing_stock" => $closing_stock
+                "closing_stock" => $closing_stock,
+                "received" => $received_stock,
+                "dispatched" => $dispatched_stock
             );
         }
 

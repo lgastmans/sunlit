@@ -24,6 +24,7 @@ mix.copy('resources/css/proforma.css', 'public/css/');
 
 mix.js('resources/js/app.js', 'public/js/');
 //mix.js('resources/js/pages/*', 'public/js/pages/');
+mix.js('resources/js/pages/credit_notes.js', 'public/js/pages/');
 mix.js('resources/js/pages/quotations.js', 'public/js/pages/');
 mix.js('resources/js/pages/sale_order_cart.js', 'public/js/pages/');
 mix.js('resources/js/pages/suppliers.js', 'public/js/pages/');

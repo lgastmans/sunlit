@@ -124,26 +124,26 @@
                             <h4 class="mb-4">Quotations</h4>
                                 <div class="mb-3 row">
                                     <div class="mt-sm-3 mt-xl-0 col-xl-4">
-                                        <label class="form-label" for="po_prefix">Quotation Prefix</label>
+                                        <label class="form-label" for="qt_prefix">Quotation Prefix</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control" name="quotation__prefix" id="qt_prefix" placeholder="" value="{{ $settings['quotation']['prefix'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
                                         </div>
                                     </div>
                                     <div class="mt-sm-3 mt-xl-0 col-xl-4">
-                                        <label class="form-label" for="po_suffix">Quotation Suffix</label>
+                                        <label class="form-label" for="qt_suffix">Quotation Suffix</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control" name="quotation__suffix" id="qt_suffix" placeholder="" value="{{ $settings['quotation']['suffix'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
                                         </div>
                                     </div>
                                     <div class="mt-sm-3 mt-xl-0 col-xl-4">
-                                        <label class="form-label" for="po_order_number">Quotation Number</label>
+                                        <label class="form-label" for="qt_quotation_number">Quotation Number</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control" name="quotation__quotation_number" id="qt_quotation_number" placeholder="" value="{{ $settings['quotation']['quotation_number'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
                                         </div>
                                     </div>
                                    <br>&nbsp;
                                     <div class="mb-3">
-                                        <label for="poi_terms" class="form-label">Payment & Delivery Terms</label>
+                                        <label for="qt_terms" class="form-label">Payment & Delivery Terms</label>
                                         <textarea class="form-control" name="quotation__terms" id="qt_terms">{!! $settings['quotation']['terms'] !!}</textarea>
                                     </div>                                    
                                 </div>
@@ -152,6 +152,40 @@
                 </div> <!-- end card-body-->
             </div> <!-- end card-->
 
+            <div class="card">
+                <div class="card-body">
+                    <div class="row ">
+                        <div class="col-sm-12">
+                            <h4 class="mb-4">Credit Notes</h4>
+                                <div class="mb-3 row">
+                                    <div class="mt-sm-3 mt-xl-0 col-xl-4">
+                                        <label class="form-label" for="cn_prefix">Credit Note Prefix</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="credit_note__prefix" id="cn_prefix" placeholder="" value="{{ $settings['credit_note']['prefix'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
+                                        </div>
+                                    </div>
+                                    <div class="mt-sm-3 mt-xl-0 col-xl-4">
+                                        <label class="form-label" for="cn_suffix">Credit Note Suffix</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="credit_note__suffix" id="cn_suffix" placeholder="" value="{{ $settings['credit_note']['suffix'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
+                                        </div>
+                                    </div>
+                                    <div class="mt-sm-3 mt-xl-0 col-xl-4">
+                                        <label class="form-label" for="cn_credit_note_number">Credit Note Number</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="credit_note__credit_note_number" id="cn_credit_note_number" placeholder="" value="{{ $settings['credit_note']['credit_note_number'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
+                                        </div>
+                                    </div>
+                                   <br>&nbsp;
+                                    <div class="mb-3">
+                                        <label for="cn_remarks" class="form-label">Remarks</label>
+                                        <textarea class="form-control" name="credit_note__remarks" id="cn_remarks">{!! $settings['credit_note']['remarks'] !!}</textarea>
+                                    </div>                                    
+                                </div>
+                        </div><!-- end col-->
+                    </div>
+                </div> <!-- end card-body-->
+            </div> <!-- end card-->
 
             <div class="card">
                 <div class="card-body">
@@ -336,6 +370,12 @@
 
     ClassicEditor
         .create( document.querySelector( '#qt_terms' ) )
+        .catch( error => {
+            console.error( error );
+        });
+
+    ClassicEditor
+        .create( document.querySelector( '#cn_remarks' ) )
         .catch( error => {
             console.error( error );
         });

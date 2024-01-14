@@ -234,6 +234,23 @@ class SaleOrderController extends Controller
         return response()->json($response);
     }
 
+    /**
+     * Display a listing of the resource for select2
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return json
+     */
+    public function getInvoicesList(Request $request)
+    {
+        $query = SaleOrder::query()
+            ->join('dealers', 'dealers.id', '=', 'sale_orders.dealer_id')
+            ->where('status', '=', SaleOrder::DISPATCHED);
+        if ($request->has('q')){
+            $query->where('order_number', 'like', '%'.$request->get('q').'%');
+        }
+        $invoices = $query->select('sale_orders.id', 'sale_orders.dealer_id', 'sale_orders.warehouse_id', 'order_number as text', 'dealers.company', 'dealers.address', 'dealers.address2', DB::raw('DATE_FORMAT(sale_orders.created_at, "%b %e, %Y") as invoice_date'))->get();
+        return ['results' => $invoices];
+    }
 
     public function getListForReport(Request $request)
     {
@@ -1279,6 +1296,9 @@ class SaleOrderController extends Controller
         ]);
         $order = SaleOrder::find($id);
 
+        /**
+         * check availability of stock before dispatch
+         */
         $check = $order->canDispatch();
         //$check = json_decode($order->canDispatch());
         // $res = implode(" ",$check);

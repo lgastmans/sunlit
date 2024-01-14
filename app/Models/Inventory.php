@@ -159,6 +159,7 @@ class Inventory extends Model
 
 
     /**
+     * 
      * get the total stock received for a given product, warehouse
      * 
      */
@@ -176,7 +177,10 @@ class Inventory extends Model
         if (is_null($till_date))
             $till_date = date('Y-m-d');
 
-        $res = PurchaseOrderInvoiceItem::select('product_id')
+        /**
+         * get stock received through Purchase Orders
+         */
+        $po = PurchaseOrderInvoiceItem::select('product_id')
             ->selectRaw('SUM(purchase_order_invoice_items.quantity_shipped) AS received_stock')
             ->join('purchase_order_invoices', 'purchase_order_invoice_items.purchase_order_invoice_id', '=', 'purchase_order_invoices.id')
             ->join('purchase_orders', 'purchase_order_invoices.purchase_order_id', '=', 'purchase_orders.id')
@@ -189,8 +193,26 @@ class Inventory extends Model
             ->first();
         
         $received_stock = 0;
-        if ($res)
-            $received_stock = $res['received_stock'];
+        if ($po)
+            $received_stock = $po['received_stock'];
+
+        /**
+         * get stock received through Credit Notes
+         */
+        $cn = CreditNoteItem::select('product_id')
+            ->selectRaw('SUM(credit_note_items.quantity) AS received_stock')
+            ->join('credit_notes', 'credit_notes.id', '=', 'credit_note_items.credit_note_id')
+            ->where('credit_notes.status', '>=', CreditNote::CONFIRMED)
+            ->where('credit_notes.warehouse_id', '=', $warehouse_id)
+            ->where('credit_note_items.product_id', '=', $product_id)
+            ->whereDate('credit_notes.confirmed_at', '<=', $till_date)
+            ->groupBy('product_id')
+            //->toSql();
+            ->first();
+
+        if ($cn)
+            $received_stock += $cn['received_stock'];
+
 
         /**
          * The opening stock got initialized at the launch of the software
@@ -208,6 +230,7 @@ class Inventory extends Model
             ->whereNull('purchase_order_id')
             ->whereNull('purchase_order_invoice_id')
             ->whereNull('sales_order_id')
+            ->whereNull('credit_note_id')
             ->first();
 
         $initial_stock = 0;
@@ -319,6 +342,7 @@ class Inventory extends Model
                             "purchase_order_id" => $model->purchase_order_id,
                             "purchase_order_invoice_id" => $model->id,
                             "sales_order_id" => null,
+                            "credit_note_id" => null,
                             "quantity" => $product->quantity_shipped,
                             "user_id" => Auth::user()->id,
                             "movement_type" => InventoryMovement::RECEIVED,
@@ -340,6 +364,46 @@ class Inventory extends Model
                 }
             }
         }
+        elseif ($class_name == 'CreditNote')
+        {
+            foreach($model->items as $item)
+            {
+                $inventory = $this->initProductStock($model->warehouse_id, $item->product_id);
+
+                if ($inventory){
+
+                    //$inventory->warehouse_id = $model->warehouse_id;
+                    //$inventory->product_id = $item->product_id;
+
+                    $available = $inventory->stock_available + $item->quantity;
+
+                    /*
+                    *   register stock received in the Inventory Movement model
+                    *   status RECEIVED
+                    */
+                    $data = array(
+                        "warehouse_id" => $model->warehouse_id,
+                        "product_id" => $item->product_id,
+                        "purchase_order_id" => null,
+                        "purchase_order_invoice_id" => null,
+                        "sales_order_id" => null,
+                        "credit_note_id" => $model->id,
+                        "quantity" => $item->quantity,
+                        "user_id" => Auth::user()->id,
+                        "movement_type" => InventoryMovement::RECEIVED,
+                        "price" => $item->price
+                    );
+                    $movement = new InventoryMovement();
+                    $movement->updateMovement($data);                
+
+                    $result = $inventory->update([
+                        "warehouse_id" => $model->warehouse_id,
+                        "product_id" => $item->product_id,
+                        "stock_available" => $available
+                    ]);
+                }
+            }
+        }     
         elseif ($class_name == 'SaleOrder')
         {
             foreach($model->items as $product)
@@ -393,6 +457,7 @@ class Inventory extends Model
                             "purchase_order_id" => null,
                             "purchase_order_invoice_id" => null,
                             "sales_order_id" => $model->id,
+                            "credit_note_id" => null,
                             "quantity" => $product->quantity_ordered,
                             "user_id" => Auth::user()->id,
                             "movement_type" => InventoryMovement::DELIVERED,

@@ -1,5 +1,6 @@
 {
     "/js/app.js": "/js/app.js",
+    "/js/pages/credit_notes.js": "/js/pages/credit_notes.js",
     "/js/pages/quotations.js": "/js/pages/quotations.js",
     "/js/pages/sale_order_cart.js": "/js/pages/sale_order_cart.js",
     "/js/pages/suppliers.js": "/js/pages/suppliers.js",

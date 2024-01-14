@@ -90,143 +90,142 @@
             $( ".filters" ).slideToggle('slow');
         });
 
-    var select_period;
+        var select_period;
 
-    var stockTable = $('#stock-datatable').DataTable({
-        dom: 'Bfrtip',
-        stateSave: true,
-        buttons: [
-            {
-                extend: 'excelHtml5',
-                exportOptions: {
-                    columns: [ 0, 1, 2, 3]
+        var stockTable = $('#stock-datatable').DataTable({
+            dom: 'Bfrtip',
+            stateSave: true,
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3]
+                    },
+                    className: 'btn btn-success'
                 },
-                className: 'btn btn-success'
-            },
-            {
-                extend: 'pdfHtml5',
-                exportOptions: {
-                    columns: [ 0, 1, 2, 3]
+                {
+                    extend: 'pdfHtml5',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3]
+                    },
+                    className: 'btn btn-warning',
+                    download: 'open'
                 },
-                className: 'btn btn-warning',
-                download: 'open'
+                // {
+                //     extend: 'colvis',
+                //     columns: ':not(.noVis)',
+                //     className: 'btn btn-info'
+                // },
+                // {
+                //     text: '<i class="mdi mdi-filter"></i>&nbsp;Filter',
+                //     // className: 'btn btn-light',
+                //     action: function ( e, dt, node, config ) {
+                //         $( ".filters" ).slideToggle('slow');
+                //     }
+                // }
+            ],
+            processing: true,
+            serverSide: true,
+            orderCellsTop: true,
+            fixedHeader: true,
+            //deferLoading: 0,
+            searching: true,
+            paging: false,
+            ajax      : {
+                url   : "{{ route('ajax.inventory-closing-stock') }}",
+                data  : function ( d ) {
+                    d.select_period = select_period
+                }            
+            }, 
+            "language": {
+                "paginate": {
+                    "previous": "<i class='mdi mdi-chevron-left'>",
+                    "next": "<i class='mdi mdi-chevron-right'>"
+                },
+                "info": "Showing inventory _START_ to _END_ of _TOTAL_",
+                "lengthMenu": "Display <select class='form-select form-select-sm ms-1 me-1'>" +
+                    '<option value="10">10</option>' +
+                    '<option value="20">20</option>' +
+                    '<option value="-1">All</option>' +
+                    '</select> rows'
             },
-            // {
-            //     extend: 'colvis',
-            //     columns: ':not(.noVis)',
-            //     className: 'btn btn-info'
-            // },
-            // {
-            //     text: '<i class="mdi mdi-filter"></i>&nbsp;Filter',
-            //     // className: 'btn btn-light',
-            //     action: function ( e, dt, node, config ) {
-            //         $( ".filters" ).slideToggle('slow');
-            //     }
-            // }
-        ],
-        processing: true,
-        serverSide: true,
-        orderCellsTop: true,
-        fixedHeader: true,
-        //deferLoading: 0,
-        searching: true,
-        paging: false,
-        ajax      : {
-            url   : "{{ route('ajax.inventory-closing-stock') }}",
-            data  : function ( d ) {
-                d.select_period = select_period
-            }            
-        }, 
-        "language": {
-            "paginate": {
-                "previous": "<i class='mdi mdi-chevron-left'>",
-                "next": "<i class='mdi mdi-chevron-right'>"
-            },
-            "info": "Showing inventory _START_ to _END_ of _TOTAL_",
-            "lengthMenu": "Display <select class='form-select form-select-sm ms-1 me-1'>" +
-                '<option value="10">10</option>' +
-                '<option value="20">20</option>' +
-                '<option value="-1">All</option>' +
-                '</select> rows'
-        },
-        "pageLength": {{ Setting::get('general.grid_rows') }},
-        "columns": [
-            { 
-                'data': 'warehouse',
-                'orderable': true
-            },
-            { 
-                'data': 'part_number',
-                'orderable': true
-            },
-            { 
-                'data': 'description',
-                'orderable': true
-            },
-            { 
-                'data': 'closing_stock',
-                'orderable': false
-            },
-        ],
-        
-        "aaSorting": [[1, "desc"]],
-        "drawCallback": function () {
-            $('.dataTables_paginate > .pagination').addClass('pagination-rounded');
-            $('#stock-datatable_length label').addClass('form-label');
+            "pageLength": {{ Setting::get('general.grid_rows') }},
+            "columns": [
+                { 
+                    'data': 'warehouse',
+                    'orderable': true
+                },
+                { 
+                    'data': 'part_number',
+                    'orderable': true
+                },
+                { 
+                    'data': 'description',
+                    'orderable': true
+                },
+                { 
+                    'data': 'closing_stock',
+                    'orderable': false
+                },
+            ],
             
-        },
-        
-    });
-
-    stockTable.columns().eq(0).each(function(colIdx) {
-
-        var cell = $('.filters th').eq($(stockTable.column(colIdx).header()).index());
-        var title = $(cell).text();
-
-        if($(cell).hasClass('no-filter')){
-
-            $(cell).html('&nbsp');
-
-        }
-        else{
-
-            // $(cell).html( '<input class="form-control filter-input" type="text"/>' );
-
-            $('select', $('.filters th').eq($(stockTable.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
-                e.stopPropagation();
-                $(this).attr('title', $(this).val());
-                //var regexr = '({search})'; //$(this).parents('th').find('select').val();
-                stockTable
-                    .column(colIdx)
-                    .search(this.value) //(this.value != "") ? regexr.replace('{search}', 'this.value') : "", this.value != "", this.value == "")
-                    .draw();
-                 
-            });
+            "aaSorting": [[1, "desc"]],
+            "drawCallback": function () {
+                $('.dataTables_paginate > .pagination').addClass('pagination-rounded');
+                $('#stock-datatable_length label').addClass('form-label');
+                
+            },
             
-            $('input', $('.filters th').eq($(stockTable.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
-                e.stopPropagation();
-                $(this).attr('title', $(this).val());
-                //var regexr = '({search})'; //$(this).parents('th').find('select').val();
-                stockTable
-                    .column(colIdx)
-                    .search(this.value) //(this.value != "") ? regexr.replace('{search}', 'this.value') : "", this.value != "", this.value == "")
-                    .draw();
-                 
-            }); 
-        }
-    });
-        
-    $(" #btn-load ").on("click", function() {
+        });
 
-        select_period = $(" #closing_stock_at ").val();
-        //month_id = $(" #month_id ").val();
-        //year_id = $(" #year_id ").val();
-        //quarterly_id = $(" #quarterly_id ").val();
-console.log('test ' + select_period);
+        stockTable.columns().eq(0).each(function(colIdx) {
 
-        stockTable.ajax.reload();
+            var cell = $('.filters th').eq($(stockTable.column(colIdx).header()).index());
+            var title = $(cell).text();
 
-    });
+            if($(cell).hasClass('no-filter')){
+
+                $(cell).html('&nbsp');
+
+            }
+            else{
+
+                // $(cell).html( '<input class="form-control filter-input" type="text"/>' );
+
+                $('select', $('.filters th').eq($(stockTable.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
+                    e.stopPropagation();
+                    $(this).attr('title', $(this).val());
+                    //var regexr = '({search})'; //$(this).parents('th').find('select').val();
+                    stockTable
+                        .column(colIdx)
+                        .search(this.value) //(this.value != "") ? regexr.replace('{search}', 'this.value') : "", this.value != "", this.value == "")
+                        .draw();
+                     
+                });
+                
+                $('input', $('.filters th').eq($(stockTable.column(colIdx).header()).index()) ).off('keyup change').on('keyup change', function (e) {
+                    e.stopPropagation();
+                    $(this).attr('title', $(this).val());
+                    //var regexr = '({search})'; //$(this).parents('th').find('select').val();
+                    stockTable
+                        .column(colIdx)
+                        .search(this.value) //(this.value != "") ? regexr.replace('{search}', 'this.value') : "", this.value != "", this.value == "")
+                        .draw();
+                     
+                }); 
+            }
+        });
+            
+        $(" #btn-load ").on("click", function() {
+
+            select_period = $(" #closing_stock_at ").val();
+            //month_id = $(" #month_id ").val();
+            //year_id = $(" #year_id ").val();
+            //quarterly_id = $(" #quarterly_id ").val();
+
+            stockTable.ajax.reload();
+
+        });
 
     });
 

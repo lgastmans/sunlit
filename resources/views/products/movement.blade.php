@@ -118,7 +118,12 @@
                 'data': 'order_number',
                 'orderable': true,
                 "render": function(data, type, row, meta){
-                    data = '<a href="/sale-orders/' + row.order_number_slug + '" target="_blank">' + data + '</a>';
+                    if (row.source=="PURCHASE")
+                        data = '<a href="/purchase-order-invoices/' + row.order_number_slug + '" target="_blank" title="Purchase Order">' + data + '</a>'
+                    else if (row.source=="SALESORDER")
+                        data = '<a href="/sale-orders/' + row.order_number_slug + '" target="_blank" title="Sales Order">' + data + '</a>'
+                    else
+                        data = '<a href="/credit-notes/' + row.order_number_slug + '" target="_blank" title="Credit Note">' + data + '</a>'
                     return data;
                 }
             },

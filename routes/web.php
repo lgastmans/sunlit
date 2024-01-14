@@ -16,10 +16,12 @@ use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\SaleOrderController;
 use App\Http\Controllers\WarehouseController;
+use App\Http\Controllers\CreditNoteController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\FreightZoneController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\SaleOrderItemController;
+use App\Http\Controllers\CreditNoteItemController;
 use App\Http\Controllers\QuotationItemsController;
 use App\Http\Controllers\SaleOrderPaymentController;
 use App\Http\Controllers\InventoryMovementController;
@@ -68,6 +70,24 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/quotation-items', [QuotationItemsController::class, 'store'])->name('quotation-items.store');
     Route::put('/quotation-items/{id}', [QuotationItemsController::class, 'update'])->name('quotation-items.update');
     Route::delete('/quotation-items/{id}', [QuotationItemsController::class, 'destroy'])->name('quotation-items.delete');
+
+    
+
+    Route::get('/credit-notes', [CreditNoteController::class, 'index'])->name('credit-notes');
+    Route::get('/credit-notes/create', [CreditNoteController::class, 'create'])->name('credit-notes.create');
+    Route::get('/credit-notes/list', [CreditNoteController::class, 'getListForDatatables'])->name('credit-notes.datatables');
+    Route::get('/credit-notes/{credit_note_number}', [CreditNoteController::class, 'show'])->name('credit-notes.show');
+    Route::get('/credit-notes/{credit_note_number_slug}/proforma/pdf', [CreditNoteController::class, 'exportProformaToPdf'])->name('credit-notes.proforma-pdf');
+    Route::get('/credit-notes/{credit_note_number_slug}/proforma/', [CreditNoteController::class, 'proforma'])->name('credit-notes.proforma');
+    Route::post('/credit-notes', [CreditNoteController::class, 'store'])->name('credit-notes.store');
+    Route::put('/credit-notes/{id}/confirmed', [CreditNoteController::class, 'confirmed'])->name('credit-notes.confirmed');
+    Route::put('/credit-notes/{id}', [CreditNoteController::class, 'update'])->name('credit-notes.update');
+    Route::delete('/credit-notes/{id}', [CreditNoteController::class, 'destroy'])->name('credit-notes.delete');
+
+    Route::post('/credit-note-items', [CreditNoteItemController::class, 'store'])->name('credit-note-items.store');
+    Route::put('/credit-note-items/{id}', [CreditNoteItemController::class, 'update'])->name('credit-note-items.update');
+    Route::delete('/credit-note-items/{id}', [CreditNoteItemController::class, 'destroy'])->name('credit-note-items.delete');
+    
 
     Route::get('/sale-orders', [SaleOrderController::class, 'index'])->name('sale-orders');
     Route::get('/sale-orders/create', [SaleOrderController::class, 'create'])->name('sale-orders.create');
@@ -274,6 +294,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/products/warehouse/{id}', [ProductController::class, 'getListPerWarehouse'])->name('ajax.products.warehouse');
         Route::get('/product/{id}/{warehouse_id?}', [ProductController::class, 'getById'])->name('product.json');
         Route::get('/sale-orders', [SaleOrderController::class, 'getListForReport'])->name('ajax.sales-report');
+        Route::get('/sale-orders/invoices', [SaleOrderController::class, 'getInvoicesList'])->name('ajax.invoices');
         Route::get('/sale-orders/dealer-report', [SaleOrderController::class, 'getListForDealerReport'])->name('ajax.sales-dealer-report');
         Route::get('/sale-orders/state-report', [SaleOrderController::class, 'getListForStateReport'])->name('ajax.sales-state-report');
         Route::get('/sale-orders/sales-totals', [SaleOrderController::class, 'getSalesTotals'])->name('ajax.sales-totals');

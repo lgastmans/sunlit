@@ -35,7 +35,7 @@
 
             <li class="side-nav-item {{ (Request::is('reports*') ? ' menuitem-active' : '') }}">
                 <a data-bs-toggle="collapse" href="#sidebarReports" aria-expanded="false" aria-controls="sidebarReports" class="side-nav-link">
-                    <i class="mdi mdi-24px mdi-note-outline"></i>
+                    <i class="mdi mdi-24px mdi-file-document-outline"></i>
                     <span> Reports </span>
                     <span class="menu-arrow"></span>
                 </a>
@@ -65,6 +65,13 @@
                 <a href="{{ route('quotations')}}" class="side-nav-link {{ (Request::is('quotations*') ? ' active' : '') }}">
                     <i class="mdi mdi-24px mdi-pen"></i>
                     <span> Quotations </span>
+                </a>
+            </li>
+
+            <li class="side-nav-item {{ (Request::is('credit-notes*') ? ' menuitem-active' : '') }}">
+                <a href="{{ route('credit-notes')}}" class="side-nav-link {{ (Request::is('credit-notes*') ? ' active' : '') }}">
+                    <i class="mdi mdi-24px mdi-credit-card-refund-outline"></i>
+                    <span> Credit Notes </span>
                 </a>
             </li>
 
