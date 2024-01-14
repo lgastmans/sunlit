@@ -66,7 +66,6 @@
                                 <th style="text-align: right;">Amount</th>
                                 <th style="width:100px;">Status</th> 
                                 <th>Created By</th> 
-                                <th>Actions</th>
                             </tr>
                             <tr class="filters">
                                 <th><input type="text" class="form-control"></th>
@@ -98,7 +97,6 @@
                                 <th class="no-filter"><input type="text" class="form-control"></th>
                                 <th><select class="form-control status-select"><option value="all">All</option>@foreach($status as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
                                 <th><input type="text" class="form-control"></th>
-                                <th class="no-filter"></th>
                             </tr>
                         </thead>
                         <tbody> 
@@ -279,7 +277,8 @@
             { 
                 'data': 'user',
                 'orderable': true 
-            },
+            }
+            /*
             {
                 'data': 'id',
                 "width": "5%",
@@ -296,11 +295,13 @@
                         edit_btn = '<a href="' + edit_route + '" class="action-icon"> <i class="mdi mdi-pencil"></i></a>'                       
                         delete_btn = '<a href="" class="action-icon" id="' + data + '" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>'
 
-                        data = edit_btn +  delete_btn
+                        //data = edit_btn + delete_btn
+                        data = edit_btn
                     }
                     return data;
                 }
-            }            
+            }
+            */            
         ],
         columnDefs: [
             { className: "dt-right", "targets": [6] },
@@ -351,6 +352,12 @@
             }); 
         }
     });
+
+    $('#credit-notes-datatable').on('dblclick', 'tr', function () {
+        var route = '{{  route("credit-notes.show", ":id") }}';
+        route = route.replace(':id', table.row( this ).data().credit_note_number_slug);
+        window.location.href = route;
+    });    
 
     @if(Session::has('success'))
         $.NotificationApp.send("Success","{{ session('success') }}","top-right","","success")
