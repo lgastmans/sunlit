@@ -325,7 +325,9 @@ $(document).ready(function () {
                                 item += '</p>';
                                 item += '</td>';
                                 item += '<td>';
-                                    item += '<input id="item-quantity-'+ data.item.id +'" type="number" min="1" value="'+ data.item.quantity +'" class="editable-field form-control" data-value="'+ data.item.quantity +'" data-field="quantity" data-item="'+ data.item.id +'" placeholder="Qty" style="width: 120px;">';
+                                    item += '<div class="input-group flex-nowrap">'
+                                        item += '<input id="item-quantity-'+ data.item.id +'" type="number" min="1" value="'+ data.item.quantity +'" class="editable-field form-control" data-value="'+ data.item.quantity +'" data-field="quantity" data-item="'+ data.item.id +'" placeholder="Qty" style="width: 120px;">';
+                                    item += '</div>';
                                 item += '</td>';
                                 item += '<td>';
                                     item += '<div class="input-group flex-nowrap">';
@@ -333,10 +335,10 @@ $(document).ready(function () {
                                         item += '<input id="item-price-'+ data.item.id +'" type="text" class="editable-field form-control" data-value="'+ data.item.price +'" data-field="price" data-item="'+ data.item.id +'" placeholder="" value="'+ data.item.price  +'" style="width:150px;">';
                                     item += '</div>';
                                 item += '</td>';
-                            item += '<td>';
+                            item += '<td style="text-align: right;">';
                             item += '<span id="item-tax-'+ data.item.id +'" class="item-tax">'+ data.item.tax +'%</span>';
                             item += '</td>';
-                            item += '<td>';
+                            item += '<td style="text-align: right;">';
                             item += '<span>'+globalSettings.inr_symbol+'</span><span id="item-total-'+ data.item.id +'" class="item-total">'+((data.item.price * getTaxValue(data.item.tax)) * parseInt(data.item.quantity)).toFixed(2) +'</span>';
                             item += '</td>';
                             item += '<td>';
