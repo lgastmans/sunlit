@@ -362,9 +362,22 @@ class CreditNoteController extends Controller
      * @param  \App\Models\CreditNote  $creditNote
      * @return \Illuminate\Http\Response
      */
-    public function destroy(CreditNote $creditNote)
+    public function destroy(Request $request, $id)
     {
-        //
+        $order = CreditNote::find($id);
+
+        activity()
+           ->performedOn($order)
+           ->withProperties(['credit_note_number' => $order->credit_note_number, 'status' => $order->status])
+           ->log('Credit Note deleted');
+
+        $order->items()->delete();
+        $order->delete();
+
+        if($request->ajax())
+            return response()->json(['deleted successfully '.$order->credit_note_number_slug]);
+        else
+            return redirect(route('credit-notes'))->with('success', trans('app.record_deleted', ['field' => 'Credit Note']));        
     }
 
     public function proforma($credit_note_number_slug)
