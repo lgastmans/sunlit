@@ -16,9 +16,9 @@
                                 <th>Created by</th>
                             </tr>
                             <tr class="filters"> 
-                                <th><input type="text" class="form-control"></th>
+                                <th></th>
                                 <th><input type="text" class="form-control"></th>      
-                                <th><input type="text" class="form-control"></th>
+                                <th></th>
                                 <th><select class="form-control entry-select">@foreach($entry_filter as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
                                 <th id="created_at" class="position-relative">
                                     <input type="text" class="form-control" name="created_at" 
@@ -74,18 +74,18 @@
                 className: 'btn btn-warning',
                 download: 'open'
             },
-            {
-                extend: 'colvis',
-                columns: ':not(.noVis)',
-                className: 'btn btn-info'
-            },
-            {
-                text: '<i class="mdi mdi-filter"></i>&nbsp;Filter',
-                // className: 'btn btn-light',
-                action: function ( e, dt, node, config ) {
-                    $( ".filters" ).slideToggle('slow');
-                }
-            }
+            // {
+            //     extend: 'colvis',
+            //     columns: ':not(.noVis)',
+            //     className: 'btn btn-info'
+            // },
+            // {
+            //     text: '<i class="mdi mdi-filter"></i>&nbsp;Filter',
+            //     // className: 'btn btn-light',
+            //     action: function ( e, dt, node, config ) {
+            //         $( ".filters" ).slideToggle('slow');
+            //     }
+            // }
         ],
         processing: true,
         serverSide: true,

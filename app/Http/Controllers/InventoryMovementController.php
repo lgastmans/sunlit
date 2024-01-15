@@ -80,11 +80,17 @@ class InventoryMovementController extends Controller
                 if ($column_index==5)
                     $order_column = "users.name";
             }else{
+                if ($column_index==0)
+                    $order_column = 'order_number';
                 if ($column_index==1)
-                    $order_column = "warehouses.name";
+                    $order_column = "dealers.company";
                 if ($column_index==3)
                     $order_column = "inventory_movements.movement_type";
+                if ($column_index==4)
+                    $order_column = 'inventory_movements.created_at';
                 if ($column_index==5)
+                    $order_column = "sale_orders.courier";
+                if ($column_index==6)
                     $order_column = "users.name";
             }
             $order_dir = $order_arr[0]['dir'];
@@ -200,13 +206,18 @@ class InventoryMovementController extends Controller
                 $query->where('inventory_movements.created_at', 'like', convertDateToMysql($column_arr[4]['search']['value']).'%');
 
             if (!empty($column_arr[5]['search']['value']))
-                $query->where('users.name', 'like', '%'.$column_arr[5]['search']['value'].'%');
+                $query->where('sale_orders.courier', 'like', '%'.$column_arr[5]['search']['value'].'%');
+
+            if (!empty($column_arr[6]['search']['value']))
+                $query->where('users.name', 'like', '%'.$column_arr[6]['search']['value'].'%');
         }
 
         $query->orderBy($order_column, $order_dir);
 
+        
         if ($length > 0)
             $query->skip($start)->take($length);
+
 
 
 //dd($query->toSql());
