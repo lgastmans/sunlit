@@ -117,9 +117,16 @@ $(document).ready(function () {
     }
 
 
+    $('body').on('click', '.click-field', function(e){
+        console.log('gotcha')
+    })
+
+
     $('[id^=item-quantity-]').on("click", function(event){
         var item_id = $(this).parent().parent().parent().attr('data-id');
+        
         console.log('item_id',item_id)
+
         var total = $('#item-price-' + item_id).val() * getTaxValue($('#item-tax-' + item_id).html()) * $('#item-quantity-' + item_id).val();
         $('#item-total-' + item_id).html(total.toFixed(2));
 
@@ -326,7 +333,7 @@ $(document).ready(function () {
                                 item += '</td>';
                                 item += '<td>';
                                     item += '<div class="input-group flex-nowrap">'
-                                        item += '<input id="item-quantity-'+ data.item.id +'" type="number" min="1" value="'+ data.item.quantity +'" class="editable-field form-control" data-value="'+ data.item.quantity +'" data-field="quantity" data-item="'+ data.item.id +'" placeholder="Qty" style="width: 120px;">';
+                                        item += '<input id="item-quantity-'+ data.item.id +'" type="number" min="1" value="'+ data.item.quantity +'" class="editable-field click-field form-control" data-value="'+ data.item.quantity +'" data-field="quantity" data-item="'+ data.item.id +'" placeholder="Qty" style="width: 120px;">';
                                     item += '</div>';
                                 item += '</td>';
                                 item += '<td>';

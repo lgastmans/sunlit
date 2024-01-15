@@ -44,6 +44,7 @@
                         </div>
 
                         <input type="hidden" name="invoice_number" id="invoice_number" value="">
+                        <input type="hidden" name="invoice_status" id="invoice_status" value="">
 
                         <div class="mb-3" id="invoice-details">
                             <div class="row">
@@ -198,6 +199,7 @@
             var data = e.params.data;
             console.log(data.id, data.company, data);
             $("#invoice_number").val(data.text);
+            $("#invoice_status").val(data.sale_order_status);
             $("#credit_note_invoice_date").val(data.invoice_date);
             $("#dealer-company").text(data.company);
             $("#dealer-address1").text(data.address);
@@ -263,6 +265,7 @@
                 $("#dealer-address").hide();
             }
             $("#invoice_number").val('');
+            $("#invoice_status").val('');
             $("#credit_note_invoice_date").val('');
             $("#dealer_id").val('');
             $("#warehouse_id").val('');

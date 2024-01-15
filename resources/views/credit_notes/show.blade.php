@@ -110,8 +110,7 @@
                                         </td>
                                         <td>
                                             <div class="input-group flex-nowrap">
-                                                <input id="item-quantity-{{ $item->id }}" type="number" min="1" value="{{ $item->quantity }}" class="editable-field form-control" data-value="{{ $item->quantity }}" data-field="quantity" data-item="{{ $item->id }}"
-                                                placeholder="Qty" style="width: 120px;">
+                                                <input id="item-quantity-{{ $item->id }}" type="number" min="1" value="{{ $item->quantity }}" class="editable-field form-control" data-value="{{ $item->quantity }}" data-field="quantity" data-item="{{ $item->id }}" placeholder="Qty" style="width: 120px;">
                                             </div>
                                         </td>
                                         <td>
