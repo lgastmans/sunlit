@@ -102,6 +102,9 @@ $(document).ready(function () {
     var tax = 1 + parseFloat(tax_percentage.replace('%', '') / 100);
     return tax;
   }
+  $('body').on('click', '.click-field', function (e) {
+    console.log('gotcha');
+  });
   $('[id^=item-quantity-]').on("click", function (event) {
     var item_id = $(this).parent().parent().parent().attr('data-id');
     console.log('item_id', item_id);
@@ -278,7 +281,7 @@ $(document).ready(function () {
           item += '</td>';
           item += '<td>';
           item += '<div class="input-group flex-nowrap">';
-          item += '<input id="item-quantity-' + data.item.id + '" type="number" min="1" value="' + data.item.quantity + '" class="editable-field form-control" data-value="' + data.item.quantity + '" data-field="quantity" data-item="' + data.item.id + '" placeholder="Qty" style="width: 120px;">';
+          item += '<input id="item-quantity-' + data.item.id + '" type="number" min="1" value="' + data.item.quantity + '" class="editable-field click-field form-control" data-value="' + data.item.quantity + '" data-field="quantity" data-item="' + data.item.id + '" placeholder="Qty" style="width: 120px;">';
           item += '</div>';
           item += '</td>';
           item += '<td>';

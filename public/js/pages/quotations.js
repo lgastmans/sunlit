@@ -104,6 +104,35 @@ $(document).ready(function () {
     var tax = 1 + parseFloat(tax_percentage.replace('%', '') / 100);
     return tax;
   }
+  $('[id^=item-quantity-]').on("click", function (event) {
+    var item_id = $(this).parent().parent().parent().attr('data-id');
+    console.log('item_id', item_id);
+    var total = $('#item-price-' + item_id).val() * getTaxValue($('#item-tax-' + item_id).html()) * $('#item-quantity-' + item_id).val();
+    $('#item-total-' + item_id).html(total.toFixed(2));
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+      }
+    });
+    var route = globalSettings.quotation_items_update;
+    route = route.replace(':id', item_id);
+    $.ajax({
+      type: 'POST',
+      url: route,
+      dataType: 'json',
+      data: {
+        'value': $(this).val(),
+        'field': $(this).attr('data-field'),
+        'item': $(this).attr('data-item'),
+        '_method': 'PUT'
+      },
+      success: function success(result) {
+        $('#item-price-' + item_id).attr('data-value', $('#item-price-' + item_id).val());
+        $('#item-quantity-' + item_id).attr('data-value', $('#item-quantity-' + item_id).val());
+        recalculateGrandTotal();
+      }
+    });
+  });
   $('body').on('blur', '.editable-field', function (e) {
     if ($(this).val() != $(this).attr('data-value')) {
       if ($(this).attr('data-field') == "price") {
@@ -250,7 +279,9 @@ $(document).ready(function () {
           item += '</p>';
           item += '</td>';
           item += '<td>';
+          item += '<div class="input-group flex-nowrap">';
           item += '<input id="item-quantity-' + data.item.id + '" type="number" min="1" value="' + data.item.quantity + '" class="editable-field form-control" data-value="' + data.item.quantity + '" data-field="quantity" data-item="' + data.item.id + '" placeholder="Qty" style="width: 120px;">';
+          item += '</div>';
           item += '</td>';
           item += '<td>';
           item += '<div class="input-group flex-nowrap">';
