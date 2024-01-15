@@ -1048,6 +1048,19 @@ class SaleOrder extends Model
     }
 
     /**
+     * Returns the shipped_at date for display Month Day, Year
+     */
+    public function getDisplayCreatedAtAttribute()
+    {
+        if ($this->dispatched_at)
+        {
+            $dt = Carbon::parse($this->dispatched_at);
+            return $dt->toFormattedDateString(); 
+        } 
+        return ""; 
+    }
+
+    /**
      * Returns the due_at date for display Month Day, Year
      */
     public function getDisplayDueAtAttribute()

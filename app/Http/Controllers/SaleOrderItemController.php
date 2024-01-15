@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Carbon\Carbon;
 use App\Models\Product;
 use App\Models\Inventory;
 use App\Models\SaleOrder;
@@ -47,11 +47,24 @@ class SaleOrderItemController extends Controller
             $column_index = $order_arr[0]['column'];
             $order_column = $column_arr[$column_index]['data'];
 
+            if ($column_index==0)
+                $order_column = "sale_orders.order_number";
             if ($column_index==1)
                 $order_column = "warehouses.name";
             if ($column_index==2)
                 $order_column = "dealers.company";
+            if ($column_index==3)
+                $order_column = "sale_order_items.quantity_ordered";
+            //if ($column_index==4)
+            if ($column_index==5)
+                $order_column = "sale_orders.status";
             if ($column_index==6)
+                $order_column = "sale_orders.booked_at";
+            if ($column_index==7)
+                $order_column = "sale_orders.dispatched_at";
+            if ($column_index==8)
+                $order_column = "sale_orders.created_at";
+            if ($column_index==9)
                 $order_column = "users.name";
 
             $order_dir = $order_arr[0]['dir'];
@@ -71,8 +84,10 @@ class SaleOrderItemController extends Controller
         // Total records
         $totalRecords = SaleOrderItem::where('product_id','=', $filter_product_id)->count();
 
-
         $query = SaleOrderItem::with('sale_order')
+                ->select('sale_order_items.id', 'sale_orders.created_at', 'sale_orders.booked_at', 'sale_orders.dispatched_at', 'sale_orders.order_number',
+                    'sale_orders.order_number_slug', 'sale_order_items.quantity_ordered', 'sale_order_items.selling_price', 'sale_orders.status', 
+                    'warehouses.name AS warehouse_name', 'dealers.company AS dealer_company', 'users.name')
                 ->join('sale_orders', 'sale_orders.id', '=', 'sale_order_id')
                 ->join('users', 'users.id', '=', 'sale_orders.user_id')
                 ->join('warehouses', 'warehouses.id', '=', 'sale_orders.warehouse_id')
@@ -91,14 +106,20 @@ class SaleOrderItemController extends Controller
         if (!empty($column_arr[3]['search']['value'])){
             $query->where('sale_order_items.quantity_ordered', 'like', $column_arr[3]['search']['value'].'%');
         }
-        if (!empty($column_arr[4]['search']['value'])){
-            $query->where('sale_orders.status', '=', $column_arr[4]['search']['value']);
-        }
         if (!empty($column_arr[5]['search']['value'])){
-            $query->where('sale_orders.ordered_at', 'like', convertDateToMysql($column_arr[5]['search']['value']));
+            $query->where('sale_orders.status', '=', $column_arr[5]['search']['value']);
         }
         if (!empty($column_arr[6]['search']['value'])){
-            $query->where('users.name', 'like', $column_arr[6]['search']['value'].'%');
+            $query->where('sale_orders.booked_at', 'like', convertDateToMysql($column_arr[6]['search']['value']));
+        }
+        if (!empty($column_arr[7]['search']['value'])){
+            $query->where('sale_orders.dispatched_at', 'like', convertDateToMysql($column_arr[7]['search']['value']));
+        }
+        if (!empty($column_arr[8]['search']['value'])){
+            $query->where('sale_orders.created_at', 'like', convertDateToMysql($column_arr[8]['search']['value']));
+        }
+        if (!empty($column_arr[9]['search']['value'])){
+            $query->where('users.name', 'like', $column_arr[9]['search']['value'].'%');
         }
                 
         if ($request->has('month_id')){
@@ -112,31 +133,37 @@ class SaleOrderItemController extends Controller
 
         if ($length > 0)
             $query->skip($start)->take($length);
-        
+//$orders = $query->toSql();
+//dd($orders);
         $orders = $query->get();
 
         $arr = array();
         foreach($orders as $order)
         {
 
-            if ($order->sale_order->status == SaleOrder::BLOCKED)
-                $sales_order_date = $order->sale_order->display_blocked_at;
-            elseif ($order->sale_order->status == SaleOrder::BOOKED)
-                $sales_order_date = $order->sale_order->display_booked_at;
-            elseif ($order->sale_order->status == SaleOrder::DISPATCHED)
-                $sales_order_date = $order->sale_order->display_dispatched_at;
+            if ($order->status==SaleOrder::DRAFT)
+                $display_status = '<span class="badge badge-secondary-lighten">Draft</span>';
+            elseif ($order->status==SaleOrder::BOOKED)
+                $display_status = '<span class="badge badge-primary-lighten">Booked</span>';
+            elseif ($order->status==SaleOrder::DISPATCHED)
+                $display_status = '<span class="badge badge-dark-lighten">Dispatched</span>';
+            else
+                $display_status = '<span class="badge badge-error-lighten">Unknown</span>';
+
 
             $arr[] = array(
                 "id" => $order->id,
-                "ordered_at" => $sales_order_date,
-                "order_number" => $order->sale_order->order_number,
-                "order_number_slug" => $order->sale_order->order_number_slug,
+                "created_at" => Carbon::parse($order->created_at->toDateString())->toFormattedDateString(),
+                "booked_at" => Carbon::parse($order->booked_at)->toFormattedDateString(),
+                "dispatched_at" => Carbon::parse($order->dispatched_at)->toFormattedDateString(),
+                "order_number" => $order->order_number,
+                "order_number_slug" => $order->order_number_slug,
                 "quantity_ordered" => $order->quantity_ordered,
                 "selling_price" => $order->selling_price,
-                "status" => $order->sale_order->display_status,
-                "warehouse" => $order->sale_order->warehouse->name,
-                "dealer" => (isset($order->sale_order->dealer) ? $order->sale_order->dealer->company : 'not specified'),
-                "user" => $order->sale_order->user->display_name
+                "status" => $display_status,
+                "warehouse" => $order->warehouse_name,
+                "dealer" => $order->dealer_company, //(isset($order->dealer) ? $order->company : 'not specified'),
+                "user" => $order->display_name
             );
         }
 

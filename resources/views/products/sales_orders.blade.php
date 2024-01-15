@@ -12,20 +12,23 @@
                                 <th style="text-align: right;">Quantity</th>
                                 <th style="text-align: right;">Price</th>
                                 <th>Status</th>
-                                <th>On</th>
+                                <th>Booked On</th>
+                                <th>Dispatched On</th>
+                                <th>Created On</th>
                                 <th>Created by</th>
                             </tr>
-                            <tr class="sale-orders-filters" style="display:none;">
+                            <tr class="sale-orders-filters">
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
                                 <th><select class="form-control status-select"><option value="0">All</option>@foreach($sale_order_status ?? '' as $k => $v) <option value={{ $k }}>{{ $v }}</option> @endforeach</select></th>
-                                <th id="sale_ordered_at" class="position-relative">
-                                    <input type="text" class="form-control" name="ordered_at" 
+                                
+                                <th id="sale_booked_at" class="position-relative">
+                                    <input type="text" class="form-control" name="sale_booked_at" 
                                     data-provide="datepicker" 
-                                    data-date-container="#sale_ordered_at"
+                                    data-date-container="#sale_booked_at"
                                     data-date-autoclose="true"
                                     data-date-format="M d, yyyy"
                                     data-date-start-date="-1d"
@@ -33,6 +36,29 @@
                                     data-date-today-highlight="true"
                                     required>
                                 </th>
+                                <th id="sale_dispatched_at" class="position-relative">
+                                    <input type="text" class="form-control" name="sale_dispatched_at" 
+                                    data-provide="datepicker" 
+                                    data-date-container="#sale_dispatched_at"
+                                    data-date-autoclose="true"
+                                    data-date-format="M d, yyyy"
+                                    data-date-start-date="-1d"
+                                    data-date-end-date="+6m"
+                                    data-date-today-highlight="true"
+                                    required>
+                                </th>
+                                <th id="sale_created_at" class="position-relative">
+                                    <input type="text" class="form-control" name="sale_created_at" 
+                                    data-provide="datepicker" 
+                                    data-date-container="#sale_created_at"
+                                    data-date-autoclose="true"
+                                    data-date-format="M d, yyyy"
+                                    data-date-start-date="-1d"
+                                    data-date-end-date="+6m"
+                                    data-date-today-highlight="true"
+                                    required>
+                                </th>
+                                
                                 <th><input type="text" class="form-control"></th>
                             </tr>
                         </thead>
@@ -79,18 +105,18 @@
                 className: 'btn btn-warning',
                 download: 'open'
             },
-            {
-                extend: 'colvis',
-                columns: ':not(.noVis)',
-                className: 'btn btn-info'
-            },
-            {
-                text: '<i class="mdi mdi-filter"></i>&nbsp;Filter',
-                // className: 'btn btn-light',
-                action: function ( e, dt, node, config ) {
-                    $( ".sale-orders-filters" ).slideToggle('slow');
-                }
-            }
+            // {
+            //     extend: 'colvis',
+            //     columns: ':not(.noVis)',
+            //     className: 'btn btn-info'
+            // },
+            // {
+            //     text: '<i class="mdi mdi-filter"></i>&nbsp;Filter',
+            //     // className: 'btn btn-light',
+            //     action: function ( e, dt, node, config ) {
+            //         $( ".sale-orders-filters" ).slideToggle('slow');
+            //     }
+            // }
         ],
         processing: true,
         serverSide: true,
@@ -148,7 +174,15 @@
                 'orderable': true
             },
             { 
-                'data': 'ordered_at',
+                'data': 'booked_at',
+                'orderable': true 
+            },
+            { 
+                'data': 'dispatched_at',
+                'orderable': true 
+            },
+            { 
+                'data': 'created_at',
                 'orderable': true 
             },
             { 
@@ -159,7 +193,7 @@
         columnDefs: [
             { className: "dt-right", "targets": [3,4] },
         ],        
-        "aaSorting": [[6, "desc"]],
+        "aaSorting": [[8, "desc"]],
         "drawCallback": function () {
             $('.dataTables_paginate > .pagination').addClass('pagination-rounded');
             $('#sale-orders-datatable_length label').addClass('form-label');
