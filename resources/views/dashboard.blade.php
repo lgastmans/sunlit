@@ -375,7 +375,6 @@ $(document).ready(function () {
         $("div[id=dashboard-product]").hide();
         $("div[id=dashboard-state]").hide();
         $("div[id=" + $(this).attr("data-related") + "]").show();
-        
     });    
 
     drawSalesTotals();
