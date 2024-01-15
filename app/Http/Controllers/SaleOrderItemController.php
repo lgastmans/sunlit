@@ -87,7 +87,7 @@ class SaleOrderItemController extends Controller
         $query = SaleOrderItem::with('sale_order')
                 ->select('sale_order_items.id', 'sale_orders.created_at', 'sale_orders.booked_at', 'sale_orders.dispatched_at', 'sale_orders.order_number',
                     'sale_orders.order_number_slug', 'sale_order_items.quantity_ordered', 'sale_order_items.selling_price', 'sale_orders.status', 
-                    'warehouses.name AS warehouse_name', 'dealers.company AS dealer_company', 'users.name')
+                    'warehouses.name AS warehouse_name', 'dealers.company AS dealer_company', 'users.name AS user_name')
                 ->join('sale_orders', 'sale_orders.id', '=', 'sale_order_id')
                 ->join('users', 'users.id', '=', 'sale_orders.user_id')
                 ->join('warehouses', 'warehouses.id', '=', 'sale_orders.warehouse_id')
@@ -163,7 +163,7 @@ class SaleOrderItemController extends Controller
                 "status" => $display_status,
                 "warehouse" => $order->warehouse_name,
                 "dealer" => $order->dealer_company, //(isset($order->dealer) ? $order->company : 'not specified'),
-                "user" => $order->display_name
+                "user" => $order->user_name
             );
         }
 
