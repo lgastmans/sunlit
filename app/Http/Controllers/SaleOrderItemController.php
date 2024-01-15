@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use Carbon\Carbon;
+use NumberFormatter;
 use App\Models\Product;
 use App\Models\Inventory;
 use App\Models\SaleOrder;
@@ -25,6 +26,9 @@ class SaleOrderItemController extends Controller
 
     public function getListForDatatables(Request $request)
     {
+        $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
+        $fmt->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 0);
+
         $draw = 1;
         if ($request->has('draw'))
             $draw = $request->get('draw');
@@ -158,8 +162,8 @@ class SaleOrderItemController extends Controller
                 "dispatched_at" => Carbon::parse($order->dispatched_at)->toFormattedDateString(),
                 "order_number" => $order->order_number,
                 "order_number_slug" => $order->order_number_slug,
-                "quantity_ordered" => $order->quantity_ordered,
-                "selling_price" => $order->selling_price,
+                "quantity_ordered" => number_format($order->quantity_ordered,0,'.',','),
+                "selling_price" => $fmt->formatCurrency($order->selling_price,"INR"),
                 "status" => $display_status,
                 "warehouse" => $order->warehouse_name,
                 "dealer" => $order->dealer_company, //(isset($order->dealer) ? $order->company : 'not specified'),

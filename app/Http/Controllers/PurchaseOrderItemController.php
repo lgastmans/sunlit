@@ -51,6 +51,8 @@ class PurchaseOrderItemController extends Controller
             // if ($column_index==2)
             //     $order_column = "dealers.company";
             if ($column_index==5)
+                $order_column = "purchase_orders.ordered_at";
+            if ($column_index==6)
                 $order_column = "users.name";
 
             $order_dir = $order_arr[0]['dir'];
@@ -74,6 +76,7 @@ class PurchaseOrderItemController extends Controller
 
         $query = PurchaseOrderItem::with('purchase_order')
             ->join('purchase_orders', 'purchase_orders.id', '=', 'purchase_order_id')
+            ->join('suppliers', 'suppliers.id', '=', 'purchase_orders.supplier_id')
             ->join('users', 'users.id', '=', 'purchase_orders.user_id')
             ->join('warehouses', 'warehouses.id', '=', 'purchase_orders.warehouse_id')
             ->where('product_id', '=', $filter_product_id);
@@ -86,16 +89,19 @@ class PurchaseOrderItemController extends Controller
             $query->where('warehouses.name', 'like', '%'.$column_arr[1]['search']['value'].'%');
         }
         if (!empty($column_arr[2]['search']['value'])){
-            $query->where('purchase_orders.quantity_confirmed', '=', $column_arr[2]['search']['value']);
+            $query->where('suppliers.company', 'like', '%'.$column_arr[2]['search']['value'].'%');
         }
         if (!empty($column_arr[3]['search']['value'])){
-            $query->where('purchase_orders.status', '=', $column_arr[3]['search']['value']);
+            $query->where('purchase_orders.quantity_confirmed', '=', $column_arr[3]['search']['value']);
         }
         if (!empty($column_arr[4]['search']['value'])){
-            $query->where('purchase_orders.ordered_at', 'like', convertDateToMysql($column_arr[4]['search']['value']));
+            $query->where('purchase_orders.status', '=', $column_arr[4]['search']['value']);
         }
         if (!empty($column_arr[5]['search']['value'])){
-            $query->where('users.name', 'like', $column_arr[5]['search']['value'].'%');
+            $query->where('purchase_orders.ordered_at', 'like', convertDateToMysql($column_arr[5]['search']['value']));
+        }
+        if (!empty($column_arr[6]['search']['value'])){
+            $query->where('users.name', 'like', $column_arr[6]['search']['value'].'%');
         }
 
 
@@ -117,7 +123,7 @@ class PurchaseOrderItemController extends Controller
                 "order_number" => $record->purchase_order->order_number,
                 "order_number_slug" => $record->purchase_order->order_number_slug,
                 "supplier" => $record->purchase_order->supplier->company,
-                "quantity_confirmed" => $record->quantity_confirmed,
+                "quantity_confirmed" => number_format($record->quantity_confirmed,0,'.',','),
                 "status" => $record->purchase_order->display_status,
                 "warehouse" => $record->purchase_order->warehouse->name,
                 "user" => $record->purchase_order->user->display_name
