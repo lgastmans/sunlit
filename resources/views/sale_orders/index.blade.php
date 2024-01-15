@@ -23,7 +23,7 @@
                     </div>
                     <div class="col-1">
                         <select class="date-filter-select form-control" id="filter-column">
-                            <option value="blocked">Blocked on</option>
+                            <option value="booked">Booked on</option>
                             <option value="expected">Expected on</option>
                             <option value="created">Created on</option>
                         </select>
@@ -62,7 +62,7 @@
                                 <th>Warehouse</th>
                                 <th>Dealer</th>
                                 <th>State</th>
-                                <th>Blocked On</th> 
+                                <th>Booked On</th> 
                                 <th>Expected On</th> 
                                 <th style="text-align: right;">Amount</th>
                                 <th style="width:100px;">Status</th> 
@@ -74,10 +74,10 @@
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
                                 <th><input type="text" class="form-control"></th>
-                                <th id="blocked_at" class="position-relative no-filter">
-                                    <input type="text" class="form-control" name="blocked_at" 
+                                <th id="booked_at" class="position-relative no-filter">
+                                    <input type="text" class="form-control" name="booked_at" 
                                     data-provide="datepicker" 
-                                    data-date-container="#blocked_at"
+                                    data-date-container="#booked_at"
                                     data-date-autoclose="true"
                                     data-date-format="M d, yyyy"
                                     data-date-start-date="-1d"
@@ -279,7 +279,7 @@
                 'orderable': true 
             },
             { 
-                'data': 'blocked_at',
+                'data': 'booked_at',
                 'orderable': true 
             },
             { 

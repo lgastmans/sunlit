@@ -143,7 +143,7 @@ class SaleOrderController extends Controller
                 $query->where('states.name', 'like', '%'.$column_arr[3]['search']['value'].'%');
             }
             if (!empty($column_arr[4]['search']['value'])){
-                $query->where('sale_orders.blocked_at', 'like', convertDateToMysql($column_arr[4]['search']['value']));
+                $query->where('sale_orders.booked_at', 'like', convertDateToMysql($column_arr[4]['search']['value']));
             }
             if (!empty($column_arr[5]['search']['value'])){
                 $query->where('sale_orders.due_at', 'like', convertDateToMysql($column_arr[5]['search']['value']));
@@ -179,8 +179,8 @@ class SaleOrderController extends Controller
                 $filter_from = Carbon::createFromFormat('Y-m-d', $filter_from)->toDateString();
                 $filter_to = Carbon::createFromFormat('Y-m-d', $filter_to)->toDateString();                
 
-                if ($filter_column=='blocked')
-                    $query->whereBetween('sale_orders.blocked_at', [$filter_from, $filter_to]);
+                if ($filter_column=='booked')
+                    $query->whereBetween('sale_orders.booked_at', [$filter_from, $filter_to]);
                 elseif ($filter_column=='expected')
                     $query->whereBetween('sale_orders.due_at', [$filter_from, $filter_to]);
                 else
@@ -214,7 +214,7 @@ class SaleOrderController extends Controller
                 "warehouse" => $order->warehouse->name,
                 "dealer" => (isset($order->dealer) ? $order->dealer->company : ''),
                 "state" => (isset($order->dealer->state) ? $order->dealer->state->name : ''),
-                "blocked_at" => $order->display_blocked_at,
+                "booked_at" => $order->display_booked_at,
                 "due_at" => $order->display_due_at,
                 //(isset($order->amount)) ? trans('app.currency_symbol_inr')." ".$order->amount : "",
                 "amount" => $total_amount, 

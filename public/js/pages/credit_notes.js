@@ -102,9 +102,6 @@ $(document).ready(function () {
     var tax = 1 + parseFloat(tax_percentage.replace('%', '') / 100);
     return tax;
   }
-  $('body').on('click', '.click-field', function (e) {
-    console.log('gotcha');
-  });
   $('[id^=item-quantity-]').on("click", function (event) {
     var item_id = $(this).parent().parent().parent().attr('data-id');
     console.log('item_id', item_id);

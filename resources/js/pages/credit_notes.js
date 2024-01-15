@@ -117,11 +117,6 @@ $(document).ready(function () {
     }
 
 
-    $('body').on('click', '.click-field', function(e){
-        console.log('gotcha')
-    })
-
-
     $('[id^=item-quantity-]').on("click", function(event){
         var item_id = $(this).parent().parent().parent().attr('data-id');
         
