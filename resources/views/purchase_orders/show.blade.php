@@ -35,7 +35,11 @@
                                 <th style="text-align: center;">Quantity<br>Confirmed</th>
                                 <th style="text-align: center;">Quantity<br>Invoice</th>
                                 <th style="text-align: center;">Quantity<br>Received</th>
-                                <th style="text-align: center;">Price</th>
+                                @if (Auth::user()->hasRole('super-admin'))
+                                    <th style="text-align: center;">Price</th>
+                                @else
+                                    <th style="text-align: right;">Price</th>
+                                @endif
                                 <th class="d-none">Tax</th>
                                 <th style="text-align: right;">Total</th>
                             </tr>
@@ -45,14 +49,22 @@
                             
                             <tr class="item" data-id="{{$item->id}}" data-product-id="{{ $item->product->id }}">
                                 <td>{{ $item->product->part_number }}</td>
-                                <td style="text-align: right;">
-                                    <div class="input-group flex-nowrap">
-                                        <input id="item-quantity-{{ $item->id }}" type="number" min="1" value="{{ $item->quantity_confirmed }}" class="editable-field form-control" data-value="{{ $item->quantity_confirmed }}" data-field="quantity" data-item="{{ $item->id }}" placeholder="Qty" style="width: 60px;">
-                                    </div>
-                                    <div class="invalid-feedback">
-                                        Quantity cannot be less than Quantity Received
-                                    </div>                                     
-                                </td>
+                                @if (Auth::user()->hasRole('super-admin'))
+                                    <td style="text-align: right;">
+                                        <div class="input-group flex-nowrap">
+                                            <input id="item-quantity-{{ $item->id }}" type="number" min="1" value="{{ $item->quantity_confirmed }}" class="editable-field form-control" data-value="{{ $item->quantity_confirmed }}" data-field="quantity" data-item="{{ $item->id }}" placeholder="Qty" style="width: 60px;">
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            Quantity cannot be less than Quantity Received
+                                        </div>
+                                    </td>
+                                @else
+                                    <td style="text-align: center;">
+                                        <span>
+                                            {{ $item->quantity_confirmed }}
+                                        </span>
+                                    </td>
+                                @endif
                                 
                                 <td style="text-align:center;">
                                     @if (!empty($shipped[$item->product_id]))
@@ -75,7 +87,6 @@
                                         </div>     
 
                                     @endif
-                                    
                                 </td>
                                 
                                 <td style="text-align: center;">
@@ -83,13 +94,20 @@
                                         @if (!empty($shipped[$item->product_id]) ) {{ $shipped[$item->product_id] }} @else 0 @endif
                                     </span>
                                 </td>
-                                <td style="text-align: right;">
-                                    <!-- {{ ($purchase_order->supplier->is_international) ? __('app.currency_symbol_usd') : __('app.currency_symbol_inr')}}{{ number_format($item->buying_price,2) }} -->
-                                    <div class="input-group flex-nowrap">
-                                        <span class="input-group-text">{{ ($purchase_order->supplier->is_international) ? __('app.currency_symbol_usd') : __('app.currency_symbol_inr')}}</span>
-                                        <input id="item-price-{{ $item->id }}" type="text" class="editable-field form-control" data-value="{{ $item->buying_price }}" data-field="price" data-item="{{ $item->id }}" placeholder="" value="{{ $item->buying_price }}" style="width: 60px;">
-                                    </div>
-                                </td>
+                                
+                                @if (Auth::user()->hasRole('super-admin'))
+                                    <td style="text-align: right;">
+                                        <div class="input-group flex-nowrap">
+                                            <span class="input-group-text">{{ ($purchase_order->supplier->is_international) ? __('app.currency_symbol_usd') : __('app.currency_symbol_inr')}}</span>
+                                            <input id="item-price-{{ $item->id }}" type="text" class="editable-field form-control" data-value="{{ $item->buying_price }}" data-field="price" data-item="{{ $item->id }}" placeholder="" value="{{ $item->buying_price }}" style="width: 60px;">
+                                        </div>
+                                    </td>
+                                @else
+                                    <td style="text-align: right;">
+                                        {{ ($purchase_order->supplier->is_international) ? __('app.currency_symbol_usd') : __('app.currency_symbol_inr')}}{{ number_format($item->buying_price,2) }}
+                                    </td>
+                                @endif
+
                                 <td class="d-none">
                                     {{ number_format($item->tax,2) }}%
                                 </td>
