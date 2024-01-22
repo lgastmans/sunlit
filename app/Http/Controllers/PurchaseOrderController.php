@@ -7,6 +7,7 @@ use Spatie\Activitylog\Models\Activity;
 
 use PDF;
 use Carbon\Carbon;
+use NumberFormatter;
 use App\Models\Inventory;
 use App\Models\Warehouse;
 use Illuminate\Http\Request;
@@ -221,6 +222,10 @@ class PurchaseOrderController extends Controller
         $orders = $query->get();
         \Debugbar::info(\DB::getQueryLog());
 
+
+        $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
+        $fmt->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 0);
+
         $arr = array();
         foreach($orders as $order)
         {           
@@ -232,7 +237,8 @@ class PurchaseOrderController extends Controller
                 "supplier" => $order->supplier->company,
                 "ordered_at" => $order->display_ordered_at,
                 "due_at" => $order->display_due_at,
-                "amount_inr" => (isset($order->amount_inr)) ? trans('app.currency_symbol_inr')." ".$order->amount_inr : "",
+                //"amount_inr" => (isset($order->amount_inr)) ? trans('app.currency_symbol_inr')." ".$order->amount_inr : "",
+                "amount_inr" => (isset($order->amount_inr)) ? $fmt->formatCurrency($order->amount_inr, "INR") : "",
                 "status" => $order->display_status,
                 "user" => $order->user->display_name
             );
@@ -410,6 +416,19 @@ class PurchaseOrderController extends Controller
             $order->update();
 
             return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'field' => $request->get('field')]);
+        }
+
+        if ($request->get('field') == "total"){
+            $order = PurchaseOrder::find($id);
+            $items = PurchaseOrderItem::where('purchase_order_id', "=", $id)->get();
+            $order->amount_usd = 0;
+            foreach($items as $item){
+                $order->amount_usd += $item->total_price;
+            }
+            $order->amount_inr = $order->amount_usd * $order->order_exchange_rate;
+            $order->update();
+
+            return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'field' => $request->get('field'), 'total_usd'=>$order->amount_usd, 'total_inr'=>$order->amount_inr]);
         }
     }
 

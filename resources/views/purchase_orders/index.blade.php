@@ -63,7 +63,7 @@
                                 <th>Supplier</th>
                                 <th>Ordered On</th> 
                                 <th>Expected On</th> 
-                                <th>Amount</th>
+                                <th style="text-align: right;">Amount</th>
                                 <th style="width:100px;">Status</th> 
                                 <th>Created By</th> 
                                 <!-- <th>Order Slug</th>  -->
@@ -302,6 +302,9 @@
         //         searchable: false
         //     },
         // ],
+        columnDefs: [
+            { className: "dt-right", "targets": [5] },
+        ],        
         "select": {
             "style": "multi"
         },
