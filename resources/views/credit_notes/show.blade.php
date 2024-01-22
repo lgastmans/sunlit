@@ -80,9 +80,9 @@
                         <thead class="table-light">
                             <tr>
                                 <th class="col-4">Product</th>
-                                <th class="col-2" style="text-align: right;">Quantity</th>
-                                <th class="col-2" style="text-align: right;">Price</th>
-                                <th class="col-1" style="text-align: right;">Tax</th>
+                                <th class="col-2" style="text-align: center;">Quantity</th>
+                                <th class="col-2" style="text-align: center;">Price</th>
+                                <th class="col-1" style="text-align: center;">Tax</th>
                                 <th class="col-2" style="text-align: right;">Total</th>
                                 <th class="col-1" style="text-align: right;"></th>
                             </tr>
@@ -123,8 +123,9 @@
                                             <span id="item-tax-{{ $item->id }}">@if ($item->tax){{ $item->tax }}@else 0.00 @endif%</span>
                                         </td>
                                         <td style="text-align: right;">
-                                            <span>{{ __('app.currency_symbol_inr')}}</span>
-                                            <span id="item-total-{{ $item->id }}" class="item-total">{{ $item->total_price }}</span>
+                                            <span id="item-total-{{ $item->id }}" class="item-total"  data-value="{{ $item->total_price_unfmt }}">
+                                                {{__('app.currency_symbol_inr')}}{{ $item->total_price }}
+                                            </span>
                                         </td>
                                         <td>
                                             <a href="javascript:void(0);" class="action-icon" id="{{ $item->id }}" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>
@@ -171,7 +172,7 @@
                             <tr>
                                 <td style="text-align: right;">Total :</td>
                                 <td>
-                                    <span>{{ __('app.currency_symbol_inr')}}</span>
+                                    <span></span>
                                     <span id="grand-total">{{ $grand_total }}</span>
                                 </td>
                             </tr>

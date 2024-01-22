@@ -35,6 +35,12 @@ class CreditNoteItem extends Model
         return  $total;
     }
 
+    public function getTotalPriceUnfmtAttribute()
+    {
+        $total = ($this->price + ($this->price * $this->tax/100)) * $this->quantity;
+        return  $total;
+    }
+
     /**
      * Returns the Taxable Value
      */

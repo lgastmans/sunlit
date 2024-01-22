@@ -10,12 +10,27 @@ $(document).ready(function () {
    * the GlobalSettings variable is declared 
    * in show.blade.php
   */
+
+  // format number to US dollar
+  var USDollar = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD'
+  });
+
+  // format number to Indian rupee
+  var INRupee = new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    maximumFractionDigits: 0
+  });
+  $("#grand-total").html(INRupee.format(parseInt($("#grand-total").html())));
   function recalculateGrandTotal() {
     var grand_total = 0;
     $('.item-total').each(function (index) {
-      grand_total = grand_total + parseFloat($(this).html());
+      console.log('total', $(this).attr('data-value'));
+      grand_total = grand_total + parseFloat($(this).attr('data-value'));
     });
-    $('#grand-total').html(grand_total.toFixed(2));
+    $('#grand-total').html(INRupee.format(grand_total));
     var route = globalSettings.credit_note_update;
     route = route.replace(':id', $('#credit-note-id').val());
     $.ajax({
@@ -29,7 +44,7 @@ $(document).ready(function () {
         '_method': 'PUT'
       },
       success: function success(result) {
-        $("#total-cost").html(result.total_cost);
+        $("#total-cost").html(INRupee.format(result.total_cost));
         console.log('result ' + JSON.stringify(result));
       }
     });
@@ -102,36 +117,7 @@ $(document).ready(function () {
     var tax = 1 + parseFloat(tax_percentage.replace('%', '') / 100);
     return tax;
   }
-  $('[id^=item-quantity-]').on("click", function (event) {
-    var item_id = $(this).parent().parent().parent().attr('data-id');
-    console.log('item_id', item_id);
-    var total = $('#item-price-' + item_id).val() * getTaxValue($('#item-tax-' + item_id).html()) * $('#item-quantity-' + item_id).val();
-    $('#item-total-' + item_id).html(total.toFixed(2));
-    $.ajaxSetup({
-      headers: {
-        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-      }
-    });
-    var route = globalSettings.credit_note_items_update;
-    route = route.replace(':id', item_id);
-    $.ajax({
-      type: 'POST',
-      url: route,
-      dataType: 'json',
-      data: {
-        'value': $(this).val(),
-        'field': $(this).attr('data-field'),
-        'item': $(this).attr('data-item'),
-        '_method': 'PUT'
-      },
-      success: function success(result) {
-        $('#item-price-' + item_id).attr('data-value', $('#item-price-' + item_id).val());
-        $('#item-quantity-' + item_id).attr('data-value', $('#item-quantity-' + item_id).val());
-        recalculateGrandTotal();
-      }
-    });
-  });
-  $('body').on('blur', '.editable-field', function (e) {
+  $('body').on('blur click', '.editable-field', function (e) {
     if ($(this).val() != $(this).attr('data-value')) {
       if ($(this).attr('data-field') == "price") {
         item_id = $(this).parent().parent().parent().attr('data-id');
@@ -139,7 +125,8 @@ $(document).ready(function () {
         var item_id = $(this).parent().parent().parent().attr('data-id');
       }
       var total = $('#item-price-' + item_id).val() * getTaxValue($('#item-tax-' + item_id).html()) * $('#item-quantity-' + item_id).val();
-      $('#item-total-' + item_id).html(total.toFixed(2));
+      $('#item-total-' + item_id).html(INRupee.format(total));
+      $("#item-total-" + item_id).attr('data-value', total);
       $.ajaxSetup({
         headers: {
           'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')

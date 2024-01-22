@@ -273,7 +273,7 @@ class CreditNoteController extends Controller
                 ->get();
 
             if ($quote)
-                return view('credit_notes.show', ['order' => $quote , 'activities' => $activities, 'grand_total' => $quote->total]);
+                return view('credit_notes.show', ['order' => $quote , 'activities' => $activities, 'grand_total' => $quote->total_unfmt]);
 
             return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'credit note']));
         //}
