@@ -181,7 +181,7 @@ $(document).ready(function () {
     var tax = 1 + parseFloat(tax_percentage.replace('%', '') / 100);
     return tax;
   }
-  $('body').on('blur', '.editable-field', function (e) {
+  $('body').on('blur click', '.editable-field', function (e) {
     if ($(this).val() != $(this).attr('data-value')) {
       if ($(this).attr('data-field') == "price") {
         item_id = $(this).parent().parent().parent().attr('data-id');

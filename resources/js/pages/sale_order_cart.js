@@ -203,7 +203,7 @@ $(document).ready(function () {
         return tax;
     }
 
-    $('body').on('blur', '.editable-field', function(e){
+    $('body').on('blur click', '.editable-field', function(e){
 
         if ($(this).val() != $(this).attr('data-value')){
 
