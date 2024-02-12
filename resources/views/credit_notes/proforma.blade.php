@@ -715,10 +715,11 @@ font-weight: bold;
     </section> {{-- signatory --}}
 
     <div class="payment-info">
-      <div>Bank Details
-          Name of the Bank : HDFC Bank Ltd
-          Bank Account No. : 04071450000340
-          IFSC Code        : HDFC0000407
+      <div><i>Bank Details</i> |
+        Name: Sunlit Future | 
+        Bank : YES BANK | 
+        Account Number:054288700001183 | 
+        IFSC Code:YESB0000542
       </div>
     </div>
 
