@@ -14,6 +14,7 @@ class InventoryMovement extends Model
 
     const RECEIVED = 1;
     const DELIVERED = 2;
+    const CANCELLED = 3;
 
 
     public function warehouse()
@@ -114,7 +115,8 @@ class InventoryMovement extends Model
         return [
             0 => 'All', 
             InventoryMovement::RECEIVED => 'In',
-            InventoryMovement::DELIVERED => 'Out'
+            InventoryMovement::DELIVERED => 'Out',
+            InventoryMovement::CANCELLED => 'Cancelled'
         ];
     }
 
@@ -138,6 +140,9 @@ class InventoryMovement extends Model
                 break;
             case InventoryMovement::DELIVERED:
                 $status = '<h4><span class="badge badge-outline-secondary">Out</span></h4>';
+                break;
+            case InventoryMovement::CANCELLED:
+                $status = '<h4><span class="badge badge-outline-warning">Cancelled</span></h4>';
                 break;
             default:
                 $status = '<h4><span class="badge badge-outline-error">Unknown</span></h4>';

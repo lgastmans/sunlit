@@ -171,7 +171,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('/purchase-order-invoices/{id}/cleared', [PurchaseOrderInvoiceController::class, 'cleared'])->name('purchase-order-invoices.cleared');
     Route::put('/purchase-order-invoices/{id}/received', [PurchaseOrderInvoiceController::class, 'received'])->name('purchase-order-invoices.received');
     Route::put('/purchase-order-invoices/{id}/paid', [PurchaseOrderInvoiceController::class, 'paid'])->name('purchase-order-invoices.paid');
-    Route::put('/purchase-order-invoices/{id}', [PurchaseOrderInvoiceController::class, 'update'])->name('purchase-order-invoices.update');    
+    Route::put('/purchase-order-invoices/{id}', [PurchaseOrderInvoiceController::class, 'update'])->name('purchase-order-invoices.update');
+    Route::put('/purchase-order-invoices/{id}/cancelled', [PurchaseOrderInvoiceController::class, 'cancelled'])->name('purchase-order-invoices.cancelled');
 
     Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory');
     Route::get('/inventory/resetOrderedStock', [InventoryController::class, 'resetOrderedStock'])->name('inventory.resetOrdered');

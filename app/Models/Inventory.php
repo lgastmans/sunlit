@@ -353,6 +353,44 @@ class Inventory extends Model
 
                         $avg_price = $movement->getAverageBuyingPrice($inventory->warehouse_id, $product->product_id);
                     }
+                    elseif ($model->status == PurchaseOrderInvoice::CANCELLED)
+                    {
+                        /**
+                         *    update Available Stock (deduct), update Ordered Stock (add)
+                         */
+                        $ordered += $product->quantity_shipped;
+
+                        $available -= $product->quantity_shipped;
+
+                        /**
+                         *   register stock received in the Inventory Movement model
+                         *   status CANCELLED
+                         */
+                        $data = array(
+                            "warehouse_id" => $order->warehouse_id,
+                            "product_id" => $product->product_id,
+                            "purchase_order_id" => $model->purchase_order_id,
+                            "purchase_order_invoice_id" => $model->id,
+                            "sales_order_id" => null,
+                            "credit_note_id" => null,
+                            "quantity" => $product->quantity_shipped,
+                            "user_id" => Auth::user()->id,
+                            "movement_type" => InventoryMovement::CANCELLED,
+                            "price" => $product->buying_price_inr
+                        );
+                        $movement = new InventoryMovement();
+                        $movement->updateMovement($data);
+
+                        /**
+                         * set the item in the purchase_order_invoice_items table as deleted
+                         */
+                        $product->delete();
+
+                        /**
+                         * the average buying price stays the same
+                         */
+                        $avg_price = $inventory->average_buying_price;                        
+                    }
 
                     $result = $inventory->update([
                         "stock_available" => $available,

@@ -295,6 +295,46 @@
         // $('#customs_amount').on('change', function(e){
         //     calculateCharges('amount');            
         // });
+
+
+
+        /**
+         * CANCEL purchase order invoice
+         * this button is in the status_update.blade.php file
+         * 
+         */
+        $("#btn-cancel-po-invoice").on("click", function(e){
+            //e.preventDefault();
+
+            if (confirm("Are you sure you want to cancel this invoice ?") == true) {
+
+                var po_invoice_id = $("#purchase-order-invoice-id").val()
+                console.log('cancel po invoice', po_invoice_id)
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                    }
+                }); 
+
+                var route = '{{ route("purchase-order-invoices.cancelled", ":id") }}';
+                route = route.replace(':id', po_invoice_id);
+
+                $.ajax({
+                    type: 'POST',
+                    url: route,
+                    dataType: 'json',
+                    data: { 
+                        'id' : po_invoice_id, 
+                        '_method': 'PUT'
+                    },
+                    success : function(result){
+                        console.log('result', result, result.message);
+                        $.NotificationApp.send("Success","PO invoice "+result.field+" cancelled ","top-right","","success")
+                    }
+                });
+            }
+        }); // cancel purchase order invoice
     }); 
 </script>
 

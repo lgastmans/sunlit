@@ -21,6 +21,7 @@ class PurchaseOrderInvoice extends Model
     const CLEARED = 6;
     const RECEIVED = 7;
     const PAID = 8;
+    const CANCELLED = 9;
 
     protected $fillable = ['payment_terms'];
     protected $dates = ['due_at', 'shipped_at', 'customs_at', 'cleared_at',  'received_at', 'paid_at'];
@@ -50,7 +51,7 @@ class PurchaseOrderInvoice extends Model
      */
     public function items()
     {
-        return $this->hasMany(PurchaseOrderInvoiceItem::class);
+        return $this->hasMany(PurchaseOrderInvoiceItem::class)->withTrashed();
     }
 
 
@@ -245,6 +246,9 @@ class PurchaseOrderInvoice extends Model
             case PurchaseOrderInvoice::PAID:
                 $status = '<span class="badge badge-success-lighten">Paid</span>';
                 break;
+            case PurchaseOrderInvoice::CANCELLED:
+                $status = '<span class="badge badge-danger-lighten">Cancelled</span>';
+                break;
             default:
                 $status = '<span class="badge badge-error-lighten">Unknown</span>';
         }
@@ -261,7 +265,8 @@ class PurchaseOrderInvoice extends Model
             //PurchaseOrderInvoice::CUSTOMS => 'Customs', 
             //PurchaseOrderInvoice::CLEARED => 'Cleared',
             PurchaseOrderInvoice::RECEIVED => 'Received',
-            PurchaseOrderInvoice::PAID => 'Paid'
+            PurchaseOrderInvoice::PAID => 'Paid',
+            PurchaseOrderInvoice::CANCELLED => 'Cancelled'
         ];
     }
 }

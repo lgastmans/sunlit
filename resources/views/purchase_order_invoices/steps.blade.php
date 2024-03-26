@@ -1,3 +1,19 @@
+@if ($invoice->status == 9)
+
+<div class="row">
+    <div class="col-12">
+        <div class="row justify-content-center">
+            <div class="col-lg-7 col-md-10 col-sm-11">
+                <div class="alert alert-danger bg-transparent text-danger" role="alert">
+                    This invoice is <strong>cancelled</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@else
+
 <div class="row">
     <div class="col-12">
         <div class="row justify-content-center">
@@ -107,3 +123,5 @@
         </div>
     </div>
 </div>
+
+@endif

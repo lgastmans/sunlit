@@ -211,7 +211,7 @@
     <div class="mt-lg-0 rounded @if ($invoice->status != 7) d-none @endif">
         <div class="card border">
             <div class="card-body">
-                <form name="receive-order-form"  class="needs-validation" novalidate
+                <form name="receive-order-form" class="needs-validation" novalidate
                     action="{{ route('purchase-order-invoices.paid', $invoice->id) }}" method="POST">
                     @csrf()
                     @method('PUT')
@@ -240,3 +240,12 @@
 
 
 @endif
+
+
+    <div class="mt-lg-0 rounded @if ($invoice->status == 9) d-none @endif">
+        <div class="card border">
+            <div class="card-body">
+                <button class="col-lg-12 text-center btn btn-danger" type="submit" name="cancel-po-invoice" id="btn-cancel-po-invoice">Cancel order</button>
+            </div>
+        </div>
+    </div>

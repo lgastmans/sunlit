@@ -475,6 +475,47 @@ class PurchaseOrderInvoiceController extends Controller
     }
 
     /**
+     * Mark the specified resource as cancelled
+     *
+     * only if the status of the invoice is "RECEIVED" or "PAID"
+     *  should the inventory be updated
+     * else just mark the items as "deleted"
+     * 
+     * 
+     * @param  \App\Models\PurchaseOrderInvoice  $purchaseOrderInvoice
+     * @return \Illuminate\Http\Response
+     */
+    public function cancelled(Request $request, $id)
+    {
+        $invoice = PurchaseOrderInvoice::with('items')->find($id);
+
+        $initial_status = $invoice->status;
+
+        $invoice->status = PurchaseOrderInvoice::CANCELLED;
+        $invoice->update();
+
+        if (($initial_status == PurchaseOrderInvoice::RECEIVED) || ($initial_status == PurchaseOrderInvoice::PAID)) {
+    
+            $inventory = new Inventory();
+            $inventory->updateStock($invoice);
+
+        }
+        else {
+            foreach ($invoice->items as $item)
+                $item->delete();
+        }
+
+
+        activity()
+           ->performedOn($invoice)
+           ->withProperties(['order_number' => $invoice->invoice_number, 'status' => $invoice->status])
+           ->log('Invoice <b>Cancelled</b>');
+
+
+        return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'redirect' => route('purchase-order-invoices.show', $invoice->invoice_number_slug)]);
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\PurchaseOrderInvoice  $purchaseOrderInvoice

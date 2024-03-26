@@ -30,6 +30,9 @@
     </div> <!-- end col -->
 
 
+    
+    <!-- the d-none class hides this card -->
+
     <div class="col-lg-4  @if (!$invoice->paid_at) d-none @endif">
         <div class="card">
             <div class="card-body">
