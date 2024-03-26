@@ -329,8 +329,8 @@
                         '_method': 'PUT'
                     },
                     success : function(result){
-                        console.log('result', result, result.message);
-                        $.NotificationApp.send("Success","PO invoice "+result.field+" cancelled ","top-right","","success")
+                        $.NotificationApp.send("Success","PO invoice cancelled successfully.","top-right","","success")
+                        setTimeout(function () { document.location.reload(true); }, 3000);
                     }
                 });
             }
