@@ -679,6 +679,12 @@ font-weight: bold;
             <th colspan="2">{{ $order->tax_total }}</th>
           </tr>
           
+          <tr data-iterate="tax">
+            <td colspan="{{ $order->dealer->state->code==33 ? 5 : 3}}"></td>
+            <th colspan="3" style="text-align: right;">{{ $order->tcs_text }}</th>
+            <th colspan="2">{{ $order->display_tcs_amount }}</th>
+          </tr>
+
           <tr class="amount-total">
             <th colspan="{{ $order->dealer->state->code==33 ? 7 : 5}}"></th>
             <th style="text-align: right;">Total (rounded)</th>

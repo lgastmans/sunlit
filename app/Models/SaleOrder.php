@@ -45,6 +45,7 @@ class SaleOrder extends Model
     var $total_spellout = '';
     var $total_advance = 0;
     var $balance_due = 0;
+    var $tcs_amount = 0;
 
     /*
     public function getActivitylogOptions(): LogOptions
@@ -881,6 +882,7 @@ class SaleOrder extends Model
         $this->total_unfmt = 0;
         $this->total_advance = 0;
         $this->balance_due = 0;
+        $this->tcs_amount = 0;
 
         if ($this->dealer)
             if ($this->dealer->state->freight_zone_id)
@@ -933,7 +935,17 @@ class SaleOrder extends Model
 
         $this->total = $this->sub_total + $this->tax_total;
 
-        $this->total = round($this->total);
+        /**
+         * add the TCS, which is calculated on the total + tax
+         */
+        $this->tcs_amount = (float)$this->total * (float)($this->tcs / 100);
+
+        /**
+         * and add the TCS amount to the total before rounding
+         */
+        $this->total = (float)$this->total + (float)$this->tcs_amount;
+
+        $this->total = (float)round($this->total);
 
         foreach ($this->sale_order_payments as $payment)
         {
@@ -1146,6 +1158,13 @@ class SaleOrder extends Model
         $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
         $fmt->setSymbol(NumberFormatter::CURRENCY_SYMBOL, ''); 
         return $this->balance_due = $fmt->formatCurrency($this->balance_due, "INR");       
+    }
+
+    public function getDisplayTcsAmountAttribute()
+    {
+        $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
+        $fmt->setSymbol(NumberFormatter::CURRENCY_SYMBOL, ''); 
+        return $fmt->formatCurrency($this->tcs_amount, "INR");       
     }
 
     public function isOverdue()

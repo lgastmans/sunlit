@@ -283,7 +283,8 @@
                                             <input type="text" class="form-control" name="purchase_order__order_number" id="po_order_number" placeholder="" value="{{ $settings['purchase_order']['order_number'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
                                         </div>
                                     </div>
-                                   <br>&nbsp;
+                                <div class="mb-3 row">
+                                </div>
                                     <div class="mb-3">
                                         <label for="poi_terms" class="form-label">Payment & Delivery Terms</label>
                                         <textarea class="form-control" name="purchase_order__terms" id="poi_terms">{!! $settings['purchase_order']['terms'] !!}</textarea>
@@ -319,7 +320,22 @@
                                             <input type="text" class="form-control" name="sale_order__order_number" id="so_order_number" placeholder="" value="{{ $settings['sale_order']['order_number'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
                                         </div>
                                     </div>
-                                    <br>&nbsp;
+                                </div>
+                                <div class="mb-3 row">
+                                    <div class="mt-sm-3 mt-xl-0 col-xl-4">
+                                        <label class="form-label" for="so_order_tcs">TCS %</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="sale_order__tcs" id="so_order_tcs" placeholder="" value="{{ $settings['sale_order']['tcs'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
+                                        </div>
+                                    </div>
+                                    <div class="mt-sm-3 mt-xl-0 col-xl-4">
+                                        <label class="form-label" for="so_order_tcs_text">TCS Caption</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="sale_order__tcs_text" id="so_order_tcs_text" placeholder="" value="{{ $settings['sale_order']['tcs_text'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
                                     <div class="mb-3">
                                         <label for="so_terms" class="form-label">Payment & Delivery Terms</label>
                                         <textarea class="form-control" name="sale_order__terms" id="so_terms">{!! $settings['sale_order']['terms'] !!}</textarea>
