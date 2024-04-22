@@ -369,12 +369,23 @@ $(document).ready(function () {
     //     console.log($(this).val());
     // });
 
+    var table;
+
     $("#nav-dashboard li a").on("click", function() {
         $("div[id=dashboard-category]").hide();
         $("div[id=dashboard-inventory]").hide();
         $("div[id=dashboard-product]").hide();
         $("div[id=dashboard-state]").hide();
         $("div[id=" + $(this).attr("data-related") + "]").show();
+
+        /**
+         * This fixes:
+         * Bug where thead not aligned to table
+         * https://datatables.net/forums/discussion/74482/thead-not-aligned-to-table
+         */
+        if ($(this).attr("data-related") == 'dashboard-inventory')
+            setTimeout(function(){ table.columns.adjust().draw() },500);
+
     });    
 
     drawSalesTotals();
@@ -803,7 +814,6 @@ $(document).ready(function () {
         route = route.replace(':id', table.row( this ).data().product_id);
         window.location.href = route;
     });
-
 
     @if(Session::has('success'))
         $.NotificationApp.send("Success","{{ session('success') }}","top-right","","success")
