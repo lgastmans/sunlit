@@ -1192,6 +1192,22 @@ class SaleOrderController extends Controller
             $order->update();
         }
 
+        if ($request->get('field') == 'tcs_value')
+        {
+            $order = SaleOrder::find($id);
+            $order->tcs = $request->get('value');
+            $order->update();
+            return response()->json(['success'=>'true', 'code'=>200, 'message'=> 'OK', 'field' => $request->get('field')]);
+        }
+
+        if ($request->get('field') == 'tcs_caption')
+        {
+            $order = SaleOrder::find($id);
+            $order->tcs_text = $request->get('value');
+            $order->update();
+            return response()->json(['success'=>'true', 'code'=>200, 'message'=> 'OK', 'field' => $request->get('field')]);
+        }
+
         if (str_starts_with($request->get('field'), 'shipping_') == "shipping_")
         {
             $order = SaleOrder::find($id);

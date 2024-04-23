@@ -13,6 +13,21 @@
 @include('sale_orders.steps')
 
 @if ($order->status >= 2 && $order->status <= 3)
+
+    <style>
+        /* Chrome, Safari, Edge, Opera */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+          -moz-appearance: textfield;
+        }        
+    </style>
+
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -207,6 +222,21 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row mb-3" >
+                        <div class="col-xl-4" id="tcs_value">
+                            <label class="form-label">TCS</label>
+                            <div class="input-group">
+                                <input type="number" min="0" step=".01" class="form-control" name="tcs_value" id="tcs_value" value="{{ $order->tcs}}">
+                                <span class="input-group-text">%</span>
+                            </div>
+                        </div>
+                        <div class="col-xl-8" id="tcs_caption">
+                            <label class="form-label">Caption</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="tcs_caption" id="tcs_caption" value="{{ $order->tcs_text}}">
+                            </div>
+                        </div>
+                    </div>
                 </div> {{-- card footer --}}
             @endif
 
@@ -344,7 +374,9 @@
             });
 
 
-            //$("#btn_transport_charges").on('click', function(e) {
+            /**
+             * Freight (or Transport Charges)
+             */
             $("#freight").blur(function() {
 
                 //e.preventDefault();
@@ -380,8 +412,43 @@
 
                         }
                 });        
+            });            
 
-            }); // transport charges            
+
+            /**
+             * TCS 
+             */
+            $("#tcs_value, #tcs_caption").blur(function() {
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                    }
+                }); 
+
+                var route = globalSettings.sale_order_update;
+                route = route.replace(':id', $('#sale-order-id').val());
+
+                var field_name = $(this).attr('id');
+                var field_value = $(this).val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: route,
+                    dataType: 'json',
+                    data: { 
+                        'value': field_value,
+                        'field': field_name, 
+                        'item': false,
+                        '_method': 'PUT'
+                    },
+                    success : function(result){
+                        console.log(result);
+
+                        $.NotificationApp.send("Success","TCS data updated","top-right","","success")
+                    }
+                });       
+            }); // TCS
 
 
             $("#btn-duplicate-order").on("click", function(e){
