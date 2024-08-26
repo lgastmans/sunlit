@@ -90,8 +90,8 @@ class UserController extends Controller
 
             $user_role = '';
             try {
-            if ($user->role !== null)
-                $user_role = $user->role;
+                if ($user->role !== null)
+                    $user_role = $user->role;
             } catch(\Exception $e) {
                 $user_role = 'Not defined'; //$e->getMessage();
             }            
