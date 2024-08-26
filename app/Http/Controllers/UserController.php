@@ -96,7 +96,7 @@ class UserController extends Controller
                 "id" => $user->id,
                 "name" => $user->name,
                 "email" => $user->email,
-                "role" => $user_role,
+                "role" => (isset($user_role) ? $user_role : ''),
                 "status" => ($user->deleted_at) ? 'disabled' : 'enabled'
             );
         }
