@@ -57,13 +57,6 @@
                     </div>
                     <!-- end card -->
 
-                    <div class="row mt-3">
-                        <div class="col-12 text-center">
-                            <p class="text-muted">Don't have an account? <a href="{{ route('register') }}" class="text-muted ms-1"><b>{{ __('Sign up') }}</b></a></p>
-                        </div> <!-- end col -->
-                    </div>
-                    <!-- end row -->
-
                 </div> <!-- end col -->
             </div>
             <!-- end row -->
