@@ -88,12 +88,12 @@ class UserController extends Controller
         $arr = array();
         foreach($users as $user){
 
-            $user_role = 'undefined';
+            $user_role = '';
             try {
             if ($user->role !== null)
                 $user_role = $user->role;
             } catch(\Exception $e) {
-                $user_role = $e->getMessage();
+                $user_role = 'Not defined'; //$e->getMessage();
             }            
 
             $arr[] = array(
