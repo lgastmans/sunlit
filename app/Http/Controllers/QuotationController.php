@@ -258,7 +258,7 @@ class QuotationController extends Controller
 
         $activities = Activity::where('subject_id', $quote->id)
             //->where('properties->order_number', $order->order_number)
-            ->where('subject_type', 'App\Models\Quotation')
+            ->where('subject_type', \App\Models\Quotation::class)
             //->where('subject_type', 'App\Models\SaleOrderPayment')
             ->orderBy('updated_at', 'desc')
             ->get();

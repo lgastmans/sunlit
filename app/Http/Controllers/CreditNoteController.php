@@ -268,7 +268,7 @@ class CreditNoteController extends Controller
         $quote->calculateTotals();
 
         $activities = Activity::where('subject_id', $quote->id)
-            ->where('subject_type', 'App\Models\CreditNote')
+            ->where('subject_type', \App\Models\CreditNote::class)
             ->orderBy('updated_at', 'desc')
             ->get();
 

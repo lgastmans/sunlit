@@ -326,7 +326,7 @@ class PurchaseOrderController extends Controller
             $shipped = [];
 
             $activities = Activity::where('subject_id', $purchase_order->id)
-                ->where('subject_type', 'App\Models\PurchaseOrder')
+                ->where('subject_type', \App\Models\PurchaseOrder::class)
                 ->orderBy('updated_at', 'desc')
                 ->get();
 

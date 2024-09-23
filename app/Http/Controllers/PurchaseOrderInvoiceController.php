@@ -281,7 +281,7 @@ class PurchaseOrderInvoiceController extends Controller
             $invoice = PurchaseOrderInvoice::with(['items', 'items.product'])->where('invoice_number_slug', '=', $invoice_number_slug)->first();
 
             $activities = Activity::where('subject_id', $po->id)
-                ->where('subject_type', 'App\Models\PurchaseOrderInvoice')
+                ->where('subject_type', \App\Models\PurchaseOrderInvoice::class)
                 ->orderBy('updated_at', 'desc')
                 ->get();
 
