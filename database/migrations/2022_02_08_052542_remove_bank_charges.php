@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class RemoveBankCharges extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -29,4 +29,4 @@ class RemoveBankCharges extends Migration
             $table->decimal('bank_and_transport_charges', $precision = 13, $scale = 2)->nullable()->after('amount_inr');
         });
     }
-}
+};

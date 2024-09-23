@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateFreightZonesColumns extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -33,4 +33,4 @@ class UpdateFreightZonesColumns extends Migration
             $table->dropColumn('rate_per_kg')->default(8);
         });
     }
-}
+};
