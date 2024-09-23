@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Dealer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class DealerFactory extends Factory
