@@ -270,7 +270,6 @@ class PurchaseOrderController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(StorePurchaseOrderRequest $request)
@@ -351,7 +350,6 @@ class PurchaseOrderController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function edit(int $id)
@@ -361,9 +359,6 @@ class PurchaseOrderController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function update(Request $request, int $id): JsonResponse
     {
@@ -432,9 +427,6 @@ class PurchaseOrderController extends Controller
 
     /**
      * Update the ordered_at and status of an order
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function ordered(Request $request, int $id): RedirectResponse
     {
@@ -470,9 +462,6 @@ class PurchaseOrderController extends Controller
 
     /**
      * Update the confirmed_at and status of an order
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function confirmed(Request $request, int $id): RedirectResponse
     {
@@ -509,9 +498,6 @@ class PurchaseOrderController extends Controller
 
     /**
      * Update the shipped_at and status of an order
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function shipped(Request $request, int $id): RedirectResponse
     {
@@ -533,9 +519,6 @@ class PurchaseOrderController extends Controller
 
     /**
      * Update the shipped_at and status of an order
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function customs(Request $request, int $id): RedirectResponse
     {
@@ -553,9 +536,6 @@ class PurchaseOrderController extends Controller
 
     /**
      * Update the cleared_at and status of an order
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function cleared(Request $request, int $id): RedirectResponse
     {
@@ -585,9 +565,6 @@ class PurchaseOrderController extends Controller
 
     /**
      * Update the shipped_at and status of an order
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function received(Request $request, int $id): RedirectResponse
     {
@@ -611,7 +588,6 @@ class PurchaseOrderController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(int $id)

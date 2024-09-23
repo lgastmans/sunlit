@@ -33,8 +33,6 @@ class QuotationItemsController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function store(Request $request): JsonResponse
     {
@@ -87,7 +85,6 @@ class QuotationItemsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \App\Models\QuotationItems  $quotationItems
-     * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id): JsonResponse
     {
@@ -121,7 +118,6 @@ class QuotationItemsController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\QuotationItems  $quotationItems
-     * @return \Illuminate\Http\Response
      */
     public function destroy($id): RedirectResponse
     {

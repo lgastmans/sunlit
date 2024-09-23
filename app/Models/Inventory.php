@@ -32,8 +32,6 @@ class Inventory extends Model
      * initializing the stock values to zero
      *
      * @param  int $warehouse_id
-     * @param  int $product_id
-     * @return boolean
      */
     public function initStock(int $product_id): bool
     {
@@ -68,10 +66,6 @@ class Inventory extends Model
     /**
      * Create a new entry in the inventory for a given warehouse_id
      * initializing the stock values to zero
-     *
-     * @param  int $warehouse_id
-     * @param  int $product_id
-     * @return boolean
      */
     public function initProductStock(int $warehouse_id, int $product_id): bool
     {
@@ -105,9 +99,6 @@ class Inventory extends Model
 
     /**
      * Update the Purchase Order stock ordered column in the inventory 
-     *
-     * @param  Illuminate\Database\Eloquent\Model $model
-     * @return boolean
      */
     public function updateOrderedStock(Model $model): bool
     {
@@ -273,9 +264,6 @@ class Inventory extends Model
     /**
      * Update the stock values in the inventory based on the model and related status
      * initializing the stock values to zero
-     *
-     * @param  Illuminate\Database\Eloquent\Model $model
-     * @return boolean
      */
     public function updateStock(Model $model): bool
     {
@@ -564,10 +552,6 @@ class Inventory extends Model
      * 
      * Update the blocked stock quantity in the inventory 
      * The model passed is assumed SaleOrderItem
-     *
-     * @param  Illuminate\Database\Eloquent\Model $model
-     * @param  int $update_quantity
-     * @return boolean
      */    
     public function updateStockBlocked(Model $model, int $update_quantity): bool
     {
@@ -590,9 +574,6 @@ class Inventory extends Model
     /**
      * Update the inventory
      * The related items 
-     *
-     * @param  Illuminate\Database\Eloquent\Model $model
-     * @return boolean
      */    
     public function deleteStock(Model $model): bool
     {

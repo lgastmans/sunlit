@@ -19,8 +19,6 @@ class QuotationController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index(): View
     {
@@ -217,7 +215,6 @@ class QuotationController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreQuotationRequest $request)
@@ -289,7 +286,6 @@ class QuotationController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \App\Models\quotation  $quotation
-     * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id): JsonResponse
     {
@@ -362,9 +358,6 @@ class QuotationController extends Controller
 
     /**
      * Update the pending_at and status of a quotation
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function pending(Request $request, int $id): RedirectResponse
     {
@@ -383,9 +376,6 @@ class QuotationController extends Controller
 
     /**
      * Update the confirmed_at and status of a quotation
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function confirmed(Request $request, int $id): RedirectResponse
     {

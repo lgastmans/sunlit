@@ -65,8 +65,6 @@ class Product extends Model
 
     /**
      * Get the purchase price amount in decimal.
-     *
-     * @return string
      */
     public function getDisplayPurchasePriceAttribute(): string
     {
@@ -87,7 +85,6 @@ class Product extends Model
      * Get the last purchased date for a product
      *
      * @param int
-     * @return date
      */
     public function getLastPurchasedOnAttribute(): date
     {
@@ -110,7 +107,6 @@ class Product extends Model
      * Get the last sold date for a product
      *
      * @param int
-     * @return date
      */
     public function getLastSoldOnAttribute(): date
     {

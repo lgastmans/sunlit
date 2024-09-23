@@ -126,7 +126,6 @@ class StateController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreStateRequest $request)
@@ -145,7 +144,6 @@ class StateController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show(int $id)
@@ -162,9 +160,6 @@ class StateController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function edit(int $id): View
     {
@@ -180,8 +175,6 @@ class StateController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(StoreStateRequest $request, int $id)
@@ -200,7 +193,6 @@ class StateController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(int $id)
@@ -226,8 +218,6 @@ class StateController extends Controller
 
     /**
      * Display a listing of the resource for select2
-     *
-     * @return json
      */
     public function getListForSelect2(Request $request): json
     {

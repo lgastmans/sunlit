@@ -33,9 +33,6 @@ class QuotationItems extends Model
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(Request $request): Response
     {

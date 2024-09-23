@@ -241,8 +241,6 @@ class SaleOrderController extends Controller
 
     /**
      * Display a listing of the resource for select2
-     *
-     * @return json
      */
     public function getInvoicesList(Request $request): json
     {
@@ -930,7 +928,6 @@ class SaleOrderController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  App\Http\Requests\StoreSaleOrderRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreSaleOrderRequest $request)
@@ -1087,9 +1084,6 @@ class SaleOrderController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function update(Request $request, int $id): JsonResponse
     {
@@ -1199,9 +1193,6 @@ class SaleOrderController extends Controller
 
     /**
      * Update the blocked_at and status of an order
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function blocked(Request $request, int $id): RedirectResponse
     {
@@ -1242,9 +1233,6 @@ class SaleOrderController extends Controller
 
     /**
      * Update the booked_at and status of an order
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function booked(Request $request, int $id): RedirectResponse
     {
@@ -1271,7 +1259,6 @@ class SaleOrderController extends Controller
     /**
      * Update the dispatched_at and status of an order
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function dispatched(Request $request, int $id)
@@ -1320,9 +1307,6 @@ class SaleOrderController extends Controller
 
     /**
      * Update the delivered_at and status of an order
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function delivered(Request $request, int $id): RedirectResponse
     {
@@ -1337,7 +1321,6 @@ class SaleOrderController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, int $id)

@@ -176,9 +176,6 @@ class PurchaseOrderInvoiceController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(StorePurchaseOrderInvoiceRequest $request): JsonResponse
     {
@@ -311,7 +308,6 @@ class PurchaseOrderInvoiceController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, int $id)
@@ -326,9 +322,6 @@ class PurchaseOrderInvoiceController extends Controller
 
     /**
      * Update the shipped_at and status of an order
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function customs(Request $request, int $id): RedirectResponse
     {
@@ -353,9 +346,6 @@ class PurchaseOrderInvoiceController extends Controller
 
     /**
      * Update the cleared_at and status of an order
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function cleared(Request $request, int $id): RedirectResponse
     {
@@ -388,9 +378,6 @@ class PurchaseOrderInvoiceController extends Controller
 
     /**
      * Update the shipped_at and status of an order
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function received(Request $request, int $id): RedirectResponse
     {
@@ -414,9 +401,6 @@ class PurchaseOrderInvoiceController extends Controller
 
     /**
      * Update the paid_at and status of an order
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function paid(Request $request, int $id): RedirectResponse
     {
@@ -469,7 +453,6 @@ class PurchaseOrderInvoiceController extends Controller
      *
      *
      * @param  \App\Models\PurchaseOrderInvoice  $purchaseOrderInvoice
-     * @return \Illuminate\Http\Response
      */
     public function cancelled(Request $request, $id): JsonResponse
     {

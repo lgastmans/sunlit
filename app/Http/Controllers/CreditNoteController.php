@@ -19,8 +19,6 @@ class CreditNoteController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index(): View
     {
@@ -297,9 +295,7 @@ class CreditNoteController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateCreditNoteRequest  $request
      * @param  \App\Models\CreditNote  $creditNote
-     * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id): JsonResponse
     {
@@ -327,9 +323,6 @@ class CreditNoteController extends Controller
 
     /**
      * Update the confirmed_at and status
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function confirmed(Request $request, int $id): RedirectResponse
     {

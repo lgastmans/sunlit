@@ -142,8 +142,6 @@ class UserController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function store(StoreUserRequest $request): RedirectResponse
     {
@@ -164,8 +162,6 @@ class UserController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function show(): View
     {
@@ -176,9 +172,6 @@ class UserController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function edit(int $id): View
     {
@@ -201,8 +194,6 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\StoreUserRequest  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(StoreUserRequest $request, int $id)
@@ -231,7 +222,6 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(int $id)
@@ -249,7 +239,6 @@ class UserController extends Controller
     /**
      * Enable the specified resource from storage.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function enable(int $id)
@@ -269,10 +258,6 @@ class UserController extends Controller
 
     /**
      * Update the password of the specified resource
-     *
-     * @param  string  $email
-     * @param  string  $invite_token
-     * @return \Illuminate\Http\Response
      */
     public function registration(string $email, string $invite_token): View
     {
@@ -281,8 +266,6 @@ class UserController extends Controller
 
     /**
      * Update the password of the specified resource
-     *
-     * @return \Illuminate\Http\Response
      */
     public function registrationPassword(Request $request): RedirectResponse
     {

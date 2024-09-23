@@ -42,7 +42,6 @@ class InventoryMovement extends Model
     /**
      * create a stock entry
      *
-     * @param  array  $data
      * @return instance of object
      */
     public function updateMovement(array $data): instance
@@ -67,8 +66,6 @@ class InventoryMovement extends Model
     /**
      * calculate the average buying price
      *
-     * @param  int  $warehouse_id
-     * @param  int  $product_id
      * @return average buying price
      */
     public static function getAverageBuyingPrice(int $warehouse_id, int $product_id): average
@@ -91,8 +88,6 @@ class InventoryMovement extends Model
     /**
      * calculate the average selling price
      *
-     * @param  int  $warehouse_id
-     * @param  int  $product_id
      * @return average selling price
      */
     public function getAverageSellingPrice(int $warehouse_id, int $product_id): average

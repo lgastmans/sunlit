@@ -15,8 +15,6 @@ class StoreDealerRequest extends FormRequest
 
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
     public function authorize(): bool
     {
@@ -25,8 +23,6 @@ class StoreDealerRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
     public function rules(): array
     {
@@ -67,8 +63,6 @@ class StoreDealerRequest extends FormRequest
 
     /**
      * Prepare inputs for validation.
-     *
-     * @return void
      */
     protected function prepareForValidation(): void
     {
@@ -84,8 +78,6 @@ class StoreDealerRequest extends FormRequest
 
     /**
      * Convert to boolean
-     *
-     * @return bool
      */
     private function toBoolean($booleable): bool
     {

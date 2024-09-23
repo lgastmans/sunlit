@@ -105,8 +105,6 @@ class SupplierController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function create(): View
     {
@@ -118,7 +116,6 @@ class SupplierController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\StoreSupplierRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreSupplierRequest $request)
@@ -135,7 +132,6 @@ class SupplierController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show(int $id)
@@ -155,9 +151,6 @@ class SupplierController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function edit(int $id): View
     {
@@ -172,8 +165,6 @@ class SupplierController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\StoreSupplierRequest  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(StoreSupplierRequest $request, int $id)
@@ -190,7 +181,6 @@ class SupplierController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(int $id)
@@ -222,8 +212,6 @@ class SupplierController extends Controller
 
     /**
      * Display a listing of the resource for select2
-     *
-     * @return json
      */
     public function getListForSelect2(Request $request): json
     {

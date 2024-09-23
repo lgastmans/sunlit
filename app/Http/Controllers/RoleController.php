@@ -10,8 +10,6 @@ class RoleController extends Controller
 {
     /**
      * Display a listing of the resource for select2
-     *
-     * @return json
      */
     public function getListForSelect2(Request $request): json
     {
