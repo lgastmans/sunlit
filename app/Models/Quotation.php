@@ -17,11 +17,6 @@ class Quotation extends Model
 
     protected $fillable = ['dealer_id', 'warehouse_id', 'quotation_number', 'quotation_number_slug', 'status', 'user_id', 'transport_charges '];
 
-    protected $casts = [
-        'pending_at' => 'datetime',
-        'confirmed_at' => 'datetime',
-    ];
-
     protected $with = ['dealer', 'warehouse', 'user', 'items'];
 
     const DRAFT = 1;
@@ -54,6 +49,14 @@ class Quotation extends Model
     public $total_spellout = '';
 
     public $total_without_transport = 0;
+
+    protected function casts(): array
+    {
+        return [
+            'pending_at' => 'datetime',
+            'confirmed_at' => 'datetime',
+        ];
+    }
 
     public static function getStatusList()
     {

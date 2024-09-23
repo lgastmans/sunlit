@@ -11,9 +11,12 @@ class FreightZone extends Model
 
     protected $fillable = ['name', 'rate_per_kg', 'properties'];
 
-    protected $casts = [
-        'properties' => 'array',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'properties' => 'array',
+        ];
+    }
 
     public function setPropertiesAttribute($value)
     {

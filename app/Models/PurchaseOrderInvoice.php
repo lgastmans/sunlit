@@ -34,16 +34,19 @@ class PurchaseOrderInvoice extends Model
 
     protected $fillable = ['payment_terms'];
 
-    protected $casts = [
-        'due_at' => 'datetime',
-        'shipped_at' => 'datetime',
-        'customs_at' => 'datetime',
-        'cleared_at' => 'datetime',
-        'received_at' => 'datetime',
-        'paid_at' => 'datetime',
-    ];
-
     protected $with = ['user'];
+
+    protected function casts(): array
+    {
+        return [
+            'due_at' => 'datetime',
+            'shipped_at' => 'datetime',
+            'customs_at' => 'datetime',
+            'cleared_at' => 'datetime',
+            'received_at' => 'datetime',
+            'paid_at' => 'datetime',
+        ];
+    }
 
     /**
      * Get the user associated with the purchase order invoice.

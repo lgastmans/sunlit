@@ -14,9 +14,12 @@ class PurchaseOrderInvoiceItem extends Model
 
     protected $fillable = ['purchase_order_id', 'product_id', 'quantity_shipped', 'selling_price'];
 
-    protected $casts = [
-        'charges' => 'array',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'charges' => 'array',
+        ];
+    }
 
     /**
      * Get the warehouse associated with the purchase order.
