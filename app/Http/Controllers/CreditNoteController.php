@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
 use App\Http\Requests\StoreCreditNoteRequest;
 use App\Models\CreditNote;
 use App\Models\CreditNoteItem;
 use App\Models\Inventory;
 use App\Models\SaleOrder;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 use PDF;
 use Spatie\Activitylog\Models\Activity;
 

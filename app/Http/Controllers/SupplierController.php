@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\View\View;
-use Illuminate\Http\JsonResponse;
 use App\Http\Requests\StoreSupplierRequest;
 use App\Models\PurchaseOrder;
 use App\Models\Supplier;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class SupplierController extends Controller
 {

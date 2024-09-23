@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
 use App\Exports\ProductsExport;
 use App\Http\Requests\StoreProductRequest;
 use App\Models\Category;
@@ -15,9 +13,11 @@ use App\Models\PurchaseOrderItem;
 use App\Models\SaleOrder;
 use App\Models\Supplier;
 use App\Models\Tax;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller

@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
 use App\Http\Requests\StoreTaxRequest;
 use App\Models\Product;
 use App\Models\Tax;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class TaxController extends Controller
 {

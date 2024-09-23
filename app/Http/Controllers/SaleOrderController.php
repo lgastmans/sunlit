@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
 use App\Http\Requests\StoreSaleOrderRequest;
 use App\Models\Dealer;
 use App\Models\Inventory;
@@ -12,8 +9,11 @@ use App\Models\SaleOrder;
 use App\Models\SaleOrderItem;
 use Carbon\Carbon;
 use DB;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 use NumberFormatter;
 use PDF;
 use Spatie\Activitylog\Models\Activity;

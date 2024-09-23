@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\View\View;
 use App\Http\Requests\StoreWarehouseRequest;
 use App\Models\InventoryMovement;
 use App\Models\PurchaseOrder;
@@ -10,6 +9,7 @@ use App\Models\SaleOrder;
 use App\Models\Warehouse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class WarehouseController extends Controller
 {

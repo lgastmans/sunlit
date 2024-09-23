@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
 use App\Http\Requests\StoreQuotationRequest;
 use App\Models\Quotation;
 use App\Models\QuotationItems;
 use App\Models\SaleOrder;
 use App\Models\SaleOrderItem;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 use PDF;
 use Spatie\Activitylog\Models\Activity;
 

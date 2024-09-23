@@ -2,8 +2,8 @@
 
 namespace App\Exports;
 
-use Illuminate\Support\Collection;
 use App\Models\Inventory;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 /*
     useful links for reference

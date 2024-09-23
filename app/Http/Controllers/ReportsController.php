@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\View\View;
 use App\Models\SaleOrder;
 use App\Models\SaleOrderItem;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 use NumberFormatter;
 
 class ReportsController extends Controller

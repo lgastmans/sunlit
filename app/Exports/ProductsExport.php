@@ -2,8 +2,8 @@
 
 namespace App\Exports;
 
-use Illuminate\Support\Collection;
 use App\Models\Product;
+use Illuminate\Support\Collection;
 /*
     useful links for reference
 
