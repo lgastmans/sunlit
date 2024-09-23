@@ -7,6 +7,7 @@ use App\Models\InventoryMovement;
 use App\Models\Product;
 use Carbon\Carbon;
 use DB;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,10 +31,9 @@ class InventoryMovementController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id)
     {
         $user = Auth::user();
         if ($user->can('list inventories')) {
@@ -267,7 +267,7 @@ class InventoryMovementController extends Controller
         return response()->json($response);
     }
 
-    public function getListForClosingStockReport(Request $request)
+    public function getListForClosingStockReport(Request $request): JsonResponse
     {
         $draw = 1;
         if ($request->has('draw')) {

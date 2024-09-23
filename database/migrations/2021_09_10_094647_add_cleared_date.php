@@ -8,10 +8,8 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('purchase_orders', function (Blueprint $table) {
             $table->date('cleared_at')->nullable();
@@ -20,10 +18,8 @@ return new class extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('purchase-_orders', function (Blueprint $table) {
             $table->$table->dropColumn('cleared_at');

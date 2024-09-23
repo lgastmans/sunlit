@@ -13,9 +13,11 @@ use App\Models\PurchaseOrderItem;
 use App\Models\SaleOrder;
 use App\Models\Supplier;
 use App\Models\Tax;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
@@ -35,7 +37,7 @@ class ProductController extends Controller
         return abort(403, trans('error.unauthorized'));
     }
 
-    public function getListForDatatables(Request $request)
+    public function getListForDatatables(Request $request): JsonResponse
     {
         $draw = 1;
         if ($request->has('draw')) {
@@ -165,10 +167,8 @@ class ProductController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): View
     {
         $product = new Product;
 
@@ -178,7 +178,6 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreProductRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreProductRequest $request)
@@ -204,10 +203,9 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id)
     {
         $user = Auth::user();
         if ($user->can('view products')) {
@@ -251,11 +249,8 @@ class ProductController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(int $id): View
     {
         $product = Product::withCount('purchase_order_item')->find($id);
         if ($product) {
@@ -268,11 +263,9 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\StoreProductRequest  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreProductRequest $request, $id)
+    public function update(StoreProductRequest $request, int $id)
     {
         $validatedData = $request->validated();
         $validatedData = Arr::except($validatedData, ['display_purchase_price']);
@@ -288,10 +281,9 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $user = Auth::user();
         if ($user->can('delete products')) {
@@ -342,10 +334,8 @@ class ProductController extends Controller
 
     /**
      * Display a listing of the resource for select2
-     *
-     * @return json
      */
-    public function getListForSelect2(Request $request)
+    public function getListForSelect2(Request $request): json
     {
         $query = Product::query();
         if ($request->has('q')) {

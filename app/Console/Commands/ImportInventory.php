@@ -32,10 +32,8 @@ class ImportInventory extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         /*
             still to be coded as a command (code below is from Dealers command)

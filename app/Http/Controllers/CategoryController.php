@@ -6,8 +6,10 @@ use App\Http\Requests\StoreCategoryRequest;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\PurchaseOrderInvoiceItem;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class CategoryController extends Controller
 {
@@ -27,7 +29,7 @@ class CategoryController extends Controller
 
     }
 
-    public function getListForDatatables(Request $request)
+    public function getListForDatatables(Request $request): JsonResponse
     {
         $draw = 1;
         if ($request->has('draw')) {
@@ -73,11 +75,11 @@ class CategoryController extends Controller
                 ->get(['id', 'name']);
         } else {
             $categories = Category::where('name', 'like', '%'.$search.'%')
-                    ->select('id', 'name', 'hsn_code', 'customs_duty', 'social_welfare_surcharge', 'igst')
-                    ->orderBy($order_column, $order_dir)
-                    ->skip($start)
-                    ->take($length)
-                    ->get();
+                ->select('id', 'name', 'hsn_code', 'customs_duty', 'social_welfare_surcharge', 'igst')
+                ->orderBy($order_column, $order_dir)
+                ->skip($start)
+                ->take($length)
+                ->get();
         }
 
         $response = [
@@ -93,10 +95,8 @@ class CategoryController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): View
     {
         $category = new Category;
 
@@ -106,7 +106,6 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreCategoryRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreCategoryRequest $request)
@@ -123,21 +122,17 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id)
     {
         //
     }
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(int $id): View
     {
         $category = Category::find($id);
         if ($category) {
@@ -150,11 +145,9 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\StoreCategoryRequest  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreCategoryRequest $request, $id)
+    public function update(StoreCategoryRequest $request, int $id)
     {
         $validatedData = $request->validated();
         $category = Category::whereId($id)->update($validatedData);
@@ -168,10 +161,9 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $user = Auth::user();
         if ($user->can('delete categories')) {
@@ -194,10 +186,8 @@ class CategoryController extends Controller
 
     /**
      * Display a listing of the resource for select2
-     *
-     * @return json
      */
-    public function getListForSelect2(Request $request)
+    public function getListForSelect2(Request $request): json
     {
         $query = Category::query();
         if ($request->has('q')) {

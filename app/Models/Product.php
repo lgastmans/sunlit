@@ -5,6 +5,8 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use NumberFormatter;
 
@@ -20,7 +22,7 @@ class Product extends Model
     /**
      * Get the category associated with the product.
      */
-    public function category()
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
@@ -28,7 +30,7 @@ class Product extends Model
     /**
      * Get the supplier associated with the product.
      */
-    public function supplier()
+    public function supplier(): BelongsTo
     {
         return $this->belongsTo(Supplier::class);
     }
@@ -36,37 +38,35 @@ class Product extends Model
     /**
      * Get the tax associated with the product.
      */
-    public function tax()
+    public function tax(): BelongsTo
     {
         return $this->belongsTo(Tax::class);
     }
 
-    public function purchase_order_item()
+    public function purchase_order_item(): HasMany
     {
         return $this->hasMany(PurchaseOrderItem::class);
     }
 
-    public function sale_order_item()
+    public function sale_order_item(): HasMany
     {
         return $this->hasMany(SaleOrderItem::class);
     }
 
-    public function inventory()
+    public function inventory(): HasMany
     {
         return $this->hasMany(Inventory::class);
     }
 
-    public function movement()
+    public function movement(): HasMany
     {
         return $this->hasMany(InventoryMovement::class);
     }
 
     /**
      * Get the purchase price amount in decimal.
-     *
-     * @return string
      */
-    public function getDisplayPurchasePriceAttribute()
+    public function getDisplayPurchasePriceAttribute(): string
     {
         return $this->purchase_price;
         // $fmt = new NumberFormatter('en_IN', NumberFormatter::CURRENCY);
@@ -85,9 +85,8 @@ class Product extends Model
      * Get the last purchased date for a product
      *
      * @param int
-     * @return date
      */
-    public function getLastPurchasedOnAttribute()
+    public function getLastPurchasedOnAttribute(): date
     {
         $result = InventoryMovement::select('created_at')
             ->whereNotNull('purchase_order_id')
@@ -108,9 +107,8 @@ class Product extends Model
      * Get the last sold date for a product
      *
      * @param int
-     * @return date
      */
-    public function getLastSoldOnAttribute()
+    public function getLastSoldOnAttribute(): date
     {
         $result = InventoryMovement::select('created_at')
             ->whereNotNull('sales_order_id')

@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Http\Response;
 
 class QuotationItems extends Model
 {
@@ -16,7 +18,7 @@ class QuotationItems extends Model
     /**
      * Get the order associated with the item.
      */
-    public function quotation()
+    public function quotation(): BelongsTo
     {
         return $this->belongsTo(Quotation::class);
     }
@@ -24,18 +26,15 @@ class QuotationItems extends Model
     /**
      * Get the product associated with the item.
      */
-    public function product()
+    public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): Response
     {
         $product = Product::find($request->get('product_id'));
 

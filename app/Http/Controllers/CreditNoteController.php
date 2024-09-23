@@ -8,7 +8,10 @@ use App\Models\CreditNoteItem;
 use App\Models\Inventory;
 use App\Models\SaleOrder;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 use PDF;
 use Spatie\Activitylog\Models\Activity;
 
@@ -16,17 +19,15 @@ class CreditNoteController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): View
     {
         $status = CreditNote::getStatusList();
 
         return view('credit_notes.index', ['status' => $status]);
     }
 
-    public function getListForDatatables(Request $request)
+    public function getListForDatatables(Request $request): JsonResponse
     {
         $draw = 1;
         if ($request->has('draw')) {
@@ -294,11 +295,9 @@ class CreditNoteController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateCreditNoteRequest  $request
      * @param  \App\Models\CreditNote  $creditNote
-     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): JsonResponse
     {
         if (($request->get('field') == 'amount') || ($request->get('field') == 'quantity')) {
             $order = CreditNote::find($id);
@@ -324,11 +323,8 @@ class CreditNoteController extends Controller
 
     /**
      * Update the confirmed_at and status
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function confirmed(Request $request, $id)
+    public function confirmed(Request $request, int $id): RedirectResponse
     {
         $validated = $request->validate([
             'confirmed_at' => 'required|date',
@@ -376,7 +372,7 @@ class CreditNoteController extends Controller
         }
     }
 
-    public function proforma($credit_note_number_slug)
+    public function proforma($credit_note_number_slug): View
     {
         $settings = \Setting::all();
 

@@ -8,10 +8,8 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('purchase_order_invoice_items', function (Blueprint $table) {
             $table->decimal('selling_price', $precision = 13, $scale = 2)->change();
@@ -20,10 +18,8 @@ return new class extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('purchase_order_invoice_items', function (Blueprint $table) {
             $table->integer('selling_price')->change();

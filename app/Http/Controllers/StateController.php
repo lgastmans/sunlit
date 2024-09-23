@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreStateRequest;
 use App\Models\Product;
 use App\Models\State;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class StateController extends Controller
 {
@@ -24,7 +26,7 @@ class StateController extends Controller
         return abort(403, trans('error.unauthorized'));
     }
 
-    public function getListForDatatables(Request $request)
+    public function getListForDatatables(Request $request): JsonResponse
     {
 
         $draw = 1;
@@ -77,12 +79,12 @@ class StateController extends Controller
                 ->get();
         } else {
             $states = State::where('states.name', 'like', '%'.$search.'%')
-                    ->select('states.*', 'freight_zones.name AS freight_zone')
-                    ->leftJoin('freight_zones', 'freight_zones.id', '=', 'states.freight_zone_id')
-                    ->orderBy($order_column, $order_dir)
-                    ->skip($start)
-                    ->take($length)
-                    ->get();
+                ->select('states.*', 'freight_zones.name AS freight_zone')
+                ->leftJoin('freight_zones', 'freight_zones.id', '=', 'states.freight_zone_id')
+                ->orderBy($order_column, $order_dir)
+                ->skip($start)
+                ->take($length)
+                ->get();
         }
 
         $arr = [];
@@ -124,7 +126,6 @@ class StateController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreStateRequest $request)
@@ -143,10 +144,9 @@ class StateController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id)
     {
         //
         $state = State::find($id);
@@ -160,11 +160,8 @@ class StateController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(int $id): View
     {
         //
         $state = State::find($id);
@@ -178,11 +175,9 @@ class StateController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreStateRequest $request, $id)
+    public function update(StoreStateRequest $request, int $id)
     {
         //
         $validatedData = $request->validated();
@@ -198,10 +193,9 @@ class StateController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $user = Auth::user();
         if ($user->can('delete states')) {
@@ -224,10 +218,8 @@ class StateController extends Controller
 
     /**
      * Display a listing of the resource for select2
-     *
-     * @return json
      */
-    public function getListForSelect2(Request $request)
+    public function getListForSelect2(Request $request): json
     {
         $query = State::query();
         if ($request->has('q')) {

@@ -5,16 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\CreditNote;
 use App\Models\CreditNoteItem;
 use App\Models\Product;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class CreditNoteItemController extends Controller
 {
     /**
      * Store a newly created resource in storage.
-     *
-     * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $product = Product::find($request->get('product_id'));
 
@@ -45,9 +45,8 @@ class CreditNoteItemController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \App\Models\QuotationItems  $quotationItems
-     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): JsonResponse
     {
         $item = CreditNoteItem::find($id);
 
@@ -79,9 +78,8 @@ class CreditNoteItemController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\QuotationItems  $quotationItems
-     * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         $item = CreditNoteItem::find($id);
 

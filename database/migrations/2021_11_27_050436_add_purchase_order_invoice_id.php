@@ -8,10 +8,8 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('inventory_movements', function (Blueprint $table) {
             $table->unsignedBigInteger('purchase_order_invoice_id')->after('purchase_order_id');
@@ -20,10 +18,8 @@ return new class extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('inventory_movements', function (Blueprint $table) {
             $table->dropColumn('purchase_order_invoice_id');

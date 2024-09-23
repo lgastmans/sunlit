@@ -8,8 +8,10 @@ use App\Models\SaleOrder;
 use App\Models\SaleOrderPayment;
 use DateTime;
 use DB;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 use NumberFormatter;
 
 class DealerController extends Controller
@@ -30,7 +32,7 @@ class DealerController extends Controller
 
     }
 
-    public function getListForDatatables(Request $request)
+    public function getListForDatatables(Request $request): JsonResponse
     {
         $draw = 1;
         if ($request->has('draw')) {
@@ -89,15 +91,15 @@ class DealerController extends Controller
                 ->get();
         } else {
             $dealers = Dealer::select('dealers.id AS dealer_id', 'company', 'contact_person', 'city', 'states.name as state_name', 'email', 'email2', 'email3', 'phone', 'phone2')
-                    ->where('contact_person', 'like', '%'.$search.'%')
-                    ->join('states', 'states.id', '=', 'state_id')
-                    ->orWhere('company', 'like', '%'.$search.'%')
-                    ->orWhere('city', 'like', '%'.$search.'%')
-                    ->orWhere('states.name', 'like', '%'.$search.'%')
-                    ->orderBy($order_column, $order_dir)
-                    ->skip($start)
-                    ->take($length)
-                    ->get();
+                ->where('contact_person', 'like', '%'.$search.'%')
+                ->join('states', 'states.id', '=', 'state_id')
+                ->orWhere('company', 'like', '%'.$search.'%')
+                ->orWhere('city', 'like', '%'.$search.'%')
+                ->orWhere('states.name', 'like', '%'.$search.'%')
+                ->orderBy($order_column, $order_dir)
+                ->skip($start)
+                ->take($length)
+                ->get();
         }
 
         $arr = [];
@@ -276,7 +278,7 @@ class DealerController extends Controller
         return response()->json($response);
     }
 
-    public function getListForLedgerSummary(Request $request)
+    public function getListForLedgerSummary(Request $request): JsonResponse
     {
         $select_period = 'period_monthly';
         if ($request->has('select_period')) {
@@ -444,7 +446,7 @@ class DealerController extends Controller
         return response()->json($response);
     }
 
-    public function ledger(Request $request)
+    public function ledger(Request $request): View
     {
         $curQuarter = getCurrentQuarter();
         $dealer_id = null;
@@ -455,7 +457,7 @@ class DealerController extends Controller
         return view('dealers.ledger', ['dealer_id' => $dealer_id, 'curQuarter' => $curQuarter, 'dealer_id' => 0]);
     }
 
-    public function ledgerSummary(Request $request)
+    public function ledgerSummary(Request $request): View
     {
         $curQuarter = getCurrentQuarter();
 
@@ -464,10 +466,8 @@ class DealerController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): View
     {
         $dealer = new Dealer;
 
@@ -477,7 +477,6 @@ class DealerController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\StoreDealerRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreDealerRequest $request)
@@ -494,10 +493,9 @@ class DealerController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id)
     {
         $user = Auth::user();
         if ($user->can('view dealers')) {
@@ -514,11 +512,8 @@ class DealerController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(int $id): View
     {
         $dealer = Dealer::with('state')->find($id);
         if ($dealer) {
@@ -531,11 +526,9 @@ class DealerController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\StoreDealerRequest  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreDealerRequest $request, $id)
+    public function update(StoreDealerRequest $request, int $id)
     {
         $validatedData = $request->validated();
         $dealer = Dealer::whereId($id)->update($validatedData);
@@ -548,10 +541,8 @@ class DealerController extends Controller
 
     /**
      * Display a listing of the resource for select2
-     *
-     * @return json
      */
-    public function getListForSelect2(Request $request)
+    public function getListForSelect2(Request $request): json
     {
         $query = Dealer::query();
         if ($request->has('q')) {
@@ -570,10 +561,9 @@ class DealerController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $user = Auth::user();
         if ($user->can('delete dealers')) {

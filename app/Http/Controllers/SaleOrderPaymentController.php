@@ -6,6 +6,7 @@ use App\Http\Requests\StoreSaleOrderPaymentRequest;
 use App\Models\SaleOrder;
 use App\Models\SaleOrderPayment;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use NumberFormatter;
@@ -70,11 +71,11 @@ class SaleOrderPaymentController extends Controller
                 ->get();
         } else {
             $payments = SaleOrderPayment::select('sale_order_payments.*')
-                    ->where('sale_order_id', '=', $filter_sale_order_id)
-                    ->orderBy($order_column, $order_dir)
-                    ->skip($start)
-                    ->take($length)
-                    ->get();
+                ->where('sale_order_id', '=', $filter_sale_order_id)
+                ->orderBy($order_column, $order_dir)
+                ->skip($start)
+                ->take($length)
+                ->get();
         }
 
         $arr = [];
@@ -118,11 +119,8 @@ class SaleOrderPaymentController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
-    public function store(StoreSaleOrderPaymentRequest $request)
+    public function store(StoreSaleOrderPaymentRequest $request): JsonResponse
     {
         $log = [];
         $log_text = '';
@@ -172,10 +170,9 @@ class SaleOrderPaymentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id)
     {
         //
     }
@@ -183,10 +180,9 @@ class SaleOrderPaymentController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(int $id)
     {
         //
     }
@@ -194,21 +190,17 @@ class SaleOrderPaymentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         //
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id): JsonResponse
     {
         $payment = SaleOrderPayment::find($id);
 

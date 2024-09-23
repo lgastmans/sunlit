@@ -8,10 +8,8 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('purchase_order_invoices', function (Blueprint $table) {
             $table->string('invoice_number_slug')->after('invoice_number');
@@ -20,10 +18,8 @@ return new class extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('purchase_order_invoices', function (Blueprint $table) {
             $table->dropColumn('invoice_number_slug');

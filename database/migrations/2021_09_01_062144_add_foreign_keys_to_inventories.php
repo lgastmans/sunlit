@@ -8,10 +8,8 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('inventories', function (Blueprint $table) {
             $table->foreign('purchase_order_item_id')->references('id')->on('purchase_order_items');
@@ -22,10 +20,8 @@ return new class extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('inventories', function (Blueprint $table) {
             $table->dropForeign(['purchase_order_item_id', 'warehouse_id', 'product_id']);

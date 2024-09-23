@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Inventory;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 /*
     useful links for reference
@@ -22,10 +23,7 @@ use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 //class InventoryExport implements FromCollection, WithHeadings, ShouldAutoSize, WithColumnFormatting, WithMapping
 class InventoryExport implements FromCollection, ShouldAutoSize, WithHeadings, WithMapping
 {
-    /**
-     * @return \Illuminate\Support\Collection
-     */
-    public function collection()
+    public function collection(): Collection
     {
         return collect(Inventory::with(['product', 'warehouse'])
             ->select('inventories.*', 'products.code', 'products.name', 'products.minimum_quantity', 'suppliers.company', 'categories.name', 'warehouses.name')

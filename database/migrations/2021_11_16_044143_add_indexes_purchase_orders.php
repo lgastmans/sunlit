@@ -8,10 +8,8 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('purchase_orders', function (Blueprint $table) {
             $table->index('order_number');
@@ -24,10 +22,8 @@ return new class extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('purchase_orders', function (Blueprint $table) {
             $table->dropIndex('purchase_orders_order_number_index');

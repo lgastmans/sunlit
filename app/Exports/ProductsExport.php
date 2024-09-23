@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Product;
+use Illuminate\Support\Collection;
 /*
     useful links for reference
 
@@ -20,10 +21,7 @@ use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 class ProductsExport implements FromCollection, ShouldAutoSize, WithColumnFormatting, WithHeadings, WithMapping
 {
-    /**
-     * @return \Illuminate\Support\Collection
-     */
-    public function collection()
+    public function collection(): Collection
     {
         return collect(Product::join('categories', 'categories.id', '=', 'products.category_id')
             ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')

@@ -10,10 +10,8 @@ class StoreCreditNoteRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -29,10 +27,8 @@ class StoreCreditNoteRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'credit_note_number' => 'required|unique:credit_notes|max:255',

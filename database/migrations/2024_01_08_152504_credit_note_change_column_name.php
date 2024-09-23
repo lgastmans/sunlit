@@ -8,10 +8,8 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('credit_notes', function (Blueprint $table) {
             $table->renameColumn('credit_note_slug_number', 'credit_note_number_slug');
@@ -20,10 +18,8 @@ return new class extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('credit_notes', function (Blueprint $table) {
             $table->renameColumn('credit_note_number_slug', 'credit_note_slug_number');

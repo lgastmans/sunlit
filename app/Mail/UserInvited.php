@@ -23,20 +23,18 @@ class UserInvited extends Mailable
 
     /**
      * Build the message.
-     *
-     * @return $this
      */
-    public function build()
+    public function build(): static
     {
         return $this->from(env('MAIL_FROM_ADDRESS', 'welcome@sunlit.in'))
             ->to($this->user->email)
             ->subject(trans('email.invite_subject'))
             ->markdown('emails.userInvited')->with([
-                        'name' => $this->user->name,
-                        'email' => $this->user->email,
-                        'subject' => trans('email.invite_subject'),
-                        'token' => $this->user->invite_token,
-                        'url' => route('registration.store', [$this->user->email, $this->user->invite_token]),
-                    ]);
+                'name' => $this->user->name,
+                'email' => $this->user->email,
+                'subject' => trans('email.invite_subject'),
+                'token' => $this->user->invite_token,
+                'url' => route('registration.store', [$this->user->email, $this->user->invite_token]),
+            ]);
     }
 }

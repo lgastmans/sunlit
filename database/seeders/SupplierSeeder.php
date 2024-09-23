@@ -9,10 +9,8 @@ class SupplierSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
         Supplier::factory()->count(10)->create();
     }

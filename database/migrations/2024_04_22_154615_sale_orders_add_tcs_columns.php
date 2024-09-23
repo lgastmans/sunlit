@@ -8,10 +8,8 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('sale_orders', function (Blueprint $table) {
             $table->string('tcs_text', 124)->after('payment_terms')->nullable();
@@ -21,10 +19,8 @@ return new class extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('sale_orders', function (Blueprint $table) {
             $table->dropColumn('tcs_text');

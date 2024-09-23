@@ -9,8 +9,11 @@ use App\Models\PurchaseOrderInvoiceItem;
 use App\Models\PurchaseOrderItem;
 use App\Models\Warehouse;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 use NumberFormatter;
 use PDF;
 use Spatie\Activitylog\Models\Activity;
@@ -48,7 +51,7 @@ class PurchaseOrderController extends Controller
         return abort(403, trans('error.unauthorized'));
     }
 
-    public function getListForDatatables(Request $request)
+    public function getListForDatatables(Request $request): JsonResponse
     {
         $draw = 1;
         if ($request->has('draw')) {
@@ -267,7 +270,6 @@ class PurchaseOrderController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(StorePurchaseOrderRequest $request)
@@ -348,21 +350,17 @@ class PurchaseOrderController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(int $id)
     {
         //
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id): JsonResponse
     {
         if ($request->get('field') == 'order_number') {
             $hasOrderNumber = PurchaseOrder::where('order_number', 'LIKE', $request->get('order_number'))->count();
@@ -429,11 +427,8 @@ class PurchaseOrderController extends Controller
 
     /**
      * Update the ordered_at and status of an order
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function ordered(Request $request, $id)
+    public function ordered(Request $request, int $id): RedirectResponse
     {
         $validated = $request->validate([
             'ordered_at' => 'required|date',
@@ -467,11 +462,8 @@ class PurchaseOrderController extends Controller
 
     /**
      * Update the confirmed_at and status of an order
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function confirmed(Request $request, $id)
+    public function confirmed(Request $request, int $id): RedirectResponse
     {
         $validated = $request->validate([
             'confirmed_at' => 'required|date',
@@ -506,11 +498,8 @@ class PurchaseOrderController extends Controller
 
     /**
      * Update the shipped_at and status of an order
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function shipped(Request $request, $id)
+    public function shipped(Request $request, int $id): RedirectResponse
     {
         // $validated = $request->validate([
         //     'shipped_at' => 'required|date',
@@ -530,11 +519,8 @@ class PurchaseOrderController extends Controller
 
     /**
      * Update the shipped_at and status of an order
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function customs(Request $request, $id)
+    public function customs(Request $request, int $id): RedirectResponse
     {
         // $validated = $request->validate([
         //     'customs_at' => 'required|date',
@@ -550,11 +536,8 @@ class PurchaseOrderController extends Controller
 
     /**
      * Update the cleared_at and status of an order
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function cleared(Request $request, $id)
+    public function cleared(Request $request, int $id): RedirectResponse
     {
         // $validated = $request->validate([
         //     'cleared_at' => 'required|date',
@@ -582,11 +565,8 @@ class PurchaseOrderController extends Controller
 
     /**
      * Update the shipped_at and status of an order
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function received(Request $request, $id)
+    public function received(Request $request, int $id): RedirectResponse
     {
         $order = PurchaseOrder::find($id);
         $order->received_at = $request->get('received_at');
@@ -608,10 +588,9 @@ class PurchaseOrderController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $user = Auth::user();
         if ($user->can('delete purchase orders')) {
@@ -632,7 +611,7 @@ class PurchaseOrderController extends Controller
 
     }
 
-    public function invoice($order_number)
+    public function invoice($order_number): View
     {
         $order = PurchaseOrder::where('order_number', '=', $order_number)->first();
 

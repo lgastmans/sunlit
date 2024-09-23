@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTaxRequest;
 use App\Models\Product;
 use App\Models\Tax;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class TaxController extends Controller
 {
@@ -26,7 +28,7 @@ class TaxController extends Controller
         return abort(403, trans('error.unauthorized'));
     }
 
-    public function getListForDatatables(Request $request)
+    public function getListForDatatables(Request $request): JsonResponse
     {
         $draw = 1;
         if ($request->has('draw')) {
@@ -80,12 +82,12 @@ class TaxController extends Controller
                 ->get();
         } else {
             $taxes = Tax::select('id', 'name', 'amount')
-                    ->where('name', 'like', '%'.$search.'%')
-                    ->orWhere('amount', 'like', '%'.$search.'%')
-                    ->orderBy($order_column, $order_dir)
-                    ->skip($start)
-                    ->take($length)
-                    ->get();
+                ->where('name', 'like', '%'.$search.'%')
+                ->orWhere('amount', 'like', '%'.$search.'%')
+                ->orderBy($order_column, $order_dir)
+                ->skip($start)
+                ->take($length)
+                ->get();
         }
 
         $response = [
@@ -101,10 +103,8 @@ class TaxController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): View
     {
         $tax = new Tax;
 
@@ -114,7 +114,6 @@ class TaxController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreTaxRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreTaxRequest $request)
@@ -132,21 +131,17 @@ class TaxController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id)
     {
         //
     }
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(int $id): View
     {
         $tax = Tax::find($id);
         if ($tax) {
@@ -159,11 +154,9 @@ class TaxController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\StoreTaxRequest  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreTaxRequest $request, $id)
+    public function update(StoreTaxRequest $request, int $id)
     {
         $validatedData = $request->validated();
         $validatedData = Arr::except($validatedData, ['display_amount']);
@@ -178,10 +171,9 @@ class TaxController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $user = Auth::user();
         if ($user->can('delete taxes')) {
@@ -204,10 +196,8 @@ class TaxController extends Controller
 
     /**
      * Display a listing of the resource for select2
-     *
-     * @return json
      */
-    public function getListForSelect2(Request $request)
+    public function getListForSelect2(Request $request): json
     {
         $query = Tax::query();
         if ($request->has('q')) {

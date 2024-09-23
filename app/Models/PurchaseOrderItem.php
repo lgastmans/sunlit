@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PurchaseOrderItem extends Model
@@ -16,12 +17,12 @@ class PurchaseOrderItem extends Model
     /**
      * Get the order associated with the purchase order item.
      */
-    public function purchase_order()
+    public function purchase_order(): BelongsTo
     {
         return $this->belongsTo(PurchaseOrder::class);
     }
 
-    public function product()
+    public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }

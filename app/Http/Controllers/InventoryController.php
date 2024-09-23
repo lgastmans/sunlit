@@ -7,6 +7,7 @@ use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\SaleOrder;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -274,7 +275,7 @@ class InventoryController extends Controller
         return Excel::download(new InventoryExport, 'inventory_'.$current.'.xlsx');
     }
 
-    public function resetOrderedStock()
+    public function resetOrderedStock(): JsonResponse
     {
         /**
          * current ordered column is calculated based on

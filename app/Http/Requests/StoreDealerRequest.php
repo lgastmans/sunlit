@@ -15,20 +15,16 @@ class StoreDealerRequest extends FormRequest
 
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return $this->user()->can('edit dealers');
     }
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'company' => 'required|string|max:255',
@@ -67,10 +63,8 @@ class StoreDealerRequest extends FormRequest
 
     /**
      * Prepare inputs for validation.
-     *
-     * @return void
      */
-    protected function prepareForValidation()
+    protected function prepareForValidation(): void
     {
         if ($this->has_shipping_address == null) {
             $has_shipping_address = 0;
@@ -84,10 +78,8 @@ class StoreDealerRequest extends FormRequest
 
     /**
      * Convert to boolean
-     *
-     * @return bool
      */
-    private function toBoolean($booleable)
+    private function toBoolean($booleable): bool
     {
         return filter_var($booleable, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     }

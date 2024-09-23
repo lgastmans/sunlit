@@ -7,22 +7,23 @@ use App\Models\SaleOrderItem;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 use NumberFormatter;
 
 class ReportsController extends Controller
 {
     //
-    public function index()
+    public function index(): View
     {
         return view('reports.stock');
     }
 
-    public function closingStock()
+    public function closingStock(): View
     {
         return view('reports.closing-stock');
     }
 
-    public function dstr()
+    public function dstr(): View
     {
         return view('reports.dstr');
     }

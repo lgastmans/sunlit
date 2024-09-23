@@ -9,6 +9,7 @@ use App\Models\SaleOrder;
 use App\Models\Warehouse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class WarehouseController extends Controller
 {
@@ -87,15 +88,15 @@ class WarehouseController extends Controller
                 ->get();
         } else {
             $warehouses = Warehouse::where('contact_person', 'like', '%'.$search.'%')
-                    ->join('states', 'states.id', '=', 'state_id')
-                    ->orWhere('warehouses.name', 'like', '%'.$search.'%')
-                    ->orWhere('city', 'like', '%'.$search.'%')
-                    ->orWhere('states.name', 'like', '%'.$search.'%')
-                    ->orderBy($order_column, $order_dir)
-                    ->skip($start)
-                    ->take($length)
-                    ->select('warehouses.*')
-                    ->get();
+                ->join('states', 'states.id', '=', 'state_id')
+                ->orWhere('warehouses.name', 'like', '%'.$search.'%')
+                ->orWhere('city', 'like', '%'.$search.'%')
+                ->orWhere('states.name', 'like', '%'.$search.'%')
+                ->orderBy($order_column, $order_dir)
+                ->skip($start)
+                ->take($length)
+                ->select('warehouses.*')
+                ->get();
         }
 
         $response = [
@@ -113,10 +114,8 @@ class WarehouseController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): View
     {
         $warehouse = new Warehouse;
 
@@ -126,7 +125,6 @@ class WarehouseController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\StoreWarehouseRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreWarehouseRequest $request)
@@ -143,10 +141,9 @@ class WarehouseController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id)
     {
         $user = Auth::user();
         if ($user->can('view warehouses')) {
@@ -172,11 +169,8 @@ class WarehouseController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(int $id): View
     {
         $warehouse = Warehouse::with('state')->find($id);
         if ($warehouse) {
@@ -189,11 +183,9 @@ class WarehouseController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\StoreWarehouseRequest  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreWarehouseRequest $request, $id)
+    public function update(StoreWarehouseRequest $request, int $id)
     {
         $validatedData = $request->validated();
         $warehouse = Warehouse::whereId($id)->update($validatedData);
@@ -207,10 +199,9 @@ class WarehouseController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $user = Auth::user();
         if ($user->can('delete warehouses')) {
@@ -233,10 +224,8 @@ class WarehouseController extends Controller
 
     /**
      * Display a listing of the resource for select2
-     *
-     * @return json
      */
-    public function getListForSelect2(Request $request)
+    public function getListForSelect2(Request $request): json
     {
         $query = Warehouse::query();
         if ($request->has('q')) {

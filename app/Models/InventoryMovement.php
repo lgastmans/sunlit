@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class InventoryMovement extends Model
 {
@@ -18,22 +19,22 @@ class InventoryMovement extends Model
 
     const CANCELLED = 3;
 
-    public function warehouse()
+    public function warehouse(): BelongsTo
     {
         return $this->belongsTo(Warehouse::class);
     }
 
-    public function product()
+    public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }
 
-    public function purchase_order()
+    public function purchase_order(): BelongsTo
     {
         return $this->belongsTo(PurchaseOrder::class);
     }
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
@@ -41,10 +42,9 @@ class InventoryMovement extends Model
     /**
      * create a stock entry
      *
-     * @param  array  $data
      * @return instance of object
      */
-    public function updateMovement($data)
+    public function updateMovement(array $data): instance
     {
 
         $movement = $this->create([
@@ -66,11 +66,9 @@ class InventoryMovement extends Model
     /**
      * calculate the average buying price
      *
-     * @param  int  $warehouse_id
-     * @param  int  $product_id
      * @return average buying price
      */
-    public static function getAverageBuyingPrice($warehouse_id, $product_id)
+    public static function getAverageBuyingPrice(int $warehouse_id, int $product_id): average
     {
         /*
             SELECT (SUM(price * quantity) / SUM(quantity)) AS average_price
@@ -90,11 +88,9 @@ class InventoryMovement extends Model
     /**
      * calculate the average selling price
      *
-     * @param  int  $warehouse_id
-     * @param  int  $product_id
      * @return average selling price
      */
-    public function getAverageSellingPrice($warehouse_id, $product_id)
+    public function getAverageSellingPrice(int $warehouse_id, int $product_id): average
     {
         /*
             SELECT (SUM(price * quantity) / SUM(quantity)) AS average_price

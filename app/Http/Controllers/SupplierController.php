@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreSupplierRequest;
 use App\Models\PurchaseOrder;
 use App\Models\Supplier;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class SupplierController extends Controller
 {
@@ -80,13 +82,13 @@ class SupplierController extends Controller
                 ->get();
         } else {
             $suppliers = Supplier::where('contact_person', 'like', '%'.$search.'%')
-                    ->orWhere('company', 'like', '%'.$search.'%')
-                    ->orWhere('city', 'like', '%'.$search.'%')
-                    ->orWhere('country', 'like', '%'.$search.'%')
-                    ->orderBy($order_column, $order_dir)
-                    ->skip($start)
-                    ->take($length)
-                    ->get();
+                ->orWhere('company', 'like', '%'.$search.'%')
+                ->orWhere('city', 'like', '%'.$search.'%')
+                ->orWhere('country', 'like', '%'.$search.'%')
+                ->orderBy($order_column, $order_dir)
+                ->skip($start)
+                ->take($length)
+                ->get();
         }
 
         $response = [
@@ -103,10 +105,8 @@ class SupplierController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): View
     {
         $supplier = new Supplier;
 
@@ -116,7 +116,6 @@ class SupplierController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\StoreSupplierRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreSupplierRequest $request)
@@ -133,10 +132,9 @@ class SupplierController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id)
     {
         $user = Auth::user();
         if ($user->can('view suppliers')) {
@@ -153,11 +151,8 @@ class SupplierController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(int $id): View
     {
         $supplier = Supplier::with('state')->find($id);
         if ($supplier) {
@@ -170,11 +165,9 @@ class SupplierController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\StoreSupplierRequest  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreSupplierRequest $request, $id)
+    public function update(StoreSupplierRequest $request, int $id)
     {
         $validatedData = $request->validated();
         $supplier = Supplier::whereId($id)->update($validatedData);
@@ -188,10 +181,9 @@ class SupplierController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $user = Auth::user();
 
@@ -220,10 +212,8 @@ class SupplierController extends Controller
 
     /**
      * Display a listing of the resource for select2
-     *
-     * @return json
      */
-    public function getListForSelect2(Request $request)
+    public function getListForSelect2(Request $request): json
     {
         $query = Supplier::query();
         if ($request->has('q')) {
@@ -234,7 +224,7 @@ class SupplierController extends Controller
         return ['results' => $suppliers];
     }
 
-    public function stats($id)
+    public function stats($id): JsonResponse
     {
         $monthly_data = DB::table('purchase_orders')
             ->select(
