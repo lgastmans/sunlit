@@ -2,17 +2,15 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Foundation\Http\FormRequest;
 
 class StoreCategoryRequest extends FormRequest
 {
-
     protected function failedAuthorization()
     {
         throw new AuthorizationException(trans('app.unauthorized'));
     }
-
 
     /**
      * Determine if the user is authorized to make this request.
@@ -36,7 +34,7 @@ class StoreCategoryRequest extends FormRequest
             'hsn_code' => 'max:255',
             'customs_duty' => 'required',
             'social_welfare_surcharge' => 'required',
-            'igst' => 'required'
+            'igst' => 'required',
         ];
     }
 }

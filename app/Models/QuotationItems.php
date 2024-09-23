@@ -39,18 +39,17 @@ class QuotationItems extends Model
     {
         $product = Product::find($request->get('product_id'));
 
-        if ($product){
+        if ($product) {
 
             $item = QuotationItems::where('quotation_id', '=', $request->quotation_id)->where('product_id', '=', $request->product_id)->first();
 
             $order = Quotation::find($request->quotation_id);
 
-            if ($item){
+            if ($item) {
                 $item->quantity_ordered = $request->quantity_ordered;
                 $item->update();
-            }
-            else{
-                $item = new QuotationItems();
+            } else {
+                $item = new QuotationItems;
                 $item->quotation_id = $request->quotation_id;
                 $item->product_id = $request->product_id;
                 $item->tax = $product->tax->amount;
@@ -59,14 +58,15 @@ class QuotationItems extends Model
                 $item->save();
             }
 
-            return response()->json(['success'=>'true','code'=>200, 'message'=> 'OK', 'item' => $item, 'product' => $product]);
+            return response()->json(['success' => 'true', 'code' => 200, 'message' => 'OK', 'item' => $item, 'product' => $product]);
         }
     }
 
     public function getTotalPriceAttribute()
     {
-        $total = number_format(($this->price + ($this->price * $this->tax/100)) * $this->quantity,2,'.',',');
-        return  $total;
+        $total = number_format(($this->price + ($this->price * $this->tax / 100)) * $this->quantity, 2, '.', ',');
+
+        return $total;
     }
 
     /**
@@ -82,7 +82,6 @@ class QuotationItems extends Model
      */
     public function getTaxAmountAttribute()
     {
-        return ($this->quantity * $this->price) * ($this->tax/100);
+        return ($this->quantity * $this->price) * ($this->tax / 100);
     }
-
 }

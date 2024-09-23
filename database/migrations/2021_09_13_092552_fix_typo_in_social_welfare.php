@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class FixTypoInSocialWelfare extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -29,4 +29,4 @@ class FixTypoInSocialWelfare extends Migration
             $table->renameColumn('social_welfare_surcharge', 'social_welfare_surchage');
         });
     }
-}
+};

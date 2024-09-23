@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Models\CreditNote;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class StoreCreditNoteRequest extends FormRequest
 {
@@ -24,7 +23,7 @@ class StoreCreditNoteRequest extends FormRequest
         $this->merge([
             'status' => CreditNote::DRAFT,
             'user_id' => Auth::user()->id,
-            'credit_note_number_slug' => str_replace(array(' ', '/'), '-', $this->credit_note_number)
+            'credit_note_number_slug' => str_replace([' ', '/'], '-', $this->credit_note_number),
         ]);
     }
 
@@ -44,7 +43,7 @@ class StoreCreditNoteRequest extends FormRequest
             'user_id' => 'required|integer',
             'invoice_number' => 'nullable|max:255',
             'invoice_date' => 'nullable|date',
-            'is_against_invoice' => 'integer'
+            'is_against_invoice' => 'integer',
         ];
     }
 }

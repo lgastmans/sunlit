@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class DealersRemoveColumnZoneId extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -16,7 +16,7 @@ class DealersRemoveColumnZoneId extends Migration
         //
         Schema::table('dealers', function (Blueprint $table) {
             $table->dropColumn('freight_zone_id');
-        });          
+        });
     }
 
     /**
@@ -29,6 +29,6 @@ class DealersRemoveColumnZoneId extends Migration
         //
         Schema::table('dealers', function (Blueprint $table) {
             $table->integer('freight_zone_id')->after('state_id')->nullable();
-        });         
+        });
     }
-}
+};

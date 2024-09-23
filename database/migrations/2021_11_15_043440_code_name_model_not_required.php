@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CodeNameModelNotRequired extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -33,4 +33,4 @@ class CodeNameModelNotRequired extends Migration
             $table->string('model')->nullable(false)->change();
         });
     }
-}
+};

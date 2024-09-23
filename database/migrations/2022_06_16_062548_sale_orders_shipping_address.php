@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class SaleOrdersShippingAddress extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -29,8 +29,8 @@ class SaleOrdersShippingAddress extends Migration
         //
 
         Schema::table('sale_orders', function (Blueprint $table) {
-            $table->json('shipping_address')->nullable();        
+            $table->json('shipping_address')->nullable();
         });
 
     }
-}
+};

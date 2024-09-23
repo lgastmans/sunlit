@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class SaleOrdersAddWarehouse extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -28,7 +28,7 @@ class SaleOrdersAddWarehouse extends Migration
         Schema::table('sale_orders', function (Blueprint $table) {
             $table->dropForeign(['warehouse_id']);
             $table->dropColumn('warehouse_id');
-            
+
         });
     }
-}
+};

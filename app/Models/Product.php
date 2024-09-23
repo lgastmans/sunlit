@@ -3,18 +3,18 @@
 namespace App\Models;
 
 use Carbon\Carbon;
-use \NumberFormatter;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use NumberFormatter;
 
 class Product extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
-    protected $dates= ['created_at'];
     protected $fillable = ['category_id', 'supplier_id', 'tax_id', 'code', 'name', 'model', 'minimum_quantity', 'purchase_price', 'kw_rating', 'part_number', 'notes', 'cable_length_input', 'cable_length_output', 'weight_actual', 'weight_volume', 'weight_calculated', 'warranty'];
+
     protected $with = ['tax', 'inventory'];
 
     /**
@@ -46,7 +46,6 @@ class Product extends Model
         return $this->hasMany(PurchaseOrderItem::class);
     }
 
-
     public function sale_order_item()
     {
         return $this->hasMany(SaleOrderItem::class);
@@ -62,8 +61,6 @@ class Product extends Model
         return $this->hasMany(InventoryMovement::class);
     }
 
-
-
     /**
      * Get the purchase price amount in decimal.
      *
@@ -73,21 +70,21 @@ class Product extends Model
     {
         return $this->purchase_price;
         // $fmt = new NumberFormatter('en_IN', NumberFormatter::CURRENCY);
-        
+
         // return $fmt->format($this->purchase_price/100); //sprintf('%01.2f', $this->purchase_price / 100);
     }
-
 
     public function getDisplayCreatedAtAttribute()
     {
         $dt = Carbon::parse($this->created_at);
-        return $dt->toFormattedDateString();  
+
+        return $dt->toFormattedDateString();
     }
 
     /**
      * Get the last purchased date for a product
      *
-     * @param integer
+     * @param int
      * @return date
      */
     public function getLastPurchasedOnAttribute()
@@ -100,7 +97,8 @@ class Product extends Model
 
         if ($result) {
             $dt = Carbon::parse($result->created_at);
-            return $dt->toFormattedDateString();  
+
+            return $dt->toFormattedDateString();
         }
 
         return 'NF'; // Not Found
@@ -109,7 +107,7 @@ class Product extends Model
     /**
      * Get the last sold date for a product
      *
-     * @param integer
+     * @param int
      * @return date
      */
     public function getLastSoldOnAttribute()
@@ -122,10 +120,10 @@ class Product extends Model
 
         if ($result) {
             $dt = Carbon::parse($result->created_at);
+
             return $dt->toFormattedDateString();
         }
 
         return 'NF'; // Not Found
     }
-
 }

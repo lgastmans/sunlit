@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-
-
 class SettingController extends Controller
 {
     /**
@@ -18,11 +16,13 @@ class SettingController extends Controller
     {
 
         $user = Auth::user();
-        if ($user->can('edit settings')){
+        if ($user->can('edit settings')) {
             $settings = \Setting::all();
-            return view('settings.index', [ 'settings'=>$settings ]);
-        
+
+            return view('settings.index', ['settings' => $settings]);
+
         }
+
         return abort(403, trans('error.unauthorized'));
     }
 
@@ -39,7 +39,6 @@ class SettingController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -72,20 +71,21 @@ class SettingController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
     {
         $user = Auth::user();
-        if ($user->can('edit settings')){
-            foreach($request->except(['_token', '_method']) as $label => $value){
+        if ($user->can('edit settings')) {
+            foreach ($request->except(['_token', '_method']) as $label => $value) {
                 $key = str_replace('__', '.', $label);
                 \Setting::set($key, $value);
             }
             \Setting::save();
+
             return redirect(route('settings'))->with('success', trans('app.record_edited', ['field' => 'settings']));
         }
+
         return abort(403, trans('error.unauthorized'));
     }
 

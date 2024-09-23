@@ -2,18 +2,10 @@
 
 namespace Database\Factories;
 
-use App\Models\PurchaseOrder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PurchaseOrderFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
-    protected $model = PurchaseOrder::class;
-
     /**
      * Define the model's default state.
      *
@@ -22,8 +14,8 @@ class PurchaseOrderFactory extends Factory
     public function definition()
     {
         return [
-            'warehouse_id' => $this->faker->numberBetween(1,5),
-            'supplier_id' => $this->faker->numberBetween(11,20),
+            'warehouse_id' => $this->faker->numberBetween(1, 5),
+            'supplier_id' => $this->faker->numberBetween(11, 20),
             'order_number' => $this->faker->bothify('BM#####'),
             'boe_number' => $this->faker->randomNumber(5, true),
             'ordered_at' => $this->faker->dateTimeThisMonth('+ 2 days'),
@@ -42,8 +34,8 @@ class PurchaseOrderFactory extends Factory
             'transport_charges' => $this->faker->randomNumber(3, true),
             'se_due_date' => $this->faker->dateTimeThisMonth('+ 2 weeks'),
             'se_payment_date' => $this->faker->dateTimeThisMonth('+ 5 weeks'),
-            'status' => $this->faker->numberBetween(1,7),
-            'user_id' => 1
+            'status' => $this->faker->numberBetween(1, 7),
+            'user_id' => 1,
         ];
     }
 }

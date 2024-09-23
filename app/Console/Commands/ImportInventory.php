@@ -50,51 +50,55 @@ class ImportInventory extends Command
     */
     private static function csvToArray($filename = '', $delimiter = "\t")
     {
-        if (!file_exists($filename) || !is_readable($filename))
+        if (! file_exists($filename) || ! is_readable($filename)) {
             return 'File not found '.$filename;
+        }
 
-        $data = array();
-        if (($handle = fopen($filename, 'r')) !== false)
-        {
-            $i=0;
-            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false)
-            {
+        $data = [];
+        if (($handle = fopen($filename, 'r')) !== false) {
+            $i = 0;
+            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false) {
 
-                if (strpos($row[0], 'Sl.No') !== false)
+                if (strpos($row[0], 'Sl.No') !== false) {
                     continue;
-                else {
+                } else {
 
-                    if ((empty($row[1])) || (is_null($row[1])))
+                    if ((empty($row[1])) || (is_null($row[1]))) {
                         $data[$i]['company'] = 'company '.$i;
-                    else
+                    } else {
                         $data[$i]['company'] = $row[1];
-                    
-                    if ((empty($row[2])) || (is_null($row[2])))
+                    }
+
+                    if ((empty($row[2])) || (is_null($row[2]))) {
                         $data[$i]['city'] = 'city '.$i;
-                    else
+                    } else {
                         $data[$i]['city'] = $row[2];
+                    }
 
                     // load the string, the id will be set in the import function
-                    if ((empty($row[3])) || (is_null($row[3])))
+                    if ((empty($row[3])) || (is_null($row[3]))) {
                         $data[$i]['state_id'] = 1;
-                    else
+                    } else {
                         $data[$i]['state_id'] = trim($row[3]);
+                    }
 
                     $data[$i]['contact_person'] = $row[4];
 
-                    if ((empty($row[5])) || (is_null($row[5])))
+                    if ((empty($row[5])) || (is_null($row[5]))) {
                         $data[$i]['phone'] = 'phone '.$i;
-                    else
+                    } else {
                         $data[$i]['phone'] = $row[5];
+                    }
 
                     $data[$i]['email'] = $row[6];
 
                     $data[$i]['gstin'] = $row[7];
 
-                    if ((empty($row[8])) || (is_null($row[8])))
+                    if ((empty($row[8])) || (is_null($row[8]))) {
                         $data[$i]['address'] = $row[8];
-                    else
+                    } else {
                         $data[$i]['address'] = $row[8];
+                    }
 
                     // as the following columns are not given in the csv file and are required, set default values
                     $data[$i]['zip_code'] = ' ';
@@ -106,6 +110,5 @@ class ImportInventory extends Command
         }
 
         return $data;
-    }    
-    
+    }
 }

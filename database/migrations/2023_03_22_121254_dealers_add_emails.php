@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class DealersAddEmails extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -17,7 +17,7 @@ class DealersAddEmails extends Migration
         Schema::table('dealers', function (Blueprint $table) {
             $table->string('email3')->after('email')->nullable();
             $table->string('email2')->after('email')->nullable();
-        });        
+        });
     }
 
     /**
@@ -31,6 +31,6 @@ class DealersAddEmails extends Migration
         Schema::table('dealers', function (Blueprint $table) {
             $table->dropColumn('email2');
             $table->dropColumn('email3');
-        });        
+        });
     }
-}
+};

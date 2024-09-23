@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateInventoriesColumns extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -18,7 +18,7 @@ class UpdateInventoriesColumns extends Migration
             $table->dropForeign(['purchase_order_item_id']);
 
             $table->dropColumn('purchase_order_item_id');
-            $table->renameColumn('current_stock','stock_available')->nullable();
+            $table->renameColumn('current_stock', 'stock_available')->nullable();
             $table->integer('stock_ordered')->nullable()->after('current_stock');
             $table->integer('stock_booked')->nullable()->after('current_stock');
             $table->decimal('landed_cost', $precision = 13, $scale = 2)->change();
@@ -43,4 +43,4 @@ class UpdateInventoriesColumns extends Migration
             $table->foreign('purchase_order_item_id')->references('id')->on('purchase_order_items');
         });
     }
-}
+};

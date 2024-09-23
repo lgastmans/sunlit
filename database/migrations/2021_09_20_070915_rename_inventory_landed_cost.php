@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class RenameInventoryLandedCost extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,7 @@ class RenameInventoryLandedCost extends Migration
     {
         //
         Schema::table('inventories', function (Blueprint $table) {
-            $table->renameColumn('landed_cost','average_cost')->nullable();
+            $table->renameColumn('landed_cost', 'average_cost')->nullable();
         });
 
     }
@@ -29,7 +29,7 @@ class RenameInventoryLandedCost extends Migration
     {
         //
         Schema::table('inventories', function (Blueprint $table) {
-            $table->renameColumn('average_cost','landed_cost')->nullable();
+            $table->renameColumn('average_cost', 'landed_cost')->nullable();
         });
     }
-}
+};

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class SaleOrdersAddShippingColumns extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -19,7 +19,7 @@ class SaleOrdersAddShippingColumns extends Migration
             $table->string('shipping_contact_person2')->after('shipping_contact_person')->nullable();
             $table->string('shipping_email')->after('shipping_phone')->nullable();
             $table->string('shipping_email2')->after('shipping_phone')->nullable();
-        });         
+        });
     }
 
     /**
@@ -35,6 +35,6 @@ class SaleOrdersAddShippingColumns extends Migration
             $table->dropColumn('shipping_contact_person2');
             $table->dropColumn('shipping_email');
             $table->dropColumn('shipping_email2');
-        });         
+        });
     }
-}
+};

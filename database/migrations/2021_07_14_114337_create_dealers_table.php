@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDealersTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -27,7 +27,7 @@ class CreateDealersTable extends Migration
             $table->string('phone2')->nullable();
             $table->string('email')->nullable();
             $table->timestamps();
-            $table->softDeletes();            
+            $table->softDeletes();
         });
 
         Schema::table('dealers', function (Blueprint $table) {
@@ -48,4 +48,4 @@ class CreateDealersTable extends Migration
 
         Schema::dropIfExists('dealers');
     }
-}
+};

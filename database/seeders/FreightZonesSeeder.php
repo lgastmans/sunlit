@@ -39,7 +39,7 @@ class FreightZonesSeeder extends Seeder
             [
                 'name' => 'JK',
                 'rate_per_kg' => 8,
-            ]
+            ],
         ]);
     }
 }

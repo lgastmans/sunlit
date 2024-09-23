@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateQuotationsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -32,7 +32,7 @@ class CreateQuotationsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->index('quotation_number');
             $table->index('confirmed_at');
-        });        
+        });
     }
 
     /**
@@ -44,4 +44,4 @@ class CreateQuotationsTable extends Migration
     {
         Schema::dropIfExists('quotations');
     }
-}
+};

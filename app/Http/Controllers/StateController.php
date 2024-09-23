@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\State;
+use App\Http\Requests\StoreStateRequest;
 use App\Models\Product;
+use App\Models\State;
 use Illuminate\Http\Request;
-use \App\Http\Requests\StoreStateRequest;
 
 class StateController extends Controller
 {
@@ -19,30 +19,32 @@ class StateController extends Controller
         //
         // $user = Auth::user();
         // if ($user->can('list states'))
-            return view('states.index');
-    
-        return abort(403, trans('error.unauthorized'));        
+        return view('states.index');
+
+        return abort(403, trans('error.unauthorized'));
     }
 
     public function getListForDatatables(Request $request)
     {
-       
+
         $draw = 1;
-        if ($request->has('draw'))
+        if ($request->has('draw')) {
             $draw = $request->get('draw');
+        }
 
         $start = 0;
-        if ($request->has('start'))
-            $start = $request->get("start");
+        if ($request->has('start')) {
+            $start = $request->get('start');
+        }
 
         $length = 10;
         if ($request->has('length')) {
-            $length = $request->get("length");
+            $length = $request->get('length');
         }
 
         $order_column = 'name';
         $order_dir = 'ASC';
-        $order_arr = array();
+        $order_arr = [];
         if ($request->has('order')) {
             $order_arr = $request->get('order');
             $column_arr = $request->get('columns');
@@ -50,8 +52,7 @@ class StateController extends Controller
             $order_column = $column_arr[$column_index]['data'];
             // if ($column_index==3)
             //     $order_column = "states.name";
-            
-            
+
             $order_dir = $order_arr[0]['dir'];
         }
 
@@ -65,48 +66,47 @@ class StateController extends Controller
         $totalRecords = State::count();
         $totalRecordswithFilter = State::where('name', 'like', '%'.$search.'%')
             ->count();
-        
 
         // Fetch records
-        if ($length < 0)
+        if ($length < 0) {
             $states = State::where('states.name', 'like', '%'.$search.'%')
                 //->select('states.id', 'states.name', 'states.code', 'freight_zones.name AS freight_zone')
                 ->select('states.*', 'freight_zones.name AS freight_zone')
                 ->leftJoin('freight_zones', 'freight_zones.id', '=', 'states.freight_zone_id')
                 ->orderBy($order_column, $order_dir)
                 ->get();
-        else
+        } else {
             $states = State::where('states.name', 'like', '%'.$search.'%')
-                ->select('states.*', 'freight_zones.name AS freight_zone')
-                ->leftJoin('freight_zones', 'freight_zones.id', '=', 'states.freight_zone_id')
-                ->orderBy($order_column, $order_dir)
-                ->skip($start)
-                ->take($length)
-                ->get();
-
-        $arr = array();
-
-        foreach($states as $record)
-        {
-
-            $arr[] = array(
-                "id" => $record->id,
-                "name" => $record->name,
-                "code" => $record->code,
-                "abbr" => $record->abbreviation,
-                "freight_zone" => $record->freight_zone
-
-            );
+                    ->select('states.*', 'freight_zones.name AS freight_zone')
+                    ->leftJoin('freight_zones', 'freight_zones.id', '=', 'states.freight_zone_id')
+                    ->orderBy($order_column, $order_dir)
+                    ->skip($start)
+                    ->take($length)
+                    ->get();
         }
 
-        $response = array(
-            "draw" => $draw,
-            "recordsTotal" => $totalRecords,
-            "recordsFiltered" => $totalRecordswithFilter,
-            "data" => $arr,
-            'error' => null
-        );
-                
+        $arr = [];
+
+        foreach ($states as $record) {
+
+            $arr[] = [
+                'id' => $record->id,
+                'name' => $record->name,
+                'code' => $record->code,
+                'abbr' => $record->abbreviation,
+                'freight_zone' => $record->freight_zone,
+
+            ];
+        }
+
+        $response = [
+            'draw' => $draw,
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $totalRecordswithFilter,
+            'data' => $arr,
+            'error' => null,
+        ];
+
         return response()->json($response);
 
     }
@@ -132,9 +132,10 @@ class StateController extends Controller
         //
         $validatedData = $request->validated();
         $state = State::create($validatedData);
-        if ($state){
+        if ($state) {
             return redirect(route('states'))->with('success', trans('app.record_added', ['field' => 'state']));
         }
+
         return back()->withInputs($request->input())->with('error', trans('error.record_added', ['field' => 'state']));
 
     }
@@ -149,8 +150,9 @@ class StateController extends Controller
     {
         //
         $state = State::find($id);
-        if ($state)
+        if ($state) {
             return view('states.show', ['state' => $state]);
+        }
 
         return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'state']));
 
@@ -166,9 +168,10 @@ class StateController extends Controller
     {
         //
         $state = State::find($id);
-        if ($state){
+        if ($state) {
             return view('states.form', ['state' => $state]);
         }
+
         return view('states.index');
     }
 
@@ -184,9 +187,10 @@ class StateController extends Controller
         //
         $validatedData = $request->validated();
         $state = State::whereId($id)->update($validatedData);
-        if ($state){
+        if ($state) {
             return redirect(route('states'))->with('success', trans('app.record_edited', ['field' => 'state']));
         }
+
         return back()->withInputs($request->input())->with('error', trans('error.record_edited', ['field' => 'state']));
 
     }
@@ -200,34 +204,37 @@ class StateController extends Controller
     public function destroy($id)
     {
         $user = Auth::user();
-        if ($user->can('delete states')){
+        if ($user->can('delete states')) {
             /*
                 check if tax present in products
             */
             $count = Product::where('tax_id', $id)->count();
 
-            if ($count > 0)
+            if ($count > 0) {
                 return redirect(route('taxes'))->with('error', trans('error.tax_has_product'));
+            }
 
             State::destroy($id);
+
             return redirect(route('states'))->with('success', trans('app.record_deleted', ['field' => 'tax']));
         }
+
         return abort(403, trans('error.unauthorized'));
     }
 
     /**
      * Display a listing of the resource for select2
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return json
      */
     public function getListForSelect2(Request $request)
     {
         $query = State::query();
-        if ($request->has('q')){
+        if ($request->has('q')) {
             $query->where('name', 'like', $request->get('q').'%');
         }
         $states = $query->select('id', 'name as text')->get();
+
         return ['results' => $states];
-    }   
+    }
 }

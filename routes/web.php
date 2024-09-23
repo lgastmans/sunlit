@@ -1,33 +1,32 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TaxController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\StateController;
-use App\Http\Controllers\DealerController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\SettingController;
-use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\SupplierController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\InventoryController;
-use App\Http\Controllers\QuotationController;
-use App\Http\Controllers\SaleOrderController;
-use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\CreditNoteController;
-use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\FreightZoneController;
-use App\Http\Controllers\PurchaseOrderController;
-use App\Http\Controllers\SaleOrderItemController;
 use App\Http\Controllers\CreditNoteItemController;
-use App\Http\Controllers\QuotationItemsController;
-use App\Http\Controllers\SaleOrderPaymentController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DealerController;
+use App\Http\Controllers\FreightZoneController;
+use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\InventoryMovementController;
-use App\Http\Controllers\PurchaseOrderItemController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\PurchaseOrderInvoiceController;
-use App\Http\Controllers\PurchaseOrderInvoiceItemController;
+use App\Http\Controllers\PurchaseOrderItemController;
+use App\Http\Controllers\QuotationController;
+use App\Http\Controllers\QuotationItemsController;
+use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SaleOrderController;
+use App\Http\Controllers\SaleOrderItemController;
+use App\Http\Controllers\SaleOrderPaymentController;
+use App\Http\Controllers\SettingController;
+use App\Http\Controllers\StateController;
+use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\TaxController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\WarehouseController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,27 +39,22 @@ use App\Http\Controllers\PurchaseOrderInvoiceItemController;
 |
 */
 
-
 require __DIR__.'/auth.php';
-
 
 Route::get('/invite/{email}/{token}', [UserController::class, 'registration'])->name('registration.store');
 Route::post('/invite', [UserController::class, 'registrationPassword'])->name('registration.password');
 
-
-
-Route::group(['middleware' => ['auth']], function () { 
+Route::middleware('auth')->group(function () {
 
     Route::get('/', [DashboardController::class, 'index'])->name('home');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
 
     Route::get('/quotations', [QuotationController::class, 'index'])->name('quotations');
     Route::get('/quotations/create', [QuotationController::class, 'create'])->name('quotations.create');
     Route::get('/quotations/list', [QuotationController::class, 'getListForDatatables'])->name('quotations.datatables');
     Route::get('/quotations/{quotation_number}', [QuotationController::class, 'show'])->name('quotations.show');
     Route::get('/quotations/{quotation_number_slug}/proforma/pdf', [QuotationController::class, 'exportProformaToPdf'])->name('quotations.proforma-pdf');
-    Route::get('/quotations/{quotation_number_slug}/proforma/', [QuotationController::class, 'proforma'])->name('quotations.proforma');    
+    Route::get('/quotations/{quotation_number_slug}/proforma/', [QuotationController::class, 'proforma'])->name('quotations.proforma');
     Route::post('/quotations', [QuotationController::class, 'store'])->name('quotations.store');
     Route::put('/quotations/{id}/pending', [QuotationController::class, 'pending'])->name('quotations.pending');
     Route::put('/quotations/{id}/confirmed', [QuotationController::class, 'confirmed'])->name('quotations.confirmed');
@@ -70,8 +64,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/quotation-items', [QuotationItemsController::class, 'store'])->name('quotation-items.store');
     Route::put('/quotation-items/{id}', [QuotationItemsController::class, 'update'])->name('quotation-items.update');
     Route::delete('/quotation-items/{id}', [QuotationItemsController::class, 'destroy'])->name('quotation-items.delete');
-
-    
 
     Route::get('/credit-notes', [CreditNoteController::class, 'index'])->name('credit-notes');
     Route::get('/credit-notes/create', [CreditNoteController::class, 'create'])->name('credit-notes.create');
@@ -87,7 +79,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/credit-note-items', [CreditNoteItemController::class, 'store'])->name('credit-note-items.store');
     Route::put('/credit-note-items/{id}', [CreditNoteItemController::class, 'update'])->name('credit-note-items.update');
     Route::delete('/credit-note-items/{id}', [CreditNoteItemController::class, 'destroy'])->name('credit-note-items.delete');
-    
 
     Route::get('/sale-orders', [SaleOrderController::class, 'index'])->name('sale-orders');
     Route::get('/sale-orders/create', [SaleOrderController::class, 'create'])->name('sale-orders.create');
@@ -109,7 +100,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('/sale-orders/{id}', [SaleOrderController::class, 'update'])->name('sale-orders.update');
     Route::delete('/sale-orders/{id}', [SaleOrderController::class, 'destroy'])->name('sale-orders.delete');
 
-
     Route::get('/sale-order-payments', [SaleOrderPaymentController::class, 'index'])->name('sale-order-payments');
     Route::get('/sale-order-payments/updatePaymentsData', [SaleOrderPaymentController::class, 'updatePaymentsData'])->name('sale-order-payments.updatePaymentsData');
     Route::get('/sale-order-payments/create', [SaleOrderPaymentController::class, 'create'])->name('sale-order-payments.create');
@@ -118,7 +108,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/sale-order-payments', [SaleOrderPaymentController::class, 'store'])->name('sale-order-payments.store');
     Route::put('/sale-order-payments/{id}', [SaleOrderPaymentController::class, 'update'])->name('sale-order-payments.update');
     Route::delete('/sale-order-payments/{id}', [SaleOrderPaymentController::class, 'destroy'])->name('sale-order-payments.delete');
-
 
     // Route::get('/sale-orders-items', [SaleOrderItemController::class, 'index'])->name('sale-orders-items');
     // Route::get('/sale-orders-items/create', [SaleOrderItemController::class, 'create'])->name('sale-orders-items.create');
@@ -129,8 +118,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('/sale-orders-items/{id}', [SaleOrderItemController::class, 'update'])->name('sale-orders-items.update');
     Route::delete('/sale-orders-items/{id}', [SaleOrderItemController::class, 'destroy'])->name('sale-orders-items.delete');
     Route::get('/sales-by-category/{range}', [SaleOrderItemController::class, 'getNumberAndTotalSaleByRange'])->name('sale-orders-items.sales-by-category');
-
-
 
     Route::get('/purchase-orders', [PurchaseOrderController::class, 'index'])->name('purchase-orders');
     Route::get('/purchase-orders/create', [PurchaseOrderController::class, 'create'])->name('purchase-orders.create');
@@ -159,7 +146,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/purchase-orders-items', [PurchaseOrderItemController::class, 'store'])->name('purchase-orders-items.store');
     Route::put('/purchase-orders-items/{id}', [PurchaseOrderItemController::class, 'update'])->name('purchase-orders-items.update');
     Route::delete('/purchase-orders-items/{id}', [PurchaseOrderItemController::class, 'destroy'])->name('purchase-orders-items.delete');
-
 
     Route::get('/purchase-order-invoices', [PurchaseOrderInvoiceController::class, 'index'])->name('purchase-order-invoices');
     Route::get('/purchase-order-invoices/list', [PurchaseOrderInvoiceController::class, 'getListForDatatables'])->name('purchase-order-invoices.datatables');
@@ -242,7 +228,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
     Route::put('/categories/{id}', [CategoryController::class, 'update'])->name('categories.update');
     Route::delete('/categories/{id}', [CategoryController::class, 'destroy'])->name('categories.delete');
-    
 
     Route::get('/freight-zones', [FreightZoneController::class, 'index'])->name('freight-zones');
     Route::get('/freight-zones/create', [FreightZoneController::class, 'create'])->name('freight-zones.create');
@@ -277,7 +262,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/settings', [SettingController::class, 'index'])->name('settings');
     Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
 
-
     Route::prefix('ajax')->group(function () {
         Route::get('/states', [StateController::class, 'getListForSelect2'])->name('ajax.states');
         Route::get('/categories', [CategoryController::class, 'getListForSelect2'])->name('ajax.categories');
@@ -305,12 +289,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/reports/dstr', [ReportsController::class, 'getDstr'])->name('ajax.dstr');
     });
 
-
     Route::prefix('export')->group(function () {
         Route::get('/products', [ProductController::class, 'getExportList'])->name('export.products');
         Route::get('/inventory', [InventoryController::class, 'getExportList'])->name('export.inventory');
     });
 
     Route::get('/permissions/add', [PermissionController::class, 'store'])->name('permissions.add');
-    
+
 });

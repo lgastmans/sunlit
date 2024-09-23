@@ -28,7 +28,7 @@ class StoreSaleOrderPaymentRequest extends FormRequest
             'dealer_id' => 'required|numeric',
             'amount' => 'required|numeric',
             'reference' => 'nullable|string',
-            'paid_at' => 'required|date' //'required|date|date_format:Y-m-d'
+            'paid_at' => 'required|date', //'required|date|date_format:Y-m-d'
         ];
     }
 }

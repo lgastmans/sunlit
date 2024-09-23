@@ -2,10 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
 use Akaunting\Setting\Facade as Setting;
-use Spatie\Permission\Models\Permission;
+use Illuminate\Database\Seeder;
 
 class SettingSeeder extends Seeder
 {
@@ -28,13 +26,13 @@ class SettingSeeder extends Seeder
 
         // Setting::set("general.grid_rows" , "10");
 
-        Setting::set("purchase_order.igst", "5");
-        Setting::set("purchase_order.transport", ".5");
-        Setting::set("purchase_order.customs_duty", "10");
-        Setting::set("purchase_order.social_welfare_surcharge", "10");
+        Setting::set('purchase_order.igst', '5');
+        Setting::set('purchase_order.transport', '.5');
+        Setting::set('purchase_order.customs_duty', '10');
+        Setting::set('purchase_order.social_welfare_surcharge', '10');
 
-        Setting::set("purchase_order.exchange_rate", "73.52");
-        Setting::set("purchase_order.exchange_rate_updated_at", "2021-09-14 04:59:58");
+        Setting::set('purchase_order.exchange_rate', '73.52');
+        Setting::set('purchase_order.exchange_rate_updated_at', '2021-09-14 04:59:58');
 
         Setting::save();
 

@@ -24,5 +24,5 @@ return [
     'state_has_product' => 'Cannot delete state because of existing products',
 
     'inventory_insufficient_stock' => ':Field has insufficient available stock',
-    
+
 ];

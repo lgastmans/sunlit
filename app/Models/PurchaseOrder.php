@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class PurchaseOrder extends Model
 {
@@ -13,15 +13,31 @@ class PurchaseOrder extends Model
     use SoftDeletes;
 
     const DRAFT = 1;
+
     const ORDERED = 2;
+
     const CONFIRMED = 3;
+
     const SHIPPED = 4;
+
     const CUSTOMS = 5;
+
     const CLEARED = 6;
+
     const RECEIVED = 7;
+
     const PAID = 8;
 
-    protected $dates = ['ordered_at', 'confirmed_at', 'received_at', 'paid_at', 'due_at', 'shipped_at', 'customs_at', 'cleared_at'];
+    protected $casts = [
+        'ordered_at' => 'datetime',
+        'confirmed_at' => 'datetime',
+        'received_at' => 'datetime',
+        'paid_at' => 'datetime',
+        'due_at' => 'datetime',
+        'shipped_at' => 'datetime',
+        'customs_at' => 'datetime',
+        'cleared_at' => 'datetime',
+    ];
 
     protected $fillable = ['warehouse_id', 'supplier_id', 'order_number', 'order_number_slug', 'boe_number', 'ordered_at', 'expected_at', 'received_at', 'credit_period', 'amount_usd', 'amount_inr', 'customs_ex_rate', 'se_ex_rate', 'duty_amount', 'social_surcharge', 'igst', 'bank_charges', 'clearing_charges', 'transport_charges', 'se_due_date', 'se_payment_date', 'status', 'user_id'];
 
@@ -49,8 +65,8 @@ class PurchaseOrder extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
-    } 
-    
+    }
+
     /**
      * Get the items associated with the purchase order.
      */
@@ -66,24 +82,25 @@ class PurchaseOrder extends Model
     {
         return $this->hasMany(PurchaseOrderInvoice::class);
     }
-    
 
     /**
      * Returns the ordered_at date for display Month Day, Year
      */
     public function getDisplayOrderedAtAttribute()
     {
-        if ($this->ordered_at){
+        if ($this->ordered_at) {
             $dt = Carbon::parse($this->ordered_at);
-            return $dt->toFormattedDateString(); 
-        } 
-        return "";
+
+            return $dt->toFormattedDateString();
+        }
+
+        return '';
     }
 
     public function setOrderedAtAttribute($value)
     {
         $dt = Carbon::parse($value);
-        $this->attributes['ordered_at'] = $dt->toDateTimeString();  
+        $this->attributes['ordered_at'] = $dt->toDateTimeString();
     }
 
     /**
@@ -91,17 +108,19 @@ class PurchaseOrder extends Model
      */
     public function getDisplayConfirmedAtAttribute()
     {
-        if ($this->confirmed_at){
+        if ($this->confirmed_at) {
             $dt = Carbon::parse($this->confirmed_at);
-            return $dt->toFormattedDateString(); 
-        } 
-        return "";  
+
+            return $dt->toFormattedDateString();
+        }
+
+        return '';
     }
 
     public function setConfirmedAtAttribute($value)
     {
         $dt = Carbon::parse($value);
-        $this->attributes['confirmed_at'] = $dt->toDateTimeString();  
+        $this->attributes['confirmed_at'] = $dt->toDateTimeString();
     }
 
     /**
@@ -109,36 +128,39 @@ class PurchaseOrder extends Model
      */
     public function getDisplayShippedAtAttribute()
     {
-        if ($this->shipped_at){
+        if ($this->shipped_at) {
             $dt = Carbon::parse($this->shipped_at);
-            return $dt->toFormattedDateString(); 
-        } 
-        return "";  
+
+            return $dt->toFormattedDateString();
+        }
+
+        return '';
     }
 
     public function setShippedAtAttribute($value)
     {
         $dt = Carbon::parse($value);
-        $this->attributes['shipped_at'] = $dt->toDateTimeString();  
+        $this->attributes['shipped_at'] = $dt->toDateTimeString();
     }
-
 
     /**
      * Returns the due_at date for display Month Day, Year
      */
     public function getDisplayDueAtAttribute()
     {
-        if ($this->due_at){
+        if ($this->due_at) {
             $dt = Carbon::parse($this->due_at);
-            return $dt->toFormattedDateString(); 
-        } 
-        return "";   
+
+            return $dt->toFormattedDateString();
+        }
+
+        return '';
     }
 
     public function setDueAtAttribute($value)
     {
         $dt = Carbon::parse($value);
-        $this->attributes['due_at'] = $dt->toDateTimeString();  
+        $this->attributes['due_at'] = $dt->toDateTimeString();
     }
 
     /**
@@ -146,17 +168,19 @@ class PurchaseOrder extends Model
      */
     public function getDisplayCustomsAtAttribute()
     {
-        if ($this->customs_at){
+        if ($this->customs_at) {
             $dt = Carbon::parse($this->customs_at);
-            return $dt->toFormattedDateString(); 
-        } 
-        return "";    
+
+            return $dt->toFormattedDateString();
+        }
+
+        return '';
     }
 
     public function setCustomsAtAttribute($value)
     {
         $dt = Carbon::parse($value);
-        $this->attributes['customs_at'] = $dt->toDateTimeString();  
+        $this->attributes['customs_at'] = $dt->toDateTimeString();
     }
 
     /**
@@ -164,17 +188,19 @@ class PurchaseOrder extends Model
      */
     public function getDisplayClearedAtAttribute()
     {
-        if ($this->cleared_at){
+        if ($this->cleared_at) {
             $dt = Carbon::parse($this->cleared_at);
-            return $dt->toFormattedDateString(); 
-        } 
-        return "";    
+
+            return $dt->toFormattedDateString();
+        }
+
+        return '';
     }
 
     public function setClearedAtAttribute($value)
     {
         $dt = Carbon::parse($value);
-        $this->attributes['cleared_at'] = $dt->toDateTimeString();  
+        $this->attributes['cleared_at'] = $dt->toDateTimeString();
     }
 
     /**
@@ -182,17 +208,19 @@ class PurchaseOrder extends Model
      */
     public function getDisplayReceivedAtAttribute()
     {
-        if ($this->received_at){
+        if ($this->received_at) {
             $dt = Carbon::parse($this->received_at);
-            return $dt->toFormattedDateString(); 
-        } 
-        return "";    
+
+            return $dt->toFormattedDateString();
+        }
+
+        return '';
     }
 
     public function setReceivedAtAttribute($value)
     {
         $dt = Carbon::parse($value);
-        $this->attributes['received_at'] = $dt->toDateTimeString();  
+        $this->attributes['received_at'] = $dt->toDateTimeString();
     }
 
     /**
@@ -211,13 +239,11 @@ class PurchaseOrder extends Model
         return $this->amount_inr + $this->customs_duty + $this->social_welfare_surcharge + $this->bank_and_tranport_charge;
     }
 
-
     public function getDisplayStatusAttribute()
     {
-        switch ($this->status)
-        {
+        switch ($this->status) {
             case PurchaseOrder::DRAFT:
-                $status =  '<span class="badge badge-secondary-lighten">Draft</span>';
+                $status = '<span class="badge badge-secondary-lighten">Draft</span>';
                 break;
             case PurchaseOrder::ORDERED:
                 $status = '<span class="badge badge-info-lighten">Ordered</span>';
@@ -243,43 +269,42 @@ class PurchaseOrder extends Model
             default:
                 $status = '<span class="badge badge-error-lighten">Unknown</span>';
         }
+
         return $status;
     }
 
     public static function getStatusList()
     {
         return [
-            //PurchaseOrder::DRAFT => 'Draft', 
-            PurchaseOrder::ORDERED => 'Ordered', 
+            //PurchaseOrder::DRAFT => 'Draft',
+            PurchaseOrder::ORDERED => 'Ordered',
             PurchaseOrder::CONFIRMED => 'Confirmed',
-            PurchaseOrder::SHIPPED => 'Shipped', 
-            //PurchaseOrder::CUSTOMS => 'Customs', 
+            PurchaseOrder::SHIPPED => 'Shipped',
+            //PurchaseOrder::CUSTOMS => 'Customs',
             //PurchaseOrder::CLEARED => 'Cleared',
             PurchaseOrder::RECEIVED => 'Received',
             //PurchaseOrder::PAID => 'Paid'
         ];
     }
 
-
     public function is_overdue()
     {
-        if (Carbon::now()->greaterThan(Carbon::parse( $this->due_at))){
+        if (Carbon::now()->greaterThan(Carbon::parse($this->due_at))) {
             return true;
         }
+
         return false;
     }
 
     public function getOrderedDaysAgoAttribute()
     {
-        return Carbon::parse( $this->ordered_at)->diffForHumans();
+        return Carbon::parse($this->ordered_at)->diffForHumans();
     }
-
 
     public function scopeOrdered($query)
     {
         return $query->where('status', '>=', PurchaseOrder::ORDERED);
     }
-
 
     /* * Retrieve orders with status RECEIVED
      *
@@ -289,7 +314,7 @@ class PurchaseOrder extends Model
     public function scopeReceived($query)
     {
         return $query->where('status', PurchaseOrder::RECEIVED);
-    }    
+    }
 
     /* * Retrieve due orders
      *
@@ -299,7 +324,7 @@ class PurchaseOrder extends Model
     public function scopeDue($query)
     {
         return $query->whereBetween('status', [PurchaseOrder::ORDERED, PurchaseOrder::CLEARED]);
-    }   
+    }
 
     /* * Retrieve overdued orders
      *
@@ -309,5 +334,5 @@ class PurchaseOrder extends Model
     public function scopeOverdue($query)
     {
         return $query->whereBetween('status', [PurchaseOrder::ORDERED, PurchaseOrder::CLEARED])->where('due_at', '<', Carbon::now());
-    }   
+    }
 }

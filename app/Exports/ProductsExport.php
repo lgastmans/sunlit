@@ -3,8 +3,6 @@
 namespace App\Exports;
 
 use App\Models\Product;
-
-
 /*
     useful links for reference
 
@@ -13,34 +11,32 @@ use App\Models\Product;
     https://docs.laravel-excel.com/2.1/reference-guide/formatting.html
 */
 
-
 use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-
-use PhpOffice\PhpSpreadsheet\Shared\Date;
-use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
-class ProductsExport implements FromCollection, WithHeadings, ShouldAutoSize, WithColumnFormatting, WithMapping
+class ProductsExport implements FromCollection, ShouldAutoSize, WithColumnFormatting, WithHeadings, WithMapping
 {
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
         return collect(Product::join('categories', 'categories.id', '=', 'products.category_id')
-                ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
-                ->join('taxes', 'taxes.id', '=', 'products.tax_id')
-                ->orderBy('products.code', 'ASC')
-                ->get(['categories.name as category_name', 'suppliers.company', 'taxes.amount as tax_amount', 'products.part_number', 'products.kw_rating', 'products.notes']
+            ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
+            ->join('taxes', 'taxes.id', '=', 'products.tax_id')
+            ->orderBy('products.code', 'ASC')
+            ->get(['categories.name as category_name', 'suppliers.company', 'taxes.amount as tax_amount', 'products.part_number', 'products.kw_rating', 'products.notes']
             ));
     }
 
-    public function headings(): array {
+    public function headings(): array
+    {
         return [
-           "category", "supplier", "tax", "part_number","kw_rating","description"
+            'category', 'supplier', 'tax', 'part_number', 'kw_rating', 'description',
         ];
     }
 
@@ -56,11 +52,10 @@ class ProductsExport implements FromCollection, WithHeadings, ShouldAutoSize, Wi
         return [
             $product->category_name,
             $product->company,
-            ($product->tax_amount/10000),
+            ($product->tax_amount / 10000),
             $product->part_number,
             $product->kw_rating,
-            $product->notes
+            $product->notes,
         ];
     }
-
 }

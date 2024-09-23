@@ -2,10 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Models\State;
 use App\Models\Dealer;
+use App\Models\State;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
 
 class importDealers extends Command
 {
@@ -42,7 +41,7 @@ class importDealers extends Command
     {
         /*
             File columns in order in CSV | corresponding column name:
-            
+
                 customer names  | company not null
                 location        | city not null
                 state           | state_id can be null
@@ -58,15 +57,15 @@ class importDealers extends Command
         $file = public_path('dealers-import.csv');
         $dataArr = $this->csvToArray($file);
 
-        for ($i = 0; $i < count($dataArr); $i ++)
-        {
+        for ($i = 0; $i < count($dataArr); $i++) {
 
             $state = State::where('name', 'like', '%'.$dataArr[$i]['state_id'].'%')->first();
 
-            if ($state)
+            if ($state) {
                 $dataArr[$i]['state_id'] = $state->id;
-            else
+            } else {
                 $dataArr[$i]['state_id'] = 1;
+            }
 
             $dealer = Dealer::insert($dataArr[$i]);
         }
@@ -79,61 +78,67 @@ class importDealers extends Command
     */
     private static function csvToArray($filename = '', $delimiter = "\t")
     {
-        if (!file_exists($filename) || !is_readable($filename))
+        if (! file_exists($filename) || ! is_readable($filename)) {
             return 'File not found '.$filename;
+        }
 
-        $data = array();
-        if (($handle = fopen($filename, 'r')) !== false)
-        {
-            $i=0;
-            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false)
-            {
+        $data = [];
+        if (($handle = fopen($filename, 'r')) !== false) {
+            $i = 0;
+            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false) {
 
-                if (strpos($row[0], 'Sl.No') !== false)
+                if (strpos($row[0], 'Sl.No') !== false) {
                     continue;
-                else {
+                } else {
 
-                    if ((empty($row[1])) || (is_null($row[1])))
+                    if ((empty($row[1])) || (is_null($row[1]))) {
                         $data[$i]['company'] = 'company '.$i;
-                    else
+                    } else {
                         $data[$i]['company'] = $row[1];
-                    
-                    if ((empty($row[2])) || (is_null($row[2])))
+                    }
+
+                    if ((empty($row[2])) || (is_null($row[2]))) {
                         $data[$i]['city'] = 'city '.$i;
-                    else
+                    } else {
                         $data[$i]['city'] = $row[2];
+                    }
 
                     // load the string, the id will be set in the import function
-                    if ((empty($row[3])) || (is_null($row[3])))
+                    if ((empty($row[3])) || (is_null($row[3]))) {
                         $data[$i]['state_id'] = 1;
-                    else
+                    } else {
                         $data[$i]['state_id'] = trim($row[3]);
+                    }
 
                     $data[$i]['contact_person'] = $row[4];
 
-                    if ((empty($row[5])) || (is_null($row[5])))
+                    if ((empty($row[5])) || (is_null($row[5]))) {
                         $data[$i]['phone'] = 'phone '.$i;
-                    else
+                    } else {
                         $data[$i]['phone'] = $row[5];
+                    }
 
                     $data[$i]['email'] = trim($row[6]);
 
                     $data[$i]['gstin'] = $row[7];
 
-                    if ((empty($row[8])) || (is_null($row[8])))
+                    if ((empty($row[8])) || (is_null($row[8]))) {
                         $data[$i]['address'] = $row[8];
-                    else
+                    } else {
                         $data[$i]['address'] = $row[8];
+                    }
 
-                    if ((empty($row[9])) || (is_null($row[9])))
+                    if ((empty($row[9])) || (is_null($row[9]))) {
                         $data[$i]['address2'] = '';
-                    else
+                    } else {
                         $data[$i]['address2'] = $row[9];
+                    }
 
-                    if ((empty($row[10])) || (is_null($row[10])))
+                    if ((empty($row[10])) || (is_null($row[10]))) {
                         $data[$i]['zip_code'] = ' ';
-                    else
+                    } else {
                         $data[$i]['zip_code'] = $row[10];
+                    }
 
                     $i++;
                 }
@@ -142,5 +147,5 @@ class importDealers extends Command
         }
 
         return $data;
-    }    
+    }
 }

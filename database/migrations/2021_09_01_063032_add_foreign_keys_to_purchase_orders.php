@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddForeignKeysToPurchaseOrders extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -17,7 +17,7 @@ class AddForeignKeysToPurchaseOrders extends Migration
             $table->foreign('warehouse_id')->references('id')->on('warehouses');
             $table->foreign('supplier_id')->references('id')->on('suppliers');
             $table->foreignId('user_id')->change();
-            
+
             $table->foreign('user_id')->references('id')->on('users');
         });
     }
@@ -34,4 +34,4 @@ class AddForeignKeysToPurchaseOrders extends Migration
 
         });
     }
-}
+};

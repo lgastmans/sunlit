@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Validation\Rule;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Auth\Access\AuthorizationException;
-
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreDealerRequest extends FormRequest
 {
@@ -13,7 +12,6 @@ class StoreDealerRequest extends FormRequest
     {
         throw new AuthorizationException(trans('app.unauthorized'));
     }
-
 
     /**
      * Determine if the user is authorized to make this request.
@@ -63,7 +61,7 @@ class StoreDealerRequest extends FormRequest
             'shipping_phone' => 'nullable|string',
             'shipping_phone2' => 'nullable|string',
             'shipping_email' => 'nullable|email',
-            'shipping_email2' => 'nullable|email'
+            'shipping_email2' => 'nullable|email',
         ];
     }
 
@@ -74,26 +72,23 @@ class StoreDealerRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-        if ($this->has_shipping_address == null){
+        if ($this->has_shipping_address == null) {
             $has_shipping_address = 0;
-        }
-        else{
+        } else {
             $has_shipping_address = 1;
         }
         $this->merge([
-            'has_shipping_address' => $has_shipping_address
+            'has_shipping_address' => $has_shipping_address,
         ]);
     }
 
     /**
      * Convert to boolean
      *
-     * @param $booleable
-     * @return boolean
+     * @return bool
      */
     private function toBoolean($booleable)
     {
         return filter_var($booleable, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     }
-
 }

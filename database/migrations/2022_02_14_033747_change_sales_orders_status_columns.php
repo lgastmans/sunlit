@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ChangeSalesOrdersStatusColumns extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -18,7 +18,7 @@ class ChangeSalesOrdersStatusColumns extends Migration
             $table->renameColumn('ordered_at', 'blocked_at');
             $table->renameColumn('confirmed_at', 'booked_at');
             $table->renameColumn('shipped_at', 'dispatched_at');
-        }); 
+        });
     }
 
     /**
@@ -33,6 +33,6 @@ class ChangeSalesOrdersStatusColumns extends Migration
             $table->renameColumn('blocked_at', 'ordered_at');
             $table->renameColumn('booked_at', 'confirmed_at');
             $table->renameColumn('dispatched_at', 'shipped_at');
-        }); 
+        });
     }
-}
+};

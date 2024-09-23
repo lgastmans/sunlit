@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreWarehouseRequest;
+use App\Models\InventoryMovement;
+use App\Models\PurchaseOrder;
 use App\Models\SaleOrder;
 use App\Models\Warehouse;
 use Illuminate\Http\Request;
-use App\Models\PurchaseOrder;
-use App\Models\InventoryMovement;
 use Illuminate\Support\Facades\Auth;
-use \App\Http\Requests\StoreWarehouseRequest;
-
-
 
 class WarehouseController extends Controller
 {
@@ -22,40 +20,43 @@ class WarehouseController extends Controller
     public function index()
     {
         $user = Auth::user();
-        if ($user->can('list warehouses'))
+        if ($user->can('list warehouses')) {
             return view('warehouses.index');
-    
+        }
+
         return abort(403, trans('error.unauthorized'));
 
     }
 
-
     public function getListForDatatables(Request $request)
     {
         $draw = 1;
-        if ($request->has('draw'))
+        if ($request->has('draw')) {
             $draw = $request->get('draw');
+        }
 
         $start = 0;
-        if ($request->has('start'))
-            $start = $request->get("start");
+        if ($request->has('start')) {
+            $start = $request->get('start');
+        }
 
         $length = 10;
         if ($request->has('length')) {
-            $length = $request->get("length");
+            $length = $request->get('length');
         }
 
         $order_column = 'name';
         $order_dir = 'ASC';
-        $order_arr = array();
+        $order_arr = [];
         if ($request->has('order')) {
             $order_arr = $request->get('order');
             $column_arr = $request->get('columns');
             $column_index = $order_arr[0]['column'];
             $order_column = $column_arr[$column_index]['data'];
-            if ($column_index==3)
-                $order_column = "states.name";
-            
+            if ($column_index == 3) {
+                $order_column = 'states.name';
+            }
+
             $order_dir = $order_arr[0]['dir'];
         }
 
@@ -73,45 +74,42 @@ class WarehouseController extends Controller
             ->orWhere('city', 'like', '%'.$search.'%')
             ->orWhere('states.name', 'like', '%'.$search.'%')
             ->count();
-        
 
         // Fetch records
-        if ($length < 0)
+        if ($length < 0) {
             $warehouses = Warehouse::where('contact_person', 'like', '%'.$search.'%')
                 ->join('states', 'states.id', '=', 'state_id')
                 ->orWhere('warehouses.name', 'like', '%'.$search.'%')
                 ->orWhere('city', 'like', '%'.$search.'%')
                 ->orWhere('states.name', 'like', '%'.$search.'%')
                 ->orderBy($order_column, $order_dir)
-                ->select("warehouses.*")
+                ->select('warehouses.*')
                 ->get();
-        else
+        } else {
             $warehouses = Warehouse::where('contact_person', 'like', '%'.$search.'%')
-                ->join('states', 'states.id', '=', 'state_id')
-                ->orWhere('warehouses.name', 'like', '%'.$search.'%')
-                ->orWhere('city', 'like', '%'.$search.'%')
-                ->orWhere('states.name', 'like', '%'.$search.'%')
-                ->orderBy($order_column, $order_dir)
-                ->skip($start)
-                ->take($length)
-                ->select("warehouses.*")
-                ->get();
+                    ->join('states', 'states.id', '=', 'state_id')
+                    ->orWhere('warehouses.name', 'like', '%'.$search.'%')
+                    ->orWhere('city', 'like', '%'.$search.'%')
+                    ->orWhere('states.name', 'like', '%'.$search.'%')
+                    ->orderBy($order_column, $order_dir)
+                    ->skip($start)
+                    ->take($length)
+                    ->select('warehouses.*')
+                    ->get();
+        }
 
+        $response = [
+            'draw' => $draw,
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $totalRecordswithFilter,
+            'data' => $warehouses,
+            'error' => null,
+        ];
 
-        $response = array(
-            "draw" => $draw,
-            "recordsTotal" => $totalRecords,
-            "recordsFiltered" => $totalRecordswithFilter,
-            "data" => $warehouses,
-            'error' => null
-        );
-
-        
         echo json_encode($response);
 
         exit;
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -120,7 +118,8 @@ class WarehouseController extends Controller
      */
     public function create()
     {
-        $warehouse = new Warehouse();
+        $warehouse = new Warehouse;
+
         return view('warehouses.form', ['warehouse' => $warehouse]);
     }
 
@@ -134,9 +133,10 @@ class WarehouseController extends Controller
     {
         $validatedData = $request->validated();
         $warehouse = Warehouse::create($validatedData);
-        if ($warehouse){
+        if ($warehouse) {
             return redirect(route('warehouses'))->with('success', trans('app.record_added', ['field' => 'warehouse']));
         }
+
         return back()->withInputs($request->input())->with('error', trans('error.record_added', ['field' => 'warehouse']));
     }
 
@@ -149,21 +149,23 @@ class WarehouseController extends Controller
     public function show($id)
     {
         $user = Auth::user();
-        if ($user->can('view warehouses')){
+        if ($user->can('view warehouses')) {
             $warehouse = Warehouse::find($id);
             $entry_filter = InventoryMovement::getMovementFilterList();
             $purchase_order_status = PurchaseOrder::getStatusList();
             $sale_order_status = SaleOrder::getStatusList();
-            if ($warehouse)
+            if ($warehouse) {
                 return view('warehouses.show',
-                ['warehouse'=>$warehouse, 
-                'entry_filter' => $entry_filter, 
-                'purchase_order_status' => $purchase_order_status,
-                'sale_order_status' => $sale_order_status,
-            ]);
+                    ['warehouse' => $warehouse,
+                        'entry_filter' => $entry_filter,
+                        'purchase_order_status' => $purchase_order_status,
+                        'sale_order_status' => $sale_order_status,
+                    ]);
+            }
 
             return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'warehouse']));
         }
+
         return abort(403, trans('error.unauthorized'));
 
     }
@@ -177,9 +179,10 @@ class WarehouseController extends Controller
     public function edit($id)
     {
         $warehouse = Warehouse::with('state')->find($id);
-        if ($warehouse){
+        if ($warehouse) {
             return view('warehouses.form', ['warehouse' => $warehouse]);
         }
+
         return view('warehouses.index');
     }
 
@@ -194,9 +197,10 @@ class WarehouseController extends Controller
     {
         $validatedData = $request->validated();
         $warehouse = Warehouse::whereId($id)->update($validatedData);
-        if ($warehouse){
+        if ($warehouse) {
             return redirect(route('warehouses'))->with('success', trans('app.record_edited', ['field' => 'warehouse']));
         }
+
         return back()->withInputs($request->input())->with('error', trans('error.record_edited', ['field' => 'warehouse']));
     }
 
@@ -209,35 +213,37 @@ class WarehouseController extends Controller
     public function destroy($id)
     {
         $user = Auth::user();
-        if ($user->can('delete warehouses')){
+        if ($user->can('delete warehouses')) {
             /*
                 check if warehouse present in purchase orders
             */
             $count = PurchaseOrder::where('warehouse_id', $id)->count();
 
-            if ($count > 0)
+            if ($count > 0) {
                 return redirect(route('warehouses'))->with('error', trans('error.warehouse_has_purchase_order'));
+            }
 
             Warehouse::destroy($id);
+
             return redirect(route('warehouses'))->with('success', trans('app.record_deleted', ['field' => 'warehouse']));
         }
+
         return abort(403, trans('error.unauthorized'));
     }
 
-     /**
+    /**
      * Display a listing of the resource for select2
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return json
      */
     public function getListForSelect2(Request $request)
     {
         $query = Warehouse::query();
-        if ($request->has('q')){
+        if ($request->has('q')) {
             $query->where('name', 'like', $request->get('q').'%');
         }
         $warehouse = $query->get(['id', 'name as text']);
-     
+
         return ['results' => $warehouse];
-    } 
+    }
 }

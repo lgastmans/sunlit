@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddChargesValues extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -26,9 +26,9 @@ class AddChargesValues extends Migration
      */
     public function down()
     {
-        Schema::table('purchase_orders', function (Blueprint $table) {  
+        Schema::table('purchase_orders', function (Blueprint $table) {
             $table->integer('transport_charges')->nullable();
             $table->dropColumn('charges');
         });
     }
-}
+};

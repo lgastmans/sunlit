@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddForeignKeysToPurchaseOrderItems extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,7 @@ class AddForeignKeysToPurchaseOrderItems extends Migration
     {
         Schema::table('purchase_order_items', function (Blueprint $table) {
             $table->foreign('purchase_order_id')->references('id')->on('purchase_orders');
-            $table->foreign('product_id')->references('id')->on('products');           
+            $table->foreign('product_id')->references('id')->on('products');
             $table->foreign('tax_id')->references('id')->on('taxes');
         });
     }
@@ -32,4 +32,4 @@ class AddForeignKeysToPurchaseOrderItems extends Migration
 
         });
     }
-}
+};

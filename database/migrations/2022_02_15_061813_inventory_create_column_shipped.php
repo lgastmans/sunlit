@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class InventoryCreateColumnShipped extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -16,7 +16,7 @@ class InventoryCreateColumnShipped extends Migration
         //
         Schema::table('inventories', function (Blueprint $table) {
             $table->integer('stock_poi_shipped')->nullable()->after('stock_ordered');
-        });        
+        });
     }
 
     /**
@@ -29,6 +29,6 @@ class InventoryCreateColumnShipped extends Migration
         //
         Schema::table('inventories', function (Blueprint $table) {
             $table->dropColumn('stock_poi_shipped');
-        });        
+        });
     }
-}
+};

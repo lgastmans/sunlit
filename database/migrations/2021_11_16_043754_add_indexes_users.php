@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddIndexesUsers extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -17,7 +17,6 @@ class AddIndexesUsers extends Migration
             $table->index('name');
             $table->index('invite_token');
         });
-
 
     }
 
@@ -33,4 +32,4 @@ class AddIndexesUsers extends Migration
             $table->dropIndex('users_invite_token_index');
         });
     }
-}
+};

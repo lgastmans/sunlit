@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Http\Requests;
-use Illuminate\Foundation\Http\FormRequest;
+
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Foundation\Http\FormRequest;
 
 class StoreWarehouseRequest extends FormRequest
 {
@@ -10,7 +11,6 @@ class StoreWarehouseRequest extends FormRequest
     {
         throw new AuthorizationException(trans('app.unauthorized'));
     }
-
 
     /**
      * Determine if the user is authorized to make this request.
@@ -39,7 +39,7 @@ class StoreWarehouseRequest extends FormRequest
             'contact_person' => 'required|string',
             'phone' => 'required|string',
             'phone2' => 'required|string',
-            'email' => 'required|email|unique:warehouses,email,'.$this->id
+            'email' => 'required|email|unique:warehouses,email,'.$this->id,
         ];
     }
 }

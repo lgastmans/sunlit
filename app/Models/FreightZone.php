@@ -10,20 +10,21 @@ class FreightZone extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'rate_per_kg', 'properties'];
+
     protected $casts = [
-        'properties' => 'array'
+        'properties' => 'array',
     ];
-    
+
     public function setPropertiesAttribute($value)
     {
         $properties = [];
 
         foreach ($value as $array_item) {
-            if (!is_null($array_item['key'])) {
+            if (! is_null($array_item['key'])) {
                 $properties[] = $array_item;
             }
         }
 
         $this->attributes['properties'] = json_encode($properties);
-    }    
+    }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class SaleOrdersAddShippingPhone2Column extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -16,7 +16,7 @@ class SaleOrdersAddShippingPhone2Column extends Migration
         //
         Schema::table('sale_orders', function (Blueprint $table) {
             $table->string('shipping_phone2')->after('shipping_phone')->nullable();
-        });         
+        });
     }
 
     /**
@@ -29,6 +29,6 @@ class SaleOrdersAddShippingPhone2Column extends Migration
         //
         Schema::table('sale_orders', function (Blueprint $table) {
             $table->dropColumn('shipping_phone2');
-        });        
+        });
     }
-}
+};

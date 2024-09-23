@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Tax;
+use App\Http\Requests\StoreTaxRequest;
 use App\Models\Product;
+use App\Models\Tax;
+use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use \App\Http\Requests\StoreTaxRequest;
 use Illuminate\Support\Facades\Auth;
-
 
 class TaxController extends Controller
 {
@@ -20,39 +19,43 @@ class TaxController extends Controller
     public function index()
     {
         $user = Auth::user();
-        if ($user->can('list taxes'))
+        if ($user->can('list taxes')) {
             return view('taxes.index');
-    
+        }
+
         return abort(403, trans('error.unauthorized'));
     }
 
     public function getListForDatatables(Request $request)
     {
         $draw = 1;
-        if ($request->has('draw'))
+        if ($request->has('draw')) {
             $draw = $request->get('draw');
+        }
 
         $start = 0;
-        if ($request->has('start'))
-            $start = $request->get("start");
+        if ($request->has('start')) {
+            $start = $request->get('start');
+        }
 
         $length = 10;
         if ($request->has('length')) {
-            $length = $request->get("length");
+            $length = $request->get('length');
         }
 
         $order_column = 'name';
         $order_dir = 'ASC';
-        $order_arr = array();
+        $order_arr = [];
         if ($request->has('order')) {
             $order_arr = $request->get('order');
             $column_arr = $request->get('columns');
             $column_index = $order_arr[0]['column'];
-            if ($column_index==1)
-                $order_column = "taxes.amount";
-            else
+            if ($column_index == 1) {
+                $order_column = 'taxes.amount';
+            } else {
                 $order_column = $column_arr[$column_index]['data'];
-                
+            }
+
             $order_dir = $order_arr[0]['dir'];
         }
 
@@ -67,35 +70,34 @@ class TaxController extends Controller
         $totalRecordswithFilter = Tax::where('name', 'like', '%'.$search.'%')
             ->orWhere('amount', 'like', '%'.$search.'%')
             ->count();
-        
 
         // Fetch records
-        if ($length < 0)
+        if ($length < 0) {
             $taxes = Tax::select('id', 'name', 'amount')
                 ->where('name', 'like', '%'.$search.'%')
                 ->orWhere('amount', 'like', '%'.$search.'%')
                 ->orderBy($order_column, $order_dir)
                 ->get();
-        else
+        } else {
             $taxes = Tax::select('id', 'name', 'amount')
-                ->where('name', 'like', '%'.$search.'%')
-                ->orWhere('amount', 'like', '%'.$search.'%')
-                ->orderBy($order_column, $order_dir)
-                ->skip($start)
-                ->take($length)
-                ->get();
-                
-        $response = array(
-            "draw" => $draw,
-            "recordsTotal" => $totalRecords,
-            "recordsFiltered" => $totalRecordswithFilter,
-            "data" => $taxes,
-            'error' => null
-        );
+                    ->where('name', 'like', '%'.$search.'%')
+                    ->orWhere('amount', 'like', '%'.$search.'%')
+                    ->orderBy($order_column, $order_dir)
+                    ->skip($start)
+                    ->take($length)
+                    ->get();
+        }
+
+        $response = [
+            'draw' => $draw,
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $totalRecordswithFilter,
+            'data' => $taxes,
+            'error' => null,
+        ];
 
         return response()->json($response);
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -104,7 +106,8 @@ class TaxController extends Controller
      */
     public function create()
     {
-        $tax = new Tax();
+        $tax = new Tax;
+
         return view('taxes.form', ['tax' => $tax]);
     }
 
@@ -117,11 +120,12 @@ class TaxController extends Controller
     public function store(StoreTaxRequest $request)
     {
         $validatedData = $request->validated();
-        $validatedData = Arr::except($validatedData, array('display_amount'));
+        $validatedData = Arr::except($validatedData, ['display_amount']);
         $tax = Tax::create($validatedData);
-        if ($tax){
+        if ($tax) {
             return redirect(route('taxes'))->with('success', trans('app.record_added', ['field' => 'tax']));
         }
+
         return back()->withInputs($request->input())->with('error', trans('error.record_added', ['field' => 'tax']));
     }
 
@@ -145,9 +149,10 @@ class TaxController extends Controller
     public function edit($id)
     {
         $tax = Tax::find($id);
-        if ($tax){
+        if ($tax) {
             return view('taxes.form', ['tax' => $tax]);
         }
+
         return view('taxes.index');
     }
 
@@ -161,11 +166,12 @@ class TaxController extends Controller
     public function update(StoreTaxRequest $request, $id)
     {
         $validatedData = $request->validated();
-        $validatedData = Arr::except($validatedData, array('display_amount'));
+        $validatedData = Arr::except($validatedData, ['display_amount']);
         $tax = Tax::whereId($id)->update($validatedData);
-        if ($tax){
+        if ($tax) {
             return redirect(route('taxes'))->with('success', trans('app.record_edited', ['field' => 'tax']));
         }
+
         return back()->withInputs($request->input())->with('error', trans('error.record_edited', ['field' => 'tax']));
     }
 
@@ -178,34 +184,37 @@ class TaxController extends Controller
     public function destroy($id)
     {
         $user = Auth::user();
-        if ($user->can('delete taxes')){
+        if ($user->can('delete taxes')) {
             /*
                 check if tax present in products
             */
             $count = Product::where('tax_id', $id)->count();
 
-            if ($count > 0)
+            if ($count > 0) {
                 return redirect(route('taxes'))->with('error', trans('error.tax_has_product'));
+            }
 
             Tax::destroy($id);
+
             return redirect(route('taxes'))->with('success', trans('app.record_deleted', ['field' => 'tax']));
         }
+
         return abort(403, trans('error.unauthorized'));
     }
 
     /**
      * Display a listing of the resource for select2
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return json
      */
     public function getListForSelect2(Request $request)
     {
         $query = Tax::query();
-        if ($request->has('q')){
+        if ($request->has('q')) {
             $query->where('name', 'like', $request->get('q').'%');
         }
         $taxes = $query->select('id', 'name as text')->get();
+
         return ['results' => $taxes];
-    }     
+    }
 }

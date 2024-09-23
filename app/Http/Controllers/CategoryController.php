@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreCategoryRequest;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\PurchaseOrderInvoiceItem;
-use \App\Http\Requests\StoreCategoryRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
-
 
 class CategoryController extends Controller
 {
@@ -19,11 +17,12 @@ class CategoryController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {   
+    {
         $user = Auth::user();
-        if ($user->can('list categories'))
+        if ($user->can('list categories')) {
             return view('categories.index');
-    
+        }
+
         return abort(403, trans('error.unauthorized'));
 
     }
@@ -31,21 +30,23 @@ class CategoryController extends Controller
     public function getListForDatatables(Request $request)
     {
         $draw = 1;
-        if ($request->has('draw'))
+        if ($request->has('draw')) {
             $draw = $request->get('draw');
+        }
 
         $start = 0;
-        if ($request->has('start'))
-            $start = $request->get("start");
+        if ($request->has('start')) {
+            $start = $request->get('start');
+        }
 
         $length = 10;
         if ($request->has('length')) {
-            $length = $request->get("length");
+            $length = $request->get('length');
         }
 
         $order_column = 'name';
         $order_dir = 'ASC';
-        $order_arr = array();
+        $order_arr = [];
         if ($request->has('order')) {
             $order_arr = $request->get('order');
             $column_arr = $request->get('columns');
@@ -64,29 +65,28 @@ class CategoryController extends Controller
         $totalRecords = Category::count();
         $totalRecordswithFilter = Category::where('name', 'like', '%'.$search.'%')->count();
 
-    
         // Fetch records
-        if ($length < 0)
+        if ($length < 0) {
             $categories = Category::where('name', 'like', '%'.$search.'%')
                 ->select('id', 'name', 'hsn_code', 'customs_duty', 'social_welfare_surcharge', 'igst')
                 ->orderBy($order_column, $order_dir)
-                ->get(['id','name']);
-        else
+                ->get(['id', 'name']);
+        } else {
             $categories = Category::where('name', 'like', '%'.$search.'%')
-            ->select('id', 'name', 'hsn_code', 'customs_duty', 'social_welfare_surcharge', 'igst')
-            ->orderBy($order_column, $order_dir)
-                ->skip($start)
-                ->take($length)
-                ->get();
-               
+                    ->select('id', 'name', 'hsn_code', 'customs_duty', 'social_welfare_surcharge', 'igst')
+                    ->orderBy($order_column, $order_dir)
+                    ->skip($start)
+                    ->take($length)
+                    ->get();
+        }
 
-        $response = array(
-            "draw" => $draw,
-            "recordsTotal" => $totalRecords,
-            "recordsFiltered" => $totalRecordswithFilter,
-            "data" => $categories,
-            'error' => null
-        );
+        $response = [
+            'draw' => $draw,
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $totalRecordswithFilter,
+            'data' => $categories,
+            'error' => null,
+        ];
 
         return response()->json($response);
     }
@@ -98,7 +98,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $category = new Category();
+        $category = new Category;
+
         return view('categories.form', ['category' => $category]);
     }
 
@@ -112,9 +113,10 @@ class CategoryController extends Controller
     {
         $validatedData = $request->validated();
         $category = Category::create($validatedData);
-        if ($category){
+        if ($category) {
             return redirect(route('categories'))->with('success', trans('app.record_added', ['field' => 'category']));
         }
+
         return back()->withInputs($request->input())->with('error', trans('error.record_added', ['field' => 'category']));
     }
 
@@ -138,9 +140,10 @@ class CategoryController extends Controller
     public function edit($id)
     {
         $category = Category::find($id);
-        if ($category){
+        if ($category) {
             return view('categories.form', ['category' => $category]);
         }
+
         return view('categories.index');
     }
 
@@ -155,9 +158,10 @@ class CategoryController extends Controller
     {
         $validatedData = $request->validated();
         $category = Category::whereId($id)->update($validatedData);
-        if ($category){
+        if ($category) {
             return redirect(route('categories'))->with('success', trans('app.record_edited', ['field' => 'category']));
         }
+
         return back()->withInputs($request->input())->with('error', trans('error.record_edited', ['field' => 'category']));
     }
 
@@ -170,36 +174,39 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         $user = Auth::user();
-        if ($user->can('delete categories')){
+        if ($user->can('delete categories')) {
             /*
                 check if tax present in products
             */
             $count = Product::where('category_id', $id)->count();
 
-            if ($count > 0)
+            if ($count > 0) {
                 return redirect(route('categories'))->with('error', trans('error.category_has_product'));
+            }
 
             Category::destroy($id);
+
             return redirect(route('categories'))->with('success', trans('app.record_deleted', ['field' => 'category']));
         }
+
         return abort(403, trans('error.unauthorized'));
     }
 
     /**
      * Display a listing of the resource for select2
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return json
      */
     public function getListForSelect2(Request $request)
     {
         $query = Category::query();
-        if ($request->has('q')){
+        if ($request->has('q')) {
             $query->where('name', 'like', $request->get('q').'%');
         }
         $categories = $query->select('id', 'name as text')->get();
+
         return ['results' => $categories];
-    }     
+    }
 
     public function getCategory(Request $request)
     {
@@ -215,9 +222,9 @@ class CategoryController extends Controller
 
             if ($category) {
                 $charges = [
-                    'customs_duty'=> $category->customs_duty,
-                    'social_welfare_surcharge'=> $category->social_welfare_surcharge,
-                    'igst'=> $category->igst,
+                    'customs_duty' => $category->customs_duty,
+                    'social_welfare_surcharge' => $category->social_welfare_surcharge,
+                    'igst' => $category->igst,
                 ];
                 $po_item->charges = $charges;
                 $po_item->update();
@@ -226,9 +233,9 @@ class CategoryController extends Controller
             $po_item->updateInvoiceItemCharges($po_item_id);
 
             return $category;
-            
+
         }
 
-        return false;    
+        return false;
     }
 }

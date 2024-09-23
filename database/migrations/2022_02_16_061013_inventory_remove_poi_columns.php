@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class InventoryRemovePoiColumns extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -30,6 +30,6 @@ class InventoryRemovePoiColumns extends Migration
         Schema::table('inventories', function (Blueprint $table) {
             $table->integer('stock_poi_shipped')->nullable();
             $table->integer('stock_poi_received')->nullable();
-        });         
+        });
     }
-}
+};

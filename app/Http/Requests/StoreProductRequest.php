@@ -2,18 +2,15 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Auth\Access\AuthorizationException;
-
+use Illuminate\Foundation\Http\FormRequest;
 
 class StoreProductRequest extends FormRequest
 {
-
     protected function failedAuthorization()
     {
         throw new AuthorizationException(trans('app.unauthorized'));
     }
-
 
     /**
      * Determine if the user is authorized to make this request.
@@ -28,8 +25,8 @@ class StoreProductRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'code' => NULL,
-            'name' => NULL,
+            'code' => null,
+            'name' => null,
             //'model' => NULL,
         ]);
     }
@@ -58,7 +55,7 @@ class StoreProductRequest extends FormRequest
             'weight_actual' => 'numeric|nullable',
             'weight_volume' => 'numeric|nullable',
             'weight_calculated' => 'numeric|nullable',
-            'warranty' => 'integer|nullable'
+            'warranty' => 'integer|nullable',
         ];
     }
 }

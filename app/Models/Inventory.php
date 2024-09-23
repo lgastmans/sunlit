@@ -336,7 +336,7 @@ class Inventory extends Model
                         *   register stock received in the Inventory Movement model
                         *   status RECEIVED
                         */
-                        $data = array(
+                        $data = [
                             "warehouse_id" => $order->warehouse_id,
                             "product_id" => $product->product_id,
                             "purchase_order_id" => $model->purchase_order_id,
@@ -347,7 +347,7 @@ class Inventory extends Model
                             "user_id" => Auth::user()->id,
                             "movement_type" => InventoryMovement::RECEIVED,
                             "price" => $product->buying_price_inr
-                        );
+                        ];
                         $movement = new InventoryMovement();
                         $movement->updateMovement($data);
 
@@ -366,7 +366,7 @@ class Inventory extends Model
                          *   register stock received in the Inventory Movement model
                          *   status CANCELLED
                          */
-                        $data = array(
+                        $data = [
                             "warehouse_id" => $order->warehouse_id,
                             "product_id" => $product->product_id,
                             "purchase_order_id" => $model->purchase_order_id,
@@ -377,7 +377,7 @@ class Inventory extends Model
                             "user_id" => Auth::user()->id,
                             "movement_type" => InventoryMovement::CANCELLED,
                             "price" => $product->buying_price_inr
-                        );
+                        ];
                         $movement = new InventoryMovement();
                         $movement->updateMovement($data);
 
@@ -419,7 +419,7 @@ class Inventory extends Model
                     *   register stock received in the Inventory Movement model
                     *   status RECEIVED
                     */
-                    $data = array(
+                    $data = [
                         "warehouse_id" => $model->warehouse_id,
                         "product_id" => $item->product_id,
                         "purchase_order_id" => null,
@@ -430,7 +430,7 @@ class Inventory extends Model
                         "user_id" => Auth::user()->id,
                         "movement_type" => InventoryMovement::RECEIVED,
                         "price" => $item->price
-                    );
+                    ];
                     $movement = new InventoryMovement();
                     $movement->updateMovement($data);                
 
@@ -489,7 +489,7 @@ class Inventory extends Model
                         *   register stock delivered in the Inventory Movement model
                         *   status DELIVERED
                         */
-                        $data = array(
+                        $data = [
                             "warehouse_id" => $model->warehouse_id,
                             "product_id" => $product->product_id,
                             "purchase_order_id" => null,
@@ -500,7 +500,7 @@ class Inventory extends Model
                             "user_id" => Auth::user()->id,
                             "movement_type" => InventoryMovement::DELIVERED,
                             "price" => $product->selling_price
-                        );
+                        ];
                         $movement = new InventoryMovement();
                         $movement->updateMovement($data);
 

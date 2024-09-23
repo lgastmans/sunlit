@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateQuotationItemsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -23,10 +23,9 @@ class CreateQuotationItemsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-
             $table->foreign('quotation_id')->references('id')->on('quotations');
             $table->foreign('product_id')->references('id')->on('products');
-        });        
+        });
     }
 
     /**
@@ -38,4 +37,4 @@ class CreateQuotationItemsTable extends Migration
     {
         Schema::dropIfExists('quotation_items');
     }
-}
+};

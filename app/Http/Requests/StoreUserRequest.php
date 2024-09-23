@@ -1,14 +1,10 @@
 <?php
 
 namespace App\Http\Requests;
-use Spatie\Permission\Models\Role;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Password;
-
 
 use Illuminate\Auth\Access\AuthorizationException;
-
-
+use Illuminate\Foundation\Http\FormRequest;
+use Spatie\Permission\Models\Role;
 
 class StoreUserRequest extends FormRequest
 {
@@ -16,7 +12,6 @@ class StoreUserRequest extends FormRequest
     {
         throw new AuthorizationException(trans('app.unauthorized'));
     }
-
 
     /**
      * Determine if the user is authorized to make this request.
@@ -31,14 +26,13 @@ class StoreUserRequest extends FormRequest
     protected function prepareForValidation()
     {
 
-        if ($this->get('role-select')){
+        if ($this->get('role-select')) {
             $roleInfo = Role::findById($this->get('role-select'));
             $role = $roleInfo->name;
-        }
-        else{
+        } else {
             $role = $this->get('role');
         }
-        $this->merge(['role'=>$role]);
+        $this->merge(['role' => $role]);
     }
 
     /**
@@ -52,7 +46,7 @@ class StoreUserRequest extends FormRequest
             'name' => 'required|max:255|unique:users,name,'.$this->id,
             'email' => 'required|email:rfc,dns|max:255|unique:users,email,'.$this->id,
             'role' => 'required',
-            'password' => 'sometimes'
+            'password' => 'sometimes',
         ];
     }
 }

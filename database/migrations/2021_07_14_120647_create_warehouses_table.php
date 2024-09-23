@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWarehousesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -25,7 +25,7 @@ class CreateWarehousesTable extends Migration
             $table->string('phone2')->nullable();
             $table->string('email')->nullable();
             $table->timestamps();
-            $table->softDeletes();            
+            $table->softDeletes();
         });
 
         Schema::table('warehouses', function (Blueprint $table) {
@@ -46,4 +46,4 @@ class CreateWarehousesTable extends Migration
 
         Schema::dropIfExists('warehouses');
     }
-}
+};

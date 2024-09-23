@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ChangeCourierType extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class ChangeCourierType extends Migration
     public function up()
     {
         Schema::table('purchase_orders', function (Blueprint $table) {
-            $table->string('courier','150')->change();
+            $table->string('courier', '150')->change();
         });
     }
 
@@ -29,4 +29,4 @@ class ChangeCourierType extends Migration
             $table->date('courier')->change();
         });
     }
-}
+};
