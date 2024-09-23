@@ -37,7 +37,7 @@ class importDealers extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         /*
             File columns in order in CSV | corresponding column name:

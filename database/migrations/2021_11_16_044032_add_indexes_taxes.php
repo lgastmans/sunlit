@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('taxes', function (Blueprint $table) {
             $table->index('name');
@@ -24,7 +24,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('taxes', function (Blueprint $table) {
             $table->dropIndex('taxes_name_index');

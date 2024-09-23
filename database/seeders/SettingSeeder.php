@@ -12,7 +12,7 @@ class SettingSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         // Setting::set("company.name" , "Sunlit Future");
         // Setting::set("company.address" , "");

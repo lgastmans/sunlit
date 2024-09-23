@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('sale_orders', function (Blueprint $table) {
             $table->string('courier', '150')->change();
@@ -23,7 +23,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('sale_orders', function (Blueprint $table) {
             $table->date('courier')->change();

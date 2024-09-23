@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -123,7 +125,7 @@ class CreditNote extends Model
     /**
      * Get the items associated with the sale order.
      */
-    public function items()
+    public function items(): HasMany
     {
         return $this->hasMany(CreditNoteItem::class);
     }
@@ -131,7 +133,7 @@ class CreditNote extends Model
     /**
      * Get the dealer associated with the sale order.
      */
-    public function dealer()
+    public function dealer(): BelongsTo
     {
         return $this->belongsTo(Dealer::class);
     }
@@ -139,7 +141,7 @@ class CreditNote extends Model
     /**
      * Get the warehouse associated with the sale order.
      */
-    public function warehouse()
+    public function warehouse(): BelongsTo
     {
         return $this->belongsTo(Warehouse::class);
     }
@@ -147,7 +149,7 @@ class CreditNote extends Model
     /**
      * Get the user associated with the sale order.
      */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

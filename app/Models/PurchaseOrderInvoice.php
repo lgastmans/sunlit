@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -46,7 +48,7 @@ class PurchaseOrderInvoice extends Model
     /**
      * Get the user associated with the purchase order invoice.
      */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
@@ -54,7 +56,7 @@ class PurchaseOrderInvoice extends Model
     /**
      * Get the purchase order associated with the invoice.
      */
-    public function purchase_order()
+    public function purchase_order(): BelongsTo
     {
         return $this->belongsTo(PurchaseOrder::class);
     }
@@ -62,7 +64,7 @@ class PurchaseOrderInvoice extends Model
     /**
      * Get the items associated with the purchase order invoice.
      */
-    public function items()
+    public function items(): HasMany
     {
         return $this->hasMany(PurchaseOrderInvoiceItem::class)->withTrashed();
     }

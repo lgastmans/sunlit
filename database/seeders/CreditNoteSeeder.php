@@ -11,7 +11,7 @@ class CreditNoteSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         //
     }

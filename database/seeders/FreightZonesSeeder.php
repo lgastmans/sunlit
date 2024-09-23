@@ -12,7 +12,7 @@ class FreightZonesSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         //
         DB::table('freight_zones')->insert([

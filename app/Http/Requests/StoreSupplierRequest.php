@@ -17,7 +17,7 @@ class StoreSupplierRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return $this->user()->can('edit suppliers');
     }
@@ -27,7 +27,7 @@ class StoreSupplierRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'company' => 'required_without:name|string|max:255',

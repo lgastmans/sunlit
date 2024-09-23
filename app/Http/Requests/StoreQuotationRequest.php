@@ -13,7 +13,7 @@ class StoreQuotationRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -32,7 +32,7 @@ class StoreQuotationRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'quotation_number' => 'required|unique:quotations|max:255',

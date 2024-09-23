@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('purchase_order_invoices', function (Blueprint $table) {
             $table->index('invoice_number');
@@ -25,7 +25,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('purchase_order_invoices', function (Blueprint $table) {
             $table->dropIndex('purchase_order_invoices_invoice_number_index');

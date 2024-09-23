@@ -12,7 +12,7 @@ class DealerSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         Dealer::factory()->count(50)->create();
     }

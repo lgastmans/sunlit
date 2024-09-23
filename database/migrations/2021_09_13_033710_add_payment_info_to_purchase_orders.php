@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('purchase_orders', function (Blueprint $table) {
             $table->renameColumn('se_payment_date', 'paid_at');
@@ -28,7 +28,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('purchase_orders', function (Blueprint $table) {
             $table->renameColumn('paid_at', 'se_payment_date');

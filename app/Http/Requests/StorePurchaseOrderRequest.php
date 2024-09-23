@@ -19,7 +19,7 @@ class StorePurchaseOrderRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return $this->user()->can('edit purchase orders');
     }
@@ -38,7 +38,7 @@ class StorePurchaseOrderRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'warehouse_id' => 'required|integer',

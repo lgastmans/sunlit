@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,7 +17,7 @@ class CreditNoteItem extends Model
     /**
      * Get the order associated with the item.
      */
-    public function credit_note()
+    public function credit_note(): BelongsTo
     {
         return $this->belongsTo(CreditNote::class);
     }
@@ -24,7 +25,7 @@ class CreditNoteItem extends Model
     /**
      * Get the product associated with the item.
      */
-    public function product()
+    public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }

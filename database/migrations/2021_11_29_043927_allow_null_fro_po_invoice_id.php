@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('inventory_movements', function (Blueprint $table) {
             $table->string('purchase_order_invoice_id')->nullable()->change();
@@ -23,7 +23,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('inventory_movements', function (Blueprint $table) {
             $table->string('purchase_order_invoice_id')->nullable(false);

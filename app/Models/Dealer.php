@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -17,7 +19,7 @@ class Dealer extends Model
     /**
      * Get the state associated with the dealer.
      */
-    public function state()
+    public function state(): BelongsTo
     {
         return $this->belongsTo(State::class);
     }
@@ -25,12 +27,12 @@ class Dealer extends Model
     /**
      * Get the shipping state associated with the dealer.
      */
-    public function shipping_state()
+    public function shipping_state(): BelongsTo
     {
         return $this->belongsTo(State::class);
     }
 
-    public function sale_orders()
+    public function sale_orders(): HasMany
     {
         return $this->hasMany(SaleOrder::class);
     }

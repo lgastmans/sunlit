@@ -17,7 +17,7 @@ class StoreCategoryRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return $this->user()->can('edit categories');
     }
@@ -27,7 +27,7 @@ class StoreCategoryRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'name' => 'required|max:255|unique:categories,name,NULL,id,deleted_at,NULL'.$this->id,

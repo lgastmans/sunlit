@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('credit_notes', function (Blueprint $table) {
             $table->text('remarks')->after('amount')->nullable();
@@ -23,7 +23,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('quocredit_notestations', function (Blueprint $table) {
             $table->dropColumn('remarks');

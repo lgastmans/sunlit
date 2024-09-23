@@ -13,7 +13,7 @@ class StoreCreditNoteRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -32,7 +32,7 @@ class StoreCreditNoteRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'credit_note_number' => 'required|unique:credit_notes|max:255',

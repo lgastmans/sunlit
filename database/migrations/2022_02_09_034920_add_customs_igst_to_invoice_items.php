@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('purchase_order_invoice_items', function (Blueprint $table) {
             $table->json('charges')->nullable();
@@ -26,7 +26,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('purchase_order_invoice_items', function (Blueprint $table) {
             $table->dropColumn('charges');

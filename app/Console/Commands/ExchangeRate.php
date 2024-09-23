@@ -37,7 +37,7 @@ class ExchangeRate extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $url = 'https://openexchangerates.org/api/latest.json?app_id=fe761d5c94a04335a88625034493234a&base=usd&symbols=inr';
         $response = Http::get($url);

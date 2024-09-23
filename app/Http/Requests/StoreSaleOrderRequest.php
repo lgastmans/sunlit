@@ -19,7 +19,7 @@ class StoreSaleOrderRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return $this->user()->can('edit sale orders');
     }
@@ -38,7 +38,7 @@ class StoreSaleOrderRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'order_number' => 'required|unique:sale_orders|max:255',

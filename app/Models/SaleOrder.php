@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -84,7 +86,7 @@ class SaleOrder extends Model
     /**
      * Get the items associated with the sale order.
      */
-    public function items()
+    public function items(): HasMany
     {
         return $this->hasMany(SaleOrderItem::class);
     }
@@ -92,7 +94,7 @@ class SaleOrder extends Model
     /**
      * Get the dealer associated with the sale order.
      */
-    public function dealer()
+    public function dealer(): BelongsTo
     {
         return $this->belongsTo(Dealer::class);
     }
@@ -100,7 +102,7 @@ class SaleOrder extends Model
     /**
      * Get the warehouse associated with the sale order.
      */
-    public function warehouse()
+    public function warehouse(): BelongsTo
     {
         return $this->belongsTo(Warehouse::class);
     }
@@ -108,7 +110,7 @@ class SaleOrder extends Model
     /**
      * Get the user associated with the sale order.
      */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
@@ -116,12 +118,12 @@ class SaleOrder extends Model
     /**
      * Get the state associated with the dealer.
      */
-    public function state()
+    public function state(): BelongsTo
     {
         return $this->belongsTo(State::class, 'shipping_state_id');
     }
 
-    public function sale_order_payments()
+    public function sale_order_payments(): HasMany
     {
         return $this->hasMany(SaleOrderPayment::class);
     }

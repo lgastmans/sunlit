@@ -12,7 +12,7 @@ class SupplierSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         Supplier::factory()->count(10)->create();
     }

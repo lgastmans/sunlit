@@ -12,7 +12,7 @@ class PurchaseOrderSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         PurchaseOrder::factory()->count(50)->create();
     }

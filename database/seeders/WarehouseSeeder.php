@@ -12,7 +12,7 @@ class WarehouseSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         Warehouse::factory()->count(5)->create();
     }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,7 +19,7 @@ class SaleOrderItem extends Model
     /**
      * Get the order associated with the item.
      */
-    public function sale_order()
+    public function sale_order(): BelongsTo
     {
         return $this->belongsTo(SaleOrder::class);
     }
@@ -26,7 +27,7 @@ class SaleOrderItem extends Model
     /**
      * Get the product associated with the item.
      */
-    public function product()
+    public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }

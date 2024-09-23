@@ -11,7 +11,7 @@ class SupplierFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'state_id' => $this->faker->numberBetween($min = 1, $max = 37),

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -20,7 +22,7 @@ class Product extends Model
     /**
      * Get the category associated with the product.
      */
-    public function category()
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
@@ -28,7 +30,7 @@ class Product extends Model
     /**
      * Get the supplier associated with the product.
      */
-    public function supplier()
+    public function supplier(): BelongsTo
     {
         return $this->belongsTo(Supplier::class);
     }
@@ -36,27 +38,27 @@ class Product extends Model
     /**
      * Get the tax associated with the product.
      */
-    public function tax()
+    public function tax(): BelongsTo
     {
         return $this->belongsTo(Tax::class);
     }
 
-    public function purchase_order_item()
+    public function purchase_order_item(): HasMany
     {
         return $this->hasMany(PurchaseOrderItem::class);
     }
 
-    public function sale_order_item()
+    public function sale_order_item(): HasMany
     {
         return $this->hasMany(SaleOrderItem::class);
     }
 
-    public function inventory()
+    public function inventory(): HasMany
     {
         return $this->hasMany(Inventory::class);
     }
 
-    public function movement()
+    public function movement(): HasMany
     {
         return $this->hasMany(InventoryMovement::class);
     }

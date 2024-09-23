@@ -18,7 +18,7 @@ class StoreDealerRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return $this->user()->can('edit dealers');
     }
@@ -28,7 +28,7 @@ class StoreDealerRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'company' => 'required|string|max:255',

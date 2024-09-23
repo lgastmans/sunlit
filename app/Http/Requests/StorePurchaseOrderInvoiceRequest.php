@@ -18,7 +18,7 @@ class StorePurchaseOrderInvoiceRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return $this->user()->can('edit purchase orders');
     }
@@ -37,7 +37,7 @@ class StorePurchaseOrderInvoiceRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'invoice_number' => 'required|unique:purchase_order_invoices|max:255',
