@@ -14,7 +14,7 @@ class SaleOrdersChangeCourierType extends Migration
     public function up()
     {
         Schema::table('sale_orders', function (Blueprint $table) {
-            $table->string('courier','150')->change();
+            $table->string('courier', '150')->change();
         });
     }
 

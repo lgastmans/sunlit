@@ -32,7 +32,7 @@ class CreateQuotationsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->index('quotation_number');
             $table->index('confirmed_at');
-        });        
+        });
     }
 
     /**

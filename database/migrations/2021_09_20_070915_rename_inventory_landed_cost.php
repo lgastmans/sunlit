@@ -15,7 +15,7 @@ class RenameInventoryLandedCost extends Migration
     {
         //
         Schema::table('inventories', function (Blueprint $table) {
-            $table->renameColumn('landed_cost','average_cost')->nullable();
+            $table->renameColumn('landed_cost', 'average_cost')->nullable();
         });
 
     }
@@ -29,7 +29,7 @@ class RenameInventoryLandedCost extends Migration
     {
         //
         Schema::table('inventories', function (Blueprint $table) {
-            $table->renameColumn('average_cost','landed_cost')->nullable();
+            $table->renameColumn('average_cost', 'landed_cost')->nullable();
         });
     }
 }

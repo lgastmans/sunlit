@@ -7,8 +7,11 @@ use Illuminate\View\Component;
 class Input extends Component
 {
     public $label;
+
     public $name;
+
     public $value;
+
     public $required;
 
     /**

@@ -17,7 +17,7 @@ class UpdateFreightZonesColumns extends Migration
         Schema::table('freight_zones', function (Blueprint $table) {
             $table->dropColumn('states');
             $table->decimal('rate_per_kg', 6, 2)->after('zone');
-        });        
+        });
     }
 
     /**
@@ -31,6 +31,6 @@ class UpdateFreightZonesColumns extends Migration
         Schema::table('freight_zones', function (Blueprint $table) {
             $table->string('states');
             $table->dropColumn('rate_per_kg')->default(8);
-        });        
+        });
     }
 }

@@ -29,7 +29,7 @@ class SaleOrdersShippingAddress extends Migration
         //
 
         Schema::table('sale_orders', function (Blueprint $table) {
-            $table->json('shipping_address')->nullable();        
+            $table->json('shipping_address')->nullable();
         });
 
     }

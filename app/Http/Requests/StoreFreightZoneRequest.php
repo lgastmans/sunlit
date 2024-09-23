@@ -1,10 +1,9 @@
 <?php
 
 namespace App\Http\Requests;
-use Illuminate\Validation\Rule;
-use Illuminate\Foundation\Http\FormRequest;
 
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Foundation\Http\FormRequest;
 
 class StoreFreightZoneRequest extends FormRequest
 {
@@ -12,7 +11,6 @@ class StoreFreightZoneRequest extends FormRequest
     {
         throw new AuthorizationException(trans('app.unauthorized'));
     }
-
 
     /**
      * Determine if the user is authorized to make this request.
@@ -35,8 +33,8 @@ class StoreFreightZoneRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'rate_per_kg' => 'required|numeric',
-            'properties' => 'array'
-//            'email' => 'required|email|unique:suppliers,email,'.$this->id
+            'properties' => 'array',
+            //            'email' => 'required|email|unique:suppliers,email,'.$this->id
         ];
     }
 }

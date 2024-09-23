@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreFreightZoneRequest;
 use App\Models\FreightZone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use \App\Http\Requests\StoreFreightZoneRequest;
-
 
 class FreightZoneController extends Controller
 {
@@ -19,31 +18,33 @@ class FreightZoneController extends Controller
     {
         //
         $user = Auth::user();
-        if ($user->can('list tranport zones'))
+        if ($user->can('list tranport zones')) {
             return view('freight-zones.index');
-    
+        }
+
         return abort(403, trans('error.unauthorized'));
     }
-
 
     public function getListForDatatables(Request $request)
     {
         $draw = 1;
-        if ($request->has('draw'))
+        if ($request->has('draw')) {
             $draw = $request->get('draw');
+        }
 
         $start = 0;
-        if ($request->has('start'))
-            $start = $request->get("start");
+        if ($request->has('start')) {
+            $start = $request->get('start');
+        }
 
         $length = 10;
         if ($request->has('length')) {
-            $length = $request->get("length");
+            $length = $request->get('length');
         }
 
         $order_column = 'name';
         $order_dir = 'ASC';
-        $order_arr = array();
+        $order_arr = [];
         if ($request->has('order')) {
             $order_arr = $request->get('order');
             $column_arr = $request->get('columns');
@@ -51,8 +52,7 @@ class FreightZoneController extends Controller
             $order_column = $column_arr[$column_index]['data'];
             // if ($column_index==3)
             //     $order_column = "states.name";
-            
-            
+
             $order_dir = $order_arr[0]['dir'];
         }
 
@@ -66,44 +66,42 @@ class FreightZoneController extends Controller
         $totalRecords = FreightZone::count();
         $totalRecordswithFilter = FreightZone::where('name', 'like', '%'.$search.'%')
             ->count();
-        
 
         // Fetch records
-        if ($length < 0)
+        if ($length < 0) {
             $zones = FreightZone::where('name', 'like', '%'.$search.'%')
                 ->orderBy($order_column, $order_dir)
                 ->get();
-        else
+        } else {
             $zones = FreightZone::where('name', 'like', '%'.$search.'%')
-                ->orderBy($order_column, $order_dir)
-                ->skip($start)
-                ->take($length)
-                ->get();
-
-        $arr = array();
-
-        foreach($zones as $record)
-        {
-
-            $arr[] = array(
-                "id" => $record->id,
-                "name" => $record->name,
-                "rate_per_kg" => $record->rate_per_kg,
-
-            );
+                    ->orderBy($order_column, $order_dir)
+                    ->skip($start)
+                    ->take($length)
+                    ->get();
         }
 
-        $response = array(
-            "draw" => $draw,
-            "recordsTotal" => $totalRecords,
-            "recordsFiltered" => $totalRecordswithFilter,
-            "data" => $arr,
-            'error' => null
-        );
-                
+        $arr = [];
+
+        foreach ($zones as $record) {
+
+            $arr[] = [
+                'id' => $record->id,
+                'name' => $record->name,
+                'rate_per_kg' => $record->rate_per_kg,
+
+            ];
+        }
+
+        $response = [
+            'draw' => $draw,
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $totalRecordswithFilter,
+            'data' => $arr,
+            'error' => null,
+        ];
+
         return response()->json($response);
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -113,8 +111,9 @@ class FreightZoneController extends Controller
     public function create()
     {
         //
-        $zone = new FreightZone();
-        return view('freight-zones.form', ['zone' => $zone]);        
+        $zone = new FreightZone;
+
+        return view('freight-zones.form', ['zone' => $zone]);
     }
 
     /**
@@ -128,9 +127,10 @@ class FreightZoneController extends Controller
         //
         $validatedData = $request->validated();
         $zone = FreightZone::create($validatedData);
-        if ($zone){
+        if ($zone) {
             return redirect(route('freight-zones'))->with('success', trans('app.record_added', ['field' => 'zone']));
         }
+
         return back()->withInputs($request->input())->with('error', trans('error.record_added', ['field' => 'zone']));
 
     }
@@ -145,10 +145,11 @@ class FreightZoneController extends Controller
     {
         //
         $user = Auth::user();
-        if ($user->can('view tranport zones')){
+        if ($user->can('view tranport zones')) {
             $zone = FreightZone::find($id);
-            if ($zone)
+            if ($zone) {
                 return view('freight-zones.show', ['zone' => $zone]);
+            }
 
             return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'zone']));
         }
@@ -166,9 +167,10 @@ class FreightZoneController extends Controller
     {
         //
         $zone = FreightZone::find($id);
-        if ($zone){
+        if ($zone) {
             return view('freight-zones.form', ['zone' => $zone]);
         }
+
         return view('freight-zones.index');
 
     }
@@ -185,9 +187,10 @@ class FreightZoneController extends Controller
         //
         $validatedData = $request->validated();
         $zone = FreightZone::whereId($id)->update($validatedData);
-        if ($zone){
+        if ($zone) {
             return redirect(route('freight-zones'))->with('success', trans('app.record_edited', ['field' => 'zone']));
         }
+
         return back()->withInputs($request->input())->with('error', trans('error.record_edited', ['field' => 'zone']));
 
     }
@@ -203,25 +206,27 @@ class FreightZoneController extends Controller
         //
         // $user = Auth::user();
         // if ($user->can('delete zones')){
-            FreightZone::destroy($id);
-            return redirect(route('freight-zones'))->with('success', trans('app.record_deleted', ['field' => 'zone']));
+        FreightZone::destroy($id);
+
+        return redirect(route('freight-zones'))->with('success', trans('app.record_deleted', ['field' => 'zone']));
+
         // }
-        return abort(403, trans('error.unauthorized'));        
+        return abort(403, trans('error.unauthorized'));
     }
 
     /**
      * Display a listing of the resource for select2
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return json
      */
     public function getListForSelect2(Request $request)
     {
         $query = FreightZone::query();
-        if ($request->has('q')){
+        if ($request->has('q')) {
             $query->where('name', 'like', $request->get('q').'%');
         }
         $rows = $query->select('id', 'name as text')->get();
+
         return ['results' => $rows];
-    }     
+    }
 }

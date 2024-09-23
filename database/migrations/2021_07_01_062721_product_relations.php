@@ -14,7 +14,7 @@ class ProductRelations extends Migration
     public function up()
     {
         //
-        
+
         Schema::table('products', function (Blueprint $table) {
             $table->foreign('category_id')->references('id')->on('categories');
             $table->foreign('supplier_id')->references('id')->on('suppliers');

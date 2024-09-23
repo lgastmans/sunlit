@@ -22,15 +22,15 @@ class WarehouseFactory extends Factory
     public function definition()
     {
         return [
-            "state_id" =>$this->faker->numberBetween($min = 1, $max = 37),
-            "name" =>$this->faker->company(),
-            "address" =>$this->faker->streetAddress(),
-            "city" =>$this->faker->city(),
-            "zip_code" =>$this->faker->postcode(),
-            "contact_person" =>$this->faker->name()." ".$this->faker->jobTitle(),
-            "phone" =>$this->faker->e164PhoneNumber(),
-            "phone2" =>$this->faker->e164PhoneNumber(),
-            "email" =>$this->faker->unique()->safeEmail()
+            'state_id' => $this->faker->numberBetween($min = 1, $max = 37),
+            'name' => $this->faker->company(),
+            'address' => $this->faker->streetAddress(),
+            'city' => $this->faker->city(),
+            'zip_code' => $this->faker->postcode(),
+            'contact_person' => $this->faker->name().' '.$this->faker->jobTitle(),
+            'phone' => $this->faker->e164PhoneNumber(),
+            'phone2' => $this->faker->e164PhoneNumber(),
+            'email' => $this->faker->unique()->safeEmail(),
         ];
     }
 }

@@ -31,7 +31,7 @@ class CreateCreditNotesTable extends Migration
             $table->foreign('dealer_id')->references('id')->on('dealers');
             $table->foreign('user_id')->references('id')->on('users');
             $table->index('credit_note_number');
-            $table->index('confirmed_at');            
+            $table->index('confirmed_at');
         });
 
         Schema::create('credit_note_items', function (Blueprint $table) {
@@ -46,7 +46,7 @@ class CreateCreditNotesTable extends Migration
 
             $table->foreign('credit_note_id')->references('id')->on('credit_notes');
             $table->foreign('product_id')->references('id')->on('products');
-        });           
+        });
     }
 
     /**

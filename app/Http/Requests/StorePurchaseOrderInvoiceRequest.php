@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Validation\Rule;
 use App\Models\PurchaseOrderInvoice;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class StorePurchaseOrderInvoiceRequest extends FormRequest
 {
@@ -29,7 +28,7 @@ class StorePurchaseOrderInvoiceRequest extends FormRequest
         $this->merge([
             'status' => PurchaseOrderInvoice::DRAFT,
             'user_id' => Auth::user()->id,
-            'invoice_number_slug' => str_replace(array(' ', '/'), '-', $this->invoice_number)
+            'invoice_number_slug' => str_replace([' ', '/'], '-', $this->invoice_number),
         ]);
     }
 

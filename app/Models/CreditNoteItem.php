@@ -31,14 +31,16 @@ class CreditNoteItem extends Model
 
     public function getTotalPriceAttribute()
     {
-        $total = number_format(($this->price + ($this->price * $this->tax/100)) * $this->quantity,2,'.',',');
-        return  $total;
+        $total = number_format(($this->price + ($this->price * $this->tax / 100)) * $this->quantity, 2, '.', ',');
+
+        return $total;
     }
 
     public function getTotalPriceUnfmtAttribute()
     {
-        $total = ($this->price + ($this->price * $this->tax/100)) * $this->quantity;
-        return  $total;
+        $total = ($this->price + ($this->price * $this->tax / 100)) * $this->quantity;
+
+        return $total;
     }
 
     /**
@@ -54,7 +56,6 @@ class CreditNoteItem extends Model
      */
     public function getTaxAmountAttribute()
     {
-        return ($this->quantity * $this->price) * ($this->tax/100);
+        return ($this->quantity * $this->price) * ($this->tax / 100);
     }
-    
 }

@@ -31,7 +31,7 @@ class AddPaymentInfoToPurchaseOrders extends Migration
     public function down()
     {
         Schema::table('purchase_orders', function (Blueprint $table) {
-            $table->renameColumn('paid_at','se_payment_date');
+            $table->renameColumn('paid_at', 'se_payment_date');
             $table->dropColumn('payment_reference');
             $table->renameColumn('bank_and_transport_charges', 'bank_charges');
             $table->renameColumn('customs_duty', 'duty_amount');

@@ -1,17 +1,14 @@
 <?php
 
 namespace App\Http\Requests;
-use Illuminate\Validation\Rule;
-use Illuminate\Foundation\Http\FormRequest;
-
-use Illuminate\Auth\Access\AuthorizationException;
 
 use App\Models\PurchaseOrder;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
 class StorePurchaseOrderRequest extends FormRequest
 {
-
     protected function failedAuthorization()
     {
         throw new AuthorizationException(trans('app.unauthorized'));
@@ -32,7 +29,7 @@ class StorePurchaseOrderRequest extends FormRequest
         $this->merge([
             'status' => PurchaseOrder::DRAFT,
             'user_id' => Auth::user()->id,
-            'order_number_slug' => str_replace(array(' ', '/'), '-', $this->order_number) //Str::of($this->order_number)->slug('-')
+            'order_number_slug' => str_replace([' ', '/'], '-', $this->order_number), //Str::of($this->order_number)->slug('-')
         ]);
     }
 
@@ -49,7 +46,7 @@ class StorePurchaseOrderRequest extends FormRequest
             'order_number' => 'required|unique:purchase_orders|max:255',
             'order_number_slug' => 'required',
             'status' => 'required|integer',
-            'user_id' => 'required|integer'
+            'user_id' => 'required|integer',
         ];
     }
 }

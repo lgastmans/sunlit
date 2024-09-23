@@ -2,29 +2,21 @@
 
 namespace App\Http\Controllers;
 
-
-use \NumberFormatter;
-
-use App\Models\Dealer;
-use App\Models\Product;
-use App\Models\Inventory;
-use App\Models\SaleOrder;
-use App\Models\Warehouse;
-use App\Models\Category;
-use App\Models\Tax;
-use App\Models\Supplier;
-use Illuminate\Support\Arr;
-use Illuminate\Http\Request;
-use App\Models\PurchaseOrder;
 use App\Exports\ProductsExport;
-
+use App\Http\Requests\StoreProductRequest;
+use App\Models\Category;
+use App\Models\Inventory;
 use App\Models\InventoryMovement;
+use App\Models\Product;
+use App\Models\PurchaseOrder;
 use App\Models\PurchaseOrderItem;
+use App\Models\SaleOrder;
+use App\Models\Supplier;
+use App\Models\Tax;
+use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
-use \App\Http\Requests\StoreProductRequest;
-
-
 
 class ProductController extends Controller
 {
@@ -36,48 +28,50 @@ class ProductController extends Controller
     public function index()
     {
         $user = Auth::user();
-        if ($user->can('list products'))
+        if ($user->can('list products')) {
             return view('products.index');
-    
+        }
+
         return abort(403, trans('error.unauthorized'));
     }
-
 
     public function getListForDatatables(Request $request)
     {
         $draw = 1;
-        if ($request->has('draw'))
+        if ($request->has('draw')) {
             $draw = $request->get('draw');
+        }
 
         $start = 0;
-        if ($request->has('start'))
-            $start = $request->get("start");
+        if ($request->has('start')) {
+            $start = $request->get('start');
+        }
 
         $length = 10;
         if ($request->has('length')) {
-            $length = $request->get("length");
+            $length = $request->get('length');
         }
 
         $order_column = 'name';
         $order_dir = 'ASC';
-        $order_arr = array();
+        $order_arr = [];
         if ($request->has('order')) {
 
             $order_arr = $request->get('order');
             $column_arr = $request->get('columns');
             $column_index = $order_arr[0]['column'];
 
-            if ($column_index==0)
-                $order_column = "categories.name";
-            elseif ($column_index==1)
-                $order_column = "suppliers.company";
-            elseif ($column_index==2)
-                $order_column = "products.part_number";
-            else
+            if ($column_index == 0) {
+                $order_column = 'categories.name';
+            } elseif ($column_index == 1) {
+                $order_column = 'suppliers.company';
+            } elseif ($column_index == 2) {
+                $order_column = 'products.part_number';
+            } else {
                 $order_column = $column_arr[$column_index]['data'];
+            }
             $order_dir = $order_arr[0]['dir'];
         }
-
 
         $search = '';
         if ($request->has('search')) {
@@ -97,80 +91,77 @@ class ProductController extends Controller
             ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
             ->join('taxes', 'taxes.id', '=', 'products.tax_id');
 
-
-        if (!empty($column_arr[0]['search']['value'])){
+        if (! empty($column_arr[0]['search']['value'])) {
             $query->where('categories.name', 'like', '%'.$column_arr[0]['search']['value'].'%');
         }
-       
-        if (!empty($column_arr[1]['search']['value'])) {
+
+        if (! empty($column_arr[1]['search']['value'])) {
             $query->where('suppliers.company', 'like', '%'.$column_arr[1]['search']['value'].'%');
         }
 
-        if (!empty($column_arr[2]['search']['value'])) {
+        if (! empty($column_arr[2]['search']['value'])) {
             $query->where('products.part_number', 'like', '%'.$column_arr[2]['search']['value'].'%');
         }
 
-        if (!empty($column_arr[3]['search']['value'])) {
+        if (! empty($column_arr[3]['search']['value'])) {
             $query->where('products.purchase_price', 'like', '%'.$column_arr[4]['search']['value'].'%');
         }
 
-        if (!empty($column_arr[4]['search']['value'])) {
+        if (! empty($column_arr[4]['search']['value'])) {
             $query->where('taxes.name', 'like', '%'.$column_arr[5]['search']['value'].'%');
         }
 
-        if ($request->has('search')){
+        if ($request->has('search')) {
             $search = $request->get('search')['value'];
-            $query->where( function ($q) use ($search){
+            $query->where(function ($q) use ($search) {
                 $q->where('products.part_number', 'like', '%'.$search.'%')
                     ->orWhere('categories.name', 'like', '%'.$search.'%')
                     ->orWhere('suppliers.company', 'like', '%'.$search.'%');
-            });    
+            });
         }
 
         $query->orderBy($order_column, $order_dir);
 
         $totalRecordswithFilter = $query->count();
 
-        if ($length > 0)
+        if ($length > 0) {
             $query->skip($start)->take($length);
+        }
 
         $products = $query->select('products.*', 'categories.name as category_name', 'taxes.name as tax_name')->get();
 
-        $arr = array();
+        $arr = [];
 
-        foreach($products as $record)
-        {
+        foreach ($products as $record) {
 
-            $arr[] = array(
-                "id" => $record->id,
-                "category" => $record->category->name,
-                "supplier" => $record->supplier->company,
-                "tax" => $record->tax->amount,
-                "code" => $record->code,
-                "name" => $record->name,
-                "part_number" => $record->part_number,
-                "purchase_price" => $record->purchase_price
+            $arr[] = [
+                'id' => $record->id,
+                'category' => $record->category->name,
+                'supplier' => $record->supplier->company,
+                'tax' => $record->tax->amount,
+                'code' => $record->code,
+                'name' => $record->name,
+                'part_number' => $record->part_number,
+                'purchase_price' => $record->purchase_price,
 
-            );
+            ];
         }
 
-        $response = array(
-            "draw" => $draw,
-            "recordsTotal" => $totalRecords,
-            "recordsFiltered" => $totalRecordswithFilter,
-            "data" => $arr,
-            'error' => null
-        );
+        $response = [
+            'draw' => $draw,
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $totalRecordswithFilter,
+            'data' => $arr,
+            'error' => null,
+        ];
 
         return response()->json($response);
     }
-
 
     public function getExportList()
     {
         return Excel::download(new ProductsExport, 'products.xlsx');
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -179,7 +170,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $product = new Product();
+        $product = new Product;
+
         return view('products.form', ['product' => $product]);
     }
 
@@ -192,19 +184,20 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
     {
         $validatedData = $request->validated();
-        $validatedData = Arr::except($validatedData, array('display_purchase_price'));
+        $validatedData = Arr::except($validatedData, ['display_purchase_price']);
         $product = Product::create($validatedData);
-        if ($product){
+        if ($product) {
 
             /*
                 create initial stock inventory entries
             */
-            $inventory = new Inventory();
+            $inventory = new Inventory;
             $inventory->stock_available = 0;
-            $inventory->initStock($product->id);            
+            $inventory->initStock($product->id);
 
             return redirect(route('products'))->with('success', trans('app.record_added', ['field' => 'product']));
         }
+
         return back()->withInputs($request->input())->with('error', trans('error.record_added', ['field' => 'product']));
     }
 
@@ -217,21 +210,23 @@ class ProductController extends Controller
     public function show($id)
     {
         $user = Auth::user();
-        if ($user->can('view products')){
+        if ($user->can('view products')) {
             $product = Product::with(['inventory', 'inventory.warehouse', 'movement', 'supplier'])->find($id);
             $entry_filter = InventoryMovement::getMovementFilterList();
             $purchase_order_status = PurchaseOrder::getStatusList();
             $sale_order_status = SaleOrder::getStatusList();
-            if ($product)
+            if ($product) {
                 return view('products.show',
-                ['product'=>$product, 
-                'entry_filter' => $entry_filter, 
-                'purchase_order_status' => $purchase_order_status,
-                'sale_order_status' => $sale_order_status,
-            ]);
+                    ['product' => $product,
+                        'entry_filter' => $entry_filter,
+                        'purchase_order_status' => $purchase_order_status,
+                        'sale_order_status' => $sale_order_status,
+                    ]);
+            }
 
             return back()->with('error', trans('error.resource_doesnt_exist', ['field' => 'product']));
         }
+
         return abort(403, trans('error.unauthorized'));
 
     }
@@ -240,16 +235,16 @@ class ProductController extends Controller
     {
         $query = Product::query();
 
-        if ($warehouse_id){
+        if ($warehouse_id) {
             $query->join('inventories', 'inventories.product_id', '=', 'products.id');
             $query->where('inventories.warehouse_id', '=', $warehouse_id);
             $product = $query->where('product_id', '=', $id)->first();
-        }
-        else{
+        } else {
             $product = Product::with('tax')->find($id);
         }
-        if ($product)
+        if ($product) {
             return $product;
+        }
 
         return false;
     }
@@ -263,9 +258,10 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::withCount('purchase_order_item')->find($id);
-        if ($product){
+        if ($product) {
             return view('products.form', ['product' => $product]);
         }
+
         return view('products.index');
     }
 
@@ -279,13 +275,14 @@ class ProductController extends Controller
     public function update(StoreProductRequest $request, $id)
     {
         $validatedData = $request->validated();
-        $validatedData = Arr::except($validatedData, array('display_purchase_price'));
+        $validatedData = Arr::except($validatedData, ['display_purchase_price']);
         $product = Product::whereId($id)->update($validatedData);
-        if ($product){
+        if ($product) {
             return redirect(route('products'))->with('success', trans('app.record_edited', ['field' => 'product']));
         }
+
         return back()->withInputs($request->input())->with('error', trans('error.record_edited', ['field' => 'product']));
-  
+
     }
 
     /**
@@ -297,31 +294,34 @@ class ProductController extends Controller
     public function destroy($id)
     {
         $user = Auth::user();
-        if ($user->can('delete products')){
+        if ($user->can('delete products')) {
             /*
                 check if product present in purchase orders
             */
             $count = PurchaseOrderItem::where('product_id', $id)->count();
 
-            if ($count > 0)
+            if ($count > 0) {
                 return redirect(route('products'))->with('error', trans('error.product_has_purchase_order_item'));
+            }
 
             Product::destroy($id);
+
             return redirect(route('products'))->with('success', trans('app.record_deleted', ['field' => 'product']));
         }
+
         return abort(403, trans('error.unauthorized'));
     }
-
 
     public function getListPerSupplier($supplier, Request $request)
     {
         $query = Product::query();
         $query->where('supplier_id', '=', $supplier);
-        if ($request->has('q')){
+        if ($request->has('q')) {
             $query->where('part_number', 'like', '%'.$request->get('q').'%');
         }
         $products = $query->select('products.id', 'products.part_number as text', 'products.cable_length_input', 'products.cable_length_output', 'products.kw_rating')->get();
-        return ['results' => $products];  
+
+        return ['results' => $products];
     }
 
     public function getListPerWarehouse($warehouse, Request $request)
@@ -331,28 +331,29 @@ class ProductController extends Controller
         $query->join('inventories', 'inventories.product_id', '=', 'products.id');
         $query->where('inventories.warehouse_id', '=', $warehouse);
 
-        if ($request->has('q')){
+        if ($request->has('q')) {
             $query->where('part_number', 'like', '%'.$request->get('q').'%')
                 ->orWhere('notes', 'like', '%'.$request->get('q').'%');
         }
         $products = $query->select('products.id', 'products.part_number as text', 'products.notes as notes', 'inventories.stock_available as stock_available', 'inventories.stock_booked as stock_booked', 'inventories.stock_ordered as stock_ordered')->get();
-        return ['results' => $products];  
+
+        return ['results' => $products];
     }
 
-
     /**
-    * Display a listing of the resource for select2
-    *
-    * @return json
-    */
+     * Display a listing of the resource for select2
+     *
+     * @return json
+     */
     public function getListForSelect2(Request $request)
     {
         $query = Product::query();
-        if ($request->has('q')){
+        if ($request->has('q')) {
             $query->where('part_number', 'like', '%'.$request->get('q').'%')
                 ->orWhere('notes', 'like', '%'.$request->get('q').'%');
         }
         $products = $query->select('products.id', 'products.part_number as text', 'products.notes as notes')->get();
+
         return ['results' => $products];
     }
 
@@ -368,7 +369,6 @@ class ProductController extends Controller
                 part number
                 stock
         */
-
 
         /*
             set manually:
@@ -388,8 +388,7 @@ class ProductController extends Controller
         */
         $taxes = Tax::first();
 
-        for ($i = 0; $i < count($dataArr); $i ++)
-        {
+        for ($i = 0; $i < count($dataArr); $i++) {
             // $categories = Category::firstOrCreate([
             //     'name' => $dataArr[$i]['category_id']
             // ]);
@@ -433,52 +432,51 @@ class ProductController extends Controller
             /*
                 register initial stock
             */
-            $inventory = new Inventory();
+            $inventory = new Inventory;
             $inventory->stock_available = $stock;
-            $warehouse_id = $inventory->initStock($product->id); 
+            $warehouse_id = $inventory->initStock($product->id);
 
             /*
                 inventory movement as RECEIVED
             */
-            $data = array(
-                "warehouse_id" => $warehouse_id,
-                "product_id" => $product->id,
-                "purchase_order_id" => null,
-                "purchase_order_invoice_id" => null,
-                "sales_order_id" => null,
-                "quantity" => $stock,
-                "user_id" => Auth::user()->id,
-                "movement_type" => InventoryMovement::RECEIVED,
-                "price" => 0
-            );
-            $movement = new InventoryMovement();
-            $movement->updateMovement($data);            
+            $data = [
+                'warehouse_id' => $warehouse_id,
+                'product_id' => $product->id,
+                'purchase_order_id' => null,
+                'purchase_order_invoice_id' => null,
+                'sales_order_id' => null,
+                'quantity' => $stock,
+                'user_id' => Auth::user()->id,
+                'movement_type' => InventoryMovement::RECEIVED,
+                'price' => 0,
+            ];
+            $movement = new InventoryMovement;
+            $movement->updateMovement($data);
         }
 
-        return true;    
+        return true;
     }
 
     /*
         convert the csv file to array
     */
-    function csvToArray($filename = '', $delimiter = "\t")
+    public function csvToArray($filename = '', $delimiter = "\t")
     {
-        if (!file_exists($filename) || !is_readable($filename))
+        if (! file_exists($filename) || ! is_readable($filename)) {
             return false;
+        }
 
-        $data = array();
-        if (($handle = fopen($filename, 'r')) !== false)
-        {
-            $i=0;
-            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false)
-            {
+        $data = [];
+        if (($handle = fopen($filename, 'r')) !== false) {
+            $i = 0;
+            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false) {
 
-                if (strpos($row[0], 'UI') !== false)
+                if (strpos($row[0], 'UI') !== false) {
                     continue;
-                else {
-                    
+                } else {
+
                     $data[$i]['notes'] = $row[1];
-                    $data[$i]['part_number'] = ($row[2] != "") ? $row[2] : "no-part-number___".time();
+                    $data[$i]['part_number'] = ($row[2] != '') ? $row[2] : 'no-part-number___'.time();
                     $data[$i]['stock'] = intval($row[3]);
 
                     /*
@@ -491,7 +489,7 @@ class ProductController extends Controller
                     // ditto column "supplier_id"
                     $data[$i]['supplier_id'] = $row[4];
                     $data[$i]['model'] = $row[5];
-                    
+
                     if ((empty($row[6])) || (is_null($row[6])))
                         $data[$i]['minimum_quantity'] = 0;
                     else
@@ -545,5 +543,4 @@ class ProductController extends Controller
 
         return $data;
     }
-
 }

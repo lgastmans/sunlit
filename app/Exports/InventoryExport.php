@@ -4,8 +4,6 @@ namespace App\Exports;
 
 use App\Models\Inventory;
 use Illuminate\Support\Facades\DB;
-
-
 /*
     useful links for reference
 
@@ -14,50 +12,48 @@ use Illuminate\Support\Facades\DB;
     https://docs.laravel-excel.com/2.1/reference-guide/formatting.html
 */
 
-
 use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-
-use PhpOffice\PhpSpreadsheet\Shared\Date;
-use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 //class InventoryExport implements FromCollection, WithHeadings, ShouldAutoSize, WithColumnFormatting, WithMapping
-class InventoryExport implements FromCollection, WithHeadings, ShouldAutoSize, WithMapping
+class InventoryExport implements FromCollection, ShouldAutoSize, WithHeadings, WithMapping
 {
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
-        return collect(Inventory::with(['product','warehouse'])
-                ->select('inventories.*', 'products.code', 'products.name', 'products.minimum_quantity', 'suppliers.company', 'categories.name', 'warehouses.name')
-                ->addSelect(DB::raw('(inventories.stock_available + inventories.stock_ordered - inventories.stock_booked) AS projected'))
-                ->join('products', 'products.id', '=', 'product_id')
-                ->join('warehouses', 'warehouses.id', '=', 'warehouse_id')
-                ->join('categories', 'categories.id', '=', 'products.category_id')
-                ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
-                ->orderBy('products.code')
-                ->get()
-            );
+        return collect(Inventory::with(['product', 'warehouse'])
+            ->select('inventories.*', 'products.code', 'products.name', 'products.minimum_quantity', 'suppliers.company', 'categories.name', 'warehouses.name')
+            ->addSelect(DB::raw('(inventories.stock_available + inventories.stock_ordered - inventories.stock_booked) AS projected'))
+            ->join('products', 'products.id', '=', 'product_id')
+            ->join('warehouses', 'warehouses.id', '=', 'warehouse_id')
+            ->join('categories', 'categories.id', '=', 'products.category_id')
+            ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')
+            ->orderBy('products.code')
+            ->get()
+        );
     }
 
-    public function headings(): array {
-        return [
-           "company", "warehouse", "category", "code", "name", "available", "ordered", "booked", "projected", "min qty"
-        ];
-    }
-
-/*
-    public function columnFormats(): array
+    public function headings(): array
     {
         return [
-            'C' => NumberFormat::FORMAT_PERCENTAGE_00,
+            'company', 'warehouse', 'category', 'code', 'name', 'available', 'ordered', 'booked', 'projected', 'min qty',
         ];
     }
-*/
+
+    /*
+        public function columnFormats(): array
+        {
+            return [
+                'C' => NumberFormat::FORMAT_PERCENTAGE_00,
+            ];
+        }
+    */
 
     public function map($record): array
     {
@@ -71,8 +67,7 @@ class InventoryExport implements FromCollection, WithHeadings, ShouldAutoSize, W
             $record->stock_ordered,
             $record->stock_booked,
             $record->projected,
-            $record->minimum_quantity
+            $record->minimum_quantity,
         ];
     }
-
 }

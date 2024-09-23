@@ -22,6 +22,6 @@ class CategorySeeder extends Seeder
             [
                 'name' => 'Inverter',
             ],
-        ]);        
+        ]);
     }
 }

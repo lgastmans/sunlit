@@ -40,6 +40,6 @@ class TaxSeeder extends Seeder
                 'name' => 'GST 28%',
                 'amount' => 2800,
             ],
-        ]);        
+        ]);
     }
 }

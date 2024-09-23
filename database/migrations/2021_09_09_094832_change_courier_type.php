@@ -14,7 +14,7 @@ class ChangeCourierType extends Migration
     public function up()
     {
         Schema::table('purchase_orders', function (Blueprint $table) {
-            $table->string('courier','150')->change();
+            $table->string('courier', '150')->change();
         });
     }
 

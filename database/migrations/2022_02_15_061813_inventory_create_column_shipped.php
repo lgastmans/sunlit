@@ -16,7 +16,7 @@ class InventoryCreateColumnShipped extends Migration
         //
         Schema::table('inventories', function (Blueprint $table) {
             $table->integer('stock_poi_shipped')->nullable()->after('stock_ordered');
-        });        
+        });
     }
 
     /**
@@ -29,6 +29,6 @@ class InventoryCreateColumnShipped extends Migration
         //
         Schema::table('inventories', function (Blueprint $table) {
             $table->dropColumn('stock_poi_shipped');
-        });        
+        });
     }
 }

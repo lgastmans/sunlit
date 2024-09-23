@@ -2,20 +2,20 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class PurchaseOrderInvoiceItem extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['purchase_order_id', 'product_id','quantity_shipped', 'selling_price'];
+    protected $fillable = ['purchase_order_id', 'product_id', 'quantity_shipped', 'selling_price'];
+
     protected $casts = [
         'charges' => 'array',
     ];
-
 
     /**
      * Get the warehouse associated with the purchase order.
@@ -28,14 +28,14 @@ class PurchaseOrderInvoiceItem extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
-    } 
+    }
 
     public function getTotalPriceAttribute()
     {
         $total = $this->buying_price * $this->quantity_shipped;
-        return  $total;
-    }
 
+        return $total;
+    }
 
     public function updateInvoiceItemCharges($invoice_item_id)
     {
@@ -48,15 +48,12 @@ class PurchaseOrderInvoiceItem extends Model
         $item->social_welfare_surcharge = $item->customs_duty * ($charges['social_welfare_surcharge'] / 100);
 
         $item->igst = (
-                ($item->buying_price * $item->quantity_shipped) 
-                + $item->customs_duty 
-                + $item->social_welfare_surcharge
-            ) * ($charges['igst'] /100);
+            ($item->buying_price * $item->quantity_shipped)
+            + $item->customs_duty
+            + $item->social_welfare_surcharge
+        ) * ($charges['igst'] / 100);
 
         $item->update();
 
     }
-
-
-
 }

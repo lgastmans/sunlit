@@ -28,7 +28,7 @@ class SaleOrdersAddWarehouse extends Migration
         Schema::table('sale_orders', function (Blueprint $table) {
             $table->dropForeign(['warehouse_id']);
             $table->dropColumn('warehouse_id');
-            
+
         });
     }
 }

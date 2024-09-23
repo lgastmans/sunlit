@@ -1,10 +1,9 @@
 <?php
 
 namespace App\Http\Requests;
-use Illuminate\Validation\Rule;
-use Illuminate\Foundation\Http\FormRequest;
 
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Foundation\Http\FormRequest;
 
 class StoreSupplierRequest extends FormRequest
 {
@@ -12,7 +11,6 @@ class StoreSupplierRequest extends FormRequest
     {
         throw new AuthorizationException(trans('app.unauthorized'));
     }
-
 
     /**
      * Determine if the user is authorized to make this request.
@@ -46,7 +44,7 @@ class StoreSupplierRequest extends FormRequest
             'currency' => 'required|string|max:3',
             'country' => 'required|string',
             'credit_period' => 'required',
-            'email' => 'required|email|unique:suppliers,email,'.$this->id
+            'email' => 'required|email|unique:suppliers,email,'.$this->id,
         ];
     }
 }

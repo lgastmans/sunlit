@@ -3,9 +3,9 @@
 namespace App\Http\Requests;
 
 use App\Models\SaleOrder;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class StoreSaleOrderRequest extends FormRequest
 {
@@ -29,10 +29,9 @@ class StoreSaleOrderRequest extends FormRequest
         $this->merge([
             'status' => SaleOrder::DRAFT,
             'user_id' => Auth::user()->id,
-            'order_number_slug' => str_replace(array(' ', '/'), '-', $this->order_number) //Str::of($this->order_number)->slug('-')
+            'order_number_slug' => str_replace([' ', '/'], '-', $this->order_number), //Str::of($this->order_number)->slug('-')
         ]);
     }
-
 
     /**
      * Get the validation rules that apply to the request.
@@ -62,7 +61,7 @@ class StoreSaleOrderRequest extends FormRequest
             'shipping_phone' => 'nullable|string|max:255',
             'shipping_phone2' => 'nullable|string|max:255',
             'shipping_email' => 'nullable|string|max:255',
-            'shipping_email2' => 'nullable|string|max:255'
+            'shipping_email2' => 'nullable|string|max:255',
         ];
     }
 }

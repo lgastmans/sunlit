@@ -23,10 +23,9 @@ class CreateQuotationItemsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-
             $table->foreign('quotation_id')->references('id')->on('quotations');
             $table->foreign('product_id')->references('id')->on('products');
-        });        
+        });
     }
 
     /**

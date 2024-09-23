@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Supplier;
+use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -22,6 +22,6 @@ class DatabaseSeeder extends Seeder
 
         Supplier::factory()
             ->count(50)
-            ->create();        
+            ->create();
     }
 }

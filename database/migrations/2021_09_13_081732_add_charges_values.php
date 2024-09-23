@@ -26,7 +26,7 @@ class AddChargesValues extends Migration
      */
     public function down()
     {
-        Schema::table('purchase_orders', function (Blueprint $table) {  
+        Schema::table('purchase_orders', function (Blueprint $table) {
             $table->integer('transport_charges')->nullable();
             $table->dropColumn('charges');
         });

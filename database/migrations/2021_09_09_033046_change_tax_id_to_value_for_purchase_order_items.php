@@ -30,7 +30,7 @@ class ChangeTaxIdToValueForPurchaseOrderItems extends Migration
         Schema::table('purchase_order_items', function (Blueprint $table) {
             $table->foreignId('tax_id')->constrained();
             $table->dropColumn('tax');
-            
+
         });
     }
 }

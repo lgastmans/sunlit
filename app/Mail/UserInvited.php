@@ -4,7 +4,6 @@ namespace App\Mail;
 
 use App\Models\User;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
@@ -29,15 +28,15 @@ class UserInvited extends Mailable
      */
     public function build()
     {
-        return $this->from(env("MAIL_FROM_ADDRESS", "welcome@sunlit.in"))
-                    ->to($this->user->email)
-                    ->subject(trans('email.invite_subject'))
-                    ->markdown('emails.userInvited')->with([
-            'name' => $this->user->name,
-            'email' => $this->user->email,
-            'subject' => trans('email.invite_subject'),
-            'token' => $this->user->invite_token,
-            'url' => route('registration.store', [$this->user->email, $this->user->invite_token])
-        ]);
+        return $this->from(env('MAIL_FROM_ADDRESS', 'welcome@sunlit.in'))
+            ->to($this->user->email)
+            ->subject(trans('email.invite_subject'))
+            ->markdown('emails.userInvited')->with([
+                        'name' => $this->user->name,
+                        'email' => $this->user->email,
+                        'subject' => trans('email.invite_subject'),
+                        'token' => $this->user->invite_token,
+                        'url' => route('registration.store', [$this->user->email, $this->user->invite_token]),
+                    ]);
     }
 }

@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Http\Requests\StoreUserRequest;
 use App\Mail\UserInvited;
-use Illuminate\Support\Str;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use \App\Http\Requests\StoreUserRequest;
-
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -20,11 +19,12 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {   
+    {
         $user = Auth::user();
-        if ($user->can('list users'))
+        if ($user->can('list users')) {
             return view('users.index');
-    
+        }
+
         return abort(403, trans('error.unauthorized'));
 
     }
@@ -32,33 +32,35 @@ class UserController extends Controller
     public function getListForDatatables(Request $request)
     {
         $draw = 1;
-        if ($request->has('draw'))
+        if ($request->has('draw')) {
             $draw = $request->get('draw');
+        }
 
         $start = 0;
-        if ($request->has('start'))
-            $start = $request->get("start");
+        if ($request->has('start')) {
+            $start = $request->get('start');
+        }
 
         $length = 10;
         if ($request->has('length')) {
-            $length = $request->get("length");
+            $length = $request->get('length');
         }
 
         $order_column = 'name';
         $order_dir = 'ASC';
-        $order_arr = array();
+        $order_arr = [];
         if ($request->has('order')) {
             $order_arr = $request->get('order');
             $column_arr = $request->get('columns');
             $column_index = $order_arr[0]['column'];
-            switch($column_index){
-                case "3":
-                    $order_column = "users.deleted_at";
+            switch ($column_index) {
+                case '3':
+                    $order_column = 'users.deleted_at';
                     break;
                 default:
                     $order_column = $column_arr[$column_index]['data'];
             }
-            
+
             $order_dir = $order_arr[0]['dir'];
         }
 
@@ -72,46 +74,49 @@ class UserController extends Controller
         $totalRecords = User::get()->count();
 
         // Fetch records
-        if ($length < 0)
+        if ($length < 0) {
             $users = User::select('id', 'name', 'email', 'deleted_at')
                 ->withTrashed()->where('name', 'like', '%'.$search.'%')
                 ->orderBy($order_column, $order_dir)
                 ->get();
-        else
+        } else {
             $users = User::select('id', 'name', 'email', 'deleted_at')
-                ->withTrashed()->where('name', 'like', '%'.$search.'%')
-                ->orderBy($order_column, $order_dir)
-                ->skip($start)
-                ->take($length)
-                ->get();
-               
-        $arr = array();
-        foreach($users as $user){
+                    ->withTrashed()->where('name', 'like', '%'.$search.'%')
+                    ->orderBy($order_column, $order_dir)
+                    ->skip($start)
+                    ->take($length)
+                    ->get();
+        }
+
+        $arr = [];
+        foreach ($users as $user) {
 
             $user_role = '';
             try {
-                if ($user->role !== null)
+                if ($user->role !== null) {
                     $user_role = $user->role;
-            } catch(\Exception $e) {
+                }
+            } catch (\Exception $e) {
                 $user_role = 'Not defined'; //$e->getMessage();
-            }            
+            }
 
-            $arr[] = array(
-                "id" => $user->id,
-                "name" => $user->name,
-                "email" => $user->email,
-                "role" => (isset($user_role) ? $user_role : ''),
-                "status" => ($user->deleted_at) ? 'disabled' : 'enabled'
-            );
+            $arr[] = [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => (isset($user_role) ? $user_role : ''),
+                'status' => ($user->deleted_at) ? 'disabled' : 'enabled',
+            ];
         }
 
-        $response = array(
-            "draw" => $draw,
-            "recordsTotal" => $totalRecords,
-            "recordsFiltered" => $users->count(),
-            "data" => $arr,
-            'error' => null
-        );
+        $response = [
+            'draw' => $draw,
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $users->count(),
+            'data' => $arr,
+            'error' => null,
+        ];
+
         return response()->json($response);
     }
 
@@ -123,11 +128,12 @@ class UserController extends Controller
     public function create()
     {
         $user = Auth::user();
-        if ($user->hasRole('super-admin'))
-        {
-            $user = new User();
+        if ($user->hasRole('super-admin')) {
+            $user = new User;
+
             return view('users.form', ['user' => $user]);
         }
+
         return abort(403, trans('error.unauthorized'));
     }
 
@@ -139,7 +145,7 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        $user = new User();
+        $user = new User;
         $validatedData = $request->validated();
         $user->name = $validatedData['name'];
         $user->email = $validatedData['email'];
@@ -148,9 +154,9 @@ class UserController extends Controller
         $user->save();
         $user->syncRoles($validatedData['role']);
 
-        // Send the email 
+        // Send the email
         Mail::to($user->email)->send(new UserInvited($user));
-         
+
         return redirect(route('users'))->with('success', trans('app.record_added', ['field' => 'user']));
     }
 
@@ -162,6 +168,7 @@ class UserController extends Controller
     public function show()
     {
         $user = User::find(Auth::user()->id);
+
         return view('users.show', ['user' => $user]);
     }
 
@@ -174,15 +181,17 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::withTrashed()->find($id);
-        if ($user){
+        if ($user) {
             return view('users.form', ['user' => $user]);
         }
+
         return view('users.index');
     }
 
-    public function editProfile(){
+    public function editProfile()
+    {
         $user = User::find(Auth::user()->id);
-        if ($user){
+        if ($user) {
             return view('users.profile-edit', ['user' => $user]);
         }
     }
@@ -198,19 +207,22 @@ class UserController extends Controller
     {
         $validatedData = $request->validated();
         $user = User::find($id);
-        if ($user){
+        if ($user) {
             $user->name = $request->name;
             $user->email = $request->email;
-            if ($request->password)
+            if ($request->password) {
                 $user->password = Hash::make($request->password);
-    
+            }
+
             $user->update();
             $user->syncRoles($validatedData['role']);
-            if ($id != Auth::user()->id){
+            if ($id != Auth::user()->id) {
                 return redirect(route('users'))->with('success', trans('app.record_edited', ['field' => 'user']));
             }
+
             return redirect(route('profile'))->with('success', trans('app.record_edited', ['field' => 'user']));
         }
+
         return back()->withInputs($request->input())->with('error', trans('error.record_edited', ['field' => 'user']));
     }
 
@@ -223,10 +235,12 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = Auth::user();
-        if ($user->can('delete users')){
+        if ($user->can('delete users')) {
             User::destroy($id);
+
             return redirect(route('users'))->with('success', trans('app.record_deleted', ['field' => 'user']));
         }
+
         return abort(403, trans('error.unauthorized'));
     }
 
@@ -239,44 +253,44 @@ class UserController extends Controller
     public function enable($id)
     {
         $user = Auth::user();
-        if ($user->can('delete users')){
+        if ($user->can('delete users')) {
             $u = User::withTrashed()->find($id);
-            if ($u){
+            if ($u) {
                 $u->restore();
+
                 return redirect(route('users'))->with('success', trans('app.record_enabled', ['field' => 'user']));
-            }   
+            }
         }
+
         return abort(403, trans('error.unauthorized'));
-    }
-
-
-        /**
-     * Update the password of the specified resource
-     * 
-     * @param  string $email
-     * @param  string $invite_token
-     * @return \Illuminate\Http\Response
-     */
-    public function registration($email, $invite_token)
-    {
-        return view('auth.update-password-registration', compact('email','invite_token'));
     }
 
     /**
      * Update the password of the specified resource
-     * 
-     * @param  \Illuminate\Http\Request  $request
+     *
+     * @param  string  $email
+     * @param  string  $invite_token
+     * @return \Illuminate\Http\Response
+     */
+    public function registration($email, $invite_token)
+    {
+        return view('auth.update-password-registration', compact('email', 'invite_token'));
+    }
+
+    /**
+     * Update the password of the specified resource
+     *
      * @return \Illuminate\Http\Response
      */
     public function registrationPassword(Request $request)
     {
         $user = User::where('email', 'like', $request->email)->where('invite_token', 'like', $request->invite_token)->first();
-        if ($user){
+        if ($user) {
             $user->password = Hash::make($request->password);
             $user->save();
             $user->markEmailAsVerified();
         }
+
         return redirect()->route('login');
     }
 }
-

@@ -14,7 +14,7 @@ class InventoryMovementChangeColumnName extends Migration
     public function up()
     {
         Schema::table('inventory_movements', function (Blueprint $table) {
-            $table->renameColumn('credit_note_order_id','credit_note_id');
+            $table->renameColumn('credit_note_order_id', 'credit_note_id');
         });
     }
 
@@ -26,7 +26,7 @@ class InventoryMovementChangeColumnName extends Migration
     public function down()
     {
         Schema::table('inventory_movements', function (Blueprint $table) {
-            $table->renameColumn('credit_note_id','credit_note_order_id');
+            $table->renameColumn('credit_note_id', 'credit_note_order_id');
         });
     }
 }

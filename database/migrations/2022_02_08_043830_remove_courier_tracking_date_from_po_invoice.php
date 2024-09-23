@@ -30,8 +30,8 @@ class RemoveCourierTrackingDateFromPoInvoice extends Migration
         Schema::table('purchase_order_invoices', function (Blueprint $table) {
             $table->date('due_at')->nullable()->after('status');
             $table->string('tracking_number')->nullable()->after('shipped_at');
-            $table->string('courier','150')->nullable()->after('tracking_number');
-            
+            $table->string('courier', '150')->nullable()->after('tracking_number');
+
         });
     }
 }

@@ -17,7 +17,7 @@ class AddForeignKeysToPurchaseOrders extends Migration
             $table->foreign('warehouse_id')->references('id')->on('warehouses');
             $table->foreign('supplier_id')->references('id')->on('suppliers');
             $table->foreignId('user_id')->change();
-            
+
             $table->foreign('user_id')->references('id')->on('users');
         });
     }

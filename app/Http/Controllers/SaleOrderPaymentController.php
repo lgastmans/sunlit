@@ -2,16 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
-use NumberFormatter;
-use Spatie\Activitylog\LogOptions;
-use Spatie\Activitylog\Models\Activity;
-
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\StoreSaleOrderPaymentRequest;
 use App\Models\SaleOrder;
 use App\Models\SaleOrderPayment;
-use \App\Http\Requests\StoreSaleOrderPaymentRequest;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use NumberFormatter;
 
 class SaleOrderPaymentController extends Controller
 {
@@ -28,21 +25,23 @@ class SaleOrderPaymentController extends Controller
     public function getListForDatatables(Request $request)
     {
         $draw = 1;
-        if ($request->has('draw'))
+        if ($request->has('draw')) {
             $draw = $request->get('draw');
+        }
 
         $start = 0;
-        if ($request->has('start'))
-            $start = $request->get("start");
+        if ($request->has('start')) {
+            $start = $request->get('start');
+        }
 
         $length = 10;
         if ($request->has('length')) {
-            $length = $request->get("length");
+            $length = $request->get('length');
         }
 
         $order_column = 'paid_at';
         $order_dir = 'ASC';
-        $order_arr = array();
+        $order_arr = [];
         if ($request->has('order')) {
             $order_arr = $request->get('order');
             $column_arr = $request->get('columns');
@@ -61,54 +60,51 @@ class SaleOrderPaymentController extends Controller
 
         // Total records
         $totalRecords = SaleOrderPayment::where('sale_order_id', '=', $filter_sale_order_id)->count();
-        $totalRecordswithFilter = SaleOrderPayment::
-            where('sale_order_id', '=', $filter_sale_order_id)->count();
-        
+        $totalRecordswithFilter = SaleOrderPayment::where('sale_order_id', '=', $filter_sale_order_id)->count();
 
         // Fetch records
-        if ($length < 0)
+        if ($length < 0) {
             $payments = SaleOrderPayment::select('sale_order_payments.*')
                 ->where('sale_order_id', '=', $filter_sale_order_id)
                 ->orderBy($order_column, $order_dir)
                 ->get();
-        else
+        } else {
             $payments = SaleOrderPayment::select('sale_order_payments.*')
-                ->where('sale_order_id', '=', $filter_sale_order_id)
-                ->orderBy($order_column, $order_dir)
-                ->skip($start)
-                ->take($length)
-                ->get();
+                    ->where('sale_order_id', '=', $filter_sale_order_id)
+                    ->orderBy($order_column, $order_dir)
+                    ->skip($start)
+                    ->take($length)
+                    ->get();
+        }
 
-        $arr = array();
+        $arr = [];
 
         $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
         //$fmt->setSymbol(NumberFormatter::CURRENCY_SYMBOL, '');
 
-        foreach($payments as $record)
-        {
+        foreach ($payments as $record) {
 
             $dt = Carbon::parse($record->paid_at);
             // return $dt->toFormattedDateString();
 
-            $arr[] = array(
-                "id" => $record->id,
-                "amount" => $fmt->formatCurrency($record->amount, "INR"),
-                "payment_reference" => $record->reference,
-                "payment_date" => $dt->toDateString(),
-            );
+            $arr[] = [
+                'id' => $record->id,
+                'amount' => $fmt->formatCurrency($record->amount, 'INR'),
+                'payment_reference' => $record->reference,
+                'payment_date' => $dt->toDateString(),
+            ];
         }
 
-        $response = array(
-            "draw" => $draw,
-            "recordsTotal" => $totalRecords,
-            "recordsFiltered" => $totalRecordswithFilter,
-            "data" => $arr,
-            'error' => null
-        );
-                
+        $response = [
+            'draw' => $draw,
+            'recordsTotal' => $totalRecords,
+            'recordsFiltered' => $totalRecordswithFilter,
+            'data' => $arr,
+            'error' => null,
+        ];
+
         return response()->json($response);
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -128,13 +124,12 @@ class SaleOrderPaymentController extends Controller
      */
     public function store(StoreSaleOrderPaymentRequest $request)
     {
-        $log = array();
+        $log = [];
         $log_text = '';
 
         $order = SaleOrder::find($request->get('sale_order_id'));
 
-        if (is_null($request->get('payment_id')))
-        {
+        if (is_null($request->get('payment_id'))) {
             $validatedData = $request->validated();
             $payment = SaleOrderPayment::create($validatedData);
 
@@ -144,14 +139,12 @@ class SaleOrderPaymentController extends Controller
 
             activity()
                //->performedOn($payment)
-               ->performedOn($order)
-               ->withProperties(['reference'=>$payment->reference, 'amount'=>$payment->amount, 'order_number'=>$order->order_number])
-               ->log($log_text);
-        }
-        else {
+                ->performedOn($order)
+                ->withProperties(['reference' => $payment->reference, 'amount' => $payment->amount, 'order_number' => $order->order_number])
+                ->log($log_text);
+        } else {
             $payment = SaleOrderPayment::find($request->get('payment_id'));
-            if ($payment)
-            {
+            if ($payment) {
                 $payment->amount = $request->get('amount');
                 $payment->reference = $request->get('reference');
                 $payment->paid_at = $request->get('paid_at');
@@ -163,14 +156,15 @@ class SaleOrderPaymentController extends Controller
 
                 activity()
                    //->performedOn($payment)
-                   ->performedOn($order)
-                   ->withProperties(['reference'=>$payment->reference, 'amount'=>$payment->amount, 'order_number'=>$order->order_number])
-                   ->log($log_text);
+                    ->performedOn($order)
+                    ->withProperties(['reference' => $payment->reference, 'amount' => $payment->amount, 'order_number' => $order->order_number])
+                    ->log($log_text);
             }
         }
 
         $log['log_date'] = $dt->toDateString();
         $log['log_text'] = $log_text.' by <b>'.Auth::user()->name.'</b>';
+
         // return response()->json($validatedData);
         return response()->json($log);
     }
@@ -200,7 +194,6 @@ class SaleOrderPaymentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -222,9 +215,9 @@ class SaleOrderPaymentController extends Controller
         $dt = Carbon::parse($payment->paid_at);
 
         activity()
-           ->performedOn($payment)
-           ->withProperties(['paid_at'=>$payment->paid_at, 'reference'=>$payment->reference, 'amount'=>$payment->amount])
-           ->log('Payment '.$payment->reference.' dated '.$dt->toDateString().' deleted');
+            ->performedOn($payment)
+            ->withProperties(['paid_at' => $payment->paid_at, 'reference' => $payment->reference, 'amount' => $payment->amount])
+            ->log('Payment '.$payment->reference.' dated '.$dt->toDateString().' deleted');
 
         SaleOrderPayment::destroy($id);
 
@@ -233,7 +226,7 @@ class SaleOrderPaymentController extends Controller
 
         // return response()->json($validatedData);
         return response()->json($log);
-        
+
     }
 
     public function updatePaymentsData()
@@ -243,10 +236,8 @@ class SaleOrderPaymentController extends Controller
          */
         $sale_orders = SaleOrder::all();
 
-        foreach ($sale_orders as $sale_order)
-        {
-            foreach ($sale_order->sale_order_payments as $payment)
-            {
+        foreach ($sale_orders as $sale_order) {
+            foreach ($sale_order->sale_order_payments as $payment) {
                 $sale_order_payment = SaleOrderPayment::find($payment->id);
                 // echo $sale_order_payment->dealer_id."<br>";
                 $sale_order_payment->dealer_id = $sale_order->dealer_id;
@@ -256,5 +247,4 @@ class SaleOrderPaymentController extends Controller
 
         return false;
     }
-
 }

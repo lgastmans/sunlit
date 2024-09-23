@@ -16,7 +16,7 @@ class SaleOrdersAddTcsColumns extends Migration
         Schema::table('sale_orders', function (Blueprint $table) {
             $table->string('tcs_text', 124)->after('payment_terms')->nullable();
             $table->decimal('tcs', 8, 2)->after('payment_terms')->nullable();
-        }); 
+        });
     }
 
     /**
@@ -29,6 +29,6 @@ class SaleOrdersAddTcsColumns extends Migration
         Schema::table('sale_orders', function (Blueprint $table) {
             $table->dropColumn('tcs_text');
             $table->dropColumn('tcs');
-        });  
+        });
     }
 }

@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 
-
 class ExchangeRate extends Command
 {
     /**
@@ -40,14 +39,14 @@ class ExchangeRate extends Command
      */
     public function handle()
     {
-        $url = "https://openexchangerates.org/api/latest.json?app_id=fe761d5c94a04335a88625034493234a&base=usd&symbols=inr";
+        $url = 'https://openexchangerates.org/api/latest.json?app_id=fe761d5c94a04335a88625034493234a&base=usd&symbols=inr';
         $response = Http::get($url);
-        if ($response->successful()){
+        if ($response->successful()) {
             $data = $response->json();
             $dt = Carbon::parse($data['timestamp']);
             $updated_at = $dt->toDateTimeString();
             $rate = $data['rates']['INR'];
-            if ($rate && $updated_at){
+            if ($rate && $updated_at) {
                 \Setting::set('purchase_order.exchange_rate', $rate);
                 \Setting::set('exchange_rate_updated_at', $updated_at);
                 \Setting::save();

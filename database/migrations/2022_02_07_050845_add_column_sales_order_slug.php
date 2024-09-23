@@ -16,7 +16,7 @@ class AddColumnSalesOrderSlug extends Migration
         //
         Schema::table('sale_orders', function (Blueprint $table) {
             $table->string('order_number_slug')->after('order_number');
-        });        
+        });
     }
 
     /**
@@ -29,6 +29,6 @@ class AddColumnSalesOrderSlug extends Migration
         //
         Schema::table('sale_orders', function (Blueprint $table) {
             $table->dropColumn('order_number_slug');
-        });        
+        });
     }
 }

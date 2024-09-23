@@ -25,7 +25,7 @@ class CreateWarehousesTable extends Migration
             $table->string('phone2')->nullable();
             $table->string('email')->nullable();
             $table->timestamps();
-            $table->softDeletes();            
+            $table->softDeletes();
         });
 
         Schema::table('warehouses', function (Blueprint $table) {

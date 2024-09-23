@@ -18,7 +18,6 @@ class AddIndexesUsers extends Migration
             $table->index('invite_token');
         });
 
-
     }
 
     /**

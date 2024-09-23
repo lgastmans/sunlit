@@ -17,7 +17,7 @@ class DealersAddEmails extends Migration
         Schema::table('dealers', function (Blueprint $table) {
             $table->string('email3')->after('email')->nullable();
             $table->string('email2')->after('email')->nullable();
-        });        
+        });
     }
 
     /**
@@ -31,6 +31,6 @@ class DealersAddEmails extends Migration
         Schema::table('dealers', function (Blueprint $table) {
             $table->dropColumn('email2');
             $table->dropColumn('email3');
-        });        
+        });
     }
 }

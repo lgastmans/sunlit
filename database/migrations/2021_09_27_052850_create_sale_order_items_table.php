@@ -23,7 +23,6 @@ class CreateSaleOrderItemsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-
             $table->foreign('sale_order_id')->references('id')->on('sale_orders');
             $table->foreign('product_id')->references('id')->on('products');
         });

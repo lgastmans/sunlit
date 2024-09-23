@@ -16,7 +16,7 @@ class InventoryCreateColumnReceived extends Migration
         //
         Schema::table('inventories', function (Blueprint $table) {
             $table->integer('stock_poi_received')->nullable()->after('stock_poi_shipped');
-        });        
+        });
     }
 
     /**
@@ -29,6 +29,6 @@ class InventoryCreateColumnReceived extends Migration
         //
         Schema::table('inventories', function (Blueprint $table) {
             $table->dropColumn('stock_poi_received');
-        });          
+        });
     }
 }

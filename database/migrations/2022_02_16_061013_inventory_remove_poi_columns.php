@@ -30,6 +30,6 @@ class InventoryRemovePoiColumns extends Migration
         Schema::table('inventories', function (Blueprint $table) {
             $table->integer('stock_poi_shipped')->nullable();
             $table->integer('stock_poi_received')->nullable();
-        });         
+        });
     }
 }

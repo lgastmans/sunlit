@@ -16,7 +16,7 @@ class CategoriesAddHsn extends Migration
         //
         Schema::table('categories', function (Blueprint $table) {
             $table->string('hsn_code')->after('name')->nullable();
-        });        
+        });
     }
 
     /**
@@ -29,6 +29,6 @@ class CategoriesAddHsn extends Migration
         //
         Schema::table('categories', function (Blueprint $table) {
             $table->dropColumn('hsn_code');
-        });        
+        });
     }
 }

@@ -6,12 +6,16 @@ use Illuminate\View\Component;
 
 class InputGroup extends Component
 {
-
     public $label;
+
     public $name;
+
     public $value;
+
     public $required;
+
     public $position;
+
     public $symbol;
 
     /**
