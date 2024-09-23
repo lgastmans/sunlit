@@ -28,7 +28,16 @@ class PurchaseOrder extends Model
 
     const PAID = 8;
 
-    protected $dates = ['ordered_at', 'confirmed_at', 'received_at', 'paid_at', 'due_at', 'shipped_at', 'customs_at', 'cleared_at'];
+    protected $casts = [
+        'ordered_at' => 'datetime',
+        'confirmed_at' => 'datetime',
+        'received_at' => 'datetime',
+        'paid_at' => 'datetime',
+        'due_at' => 'datetime',
+        'shipped_at' => 'datetime',
+        'customs_at' => 'datetime',
+        'cleared_at' => 'datetime',
+    ];
 
     protected $fillable = ['warehouse_id', 'supplier_id', 'order_number', 'order_number_slug', 'boe_number', 'ordered_at', 'expected_at', 'received_at', 'credit_period', 'amount_usd', 'amount_inr', 'customs_ex_rate', 'se_ex_rate', 'duty_amount', 'social_surcharge', 'igst', 'bank_charges', 'clearing_charges', 'transport_charges', 'se_due_date', 'se_payment_date', 'status', 'user_id'];
 

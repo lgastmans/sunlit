@@ -13,5 +13,7 @@ class SaleOrderPayment extends Model
 
     protected $fillable = ['sale_order_id', 'dealer_id', 'amount', 'reference', 'paid_at'];
 
-    protected $dates = ['paid_at'];
+    protected $casts = [
+        'paid_at' => 'datetime',
+    ];
 }

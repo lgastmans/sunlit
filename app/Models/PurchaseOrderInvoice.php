@@ -32,7 +32,14 @@ class PurchaseOrderInvoice extends Model
 
     protected $fillable = ['payment_terms'];
 
-    protected $dates = ['due_at', 'shipped_at', 'customs_at', 'cleared_at',  'received_at', 'paid_at'];
+    protected $casts = [
+        'due_at' => 'datetime',
+        'shipped_at' => 'datetime',
+        'customs_at' => 'datetime',
+        'cleared_at' => 'datetime',
+        'received_at' => 'datetime',
+        'paid_at' => 'datetime',
+    ];
 
     protected $with = ['user'];
 

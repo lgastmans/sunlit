@@ -19,7 +19,14 @@ class SaleOrder extends Model
 
     protected $fillable = ['dealer_id', 'warehouse_id', 'order_number', 'order_number_slug', 'status', 'user_id', 'amount', 'transport_charges', 'payment_terms', 'shipping_state_id', 'shipping_company', 'shipping_address', 'shipping_address2', 'shipping_address3', 'shipping_city', 'shipping_zip_code', 'shipping_gstin', 'shipping_contact_person', 'shipping_contact_person2', 'shipping_phone', 'shipping_phone2', 'shipping_email', 'shipping_email2'];
 
-    protected $dates = ['blocked_at', 'booked_at', 'dispatched_at', 'paid_at', 'due_at', 'shipped_at'];
+    protected $casts = [
+        'blocked_at' => 'datetime',
+        'booked_at' => 'datetime',
+        'dispatched_at' => 'datetime',
+        'paid_at' => 'datetime',
+        'due_at' => 'datetime',
+        'shipped_at' => 'datetime',
+    ];
 
     protected $with = ['dealer', 'warehouse', 'user', 'items', 'state', 'sale_order_payments'];
     //protected static $recordEvents = ['created','updated','deleted'];

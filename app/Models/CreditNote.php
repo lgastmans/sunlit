@@ -15,7 +15,10 @@ class CreditNote extends Model
 
     protected $fillable = ['dealer_id', 'warehouse_id', 'credit_note_number', 'credit_note_number_slug', 'status', 'remarks', 'user_id', 'invoice_number', 'invoice_date', 'is_against_invoice'];
 
-    protected $dates = ['confirmed_at', 'invoice_date'];
+    protected $casts = [
+        'confirmed_at' => 'datetime',
+        'invoice_date' => 'datetime',
+    ];
 
     protected $with = ['dealer', 'warehouse', 'user', 'items'];
 

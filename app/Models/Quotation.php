@@ -15,7 +15,10 @@ class Quotation extends Model
 
     protected $fillable = ['dealer_id', 'warehouse_id', 'quotation_number', 'quotation_number_slug', 'status', 'user_id', 'transport_charges '];
 
-    protected $dates = ['pending_at', 'confirmed_at'];
+    protected $casts = [
+        'pending_at' => 'datetime',
+        'confirmed_at' => 'datetime',
+    ];
 
     protected $with = ['dealer', 'warehouse', 'user', 'items'];
 
