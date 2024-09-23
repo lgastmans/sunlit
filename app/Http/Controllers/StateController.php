@@ -77,12 +77,12 @@ class StateController extends Controller
                 ->get();
         } else {
             $states = State::where('states.name', 'like', '%'.$search.'%')
-                    ->select('states.*', 'freight_zones.name AS freight_zone')
-                    ->leftJoin('freight_zones', 'freight_zones.id', '=', 'states.freight_zone_id')
-                    ->orderBy($order_column, $order_dir)
-                    ->skip($start)
-                    ->take($length)
-                    ->get();
+                ->select('states.*', 'freight_zones.name AS freight_zone')
+                ->leftJoin('freight_zones', 'freight_zones.id', '=', 'states.freight_zone_id')
+                ->orderBy($order_column, $order_dir)
+                ->skip($start)
+                ->take($length)
+                ->get();
         }
 
         $arr = [];

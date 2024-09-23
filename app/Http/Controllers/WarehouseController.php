@@ -87,15 +87,15 @@ class WarehouseController extends Controller
                 ->get();
         } else {
             $warehouses = Warehouse::where('contact_person', 'like', '%'.$search.'%')
-                    ->join('states', 'states.id', '=', 'state_id')
-                    ->orWhere('warehouses.name', 'like', '%'.$search.'%')
-                    ->orWhere('city', 'like', '%'.$search.'%')
-                    ->orWhere('states.name', 'like', '%'.$search.'%')
-                    ->orderBy($order_column, $order_dir)
-                    ->skip($start)
-                    ->take($length)
-                    ->select('warehouses.*')
-                    ->get();
+                ->join('states', 'states.id', '=', 'state_id')
+                ->orWhere('warehouses.name', 'like', '%'.$search.'%')
+                ->orWhere('city', 'like', '%'.$search.'%')
+                ->orWhere('states.name', 'like', '%'.$search.'%')
+                ->orderBy($order_column, $order_dir)
+                ->skip($start)
+                ->take($length)
+                ->select('warehouses.*')
+                ->get();
         }
 
         $response = [

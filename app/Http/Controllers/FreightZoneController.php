@@ -74,10 +74,10 @@ class FreightZoneController extends Controller
                 ->get();
         } else {
             $zones = FreightZone::where('name', 'like', '%'.$search.'%')
-                    ->orderBy($order_column, $order_dir)
-                    ->skip($start)
-                    ->take($length)
-                    ->get();
+                ->orderBy($order_column, $order_dir)
+                ->skip($start)
+                ->take($length)
+                ->get();
         }
 
         $arr = [];

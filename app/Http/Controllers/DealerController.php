@@ -89,15 +89,15 @@ class DealerController extends Controller
                 ->get();
         } else {
             $dealers = Dealer::select('dealers.id AS dealer_id', 'company', 'contact_person', 'city', 'states.name as state_name', 'email', 'email2', 'email3', 'phone', 'phone2')
-                    ->where('contact_person', 'like', '%'.$search.'%')
-                    ->join('states', 'states.id', '=', 'state_id')
-                    ->orWhere('company', 'like', '%'.$search.'%')
-                    ->orWhere('city', 'like', '%'.$search.'%')
-                    ->orWhere('states.name', 'like', '%'.$search.'%')
-                    ->orderBy($order_column, $order_dir)
-                    ->skip($start)
-                    ->take($length)
-                    ->get();
+                ->where('contact_person', 'like', '%'.$search.'%')
+                ->join('states', 'states.id', '=', 'state_id')
+                ->orWhere('company', 'like', '%'.$search.'%')
+                ->orWhere('city', 'like', '%'.$search.'%')
+                ->orWhere('states.name', 'like', '%'.$search.'%')
+                ->orderBy($order_column, $order_dir)
+                ->skip($start)
+                ->take($length)
+                ->get();
         }
 
         $arr = [];

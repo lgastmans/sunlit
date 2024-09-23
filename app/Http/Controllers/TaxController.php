@@ -80,12 +80,12 @@ class TaxController extends Controller
                 ->get();
         } else {
             $taxes = Tax::select('id', 'name', 'amount')
-                    ->where('name', 'like', '%'.$search.'%')
-                    ->orWhere('amount', 'like', '%'.$search.'%')
-                    ->orderBy($order_column, $order_dir)
-                    ->skip($start)
-                    ->take($length)
-                    ->get();
+                ->where('name', 'like', '%'.$search.'%')
+                ->orWhere('amount', 'like', '%'.$search.'%')
+                ->orderBy($order_column, $order_dir)
+                ->skip($start)
+                ->take($length)
+                ->get();
         }
 
         $response = [
@@ -114,7 +114,6 @@ class TaxController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreTaxRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreTaxRequest $request)
@@ -159,7 +158,6 @@ class TaxController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\StoreTaxRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */

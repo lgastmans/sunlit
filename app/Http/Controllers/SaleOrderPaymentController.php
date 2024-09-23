@@ -70,11 +70,11 @@ class SaleOrderPaymentController extends Controller
                 ->get();
         } else {
             $payments = SaleOrderPayment::select('sale_order_payments.*')
-                    ->where('sale_order_id', '=', $filter_sale_order_id)
-                    ->orderBy($order_column, $order_dir)
-                    ->skip($start)
-                    ->take($length)
-                    ->get();
+                ->where('sale_order_id', '=', $filter_sale_order_id)
+                ->orderBy($order_column, $order_dir)
+                ->skip($start)
+                ->take($length)
+                ->get();
         }
 
         $arr = [];

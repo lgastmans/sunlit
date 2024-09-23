@@ -32,11 +32,11 @@ class UserInvited extends Mailable
             ->to($this->user->email)
             ->subject(trans('email.invite_subject'))
             ->markdown('emails.userInvited')->with([
-                        'name' => $this->user->name,
-                        'email' => $this->user->email,
-                        'subject' => trans('email.invite_subject'),
-                        'token' => $this->user->invite_token,
-                        'url' => route('registration.store', [$this->user->email, $this->user->invite_token]),
-                    ]);
+                'name' => $this->user->name,
+                'email' => $this->user->email,
+                'subject' => trans('email.invite_subject'),
+                'token' => $this->user->invite_token,
+                'url' => route('registration.store', [$this->user->email, $this->user->invite_token]),
+            ]);
     }
 }

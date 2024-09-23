@@ -73,11 +73,11 @@ class CategoryController extends Controller
                 ->get(['id', 'name']);
         } else {
             $categories = Category::where('name', 'like', '%'.$search.'%')
-                    ->select('id', 'name', 'hsn_code', 'customs_duty', 'social_welfare_surcharge', 'igst')
-                    ->orderBy($order_column, $order_dir)
-                    ->skip($start)
-                    ->take($length)
-                    ->get();
+                ->select('id', 'name', 'hsn_code', 'customs_duty', 'social_welfare_surcharge', 'igst')
+                ->orderBy($order_column, $order_dir)
+                ->skip($start)
+                ->take($length)
+                ->get();
         }
 
         $response = [
@@ -106,7 +106,6 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreCategoryRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreCategoryRequest $request)
