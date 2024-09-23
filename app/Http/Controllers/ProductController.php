@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 use App\Exports\ProductsExport;
 use App\Http\Requests\StoreProductRequest;
 use App\Models\Category;
@@ -35,7 +37,7 @@ class ProductController extends Controller
         return abort(403, trans('error.unauthorized'));
     }
 
-    public function getListForDatatables(Request $request)
+    public function getListForDatatables(Request $request): JsonResponse
     {
         $draw = 1;
         if ($request->has('draw')) {
@@ -168,7 +170,7 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): View
     {
         $product = new Product;
 
@@ -206,7 +208,7 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id)
     {
         $user = Auth::user();
         if ($user->can('view products')) {
@@ -254,7 +256,7 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(int $id): View
     {
         $product = Product::withCount('purchase_order_item')->find($id);
         if ($product) {
@@ -270,7 +272,7 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreProductRequest $request, $id)
+    public function update(StoreProductRequest $request, int $id)
     {
         $validatedData = $request->validated();
         $validatedData = Arr::except($validatedData, ['display_purchase_price']);
@@ -289,7 +291,7 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $user = Auth::user();
         if ($user->can('delete products')) {
@@ -343,7 +345,7 @@ class ProductController extends Controller
      *
      * @return json
      */
-    public function getListForSelect2(Request $request)
+    public function getListForSelect2(Request $request): json
     {
         $query = Product::query();
         if ($request->has('q')) {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\View\View;
 use App\Models\SaleOrder;
 use App\Models\SaleOrderItem;
 use Carbon\Carbon;
@@ -12,17 +13,17 @@ use NumberFormatter;
 class ReportsController extends Controller
 {
     //
-    public function index()
+    public function index(): View
     {
         return view('reports.stock');
     }
 
-    public function closingStock()
+    public function closingStock(): View
     {
         return view('reports.closing-stock');
     }
 
-    public function dstr()
+    public function dstr(): View
     {
         return view('reports.dstr');
     }

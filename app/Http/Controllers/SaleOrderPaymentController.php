@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use App\Http\Requests\StoreSaleOrderPaymentRequest;
 use App\Models\SaleOrder;
 use App\Models\SaleOrderPayment;
@@ -122,7 +123,7 @@ class SaleOrderPaymentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreSaleOrderPaymentRequest $request)
+    public function store(StoreSaleOrderPaymentRequest $request): JsonResponse
     {
         $log = [];
         $log_text = '';
@@ -175,7 +176,7 @@ class SaleOrderPaymentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id)
     {
         //
     }
@@ -186,7 +187,7 @@ class SaleOrderPaymentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(int $id)
     {
         //
     }
@@ -197,7 +198,7 @@ class SaleOrderPaymentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         //
     }
@@ -208,7 +209,7 @@ class SaleOrderPaymentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id): JsonResponse
     {
         $payment = SaleOrderPayment::find($id);
 

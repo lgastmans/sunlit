@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use App\Exports\InventoryExport;
 use App\Models\Inventory;
 use App\Models\Product;
@@ -274,7 +275,7 @@ class InventoryController extends Controller
         return Excel::download(new InventoryExport, 'inventory_'.$current.'.xlsx');
     }
 
-    public function resetOrderedStock()
+    public function resetOrderedStock(): JsonResponse
     {
         /**
          * current ordered column is calculated based on

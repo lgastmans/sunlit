@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 use App\Http\Requests\StoreStateRequest;
 use App\Models\Product;
 use App\Models\State;
@@ -24,7 +26,7 @@ class StateController extends Controller
         return abort(403, trans('error.unauthorized'));
     }
 
-    public function getListForDatatables(Request $request)
+    public function getListForDatatables(Request $request): JsonResponse
     {
 
         $draw = 1;
@@ -146,7 +148,7 @@ class StateController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id)
     {
         //
         $state = State::find($id);
@@ -164,7 +166,7 @@ class StateController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(int $id): View
     {
         //
         $state = State::find($id);
@@ -182,7 +184,7 @@ class StateController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreStateRequest $request, $id)
+    public function update(StoreStateRequest $request, int $id)
     {
         //
         $validatedData = $request->validated();
@@ -201,7 +203,7 @@ class StateController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $user = Auth::user();
         if ($user->can('delete states')) {
@@ -227,7 +229,7 @@ class StateController extends Controller
      *
      * @return json
      */
-    public function getListForSelect2(Request $request)
+    public function getListForSelect2(Request $request): json
     {
         $query = State::query();
         if ($request->has('q')) {

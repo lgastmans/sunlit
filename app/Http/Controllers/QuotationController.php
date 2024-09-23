@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use App\Http\Requests\StoreQuotationRequest;
 use App\Models\Quotation;
 use App\Models\QuotationItems;
@@ -19,14 +22,14 @@ class QuotationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): View
     {
         $status = Quotation::getStatusList();
 
         return view('quotations.index', ['status' => $status]);
     }
 
-    public function getListForDatatables(Request $request)
+    public function getListForDatatables(Request $request): JsonResponse
     {
         $draw = 1;
         if ($request->has('draw')) {
@@ -288,7 +291,7 @@ class QuotationController extends Controller
      * @param  \App\Models\quotation  $quotation
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): JsonResponse
     {
         if ($request->get('field') == 'transport_charges') {
             $order = Quotation::find($id);
@@ -363,7 +366,7 @@ class QuotationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function pending(Request $request, $id)
+    public function pending(Request $request, int $id): RedirectResponse
     {
         $order = Quotation::find($id);
         $order->pending_at = $request->get('pending_at');
@@ -384,7 +387,7 @@ class QuotationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function confirmed(Request $request, $id)
+    public function confirmed(Request $request, int $id): RedirectResponse
     {
         $quote = Quotation::find($id);
         $quote->confirmed_at = $request->get('confirmed_at');
@@ -434,7 +437,7 @@ class QuotationController extends Controller
         return redirect(route('quotations.show', $quote->quotation_number_slug))->with('success', 'Quotation confirmed');
     }
 
-    public function proforma($quotation_number_slug)
+    public function proforma($quotation_number_slug): View
     {
         $settings = \Setting::all();
 

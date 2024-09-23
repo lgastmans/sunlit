@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 use App\Http\Requests\StoreDealerRequest;
 use App\Models\Dealer;
 use App\Models\SaleOrder;
@@ -30,7 +32,7 @@ class DealerController extends Controller
 
     }
 
-    public function getListForDatatables(Request $request)
+    public function getListForDatatables(Request $request): JsonResponse
     {
         $draw = 1;
         if ($request->has('draw')) {
@@ -276,7 +278,7 @@ class DealerController extends Controller
         return response()->json($response);
     }
 
-    public function getListForLedgerSummary(Request $request)
+    public function getListForLedgerSummary(Request $request): JsonResponse
     {
         $select_period = 'period_monthly';
         if ($request->has('select_period')) {
@@ -444,7 +446,7 @@ class DealerController extends Controller
         return response()->json($response);
     }
 
-    public function ledger(Request $request)
+    public function ledger(Request $request): View
     {
         $curQuarter = getCurrentQuarter();
         $dealer_id = null;
@@ -455,7 +457,7 @@ class DealerController extends Controller
         return view('dealers.ledger', ['dealer_id' => $dealer_id, 'curQuarter' => $curQuarter, 'dealer_id' => 0]);
     }
 
-    public function ledgerSummary(Request $request)
+    public function ledgerSummary(Request $request): View
     {
         $curQuarter = getCurrentQuarter();
 
@@ -467,7 +469,7 @@ class DealerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): View
     {
         $dealer = new Dealer;
 
@@ -497,7 +499,7 @@ class DealerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id)
     {
         $user = Auth::user();
         if ($user->can('view dealers')) {
@@ -518,7 +520,7 @@ class DealerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(int $id): View
     {
         $dealer = Dealer::with('state')->find($id);
         if ($dealer) {
@@ -535,7 +537,7 @@ class DealerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreDealerRequest $request, $id)
+    public function update(StoreDealerRequest $request, int $id)
     {
         $validatedData = $request->validated();
         $dealer = Dealer::whereId($id)->update($validatedData);
@@ -551,7 +553,7 @@ class DealerController extends Controller
      *
      * @return json
      */
-    public function getListForSelect2(Request $request)
+    public function getListForSelect2(Request $request): json
     {
         $query = Dealer::query();
         if ($request->has('q')) {
@@ -573,7 +575,7 @@ class DealerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $user = Auth::user();
         if ($user->can('delete dealers')) {

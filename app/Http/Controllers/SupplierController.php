@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 use App\Http\Requests\StoreSupplierRequest;
 use App\Models\PurchaseOrder;
 use App\Models\Supplier;
@@ -106,7 +108,7 @@ class SupplierController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): View
     {
         $supplier = new Supplier;
 
@@ -136,7 +138,7 @@ class SupplierController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id)
     {
         $user = Auth::user();
         if ($user->can('view suppliers')) {
@@ -157,7 +159,7 @@ class SupplierController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(int $id): View
     {
         $supplier = Supplier::with('state')->find($id);
         if ($supplier) {
@@ -174,7 +176,7 @@ class SupplierController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreSupplierRequest $request, $id)
+    public function update(StoreSupplierRequest $request, int $id)
     {
         $validatedData = $request->validated();
         $supplier = Supplier::whereId($id)->update($validatedData);
@@ -191,7 +193,7 @@ class SupplierController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $user = Auth::user();
 
@@ -223,7 +225,7 @@ class SupplierController extends Controller
      *
      * @return json
      */
-    public function getListForSelect2(Request $request)
+    public function getListForSelect2(Request $request): json
     {
         $query = Supplier::query();
         if ($request->has('q')) {
@@ -234,7 +236,7 @@ class SupplierController extends Controller
         return ['results' => $suppliers];
     }
 
-    public function stats($id)
+    public function stats($id): JsonResponse
     {
         $monthly_data = DB::table('purchase_orders')
             ->select(

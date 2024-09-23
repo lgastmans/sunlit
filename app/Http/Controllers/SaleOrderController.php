@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use App\Http\Requests\StoreSaleOrderRequest;
 use App\Models\Dealer;
 use App\Models\Inventory;
@@ -35,7 +38,7 @@ class SaleOrderController extends Controller
         return abort(403, trans('error.unauthorized'));
     }
 
-    public function getListForDatatables(Request $request)
+    public function getListForDatatables(Request $request): JsonResponse
     {
         $draw = 1;
         if ($request->has('draw')) {
@@ -241,7 +244,7 @@ class SaleOrderController extends Controller
      *
      * @return json
      */
-    public function getInvoicesList(Request $request)
+    public function getInvoicesList(Request $request): json
     {
         $query = SaleOrder::query()
             ->join('dealers', 'dealers.id', '=', 'sale_orders.dealer_id')
@@ -254,7 +257,7 @@ class SaleOrderController extends Controller
         return ['results' => $invoices];
     }
 
-    public function getListForReport(Request $request)
+    public function getListForReport(Request $request): JsonResponse
     {
 
         $select_period = 'period_monthly';
@@ -414,7 +417,7 @@ class SaleOrderController extends Controller
         return response()->json($response);
     }
 
-    public function getListForDealerReport(Request $request)
+    public function getListForDealerReport(Request $request): JsonResponse
     {
         $dealer_id = 0;
         if ($request->has('dealer_id')) {
@@ -637,7 +640,7 @@ class SaleOrderController extends Controller
 
     }
 
-    public function getListForStateReport(Request $request)
+    public function getListForStateReport(Request $request): JsonResponse
     {
         $state_id = 0;
         if ($request->has('state_id')) {
@@ -811,7 +814,7 @@ class SaleOrderController extends Controller
         return response()->json($response);
     }
 
-    public function getSalesTotals(Request $request)
+    public function getSalesTotals(Request $request): View
     {
         /**
          * period_monthly or period_quarterly
@@ -858,7 +861,7 @@ class SaleOrderController extends Controller
         return view('sale_orders.dashboard-totals-table', ['period' => $period, 'type' => 'category', 'totals' => $res]);
     }
 
-    public function getStateSalesTotals(Request $request)
+    public function getStateSalesTotals(Request $request): View
     {
         /**
          * period_monthly or period_quarterly
@@ -1069,7 +1072,7 @@ class SaleOrderController extends Controller
         //
     }
 
-    public function duplicate(Request $request, $id)
+    public function duplicate(Request $request, $id): JsonResponse
     {
 
         $order = SaleOrder::find($id);
@@ -1088,7 +1091,7 @@ class SaleOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id): JsonResponse
     {
         if ($request->get('field') == 'order_number') {
             $hasOrderNumber = SaleOrder::where('order_number', 'LIKE', $request->get('order_number'))->count();
@@ -1200,7 +1203,7 @@ class SaleOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function blocked(Request $request, $id)
+    public function blocked(Request $request, int $id): RedirectResponse
     {
         $validated = $request->validate([
             'blocked_at' => 'required|date',
@@ -1243,7 +1246,7 @@ class SaleOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function booked(Request $request, $id)
+    public function booked(Request $request, int $id): RedirectResponse
     {
         $validated = $request->validate([
             'booked_at' => 'required|date',
@@ -1271,7 +1274,7 @@ class SaleOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function dispatched(Request $request, $id)
+    public function dispatched(Request $request, int $id)
     {
         $validated = $request->validate([
             'dispatched_at' => 'required|date',
@@ -1321,7 +1324,7 @@ class SaleOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function delivered(Request $request, $id)
+    public function delivered(Request $request, int $id): RedirectResponse
     {
         $order = SaleOrder::find($id);
         $order->delivered_at = $request->get('delivered_at');
@@ -1337,7 +1340,7 @@ class SaleOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, int $id)
     {
         $user = Auth::user();
         if ($user->can('delete sale orders')) {
@@ -1364,7 +1367,7 @@ class SaleOrderController extends Controller
         return abort(403, trans('error.unauthorized'));
     }
 
-    public function proforma($order_number_slug)
+    public function proforma($order_number_slug): View
     {
         $settings = \Setting::all();
 

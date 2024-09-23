@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 use App\Http\Requests\StoreFreightZoneRequest;
 use App\Models\FreightZone;
 use Illuminate\Http\Request;
@@ -25,7 +27,7 @@ class FreightZoneController extends Controller
         return abort(403, trans('error.unauthorized'));
     }
 
-    public function getListForDatatables(Request $request)
+    public function getListForDatatables(Request $request): JsonResponse
     {
         $draw = 1;
         if ($request->has('draw')) {
@@ -108,7 +110,7 @@ class FreightZoneController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): View
     {
         //
         $zone = new FreightZone;
@@ -141,7 +143,7 @@ class FreightZoneController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id)
     {
         //
         $user = Auth::user();
@@ -163,7 +165,7 @@ class FreightZoneController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(int $id): View
     {
         //
         $zone = FreightZone::find($id);
@@ -182,7 +184,7 @@ class FreightZoneController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreFreightZoneRequest $request, $id)
+    public function update(StoreFreightZoneRequest $request, int $id)
     {
         //
         $validatedData = $request->validated();
@@ -201,7 +203,7 @@ class FreightZoneController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         //
         // $user = Auth::user();
@@ -219,7 +221,7 @@ class FreightZoneController extends Controller
      *
      * @return json
      */
-    public function getListForSelect2(Request $request)
+    public function getListForSelect2(Request $request): json
     {
         $query = FreightZone::query();
         if ($request->has('q')) {

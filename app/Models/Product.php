@@ -68,7 +68,7 @@ class Product extends Model
      *
      * @return string
      */
-    public function getDisplayPurchasePriceAttribute()
+    public function getDisplayPurchasePriceAttribute(): string
     {
         return $this->purchase_price;
         // $fmt = new NumberFormatter('en_IN', NumberFormatter::CURRENCY);
@@ -89,7 +89,7 @@ class Product extends Model
      * @param int
      * @return date
      */
-    public function getLastPurchasedOnAttribute()
+    public function getLastPurchasedOnAttribute(): date
     {
         $result = InventoryMovement::select('created_at')
             ->whereNotNull('purchase_order_id')
@@ -112,7 +112,7 @@ class Product extends Model
      * @param int
      * @return date
      */
-    public function getLastSoldOnAttribute()
+    public function getLastSoldOnAttribute(): date
     {
         $result = InventoryMovement::select('created_at')
             ->whereNotNull('sales_order_id')

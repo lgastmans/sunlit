@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\StoreUserRequest;
 use App\Mail\UserInvited;
 use App\Models\User;
@@ -29,7 +32,7 @@ class UserController extends Controller
 
     }
 
-    public function getListForDatatables(Request $request)
+    public function getListForDatatables(Request $request): JsonResponse
     {
         $draw = 1;
         if ($request->has('draw')) {
@@ -142,7 +145,7 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreUserRequest $request)
+    public function store(StoreUserRequest $request): RedirectResponse
     {
         $user = new User;
         $validatedData = $request->validated();
@@ -164,7 +167,7 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show(): View
     {
         $user = User::find(Auth::user()->id);
 
@@ -177,7 +180,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(int $id): View
     {
         $user = User::withTrashed()->find($id);
         if ($user) {
@@ -187,7 +190,7 @@ class UserController extends Controller
         return view('users.index');
     }
 
-    public function editProfile()
+    public function editProfile(): View
     {
         $user = User::find(Auth::user()->id);
         if ($user) {
@@ -202,7 +205,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreUserRequest $request, $id)
+    public function update(StoreUserRequest $request, int $id)
     {
         $validatedData = $request->validated();
         $user = User::find($id);
@@ -231,7 +234,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $user = Auth::user();
         if ($user->can('delete users')) {
@@ -249,7 +252,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function enable($id)
+    public function enable(int $id)
     {
         $user = Auth::user();
         if ($user->can('delete users')) {
@@ -271,7 +274,7 @@ class UserController extends Controller
      * @param  string  $invite_token
      * @return \Illuminate\Http\Response
      */
-    public function registration($email, $invite_token)
+    public function registration(string $email, string $invite_token): View
     {
         return view('auth.update-password-registration', compact('email', 'invite_token'));
     }
@@ -281,7 +284,7 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function registrationPassword(Request $request)
+    public function registrationPassword(Request $request): RedirectResponse
     {
         $user = User::where('email', 'like', $request->email)->where('invite_token', 'like', $request->invite_token)->first();
         if ($user) {

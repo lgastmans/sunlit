@@ -35,7 +35,7 @@ class Inventory extends Model
      * @param  int $product_id
      * @return boolean
      */
-    public function initStock($product_id)
+    public function initStock(int $product_id): bool
     {
         /*
             retrieve the ids of all warehouses
@@ -73,7 +73,7 @@ class Inventory extends Model
      * @param  int $product_id
      * @return boolean
      */
-    public function initProductStock($warehouse_id, $product_id)
+    public function initProductStock(int $warehouse_id, int $product_id): bool
     {
         $current_inventory = $this->where('warehouse_id', '=', $warehouse_id)->where('product_id', '=', $product_id)->first();
         if ($current_inventory){
@@ -109,7 +109,7 @@ class Inventory extends Model
      * @param  Illuminate\Database\Eloquent\Model $model
      * @return boolean
      */
-    public function updateOrderedStock(Model $model)
+    public function updateOrderedStock(Model $model): bool
     {
         $order = PurchaseOrder::find($model->id);
 
@@ -277,7 +277,7 @@ class Inventory extends Model
      * @param  Illuminate\Database\Eloquent\Model $model
      * @return boolean
      */
-    public function updateStock(Model $model)
+    public function updateStock(Model $model): bool
     {
         /*
         *   get name of model
@@ -569,7 +569,7 @@ class Inventory extends Model
      * @param  int $update_quantity
      * @return boolean
      */    
-    public function updateStockBlocked(Model $model, $update_quantity)
+    public function updateStockBlocked(Model $model, int $update_quantity): bool
     {
         $inventory = $this->initProductStock($model->sale_order->warehouse_id, $model->product_id);
 
@@ -594,7 +594,7 @@ class Inventory extends Model
      * @param  Illuminate\Database\Eloquent\Model $model
      * @return boolean
      */    
-    public function deleteStock(Model $model)
+    public function deleteStock(Model $model): bool
     {
         /*
             const DRAFT = 1;

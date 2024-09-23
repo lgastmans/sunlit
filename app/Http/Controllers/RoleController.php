@@ -13,7 +13,7 @@ class RoleController extends Controller
      *
      * @return json
      */
-    public function getListForSelect2(Request $request)
+    public function getListForSelect2(Request $request): json
     {
         $allRoles = Role::all();
         $roles = [];

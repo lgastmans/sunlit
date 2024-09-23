@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use Illuminate\Support\Collection;
 use App\Models\Product;
 /*
     useful links for reference
@@ -23,7 +24,7 @@ class ProductsExport implements FromCollection, ShouldAutoSize, WithColumnFormat
     /**
      * @return \Illuminate\Support\Collection
      */
-    public function collection()
+    public function collection(): Collection
     {
         return collect(Product::join('categories', 'categories.id', '=', 'products.category_id')
             ->join('suppliers', 'suppliers.id', '=', 'products.supplier_id')

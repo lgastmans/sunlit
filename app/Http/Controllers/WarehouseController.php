@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\View\View;
 use App\Http\Requests\StoreWarehouseRequest;
 use App\Models\InventoryMovement;
 use App\Models\PurchaseOrder;
@@ -116,7 +117,7 @@ class WarehouseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): View
     {
         $warehouse = new Warehouse;
 
@@ -146,7 +147,7 @@ class WarehouseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id)
     {
         $user = Auth::user();
         if ($user->can('view warehouses')) {
@@ -176,7 +177,7 @@ class WarehouseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(int $id): View
     {
         $warehouse = Warehouse::with('state')->find($id);
         if ($warehouse) {
@@ -193,7 +194,7 @@ class WarehouseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreWarehouseRequest $request, $id)
+    public function update(StoreWarehouseRequest $request, int $id)
     {
         $validatedData = $request->validated();
         $warehouse = Warehouse::whereId($id)->update($validatedData);
@@ -210,7 +211,7 @@ class WarehouseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $user = Auth::user();
         if ($user->can('delete warehouses')) {
@@ -236,7 +237,7 @@ class WarehouseController extends Controller
      *
      * @return json
      */
-    public function getListForSelect2(Request $request)
+    public function getListForSelect2(Request $request): json
     {
         $query = Warehouse::query();
         if ($request->has('q')) {

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\SaleOrder;
@@ -209,7 +211,7 @@ class SaleOrderItemController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $product = Product::find($request->get('product_id'));
 
@@ -268,7 +270,7 @@ class SaleOrderItemController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id): JsonResponse
     {
         $item = SaleOrderItem::find($id);
 
@@ -305,7 +307,7 @@ class SaleOrderItemController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id): RedirectResponse
     {
         $item = SaleOrderItem::find($id);
 
@@ -327,7 +329,7 @@ class SaleOrderItemController extends Controller
 
     }
 
-    public static function getNumberAndTotalSaleByRange($range)
+    public static function getNumberAndTotalSaleByRange($range): JsonResponse
     {
         $query = DB::table('sale_order_items')
             ->join('products', 'products.id', '=', 'sale_order_items.product_id')

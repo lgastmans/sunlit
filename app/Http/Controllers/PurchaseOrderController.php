@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use App\Http\Requests\StorePurchaseOrderRequest;
 use App\Models\Inventory;
 use App\Models\PurchaseOrder;
@@ -48,7 +51,7 @@ class PurchaseOrderController extends Controller
         return abort(403, trans('error.unauthorized'));
     }
 
-    public function getListForDatatables(Request $request)
+    public function getListForDatatables(Request $request): JsonResponse
     {
         $draw = 1;
         if ($request->has('draw')) {
@@ -351,7 +354,7 @@ class PurchaseOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(int $id)
     {
         //
     }
@@ -362,7 +365,7 @@ class PurchaseOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id): JsonResponse
     {
         if ($request->get('field') == 'order_number') {
             $hasOrderNumber = PurchaseOrder::where('order_number', 'LIKE', $request->get('order_number'))->count();
@@ -433,7 +436,7 @@ class PurchaseOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function ordered(Request $request, $id)
+    public function ordered(Request $request, int $id): RedirectResponse
     {
         $validated = $request->validate([
             'ordered_at' => 'required|date',
@@ -471,7 +474,7 @@ class PurchaseOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function confirmed(Request $request, $id)
+    public function confirmed(Request $request, int $id): RedirectResponse
     {
         $validated = $request->validate([
             'confirmed_at' => 'required|date',
@@ -510,7 +513,7 @@ class PurchaseOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function shipped(Request $request, $id)
+    public function shipped(Request $request, int $id): RedirectResponse
     {
         // $validated = $request->validate([
         //     'shipped_at' => 'required|date',
@@ -534,7 +537,7 @@ class PurchaseOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function customs(Request $request, $id)
+    public function customs(Request $request, int $id): RedirectResponse
     {
         // $validated = $request->validate([
         //     'customs_at' => 'required|date',
@@ -554,7 +557,7 @@ class PurchaseOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function cleared(Request $request, $id)
+    public function cleared(Request $request, int $id): RedirectResponse
     {
         // $validated = $request->validate([
         //     'cleared_at' => 'required|date',
@@ -586,7 +589,7 @@ class PurchaseOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function received(Request $request, $id)
+    public function received(Request $request, int $id): RedirectResponse
     {
         $order = PurchaseOrder::find($id);
         $order->received_at = $request->get('received_at');
@@ -611,7 +614,7 @@ class PurchaseOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $user = Auth::user();
         if ($user->can('delete purchase orders')) {
@@ -632,7 +635,7 @@ class PurchaseOrderController extends Controller
 
     }
 
-    public function invoice($order_number)
+    public function invoice($order_number): View
     {
         $order = PurchaseOrder::where('order_number', '=', $order_number)->first();
 

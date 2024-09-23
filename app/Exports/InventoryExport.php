@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use Illuminate\Support\Collection;
 use App\Models\Inventory;
 use Illuminate\Support\Facades\DB;
 /*
@@ -25,7 +26,7 @@ class InventoryExport implements FromCollection, ShouldAutoSize, WithHeadings, W
     /**
      * @return \Illuminate\Support\Collection
      */
-    public function collection()
+    public function collection(): Collection
     {
         return collect(Inventory::with(['product', 'warehouse'])
             ->select('inventories.*', 'products.code', 'products.name', 'products.minimum_quantity', 'suppliers.company', 'categories.name', 'warehouses.name')

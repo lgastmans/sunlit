@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 use App\Http\Requests\StoreTaxRequest;
 use App\Models\Product;
 use App\Models\Tax;
@@ -26,7 +28,7 @@ class TaxController extends Controller
         return abort(403, trans('error.unauthorized'));
     }
 
-    public function getListForDatatables(Request $request)
+    public function getListForDatatables(Request $request): JsonResponse
     {
         $draw = 1;
         if ($request->has('draw')) {
@@ -104,7 +106,7 @@ class TaxController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): View
     {
         $tax = new Tax;
 
@@ -134,7 +136,7 @@ class TaxController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id)
     {
         //
     }
@@ -145,7 +147,7 @@ class TaxController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(int $id): View
     {
         $tax = Tax::find($id);
         if ($tax) {
@@ -161,7 +163,7 @@ class TaxController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreTaxRequest $request, $id)
+    public function update(StoreTaxRequest $request, int $id)
     {
         $validatedData = $request->validated();
         $validatedData = Arr::except($validatedData, ['display_amount']);
@@ -179,7 +181,7 @@ class TaxController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $user = Auth::user();
         if ($user->can('delete taxes')) {
@@ -205,7 +207,7 @@ class TaxController extends Controller
      *
      * @return json
      */
-    public function getListForSelect2(Request $request)
+    public function getListForSelect2(Request $request): json
     {
         $query = Tax::query();
         if ($request->has('q')) {

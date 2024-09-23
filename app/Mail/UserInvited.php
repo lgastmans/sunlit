@@ -26,7 +26,7 @@ class UserInvited extends Mailable
      *
      * @return $this
      */
-    public function build()
+    public function build(): static
     {
         return $this->from(env('MAIL_FROM_ADDRESS', 'welcome@sunlit.in'))
             ->to($this->user->email)

@@ -70,7 +70,7 @@ class StoreDealerRequest extends FormRequest
      *
      * @return void
      */
-    protected function prepareForValidation()
+    protected function prepareForValidation(): void
     {
         if ($this->has_shipping_address == null) {
             $has_shipping_address = 0;
@@ -87,7 +87,7 @@ class StoreDealerRequest extends FormRequest
      *
      * @return bool
      */
-    private function toBoolean($booleable)
+    private function toBoolean($booleable): bool
     {
         return filter_var($booleable, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     }

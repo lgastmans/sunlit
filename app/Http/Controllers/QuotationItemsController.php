@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use App\Models\Product;
 use App\Models\Quotation;
 use App\Models\QuotationItems;
@@ -34,7 +36,7 @@ class QuotationItemsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $product = Product::find($request->get('product_id'));
 
@@ -87,7 +89,7 @@ class QuotationItemsController extends Controller
      * @param  \App\Models\QuotationItems  $quotationItems
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): JsonResponse
     {
         $item = QuotationItems::find($id);
 
@@ -121,7 +123,7 @@ class QuotationItemsController extends Controller
      * @param  \App\Models\QuotationItems  $quotationItems
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
         $item = QuotationItems::find($id);
 

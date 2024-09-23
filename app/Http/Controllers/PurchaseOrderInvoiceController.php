@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 use App\Http\Requests\StorePurchaseOrderInvoiceRequest;
 use App\Models\Inventory;
 use App\Models\Product;
@@ -45,7 +48,7 @@ class PurchaseOrderInvoiceController extends Controller
         //
     }
 
-    public function getListForDatatables(Request $request)
+    public function getListForDatatables(Request $request): JsonResponse
     {
         $draw = 1;
         if ($request->has('draw')) {
@@ -177,7 +180,7 @@ class PurchaseOrderInvoiceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorePurchaseOrderInvoiceRequest $request)
+    public function store(StorePurchaseOrderInvoiceRequest $request): JsonResponse
     {
         $validatedData = $request->validated();
         $purchase_order = PurchaseOrder::find($request->purchase_order_id);
@@ -311,7 +314,7 @@ class PurchaseOrderInvoiceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         //
         if ($request->get('field') == 'payment_terms') {
@@ -327,7 +330,7 @@ class PurchaseOrderInvoiceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function customs(Request $request, $id)
+    public function customs(Request $request, int $id): RedirectResponse
     {
         $validated = $request->validate([
             'customs_at' => 'required|date',
@@ -354,7 +357,7 @@ class PurchaseOrderInvoiceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function cleared(Request $request, $id)
+    public function cleared(Request $request, int $id): RedirectResponse
     {
         $validated = $request->validate([
             'cleared_at' => 'required|date',
@@ -389,7 +392,7 @@ class PurchaseOrderInvoiceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function received(Request $request, $id)
+    public function received(Request $request, int $id): RedirectResponse
     {
         $invoice = PurchaseOrderInvoice::find($id);
         $invoice_number = $invoice->invoice_number;
@@ -415,7 +418,7 @@ class PurchaseOrderInvoiceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function paid(Request $request, $id)
+    public function paid(Request $request, int $id): RedirectResponse
     {
 
         $invoice = PurchaseOrderInvoice::with('purchase_order')->find($id);
@@ -468,7 +471,7 @@ class PurchaseOrderInvoiceController extends Controller
      * @param  \App\Models\PurchaseOrderInvoice  $purchaseOrderInvoice
      * @return \Illuminate\Http\Response
      */
-    public function cancelled(Request $request, $id)
+    public function cancelled(Request $request, $id): JsonResponse
     {
         $invoice = PurchaseOrderInvoice::with('items')->find($id);
 
@@ -506,7 +509,7 @@ class PurchaseOrderInvoiceController extends Controller
         //
     }
 
-    public function proforma($invoice_number_slug)
+    public function proforma($invoice_number_slug): View
     {
         $settings = \Setting::all();
 
