@@ -41,3 +41,4 @@ public/css/vendor/fixedHeader.dataTables.min.css
 docker-compose.yml
 /docker-compose.yml
 public/dealers-2021.csv
+.envZone.Identifier
