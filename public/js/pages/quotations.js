@@ -1,5 +1,4 @@
 /******/ (() => { // webpackBootstrap
-var __webpack_exports__ = {};
 /*!******************************************!*\
   !*** ./resources/js/pages/quotations.js ***!
   \******************************************/
@@ -94,7 +93,6 @@ $(document).ready(function () {
           $(" #suggested_selling_price ").show();
           $(" #suggested_selling_price ").html('BP: Rs ' + data.average_buying_price); //.toNumber().formatCurrency());
         }
-
         $('#tax').val(data.tax.amount);
       }
     });
@@ -106,7 +104,6 @@ $(document).ready(function () {
   }
   $('[id^=item-quantity-]').on("click", function (event) {
     var item_id = $(this).parent().parent().parent().attr('data-id');
-    console.log('item_id', item_id);
     var total = $('#item-price-' + item_id).val() * getTaxValue($('#item-tax-' + item_id).html()) * $('#item-quantity-' + item_id).val();
     $('#item-total-' + item_id).html(total.toFixed(2));
     $.ajaxSetup({
@@ -193,7 +190,6 @@ $(document).ready(function () {
     // put an else here in case the 'cancel' implies 'confirm without invoice'
     // and pass an additional parameter to the route
   });
-
   function is_existing_product(product_id) {
     var item_id = 0;
     $('.item').each(function (index) {

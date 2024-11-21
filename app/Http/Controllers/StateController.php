@@ -219,7 +219,7 @@ class StateController extends Controller
     /**
      * Display a listing of the resource for select2
      */
-    public function getListForSelect2(Request $request): json
+    public function getListForSelect2(Request $request): array
     {
         $query = State::query();
         if ($request->has('q')) {

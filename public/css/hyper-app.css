@@ -1550,8 +1550,7 @@ progress {
   .form-control::file-selector-button {
     padding: 0.45rem 0.9rem;
     margin: -0.45rem -0.9rem;
-    -webkit-margin-end: 0.9rem;
-            margin-inline-end: 0.9rem;
+    margin-inline-end: 0.9rem;
     color: #6c757d;
     background-color: #eef2f7;
     pointer-events: none;
@@ -1569,8 +1568,7 @@ progress {
   .form-control::-webkit-file-upload-button {
     padding: 0.45rem 0.9rem;
     margin: -0.45rem -0.9rem;
-    -webkit-margin-end: 0.9rem;
-            margin-inline-end: 0.9rem;
+    margin-inline-end: 0.9rem;
     color: #6c757d;
     background-color: #eef2f7;
     pointer-events: none;
@@ -1610,13 +1608,11 @@ progress {
   .form-control-sm::file-selector-button {
     padding: 0.28rem 0.8rem;
     margin: -0.28rem -0.8rem;
-    -webkit-margin-end: 0.8rem;
-            margin-inline-end: 0.8rem; }
+    margin-inline-end: 0.8rem; }
   .form-control-sm::-webkit-file-upload-button {
     padding: 0.28rem 0.8rem;
     margin: -0.28rem -0.8rem;
-    -webkit-margin-end: 0.8rem;
-            margin-inline-end: 0.8rem; }
+    margin-inline-end: 0.8rem; }
 
 .form-control-lg {
   min-height: calc(1.5em + 1rem + 2px);
@@ -1629,13 +1625,11 @@ progress {
   .form-control-lg::file-selector-button {
     padding: 0.5rem 1rem;
     margin: -0.5rem -1rem;
-    -webkit-margin-end: 1rem;
-            margin-inline-end: 1rem; }
+    margin-inline-end: 1rem; }
   .form-control-lg::-webkit-file-upload-button {
     padding: 0.5rem 1rem;
     margin: -0.5rem -1rem;
-    -webkit-margin-end: 1rem;
-            margin-inline-end: 1rem; }
+    margin-inline-end: 1rem; }
 
 textarea.form-control {
   min-height: calc(1.5em + 0.9rem + 2px); }
@@ -11974,7 +11968,6 @@ body.auth-fluid-pages[data-leftbar-compact-mode=condensed] {
 .select2-hidden-accessible {
   border: 0 !important;
   clip: rect(0 0 0 0) !important;
-  -webkit-clip-path: inset(50%) !important;
   clip-path: inset(50%) !important;
   height: 1px !important;
   overflow: hidden !important;

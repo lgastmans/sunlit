@@ -33,7 +33,7 @@ class Inventory extends Model
      *
      * @param  int $warehouse_id
      */
-    public function initStock(int $product_id): bool
+    public function initStock(int $product_id)
     {
         /*
             retrieve the ids of all warehouses
@@ -67,7 +67,7 @@ class Inventory extends Model
      * Create a new entry in the inventory for a given warehouse_id
      * initializing the stock values to zero
      */
-    public function initProductStock(int $warehouse_id, int $product_id): bool
+    public function initProductStock(int $warehouse_id, int $product_id)
     {
         $current_inventory = $this->where('warehouse_id', '=', $warehouse_id)->where('product_id', '=', $product_id)->first();
         if ($current_inventory){
@@ -100,7 +100,7 @@ class Inventory extends Model
     /**
      * Update the Purchase Order stock ordered column in the inventory 
      */
-    public function updateOrderedStock(Model $model): bool
+    public function updateOrderedStock(Model $model)
     {
         $order = PurchaseOrder::find($model->id);
 
@@ -265,7 +265,7 @@ class Inventory extends Model
      * Update the stock values in the inventory based on the model and related status
      * initializing the stock values to zero
      */
-    public function updateStock(Model $model): bool
+    public function updateStock(Model $model)
     {
         /*
         *   get name of model
@@ -553,7 +553,7 @@ class Inventory extends Model
      * Update the blocked stock quantity in the inventory 
      * The model passed is assumed SaleOrderItem
      */    
-    public function updateStockBlocked(Model $model, int $update_quantity): bool
+    public function updateStockBlocked(Model $model, int $update_quantity)
     {
         $inventory = $this->initProductStock($model->sale_order->warehouse_id, $model->product_id);
 
@@ -575,7 +575,7 @@ class Inventory extends Model
      * Update the inventory
      * The related items 
      */    
-    public function deleteStock(Model $model): bool
+    public function deleteStock(Model $model)
     {
         /*
             const DRAFT = 1;

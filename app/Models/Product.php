@@ -86,7 +86,7 @@ class Product extends Model
      *
      * @param int
      */
-    public function getLastPurchasedOnAttribute(): date
+    public function getLastPurchasedOnAttribute()
     {
         $result = InventoryMovement::select('created_at')
             ->whereNotNull('purchase_order_id')
@@ -108,7 +108,7 @@ class Product extends Model
      *
      * @param int
      */
-    public function getLastSoldOnAttribute(): date
+    public function getLastSoldOnAttribute()
     {
         $result = InventoryMovement::select('created_at')
             ->whereNotNull('sales_order_id')

@@ -1,5 +1,4 @@
 /******/ (() => { // webpackBootstrap
-var __webpack_exports__ = {};
 /*!***********************************************!*\
   !*** ./resources/js/pages/sale_order_cart.js ***!
   \***********************************************/
@@ -23,7 +22,6 @@ $(document).ready(function () {
       // }
     }
   });
-
   shippingStateSelect.on("change", function (e) {
     var lastValue = e.currentTarget.value;
     var lastText = e.currentTarget.textContent;
@@ -59,7 +57,6 @@ $(document).ready(function () {
       }
     });
   });
-
   function recalculateGrandTotal() {
     var grand_total = 0;
     $('.item-total').each(function (index) {
@@ -90,7 +87,6 @@ $(document).ready(function () {
       }
     });
   }
-
   var dealerSelect = $(".dealer-select").select2();
   dealerSelect.select2({
     ajax: {
@@ -171,7 +167,6 @@ $(document).ready(function () {
           $(" #suggested_selling_price ").show();
           $(" #suggested_selling_price ").html('BP: Rs ' + data.average_buying_price); //.toNumber().formatCurrency());
         }
-
         $('#tax').val(data.tax.amount);
       }
     });

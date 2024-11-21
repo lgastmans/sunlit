@@ -242,7 +242,7 @@ class SaleOrderController extends Controller
     /**
      * Display a listing of the resource for select2
      */
-    public function getInvoicesList(Request $request): json
+    public function getInvoicesList(Request $request): json | array
     {
         $query = SaleOrder::query()
             ->join('dealers', 'dealers.id', '=', 'sale_orders.dealer_id')

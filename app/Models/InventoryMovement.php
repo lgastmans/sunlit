@@ -44,7 +44,7 @@ class InventoryMovement extends Model
      *
      * @return instance of object
      */
-    public function updateMovement(array $data): instance
+    public function updateMovement(array $data)
     {
 
         $movement = $this->create([
@@ -68,7 +68,7 @@ class InventoryMovement extends Model
      *
      * @return average buying price
      */
-    public static function getAverageBuyingPrice(int $warehouse_id, int $product_id): average
+    public static function getAverageBuyingPrice(int $warehouse_id, int $product_id)
     {
         /*
             SELECT (SUM(price * quantity) / SUM(quantity)) AS average_price
@@ -90,7 +90,7 @@ class InventoryMovement extends Model
      *
      * @return average selling price
      */
-    public function getAverageSellingPrice(int $warehouse_id, int $product_id): average
+    public function getAverageSellingPrice(int $warehouse_id, int $product_id)
     {
         /*
             SELECT (SUM(price * quantity) / SUM(quantity)) AS average_price

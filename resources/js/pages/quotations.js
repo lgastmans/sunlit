@@ -121,7 +121,6 @@ $(document).ready(function () {
     
     $('[id^=item-quantity-]').on("click", function(event){
         var item_id = $(this).parent().parent().parent().attr('data-id');
-        console.log('item_id',item_id)
         var total = $('#item-price-' + item_id).val() * getTaxValue($('#item-tax-' + item_id).html()) * $('#item-quantity-' + item_id).val();
         $('#item-total-' + item_id).html(total.toFixed(2));
 
@@ -133,6 +132,7 @@ $(document).ready(function () {
 
         var route = globalSettings.quotation_items_update;
         route = route.replace(':id', item_id);
+
         $.ajax({
             type: 'POST',
             url: route,

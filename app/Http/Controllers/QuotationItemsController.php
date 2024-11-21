@@ -88,30 +88,35 @@ class QuotationItemsController extends Controller
      */
     public function update(Request $request, $id): JsonResponse
     {
+
         $item = QuotationItems::find($id);
 
-        $order = Quotation::find($item->quotation_id);
+        if ($item) {
+            $order = Quotation::find($item->quotation_id);
 
-        $update_quantity = 0;
+            $update_quantity = 0;
 
-        if ($request->field == 'quantity') {
+            if ($request->field == 'quantity') {
 
-            if ($order->status == Quotation::DRAFT) {
-                $item->quantity = $request->value;
-            } else {
-                $update_quantity = $request->value - $item->quantity;
+                if ($order->status == Quotation::DRAFT) {
+                    $item->quantity = $request->value;
+                } else {
+                    $update_quantity = $request->value - $item->quantity;
 
-                $item->quantity = $request->value;
+                    $item->quantity = $request->value;
+                }
             }
+
+            if ($request->field == 'price') {
+                $item->price = $request->value;
+            }
+
+            $item->update();
+
+            return response()->json(['success' => 'true', 'code' => 200, 'message' => 'OK']);
         }
-
-        if ($request->field == 'price') {
-            $item->price = $request->value;
-        }
-
-        $item->update();
-
-        return response()->json(['success' => 'true', 'code' => 200, 'message' => 'OK']);
+        else 
+            return response()->json(['success' => 'false', 'code' => 400, 'message' => 'Item not found']);
     }
 
     /**

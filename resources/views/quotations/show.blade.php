@@ -82,7 +82,7 @@
                         <tbody>
                             @foreach($order->items as $item)
                                 @if ($order->status == 4)
-                                     <tr>
+                                     <tr class="item" data-id="{{$item->id}}" data-product-id="{{ $item->product->id }}">
                                         <td>{{ $item->product->part_number }}</td>
                                         <td>{{ $item->quantity_ordered }}</td>
                                         <td>{{ __('app.currency_symbol_inr')}}{{ number_format($item->selling_price,2) }}</td>
