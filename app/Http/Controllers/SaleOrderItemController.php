@@ -161,19 +161,23 @@ class SaleOrderItemController extends Controller
 
             if ($order->status == SaleOrder::DRAFT) {
                 $display_status = '<span class="badge badge-secondary-lighten">Draft</span>';
+                $display_date = Carbon::parse($order->created_at->toDateString())->toFormattedDateString();
             } elseif ($order->status == SaleOrder::BOOKED) {
                 $display_status = '<span class="badge badge-primary-lighten">Booked</span>';
+                $display_date = Carbon::parse($order->booked_at)->toFormattedDateString();
             } elseif ($order->status == SaleOrder::DISPATCHED) {
                 $display_status = '<span class="badge badge-dark-lighten">Dispatched</span>';
+                $display_date = Carbon::parse($order->dispatched_at)->toFormattedDateString();
             } else {
-                $display_status = '<span class="badge badge-error-lighten">Unknown</span>';
+                $display_status = '<span class="badge badge-warning-lighten">Unknown</span>';
+                $display_date = null;
             }
 
             $arr[] = [
                 'id' => $order->id,
-                'created_at' => Carbon::parse($order->created_at->toDateString())->toFormattedDateString(),
-                'booked_at' => Carbon::parse($order->booked_at)->toFormattedDateString(),
-                'dispatched_at' => Carbon::parse($order->dispatched_at)->toFormattedDateString(),
+                'ordered_at' => $display_date,
+                //'booked_at' => Carbon::parse($order->booked_at)->toFormattedDateString(),
+                //'dispatched_at' => Carbon::parse($order->dispatched_at)->toFormattedDateString(),
                 'order_number' => $order->order_number,
                 'order_number_slug' => $order->order_number_slug,
                 'quantity_ordered' => number_format($order->quantity_ordered, 0, '.', ','),

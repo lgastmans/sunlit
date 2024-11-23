@@ -197,7 +197,7 @@ class TaxController extends Controller
     /**
      * Display a listing of the resource for select2
      */
-    public function getListForSelect2(Request $request): json
+    public function getListForSelect2(Request $request): array
     {
         $query = Tax::query();
         if ($request->has('q')) {

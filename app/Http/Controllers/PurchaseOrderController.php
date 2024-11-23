@@ -212,9 +212,7 @@ class PurchaseOrderController extends Controller
         }
 
         $query->orderBy($order_column, $order_dir);
-        \DB::enableQueryLog();
         $orders = $query->get();
-        \Debugbar::info(\DB::getQueryLog());
 
         $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
         $fmt->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 0);

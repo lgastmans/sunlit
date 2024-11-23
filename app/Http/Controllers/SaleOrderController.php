@@ -1085,7 +1085,7 @@ class SaleOrderController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, int $id): JsonResponse
+    public function update(Request $request, int $id)
     {
         if ($request->get('field') == 'order_number') {
             $hasOrderNumber = SaleOrder::where('order_number', 'LIKE', $request->get('order_number'))->count();
