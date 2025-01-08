@@ -991,6 +991,7 @@ class SaleOrderController extends Controller
                 $order->payment_terms = \Setting::get('sale_order.terms');
                 $order->tcs = \Setting::get('sale_order.tcs');
                 $order->tcs_text = \Setting::get('sale_order.tcs_text');
+                $order->transport_tax = \Setting::get('sale_order.tax');
 
                 $order->update();
             }

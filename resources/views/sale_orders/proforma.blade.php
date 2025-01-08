@@ -629,6 +629,16 @@ font-weight: bold;
               <td><span>{{ $order->transport_charges }}</span></td>
               {{-- <td><span>&mdash;</span></td> --}}
               <td><span>{{ $order->transport_charges }}</span></td>
+              
+              {{--
+                  Up until January 2024, the tax on the transport charges was based on the highest tax in the list of products
+                  after January 2024, the tax is set in the Global Settings
+              --}}
+              @php
+              if (!is_null($order->transport_tax)) 
+                  $tax = $order->transport_tax;
+              @endphp
+
               @if ($order->dealer->state->code==33)
                 <td>{{ $tax/2 }}%</td>
                 <td>@php echo number_format($order->transport_tax_amount_unfmt/2, 2); @endphp</td>

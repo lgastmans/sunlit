@@ -334,6 +334,12 @@
                                             <input type="text" class="form-control" name="sale_order__tcs_text" id="so_order_tcs_text" placeholder="" value="{{ $settings['sale_order']['tcs_text'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
                                         </div>
                                     </div>
+                                    <div class="mt-sm-3 mt-xl-0 col-xl-4">
+                                        <label class="form-label" for="so_order_tax">Transport Tax %</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="sale_order__tax" id="so_order_tax" placeholder="" value="{{ $settings['sale_order']['tax'] }}" required @if (Auth::user()->cannot('edit settings')) disabled @endif>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="mb-3 row">
                                     <div class="mb-3">
