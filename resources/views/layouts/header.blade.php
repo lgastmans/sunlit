@@ -29,8 +29,9 @@
 
     <!-- main style.css -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+    @livewireStyles
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.11.5/b-2.2.2/b-colvis-2.2.2/b-html5-2.2.2/r-2.2.9/sr-1.1.0/datatables.min.css"/>
+    <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.11.5/b-2.2.2/b-colvis-2.2.2/b-html5-2.2.2/r-2.2.9/sr-1.1.0/datatables.min.css"/> -->
 
 
     @yield('page-styles')
@@ -46,5 +47,3 @@
 
 </head>
 <body class="loading" data-layout-config='{"leftSideBarTheme":"dark","layoutBoxed":false, "leftSidebarCondensed":true, "leftSidebarScrollable":false,"darkMode":false, "showRightSidebarOnStart": true}'>
-
-
