@@ -224,7 +224,8 @@ class SaleOrderController extends Controller
                 'amount' => $total_amount,
                 'status' => $order->display_status,
                 'created_at' => $order->created_at->toDateString(),
-                'user' => $order->user->display_name,
+                //'user' => (isset($order->user->display_name) ? $order->user->display_name : ''),
+                'user' => $order->name,
             ];
         }
 
@@ -1043,7 +1044,10 @@ class SaleOrderController extends Controller
             $order = SaleOrder::with('state')->where('order_number_slug', '=', $order_number_slug)->first();
             $order->calculateTotals();
 
-            $activities = Activity::where('subject_id', $order->id)
+            $activities = Activity::with(['causer' => function ($query) {
+                    $query->withTrashed();
+                }])
+                ->where('subject_id', $order->id)
                 //->where('properties->order_number', $order->order_number)
                 //->where('subject_type', 'App\Models\SaleOrder')
                 //->where('subject_type', 'App\Models\SaleOrderPayment')

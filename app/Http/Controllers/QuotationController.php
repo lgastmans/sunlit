@@ -256,7 +256,10 @@ class QuotationController extends Controller
         $quote = Quotation::where('quotation_number_slug', '=', $quotation_number_slug)->first();
         $quote->calculateTotals();
 
-        $activities = Activity::where('subject_id', $quote->id)
+        $activities = Activity::with(['causer' => function ($query) {
+                    $query->withTrashed();
+                }])
+            ->where('subject_id', $quote->id)
             //->where('properties->order_number', $order->order_number)
             ->where('subject_type', \App\Models\Quotation::class)
             //->where('subject_type', 'App\Models\SaleOrderPayment')

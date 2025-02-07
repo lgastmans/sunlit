@@ -268,7 +268,10 @@ class CreditNoteController extends Controller
         $quote = CreditNote::where('credit_note_number_slug', '=', $credit_note_number_slug)->first();
         $quote->calculateTotals();
 
-        $activities = Activity::where('subject_id', $quote->id)
+        $activities = Activity::with(['causer' => function ($query) {
+                    $query->withTrashed();
+                }])
+            ->where('subject_id', $quote->id)
             ->where('subject_type', \App\Models\CreditNote::class)
             ->orderBy('updated_at', 'desc')
             ->get();

@@ -327,7 +327,10 @@ class PurchaseOrderController extends Controller
             $invoices = $purchase_order->invoices->pluck('id');
             $shipped = [];
 
-            $activities = Activity::where('subject_id', $purchase_order->id)
+            $activities = Activity::with(['causer' => function ($query) {
+                    $query->withTrashed();
+                }])
+                ->where('subject_id', $purchase_order->id)
                 ->where('subject_type', \App\Models\PurchaseOrder::class)
                 ->orderBy('updated_at', 'desc')
                 ->get();
