@@ -39,8 +39,8 @@ $pathOnServer = "./";
 @task('composer:update')
     cd {{ $pathOnServer }}
     echo "Running composer update"
-    composer update
-    composer dump-autoload -o
+    composer2 update
+    composer2 dump-autoload -o
 @endtask
 
 @task('cache:clear')
