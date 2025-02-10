@@ -116,7 +116,7 @@ html, body {
 #container {
   font: normal 14px/1.4em 'PT Sans', Sans-serif;
   margin: 0 auto;
-  padding: 10mm 10mm;
+  padding: 5mm 5mm;
   position: relative;
   border-style: none;
   border-color: grey;
@@ -127,7 +127,7 @@ html, body {
 
 #container table {
   width: 190mm;
-  margin-bottom: 5mm;
+  margin-bottom: 0mm;
 }
 
 #memo {
@@ -145,7 +145,9 @@ html, body {
 #memo .company-info {
   float: left;
   margin-top: 8px;
+  margin-bottom: 20px;
   max-width: 515px;
+
 }
 #memo .company-info span {
   color: grey;
@@ -239,6 +241,8 @@ table th, table td {
 	vertical-align: top;
 	word-break: keep-all;
 	word-wrap: break-word;
+  padding: 0px;
+  line-height: 1.5;
 }
 
 
@@ -275,7 +279,7 @@ table th, table td {
 }
 #items table th {
   font-weight: bold;
-  padding: 5px;
+  padding: -10px;
   text-align: right;
   border-bottom: 2px solid #898989;
 }
@@ -288,7 +292,7 @@ table th, table td {
 }
 #items table td {
   border-bottom: 1px solid #C4C4C4;
-  padding: 4px;
+  padding: -10px;
   text-align: right;
 }
 #items table td:first-child {
@@ -352,7 +356,7 @@ font-weight: bold;
 	color: black; /*#888;*/
   font-weight: bold;
 	font-size: 12px;
-	margin-top: 20px;
+	margin-top: 10px;
 	width: 100%;
   text-align: left;
 	/*max-width: 440px;*/
@@ -391,7 +395,7 @@ font-weight: bold;
 
     <section id="memo">
       {{-- HEADER --}}
-      <table>
+      <table cellspacing="0" cellpadding="0">
         <tr>
           <td>
             @isset($not_pdf)
