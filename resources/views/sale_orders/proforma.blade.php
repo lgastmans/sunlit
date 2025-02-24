@@ -279,7 +279,8 @@ table th, table td {
 }
 #items table th {
   font-weight: bold;
-  padding: -10px;
+  padding-left:10px;
+  padding-right:10px;
   text-align: right;
   border-bottom: 2px solid #898989;
 }
@@ -292,7 +293,8 @@ table th, table td {
 }
 #items table td {
   border-bottom: 1px solid #C4C4C4;
-  padding: -10px;
+  padding-left: 10px;
+  padding-right:10px;
   text-align: right;
 }
 #items table td:first-child {
