@@ -36,6 +36,13 @@ public/js/app.js
 
 public/js/vendor/dataTables.fixedHeader.min.js
 
+/public/ckeditor5-build-classic/
+/public/dealers-*.csv
+/resources/js/vendor/
+
+*:Zone.Identifier
+
+
 
 public/css/vendor/fixedHeader.dataTables.min.css
 docker-compose.yml

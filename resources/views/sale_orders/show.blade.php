@@ -178,7 +178,15 @@
                          
 {{--                             @if ($order->status >= 2 && $order->status <= 3)
  --}}                                <tr>
-                                    <td>Transport Charges: </td>
+                                    <td>
+                                        Transport Charges
+                                        <br>
+                                        @if ($order->tax)
+                                        <span class="text-muted small fst-italic">
+                                            ({{ $order->tax->name }})
+                                        </span>
+                                        @endif
+                                    </td>
                                     <td>
                                         <span>{{ __('app.currency_symbol_inr')}}</span>
                                         <span id="transport-charges">{{ $order->transport_total ?? '0.00' }}</span>
@@ -215,10 +223,14 @@
                             </div>
                         </div>
                         <div class="col-xl-6">
-                            <label class="form-label">&nbsp;</label>
-                            <div class="input-group">
-                                {{-- <a class="btn btn-success" href="#" role="button" id="btn_transport_charges">Save Transport Charges</a> --}}
-                                {{-- <button class="col-lg-12 text-center btn btn-success" id="btn_transport_charges" name="transport_charges">Save Transport Charges</button> --}}
+                            <label class="form-label">Transport Tax</label>
+                            <select class="tax-select form-control" id="transport_tax" name="transport_tax_id">
+                                @if ($order->tax)
+                                    <option value="{{$order->tax->id}}" selected="selected">{{$order->tax->name}}</option>
+                                @endif
+                            </select>
+                            <div class="invalid-feedback">
+                                {{ __('error.form_invalid_field', ['field' => 'tax' ]) }}
                             </div>
                         </div>
                     </div>
@@ -416,6 +428,49 @@
 
 
             /**
+             * Transport Tax
+             */
+            $("#transport_tax").on('change', function() {
+
+                //e.preventDefault();
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                    }
+                }); 
+
+                var route = '{{ route("sale-orders.update", ":id") }}';
+                route = route.replace(':id', $('#sale-order-id').val());
+
+                var tax = $("#transport_tax").val();
+                console.log("Selected transport tax: " + tax);
+
+                $.ajax({
+                        type: 'POST',
+                        url: route,
+                        dataType: 'json',
+                        data: { 
+                            'value' : tax, 
+                            'field': 'transport_tax', 
+                            'item': false,
+                            '_method': 'PUT'
+                        },
+                        success : function(result){
+                            console.log('result: ',result);
+
+                            $(" #transport-charges ").html(result.transport_charges);
+                            $(" #total-cost ").html(result.total);
+
+                            $.NotificationApp.send("Success","Transport Tax saved","top-right","","success")
+
+                        },
+
+                });        
+            });
+
+
+            /**
              * TCS 
              */
             $("#tcs_value, #tcs_caption").blur(function() {
@@ -479,6 +534,13 @@
                 });
             }); // duplicate order
 
+            var taxSelect = $(".tax-select").select2();
+            taxSelect.select2({
+                ajax: {
+                    url: '{{route('ajax.taxes')}}',
+                    dataType: 'json'
+                }
+            });
 
         }); //document ready
 

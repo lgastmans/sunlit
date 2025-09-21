@@ -7,6 +7,7 @@ use App\Models\Dealer;
 use App\Models\Inventory;
 use App\Models\SaleOrder;
 use App\Models\SaleOrderItem;
+use App\Models\Tax;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\JsonResponse;
@@ -992,7 +993,7 @@ class SaleOrderController extends Controller
                 $order->payment_terms = \Setting::get('sale_order.terms');
                 $order->tcs = \Setting::get('sale_order.tcs');
                 $order->tcs_text = \Setting::get('sale_order.tcs_text');
-                $order->transport_tax = \Setting::get('sale_order.tax');
+                //$order->transport_tax = \Setting::get('sale_order.tax');
 
                 $order->update();
             }
@@ -1163,6 +1164,27 @@ class SaleOrderController extends Controller
 
             return response()->json(['success' => 'true', 'total' => $order->total, 'tax_total' => $order->tax_total, 'freight_charges' => $order->freight_charges, 'transport_charges' => $order->transport_total, 'code' => 200, 'message' => 'OK', 'field' => $request->get('field')]);
         }
+
+        if ($request->get('field') == 'transport_tax') {
+            $order = SaleOrder::find($id);
+            $items = SaleOrderItem::where('sale_order_id', '=', $id)->get();
+            $tax = Tax::find($request->get('value'));
+
+            $order->transport_tax_id = $request->get('value');
+            $order->transport_tax = $tax->amount;
+
+            activity()
+                ->performedOn($order)
+                ->withProperties(['order_number' => $order->order_number, 'status' => $order->status])
+                ->log('Transport Tax updated to '.number_format($tax->amount, 2));
+
+            $order->update();
+
+            $order->calculateTotals();
+
+            return response()->json(['success'=>'true', 'total'=>$order->total, 'tax_total'=>$order->tax_total, 'freight_charges'=>$order->freight_charges, 'transport_charges'=>$order->transport_total, 'code'=>200, 'message'=>'OK', 'field'=>$request->get('field')]);
+        }
+
 
         if ($request->get('field') == 'payment_terms') {
             $order = SaleOrder::find($id);

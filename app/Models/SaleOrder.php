@@ -21,7 +21,7 @@ class SaleOrder extends Model
 
     protected $fillable = ['dealer_id', 'warehouse_id', 'order_number', 'order_number_slug', 'status', 'user_id', 'amount', 'transport_charges', 'transport_tax', 'payment_terms', 'shipping_state_id', 'shipping_company', 'shipping_address', 'shipping_address2', 'shipping_address3', 'shipping_city', 'shipping_zip_code', 'shipping_gstin', 'shipping_contact_person', 'shipping_contact_person2', 'shipping_phone', 'shipping_phone2', 'shipping_email', 'shipping_email2'];
 
-    protected $with = ['dealer', 'warehouse', 'user', 'items', 'state', 'sale_order_payments'];
+    protected $with = ['dealer', 'warehouse', 'user', 'items', 'state', 'sale_order_payments', 'tax'];
     //protected static $recordEvents = ['created','updated','deleted'];
 
     const DRAFT = 1;
@@ -124,6 +124,14 @@ class SaleOrder extends Model
     public function state(): BelongsTo
     {
         return $this->belongsTo(State::class, 'shipping_state_id');
+    }
+    
+    /**
+     * Get the tax associated with the product.
+     */
+    public function tax(): BelongsTo
+    {
+        return $this->belongsTo(Tax::class, 'transport_tax_id');
     }
 
     public function sale_order_payments(): HasMany
@@ -897,6 +905,14 @@ class SaleOrder extends Model
          * Up until January 2024, the tax on the transport charges was based on the highest tax in the list of products
          * after January 2024, the tax is set in the Global Settings
          */
+        //if (!is_null($this->transport_tax)) 
+        //    $tax = $this->transport_tax;
+
+        /**
+         * September 2025: the transport tax is manually selected
+         * 
+         */
+        $tax = 0;
         if (!is_null($this->transport_tax)) 
             $tax = $this->transport_tax;
 

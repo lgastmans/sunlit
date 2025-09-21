@@ -704,8 +704,8 @@ font-weight: bold;
           @endif
 
           <tr class="amount-total">
-            <th colspan="{{ $order->dealer->state->code==33 ? 7 : 5}}"></th>
-            <th style="text-align: right;">Total (rounded)</th>
+            <th colspan="{{ $order->dealer->state->code==33 ? 6 : 4}}"></th>
+            <th colspan="2" style="text-align: right;">Total (rounded)</th>
             <th colspan="2">{{ $order->total }}</th>
           </tr>
 
