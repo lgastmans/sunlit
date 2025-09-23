@@ -36,7 +36,6 @@ public/js/app.js
 
 public/js/vendor/dataTables.fixedHeader.min.js
 
-/public/ckeditor5-build-classic/
 /public/dealers-*.csv
 /resources/js/vendor/
 
