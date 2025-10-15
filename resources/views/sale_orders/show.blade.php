@@ -25,6 +25,21 @@
         /* Firefox */
         input[type=number] {
           -moz-appearance: textfield;
+        }
+
+        .custom-table td, 
+        .custom-table th {
+            padding: 6px 10px !important;
+            vertical-align: middle !important;
+        }
+
+        .custom-table input[type="text"],
+        .custom-table input[type="number"],
+        .custom-table input[type="date"],
+        .custom-table select {
+            padding: 2px 6px !important;  /* adjust as needed */
+            height: auto !important;      /* removes fixed height if Bootstrap sets it */
+            line-height: 1.2 !important;  /* vertically centers text nicely */
         }        
     </style>
 
@@ -83,31 +98,37 @@
                 <x-forms.errors class="mb-4" :errors="$errors" />
 
                 <div class="table-responsive">
-                    <table class="table mb-0" id="sale-order-items-table">
+                    <table class="table mb-0 custom-table" id="sale-order-items-table">
                         <thead class="table-light">
                             <tr>
-                                <th class="col-5">Product</th>
+                                <th class="col-3">Product</th>
                                 <th class="col-2">Quantity</th>
                                 <th class="col-1">Price</th>
-                                <th class="col-1">Tax</th>
-                                <th class="col-2">Total</th>
-                                <th class="col-1"></th>
+                                <th class="col-2" style="text-align: right;">Amount</th>
+                                <th class="col-1" style="text-align: right;">Tax</th>
+                                <th class="col-2" style="text-align: right;">Total</th>
+                                <th class="col-1" width='5%'></th>
                             </tr>
                         </thead>
                         <tbody>
+                            @php
+                                $total = $order->items->sum(function($item) {
+                                    return $item->quantity_ordered * $item->selling_price;
+                                });
+                            @endphp
+
                             @foreach($order->items as $item)
                                 @if ($order->status == 4)
                                      <tr>
                                         <td>{{ $item->product->part_number }}</td>
                                         <td>{{ $item->quantity_ordered }}</td>
                                         <td>{{ __('app.currency_symbol_inr')}}{{ number_format($item->selling_price,2) }}</td>
-                                        <td>{{ number_format($item->tax,2) }}%</td>
-                                        <td>{{ __('app.currency_symbol_inr')}}{{ number_format($item->total_price,2) }}</td>
+                                        <td style="text-align: right;">{{ __('app.currency_symbol_inr') }}{{ number_format($item->quantity_ordered * $item->selling_price, 2) }}</td>
+                                        <td style="text-align: right; !important">{{ number_format($item->tax,2) }}%</td>
+                                        <td style="text-align: right;">{{ __('app.currency_symbol_inr')}}{{ number_format($item->total_price,2) }}</td>
                                     </tr>
                                 @else
-
                                     <tr class="item" data-id="{{$item->id}}" data-product-id="{{ $item->product->id }}">
-
                                         <td>
                                             <p class="m-0 d-inline-block align-middle font-16">
                                                 <a href="javascript:void(0);"
@@ -126,10 +147,14 @@
                                                 <input id="item-price-{{ $item->id }}" type="text" class="editable-field form-control" data-value="{{ $item->selling_price }}" data-field="price" data-item="{{ $item->id }}" placeholder="" value="{{ $item->selling_price }}" style="width: 120px;">
                                             </div>
                                         </td>
-                                        <td>
+                                        <td style="text-align: right;">
+                                            <span>{{ __('app.currency_symbol_inr')}}</span>
+                                            <span id="item-amount-{{ $item->id }}" class="item-amount">{{ number_format($item->quantity_ordered * $item->selling_price, 2) }}</span>
+                                        </td>
+                                        <td style="text-align: right;">
                                             <span id="item-tax-{{ $item->id }}">@if ($item->tax){{ $item->tax }}@else 0.00 @endif%</span>
                                         </td>
-                                        <td>
+                                        <td style="text-align: right;">
                                             <span>{{ __('app.currency_symbol_inr')}}</span>
                                             <span id="item-total-{{ $item->id }}" class="item-total">{{ $item->total_price }}</span>
                                         </td>
@@ -140,8 +165,18 @@
 
                                 @endif
                             @endforeach
-
                         </tbody>
+                        <tfoot>
+                            <td colspan="2"></td>
+                            <td style="text-align: right;">Total</td>
+                            <td style="text-align: right;">
+                                <strong>
+                                    <span>{{ __('app.currency_symbol_inr')}}</span>
+                                    <span id="items-total-amount">{{ number_format($total, 2) }}</span>
+                                </strong>
+                            </td>
+                            <td colspan="3"></td>
+                        </tfoot>
                     </table>
                 </div>
                 <!-- end table-responsive -->
@@ -336,7 +371,7 @@
             sale_order_delete : '{{ route("sale-orders.delete", ":id") }}',
             product_route : '{{ route("ajax.products.warehouse", [":warehouse_id"]) }}',
             inr_symbol : '{{ __("app.currency_symbol_inr")}}',
-            sale_order_shipping_state : '{{route('ajax.states')}}'
+            sale_order_shipping_state : '{{route("ajax.states")}}'
         };
 
         $(document).ready(function () {

@@ -11,6 +11,23 @@
 @section('content')
 
 @include('sale_orders.steps')
+        
+    <style>        
+        .custom-table td, 
+        .custom-table th {
+            padding: 6px 10px !important;
+            vertical-align: middle !important;
+        }
+
+        .custom-table input[type="text"],
+        .custom-table input[type="number"],
+        .custom-table input[type="date"],
+        .custom-table select {
+            padding: 2px 6px !important;  /* adjust as needed */
+            height: auto !important;      /* removes fixed height if Bootstrap sets it */
+            line-height: 1.2 !important;  /* vertically centers text nicely */
+        }
+    </style>
 
 <div class="row">
     <div class="col-12">
@@ -65,18 +82,24 @@
                 <div class="row">
                     <div class="col-lg-9">
                         <div class="table-responsive">
-                            <table class="table table-borderless table-centered mb-0" id="sale-order-items-table">
+                            <table class="table table-borderless table-centered mb-0 custom-table" id="sale-order-items-table">
                                 <thead class="table-light">
                                     <tr>
-                                        <th class="col-5">Product</th>
+                                        <th class="col-3">Product</th>
                                         <th class="col-1">Quantity</th>
                                         <th class="col-2">Price</th>
-                                        <th class="col-1">Tax</th>
-                                        <th class="col-2">Total</th>
+                                        <th class="col-2" style="text-align: right;">Amount</th>
+                                        <th class="col-1" style="text-align: right;">Tax</th>
+                                        <th class="col-2" style="text-align: right;">Total</th>
                                         <th class="col-1"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @php
+                                        $total = $order->items->sum(function($item) {
+                                            return $item->quantity_ordered * $item->selling_price;
+                                        });
+                                    @endphp
                                     @forelse($order->items as $item) 
                                         <tr class="item" data-id="{{$item->id}}" data-product-id="{{ $item->product->id }}">
 
@@ -98,10 +121,14 @@
                                                     <input id="item-price-{{ $item->id }}" type="text" class="editable-field form-control" data-value="{{ $item->selling_price }}" data-field="price" data-item="{{ $item->id }}" placeholder="" value="{{ $item->selling_price }}">
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td style="text-align: right;">
+                                                <span>{{ __('app.currency_symbol_inr')}}</span>
+                                                <span id="item-amount-{{ $item->id }}" class="item-amount">{{ number_format($item->quantity_ordered * $item->selling_price, 2) }}</span>
+                                            </td>
+                                            <td style="text-align: right;">
                                                 <span id="item-tax-{{ $item->id }}">@if ($item->tax){{ $item->tax }}@else 0.00 @endif%</span>
                                             </td>
-                                            <td>
+                                            <td style="text-align: right;">
                                                 <span>{{ __('app.currency_symbol_inr')}}</span>
                                                 <span id="item-total-{{ $item->id }}" class="item-total">{{ $item->total_price }}</span>
                                             </td>

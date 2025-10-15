@@ -1145,7 +1145,7 @@ class SaleOrderController extends Controller
 
             $order->update();
 
-            return response()->json(['success' => 'true', 'code' => 200, 'message' => 'OK', 'field' => $request->get('field'), 'freight_charges' => $order->freight_charges, 'transport_charges' => $order->transport_total, 'total_cost' => $order->total]);
+            return response()->json(['success' => 'true', 'code' => 200, 'message' => 'OK', 'field' => $request->get('field'), 'freight_charges' => $order->freight_charges, 'transport_charges' => $order->transport_total, 'total_cost' => $order->total, 'items_total_amount' => $order->items_total_amount]);
         }
 
         if ($request->get('field') == 'transport_charges') {

@@ -65,6 +65,8 @@ class SaleOrder extends Model
 
     public $tcs_amount = 0;
 
+    public $items_total_amount = 0; // the total amount of ordered items, without tax
+
     protected function casts(): array
     {
         return [
@@ -860,6 +862,7 @@ class SaleOrder extends Model
         $this->total_advance = 0;
         $this->balance_due = 0;
         $this->tcs_amount = 0;
+        $this->items_total_amount = 0;
 
         if ($this->dealer) {
             if ($this->dealer->state->freight_zone_id) {
@@ -874,6 +877,7 @@ class SaleOrder extends Model
         $tax = 0;
         foreach ($this->items as $item) {
             $this->sub_total += $item->quantity_ordered * $item->selling_price;
+            $this->items_total_amount += $item->quantity_ordered * $item->selling_price;
             $this->tax_total += ($item->quantity_ordered * $item->selling_price) * ($item->tax / 100);
             /*
                 this feature left out until finalized
