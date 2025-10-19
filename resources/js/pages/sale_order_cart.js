@@ -88,7 +88,8 @@ $(document).ready(function () {
                     $("#freight").val(result.freight_charges);
                     $("#transport-charges").html(result.transport_charges);
                     $("#total-cost").html(result.total_cost);
-                    
+                    $("#items-total-amount").html(result.items_total_amount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+
                     console.log('result ' + JSON.stringify(result));
                     //console.log('update' + result.transport_charges)
                     //$(" #total-cost ").html(result.total);                    
@@ -279,7 +280,7 @@ $(document).ready(function () {
 
     $('.form-product').on('submit', function(e){
         e.preventDefault();
-
+console.log('update item');
         var price = $("#selling_price").val();
         var asked_quantity = $('#quantity_ordered').val();        
         var product_id = $('#product_id').val();
@@ -332,7 +333,7 @@ $(document).ready(function () {
             var new_quantity = parseInt(asked_quantity) + parseInt($('#item-quantity-'+existing_item_id).val())
             $('#quantity_ordered').val(new_quantity);
         }
-
+console.log('call ajax');
         $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
@@ -344,6 +345,7 @@ $(document).ready(function () {
             dataType: 'json',
             data: $( this ).serialize(),
             success: function (data) {
+                console.log('success',existing_item_id);
                 if (existing_item_id > 0){
                     $('.item').each(function(index){
                         if ($(this).attr('data-product-id') == data.product.id){
@@ -357,8 +359,9 @@ $(document).ready(function () {
                     });
                 }
                 else{
+                    console.log('add row to table');
                     var item = '<tr class="item" data-id="'+ data.item.id +'" data-product-id="'+data.product.id+'">';
-                    item += '<td>';
+                        item += '<td>';
                         item += '<p class="m-0 d-inline-block align-middle font-16">';
                             item += '<a href="javascript:void(0); class="text-body product-name">'+ data.product.part_number +'</a>';
                                 item += '<br>';
@@ -374,17 +377,26 @@ $(document).ready(function () {
                                         item += '<input id="item-price-'+ data.item.id +'" type="text" class="editable-field form-control" data-value="'+ data.item.selling_price +'" data-field="price" data-item="'+ data.item.id +'" placeholder="" value="'+ data.item.selling_price  +'">';
                                     item += '</div>';
                                 item += '</td>';
-                            item += '<td>';
-                            item += '<span id="item-tax-'+ data.item.id +'" class="item-tax">'+ data.item.tax +'%</span>';
+
+                            item += '<td style="text-align: right;">';
+                                item += '<span>'+globalSettings.inr_symbol+'</span>';
+                                item += '<span id="item-amount-'+ data.item.id +'" class="item-amount">'+(data.item.selling_price * parseInt(data.item.quantity_ordered)).toFixed(2) +'</span>';
                             item += '</td>';
-                            item += '<td>';
-                            item += '<span>'+globalSettings.inr_symbol+'</span><span id="item-total-'+ data.item.id +'" class="item-total">'+((data.item.selling_price * getTaxValue(data.item.tax)) * parseInt(data.item.quantity_ordered)).toFixed(2) +'</span>';
+
+                            item += '<td style="text-align: right;">';
+                                item += '<span id="item-tax-'+ data.item.id +'" class="item-tax">'+ data.item.tax +'%</span>';
                             item += '</td>';
+
+                            item += '<td style="text-align: right;">';
+                                item += '<span>'+globalSettings.inr_symbol+'</span><span id="item-total-'+ data.item.id +'" class="item-total">'+((data.item.selling_price * getTaxValue(data.item.tax)) * parseInt(data.item.quantity_ordered)).toFixed(2) +'</span>';
+                            item += '</td>';
+
                             item += '<td>';
                             item += '<a href="javascript:void(0);" class="action-icon" id="'+data.item.id+'" data-bs-toggle="modal" data-bs-target="#delete-modal"> <i class="mdi mdi-delete"></i></a>';
                             item += '</td>';
                             item += '</tr> ';
-                    $('#sale-order-items-table > tbody:last-child').append(item);
+                    //$('#sale-order-items-table > tbody:last-child').append(item);
+                    $('#sale-order-items-table tbody').append(item);
                     $('.no-items').remove();
                 }
                 $('.place-order-form-container').removeClass('d-none');
