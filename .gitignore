@@ -48,3 +48,4 @@ docker-compose.yml
 /docker-compose.yml
 public/dealers-2021.csv
 .envZone.Identifier
+sunlit_db-*.sql.gz
