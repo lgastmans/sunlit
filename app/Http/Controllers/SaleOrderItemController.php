@@ -26,179 +26,168 @@ class SaleOrderItemController extends Controller
         //
     }
 
-    public function getListForDatatables(Request $request)
-    {
-        $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
-        $fmt->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 0);
+public function getListForDatatables(Request $request): JsonResponse
+{
+    $fmt = new NumberFormatter('en_IN', NumberFormatter::CURRENCY);
+    $fmt->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 0);
 
-        $draw = 1;
-        if ($request->has('draw')) {
-            $draw = $request->get('draw');
-        }
+    $draw   = $request->get('draw', 1);
+    $start  = $request->get('start', 0);
+    $length = $request->get('length', 10);
 
-        $start = 0;
-        if ($request->has('start')) {
-            $start = $request->get('start');
-        }
-
-        $length = 10;
-        if ($request->has('length')) {
-            $length = $request->get('length');
-        }
-
-        $order_column = 'order_number';
-        $order_dir = 'ASC';
-        $order_arr = [];
-        if ($request->has('order')) {
-            $order_arr = $request->get('order');
-            $column_arr = $request->get('columns');
-            $column_index = $order_arr[0]['column'];
-            $order_column = $column_arr[$column_index]['data'];
-
-            if ($column_index == 0) {
-                $order_column = 'sale_orders.order_number';
-            }
-            if ($column_index == 1) {
-                $order_column = 'warehouses.name';
-            }
-            if ($column_index == 2) {
-                $order_column = 'dealers.company';
-            }
-            if ($column_index == 3) {
-                $order_column = 'sale_order_items.quantity_ordered';
-            }
-            //if ($column_index==4)
-            if ($column_index == 5) {
-                $order_column = 'sale_orders.status';
-            }
-            if ($column_index == 6) {
-                $order_column = 'sale_orders.booked_at';
-            }
-            if ($column_index == 7) {
-                $order_column = 'sale_orders.dispatched_at';
-            }
-            if ($column_index == 8) {
-                $order_column = 'sale_orders.created_at';
-            }
-            if ($column_index == 9) {
-                $order_column = 'users.name';
-            }
-
-            $order_dir = $order_arr[0]['dir'];
-        }
-
-        $search = '';
-        if ($request->has('search')) {
-            $search_arr = $request->get('search');
-            $search = $search_arr['value'];
-        }
-
-        $arr = [];
-        if (! $request->has('filter_product_id')) {
-            return $arr;
-        }
-        $filter_product_id = $request->get('filter_product_id');
-
-        // Total records
-        $totalRecords = SaleOrderItem::where('product_id', '=', $filter_product_id)->count();
-
-        $query = SaleOrderItem::with('sale_order')
-            ->select('sale_order_items.id', 'sale_orders.created_at', 'sale_orders.booked_at', 'sale_orders.dispatched_at', 'sale_orders.order_number',
-                'sale_orders.order_number_slug', 'sale_order_items.quantity_ordered', 'sale_order_items.selling_price', 'sale_orders.status',
-                'warehouses.name AS warehouse_name', 'dealers.company AS dealer_company', 'users.name AS user_name')
-            ->join('sale_orders', 'sale_orders.id', '=', 'sale_order_id')
-            ->join('users', 'users.id', '=', 'sale_orders.user_id')
-            ->join('warehouses', 'warehouses.id', '=', 'sale_orders.warehouse_id')
-            ->join('dealers', 'dealers.id', '=', 'sale_orders.dealer_id')
-            ->where('product_id', '=', $filter_product_id);
-
-        if (! empty($column_arr[0]['search']['value'])) {
-            $query->where('sale_orders.order_number', 'like', '%'.$column_arr[0]['search']['value'].'%');
-        }
-        if (! empty($column_arr[1]['search']['value'])) {
-            $query->where('warehouses.name', 'like', '%'.$column_arr[1]['search']['value'].'%');
-        }
-        if (! empty($column_arr[2]['search']['value'])) {
-            $query->where('dealers.company', 'like', '%'.$column_arr[2]['search']['value'].'%');
-        }
-        if (! empty($column_arr[3]['search']['value'])) {
-            $query->where('sale_order_items.quantity_ordered', 'like', $column_arr[3]['search']['value'].'%');
-        }
-        if (! empty($column_arr[5]['search']['value'])) {
-            $query->where('sale_orders.status', '=', $column_arr[5]['search']['value']);
-        }
-        if (! empty($column_arr[6]['search']['value'])) {
-            $query->where('sale_orders.booked_at', 'like', convertDateToMysql($column_arr[6]['search']['value']));
-        }
-        if (! empty($column_arr[7]['search']['value'])) {
-            $query->where('sale_orders.dispatched_at', 'like', convertDateToMysql($column_arr[7]['search']['value']));
-        }
-        if (! empty($column_arr[8]['search']['value'])) {
-            $query->where('sale_orders.created_at', 'like', convertDateToMysql($column_arr[8]['search']['value']));
-        }
-        if (! empty($column_arr[9]['search']['value'])) {
-            $query->where('users.name', 'like', $column_arr[9]['search']['value'].'%');
-        }
-
-        if ($request->has('month_id')) {
-            $month = $request->get('month_id');
-            $query->whereMonth('sale_orders.dispatched_at', '=', $month);
-        }
-
-        $totalRecordswithFilter = $query->count();
-
-        $query->orderBy($order_column, $order_dir);
-
-        if ($length > 0) {
-            $query->skip($start)->take($length);
-        }
-        //$orders = $query->toSql();
-        //dd($orders);
-        $orders = $query->get();
-
-        $arr = [];
-        foreach ($orders as $order) {
-
-            if ($order->status == SaleOrder::DRAFT) {
-                $display_status = '<span class="badge badge-secondary-lighten">Draft</span>';
-                $display_date = Carbon::parse($order->created_at->toDateString())->toFormattedDateString();
-            } elseif ($order->status == SaleOrder::BOOKED) {
-                $display_status = '<span class="badge badge-primary-lighten">Booked</span>';
-                $display_date = Carbon::parse($order->booked_at)->toFormattedDateString();
-            } elseif ($order->status == SaleOrder::DISPATCHED) {
-                $display_status = '<span class="badge badge-dark-lighten">Dispatched</span>';
-                $display_date = Carbon::parse($order->dispatched_at)->toFormattedDateString();
-            } else {
-                $display_status = '<span class="badge badge-warning-lighten">Unknown</span>';
-                $display_date = null;
-            }
-
-            $arr[] = [
-                'id' => $order->id,
-                'ordered_at' => $display_date,
-                //'booked_at' => Carbon::parse($order->booked_at)->toFormattedDateString(),
-                //'dispatched_at' => Carbon::parse($order->dispatched_at)->toFormattedDateString(),
-                'order_number' => $order->order_number,
-                'order_number_slug' => $order->order_number_slug,
-                'quantity_ordered' => number_format($order->quantity_ordered, 0, '.', ','),
-                'selling_price' => $fmt->formatCurrency($order->selling_price, 'INR'),
-                'status' => $display_status,
-                'warehouse' => $order->warehouse_name,
-                'dealer' => $order->dealer_company, //(isset($order->dealer) ? $order->company : 'not specified'),
-                'user' => $order->user_name,
-            ];
-        }
-
-        $response = [
-            'draw' => $draw,
-            'recordsTotal' => $totalRecords,
-            'recordsFiltered' => $totalRecordswithFilter,
-            'data' => $arr,
-            'error' => null,
-        ];
-
-        return response()->json($response);
+    if (! $request->has('filter_product_id')) {
+        return response()->json([]);
     }
+
+    $filter_product_id = $request->get('filter_product_id');
+
+    // Base query
+    $query = SaleOrderItem::query()
+        ->join('sale_orders', 'sale_orders.id', '=', 'sale_order_items.sale_order_id')
+        ->join('users', 'users.id', '=', 'sale_orders.user_id')
+        ->join('warehouses', 'warehouses.id', '=', 'sale_orders.warehouse_id')
+        ->join('dealers', 'dealers.id', '=', 'sale_orders.dealer_id')
+        ->where('sale_order_items.product_id', $filter_product_id)
+        ->select([
+            'sale_order_items.id',
+            'sale_orders.order_number',
+            'sale_orders.order_number_slug',
+            'sale_orders.status',
+            'sale_orders.booked_at',
+            'sale_orders.dispatched_at',
+            'sale_orders.created_at',
+            'sale_order_items.quantity_ordered',
+            'sale_order_items.selling_price',
+            'warehouses.name as warehouse',
+            'dealers.company as dealer',
+            'users.name as user',
+        ]);
+
+    // Total count
+    $totalRecords = (clone $query)->count();
+
+    // 🔍 Filtering (cleaner)
+    $columns = $request->get('columns', []);
+
+    if (!empty($columns[0]['search']['value'])) {
+        $query->where('sale_orders.order_number', 'like', '%'.$columns[0]['search']['value'].'%');
+    }
+
+    if (!empty($columns[1]['search']['value'])) {
+        $query->where('warehouses.name', 'like', '%'.$columns[1]['search']['value'].'%');
+    }
+
+    if (!empty($columns[2]['search']['value'])) {
+        $query->where('dealers.company', 'like', '%'.$columns[2]['search']['value'].'%');
+    }
+
+    if (!empty($columns[3]['search']['value'])) {
+        $query->where('sale_order_items.quantity_ordered', 'like', $columns[3]['search']['value'].'%');
+    }
+
+    if (!empty($columns[5]['search']['value'])) {
+        $query->where('sale_orders.status', $columns[5]['search']['value']);
+    }
+
+    if (!empty($columns[6]['search']['value'])) {
+        $query->where('sale_orders.booked_at', 'like', convertDateToMysql($columns[6]['search']['value']));
+    }
+
+    if (!empty($columns[7]['search']['value'])) {
+        $query->where('sale_orders.dispatched_at', 'like', convertDateToMysql($columns[7]['search']['value']));
+    }
+
+    if (!empty($columns[8]['search']['value'])) {
+        $query->where('sale_orders.created_at', 'like', convertDateToMysql($columns[8]['search']['value']));
+    }
+
+    if (!empty($columns[9]['search']['value'])) {
+        $query->where('users.name', 'like', $columns[9]['search']['value'].'%');
+    }
+
+    // Filtered count
+    $totalRecordsFiltered = (clone $query)->count();
+
+    // 🔽 Ordering (clean mapping)
+    $orderColumnMap = [
+        0 => 'sale_orders.order_number',
+        1 => 'warehouses.name',
+        2 => 'dealers.company',
+        3 => 'sale_order_items.quantity_ordered',
+        5 => 'sale_orders.status',
+        6 => 'sale_orders.booked_at',
+        7 => 'sale_orders.dispatched_at',
+        8 => 'sale_orders.created_at',
+        9 => 'users.name',
+    ];
+
+    if ($request->has('order')) {
+        $order = $request->get('order')[0];
+        $columnIndex = $order['column'];
+        $dir = $order['dir'];
+
+        if (isset($orderColumnMap[$columnIndex])) {
+            $query->orderBy($orderColumnMap[$columnIndex], $dir);
+        }
+    }
+
+    // Paging
+    if ($length > 0) {
+        $query->skip($start)->take($length);
+    }
+
+    $orders = $query->get();
+
+    // 🎯 Transform data cleanly
+    $data = $orders->map(function ($order) use ($fmt) {
+
+        // Status + display date
+        switch ($order->status) {
+            case SaleOrder::DRAFT:
+                $status = '<span class="badge badge-secondary-lighten">Draft</span>';
+                $display_date = $order->created_at;
+                break;
+
+            case SaleOrder::BOOKED:
+                $status = '<span class="badge badge-primary-lighten">Booked</span>';
+                $display_date = $order->booked_at;
+                break;
+
+            case SaleOrder::DISPATCHED:
+                $status = '<span class="badge badge-dark-lighten">Dispatched</span>';
+                $display_date = $order->dispatched_at;
+                break;
+
+            default:
+                $status = '<span class="badge badge-warning-lighten">Unknown</span>';
+                $display_date = null;
+        }
+
+        return [
+            'order_number' => $order->order_number,
+            'order_number_slug' => $order->order_number_slug,
+            'warehouse' => $order->warehouse,
+            'dealer' => $order->dealer,
+            'quantity_ordered' => number_format($order->quantity_ordered, 0),
+            'selling_price' => $fmt->formatCurrency($order->selling_price, 'INR'),
+            'status' => $status,
+
+            // ✅ now consistent with DataTables
+            'booked_at' => optional($order->booked_at)->format('d M Y'),
+            'dispatched_at' => optional($order->dispatched_at)->format('d M Y'),
+            'created_at' => optional($order->created_at)->format('d M Y'),
+
+            'user' => $order->user,
+        ];
+    });
+
+    return response()->json([
+        'draw' => $draw,
+        'recordsTotal' => $totalRecords,
+        'recordsFiltered' => $totalRecordsFiltered,
+        'data' => $data,
+    ]);
+}
 
     /**
      * Show the form for creating a new resource.

@@ -175,6 +175,7 @@
             },
             { 
                 'data': 'booked_at',
+                'defaultContent': '',
                 'orderable': true 
             },
             { 
