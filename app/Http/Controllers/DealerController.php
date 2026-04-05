@@ -300,133 +300,119 @@ class DealerController extends Controller
             $quarter = $request->get('quarterly_id');
         }
 
-        $vdata = [];
-
-        $ret = [
-            'data' => [],
-            'footer' => ['debit_total' => 0, 'credit_total' => 0],
-            'customer' => ['company' => '', 'address' => ''],
-        ];
-
-        $serial = 1;
-
-        $debit_grand_total = 0;
-        $credit_grand_total = 0;
-        $balance_grand_total = 0;
-
         $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
         //$fmt->setSymbol(NumberFormatter::CURRENCY_SYMBOL, '');
 
-        $column_arr = $request->get('columns');
-        if (! empty($column_arr[1]['search']['value'])) {
-            $query = Dealer::select('*');
-            $query->where('dealers.company', 'like', '%'.$column_arr[1]['search']['value'].'%');
-            $dealers = $query->get();
-        } else {
-            $dealers = Dealer::all();
+        $column_arr = $request->get('columns', []);
+        $dealerSearch = trim(data_get($column_arr, '1.search.value', ''));
+
+        $orderTotalsQuery = SaleOrder::query()
+            ->leftJoin('sale_order_items', function ($join) {
+                $join->on('sale_order_items.sale_order_id', '=', 'sale_orders.id')
+                    ->whereNull('sale_order_items.deleted_at');
+            })
+            ->select(
+                'sale_orders.id',
+                'sale_orders.dealer_id'
+            )
+            ->selectRaw('
+                ROUND(
+                    (
+                        COALESCE(SUM(sale_order_items.quantity_ordered * sale_order_items.selling_price), 0)
+                        + COALESCE(SUM((sale_order_items.quantity_ordered * sale_order_items.selling_price) * (sale_order_items.tax / 100)), 0)
+                        + COALESCE(sale_orders.transport_charges, 0)
+                        + (COALESCE(sale_orders.transport_charges, 0) * COALESCE(sale_orders.transport_tax, 0) / 100)
+                    )
+                    +
+                    (
+                        (
+                            COALESCE(SUM(sale_order_items.quantity_ordered * sale_order_items.selling_price), 0)
+                            + COALESCE(SUM((sale_order_items.quantity_ordered * sale_order_items.selling_price) * (sale_order_items.tax / 100)), 0)
+                            + COALESCE(sale_orders.transport_charges, 0)
+                            + (COALESCE(sale_orders.transport_charges, 0) * COALESCE(sale_orders.transport_tax, 0) / 100)
+                        ) * COALESCE(sale_orders.tcs, 0) / 100
+                    )
+                ) AS order_total
+            ')
+            ->where('sale_orders.status', '>=', SaleOrder::DISPATCHED);
+
+        if ($select_period == 'period_monthly') {
+            $orderTotalsQuery->whereYear('sale_orders.dispatched_at', '=', $year);
+            $orderTotalsQuery->whereMonth('sale_orders.dispatched_at', '=', $month);
+        } elseif ($select_period == 'period_quarterly') {
+            if ($quarter == 'Q1') {
+                $from = $year.'-01-01';
+                $to = $year.'-03-31';
+                $orderTotalsQuery->whereBetween('sale_orders.dispatched_at', [$from, $to]);
+            } elseif ($quarter == 'Q2') {
+                $from = $year.'-04-01';
+                $to = $year.'-06-30';
+                $orderTotalsQuery->whereBetween('sale_orders.dispatched_at', [$from, $to]);
+            } elseif ($quarter == 'Q3') {
+                $from = $year.'-07-01';
+                $to = $year.'-09-30';
+                $orderTotalsQuery->whereBetween('sale_orders.dispatched_at', [$from, $to]);
+            } elseif ($quarter == 'Q4') {
+                $from = $year.'-10-01';
+                $to = $year.'-12-31';
+                $orderTotalsQuery->whereBetween('sale_orders.dispatched_at', [$from, $to]);
+            }
+        } elseif ($select_period == 'period_yearly') {
+            $orderTotalsQuery->whereYear('sale_orders.dispatched_at', '=', $year);
         }
 
-        foreach ($dealers as $dealer) {
-            $row = [];
+        $orderTotalsQuery->groupBy(
+            'sale_orders.id',
+            'sale_orders.dealer_id',
+            'sale_orders.transport_charges',
+            'sale_orders.transport_tax',
+            'sale_orders.tcs'
+        );
 
-            $row['dealer_id'] = $dealer->id;
-            $row['serial_number'] = $serial;
-            $row['dealer'] = $dealer->company.', '.$dealer->address.' - '.$dealer->city.'-'.$dealer->zip_code;
-            $row['debit_unfmt'] = 0;
-            $row['debit'] = 0;
-            $row['credit'] = 0;
-            $row['balance'] = 0;
+        $salesTotalsQuery = DB::query()
+            ->fromSub($orderTotalsQuery, 'order_totals')
+            ->select(
+                'order_totals.dealer_id',
+                DB::raw('SUM(order_totals.order_total) AS debit_total')
+            )
+            ->groupBy('order_totals.dealer_id');
 
-            $debit_total = 0;
-            $credit_total = 0;
-            $balance_total = 0;
+        $dealers = Dealer::query()
+            ->leftJoinSub($salesTotalsQuery, 'sales_totals', function ($join) {
+                $join->on('sales_totals.dealer_id', '=', 'dealers.id');
+            })
+            ->select(
+                'dealers.id',
+                'dealers.company',
+                'dealers.address',
+                'dealers.city',
+                'dealers.zip_code',
+                DB::raw('COALESCE(sales_totals.debit_total, 0) AS debit_unfmt')
+            )
+            ->when($dealerSearch !== '', function ($query) use ($dealerSearch) {
+                $query->where('dealers.company', 'like', '%'.$dealerSearch.'%');
+            })
+            ->orderByDesc('debit_unfmt')
+            ->get();
 
-            /**
-             * get the invoices total
-             * could not run a SUM query as the amount saved does not include taxes,
-             * and transport charges
-             */
-            $query = SaleOrder::select('sale_orders.id');
-            //$query = SaleOrder::select(DB::raw('SUM(sale_orders.amount + sale_orders.transport_charges) AS dealer_debit'));
-            $query->where('sale_orders.status', '>=', '4');
-            $query->where('sale_orders.dealer_id', '=', $dealer->id);
+        $debit_grand_total = (float) $dealers->sum('debit_unfmt');
+        $credit_grand_total = 0;
+        $balance_grand_total = 0;
 
-            if ($select_period == 'period_monthly') {
-                $query->whereYear('sale_orders.dispatched_at', '=', $year);
-                $query->whereMonth('sale_orders.dispatched_at', '=', $month);
-            } elseif ($select_period == 'period_quarterly') {
-                if ($quarter == 'Q1') {
-                    $from = date($year.'-01-01');
-                    $to = date($year.'-03-31');
-                    $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
-                } elseif ($quarter == 'Q2') {
-                    $from = date($year.'-04-01');
-                    $to = date($year.'-06-30');
-                    $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
-                } elseif ($quarter == 'Q3') {
-                    $from = date($year.'-07-01');
-                    $to = date($year.'-09-30');
-                    $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
-                } elseif ($quarter == 'Q4') {
-                    $from = date($year.'-10-01');
-                    $to = date($year.'-12-31');
-                    $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
-                }
-            } elseif ($select_period == 'period_yearly') {
-                $query->whereYear('sale_orders.dispatched_at', '=', $year);
-            }
+        $vdata = [];
+        foreach ($dealers->values() as $index => $dealer) {
+            $debit = (float) $dealer->debit_unfmt;
 
-            //$query->groupBy('sale_orders.dealer_id');
-            //$ret = $query->toSql(); print_r($ret);die();
-            //$sale_order = $query->first();
-            $sale_orders = $query->get();
-
-            foreach ($sale_orders as $sale_order) {
-                $curOrder = SaleOrder::find($sale_order->id);
-                $curOrder->calculateTotals();
-                if ($curOrder) {
-                    $debit_total += $curOrder->total_unfmt;
-                }
-            }
-
-            /**
-             * get the payments total
-             *
-             * October 2023: Rishi requested to remove the credit and balance columns
-             */
-            /*
-            $query = SaleOrderPayment::select(DB::raw('SUM(amount) AS dealer_credit'));
-            $query->where('sale_order_payments.dealer_id', '=', $dealer->id);
-            $query->groupBy('sale_order_payments.dealer_id');
-
-            $sale_order_payment = $query->first();
-
-            if ($sale_order_payment)
-            {
-                $credit_total = $sale_order_payment->dealer_credit;
-            }
-
-            $balance_total = $debit_total - $credit_total;
-            */
-
-            // if ($balance_total > 0)
-            // {
-            $row['debit_unfmt'] = intval($debit_total);
-            $row['debit'] = $fmt->formatCurrency($debit_total, 'INR');
-            $row['credit'] = 0; //$fmt->formatCurrency($credit_total, "INR");
-            $row['balance'] = 0; //$fmt->formatCurrency($balance_total, "INR");
-
-            $vdata[] = $row;
-            $serial++;
-
-            $debit_grand_total += $debit_total;
-            //$credit_grand_total += $credit_total;
-            //$balance_grand_total += $balance_total;
-            // }
-
+            $vdata[] = [
+                'dealer_id' => $dealer->id,
+                'serial_number' => $index + 1,
+                'dealer' => $dealer->company.', '.$dealer->address.' - '.$dealer->city.'-'.$dealer->zip_code,
+                'debit' => $fmt->formatCurrency($debit, 'INR'),
+                'debit_unfmt' => (int) $debit,
+                'credit' => 0,
+                'balance' => 0,
+            ];
         }
-
-        usort($vdata, fn ($a, $b) => $b['debit_unfmt'] <=> $a['debit_unfmt']);
 
         $debit_grand_total = $fmt->formatCurrency($debit_grand_total, 'INR');
         $credit_grand_total = 0; //$fmt->formatCurrency($credit_grand_total, "INR");

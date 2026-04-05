@@ -127,7 +127,20 @@
         var select_period = $(" #select_period ").val();
         var month_id = $(" #month_id ").val();
         var year_id = $(" #year_id ").val();
-        var quarterly_id = $(" #quarterly_id ").val();       
+        var quarterly_id = $(" #quarterly_id ").val();
+        var loadButton = $("#btn-load");
+
+        function setLoadButtonState(isLoading) {
+            if (isLoading) {
+                loadButton
+                    .prop('disabled', true)
+                    .html('<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>Loading...');
+
+                return;
+            }
+
+            loadButton.prop('disabled', false).html('Load');
+        }
 
         $('#year_id').datepicker({
             format: 'yyyy',
@@ -246,6 +259,14 @@
             }
         });
 
+        $('#table-ledger-summary')
+            .on('xhr.dt', function () {
+                setLoadButtonState(false);
+            })
+            .on('error.dt', function () {
+                setLoadButtonState(false);
+            });
+
         ledgerTable.columns().eq(0).each(function(colIdx) {
 
             var cell = $('.filters-datewise th').eq($(ledgerTable.column(colIdx).header()).index());
@@ -292,6 +313,7 @@
         });
 
         $(" #btn-load ").on("click", function() {
+            setLoadButtonState(true);
 
             select_period = $(" #select_period ").val();
             month_id = $(" #month_id ").val();
