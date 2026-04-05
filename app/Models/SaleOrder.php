@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 //use Spatie\Activitylog\LogOptions;
 //use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use NumberFormatter;
@@ -214,10 +215,6 @@ class SaleOrder extends Model
 
     public function calculateProductMonthSalesTotals($period = 'period_monthly', $month = '', $year = '', $part_number = '_ALL', $quarter = null)
     {
-
-        $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
-        $fmt->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 0);
-
         if (empty($month)) {
             $month = date('n');
         }
@@ -230,63 +227,10 @@ class SaleOrder extends Model
             $quarter = 'Q1';
         }
 
-        $fmt = new NumberFormatter($locale = 'en_IN', NumberFormatter::CURRENCY);
-        $fmt->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 0);
+        $rows = $this->getProductSalesTotalsByPeriod($period, $year, $month, $quarter, $part_number);
+        $targetPeriod = $period === 'period_quarterly' ? $quarter : (int) $month;
 
-        $query = SaleOrder::query();
-
-        $query->select('products.id', 'products.part_number', 'products.notes')
-            ->selectRaw('SUM(sale_order_items.quantity_ordered) AS quantity_sold')
-            ->selectRaw('SUM(sale_order_items.selling_price * sale_order_items.quantity_ordered) / SUM(sale_order_items.quantity_ordered) AS avg_selling_price')
-            ->join('sale_order_items', 'sale_order_items.sale_order_id', '=', 'sale_orders.id')
-            ->join('products', 'products.id', '=', 'sale_order_items.product_id');
-
-        if ($part_number != '_ALL') {
-            $query->where('products.part_number', 'LIKE', '%'.$part_number.'%');
-        }
-
-        $query->where('sale_orders.status', '>=', SaleOrder::DISPATCHED);
-        $query->whereNull('sale_order_items.deleted_at');
-
-        if (($period == 'period_monthly') || ($period == 'period_yearly')) {
-            $query->whereYear('sale_orders.dispatched_at', '=', $year);
-            $query->whereMonth('sale_orders.dispatched_at', '=', $month);
-        } else {
-            if ($quarter == 'Q1') {
-                $from = date($year.'-01-01');
-                $to = date($year.'-03-31');
-                $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
-            } elseif ($quarter == 'Q2') {
-                $from = date($year.'-04-01');
-                $to = date($year.'-06-30');
-                $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
-            } elseif ($quarter == 'Q3') {
-                $from = date($year.'-07-01');
-                $to = date($year.'-09-30');
-                $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
-            } elseif ($quarter == 'Q4') {
-                $from = date($year.'-10-01');
-                $to = date($year.'-12-31');
-                $query->whereBetween('sale_orders.dispatched_at', [$from, $to]);
-            }
-        }
-
-        $query->groupBy('products.id');
-        $query->orderBy('products.part_number', 'ASC');
-
-        //dd($query->toSql());
-        $rows = $query->get();
-
-        $res = [];
-        foreach ($rows as $product) {
-            $res[$product->id]['id'] = $product->id;
-            $res[$product->id]['part_number'] = $product->part_number;
-            $res[$product->id]['description'] = $product->notes;
-            $res[$product->id]['quantity_sold'] = $product->quantity_sold;
-            $res[$product->id]['amount_sold'] = $product->quantity_sold * $product->avg_selling_price;
-        }
-
-        return $res;
+        return $rows[$targetPeriod] ?? [];
     }
 
     public function calculateProductSalesTotals($period = '', $year = '', $month = '_ALL', $quarter = '_ALL', $part_number = '_ALL', $limit = 0)
@@ -304,54 +248,97 @@ class SaleOrder extends Model
             $year = date('Y');
         }
 
-        $products = Product::select('id', 'part_number');
-        if ($part_number != '_ALL') {
-            $products->where('part_number', 'like', '%'.$part_number.'%');
+        $result = $this->getProductSalesTotalsByPeriod($select_period, $year, $month, $quarter, $part_number);
+
+        if ($select_period === 'period_monthly') {
+            $monthKey = (int) $month;
+
+            return [
+                $monthKey => $result[$monthKey] ?? [],
+            ];
         }
-        //dd("period ".$select_period,":month ".$month,":year ".$year,":quarter ".$quarter);
 
-        $products = $products->orderBy('part_number')
-            ->get();
+        if ($select_period === 'period_quarterly' && $quarter !== '_ALL') {
+            return [
+                $quarter => $result[$quarter] ?? [],
+            ];
+        }
 
-        $res = [];
+        return $result;
+    }
 
-        /**
-         * function 'calculateProductMonthSalesTotals' returns an array with data per product
-         * iterate through this 'per product' array and group into a 'per month'/'per quarter' array
-         */
-        foreach ($products as $product) {
-            if ($select_period == 'period_yearly') {
-                for ($month = 1; $month <= 12; $month++) {
-                    $res[$month] = $this->calculateProductMonthSalesTotals($select_period, $month, $year, $part_number);
-                }
+    protected function getProductSalesTotalsByPeriod($period, $year, $month, $quarter, $part_number)
+    {
+        $periodSelect = 'MONTH(sale_orders.dispatched_at)';
+        $periodAlias = 'period_key';
 
-            } elseif ($select_period == 'period_monthly') {
-                $res[$month] = $this->calculateProductMonthSalesTotals($select_period, $month, $year, $part_number);
-            } else {
-                if ($quarter == '_ALL') {
-                    //$res['Q1'] = $this->calculateProductQuarterSalesTotals('Q1', $year);
-                    $res['Q1'] = $this->calculateProductMonthSalesTotals($select_period, $month, $year, $part_number, 'Q1');
-                    //$row_total += (float)$res[$category->name]['Q1']['total_amount_unfmt'];
-                    //$totals['Q1'] += (float)$res[$category->name]['Q1']['total_amount_unfmt'];
+        if ($period === 'period_quarterly') {
+            $periodSelect = "CONCAT('Q', QUARTER(sale_orders.dispatched_at))";
+        }
 
-                    $res['Q2'] = $this->calculateProductMonthSalesTotals($select_period, $month, $year, $part_number, 'Q2');
-                    //$row_total += (float)$res[$category->name]['Q2']['total_amount_unfmt'];
-                    //$totals['Q2'] += (float)$res[$category->name]['Q2']['total_amount_unfmt'];
+        $query = SaleOrder::query()
+            ->select(
+                'products.id',
+                'products.part_number',
+                'products.notes'
+            )
+            ->selectRaw($periodSelect.' AS '.$periodAlias)
+            ->selectRaw('SUM(sale_order_items.quantity_ordered) AS quantity_sold')
+            ->selectRaw('SUM(sale_order_items.quantity_ordered * sale_order_items.selling_price) AS amount_sold')
+            ->join('sale_order_items', 'sale_order_items.sale_order_id', '=', 'sale_orders.id')
+            ->join('products', 'products.id', '=', 'sale_order_items.product_id')
+            ->where('sale_orders.status', '>=', SaleOrder::DISPATCHED)
+            ->whereNull('sale_order_items.deleted_at');
 
-                    $res['Q3'] = $this->calculateProductMonthSalesTotals($select_period, $month, $year, $part_number, 'Q3');
-                    //$row_total += (float)$res[$category->name]['Q3']['total_amount_unfmt'];
-                    //$totals['Q3'] += (float)$res[$category->name]['Q3']['total_amount_unfmt'];
+        if ($part_number != '_ALL') {
+            $query->where('products.part_number', 'like', '%'.$part_number.'%');
+        }
 
-                    $res['Q4'] = $this->calculateProductMonthSalesTotals($select_period, $month, $year, $part_number, 'Q4');
-                    //$row_total += (float)$res[$category->name]['Q4']['total_amount_unfmt'];
-                    //$totals['Q4'] += (float)$res[$category->name]['Q4']['total_amount_unfmt'];
-                } else {
-                    $res[$quarter] = $this->calculateProductMonthSalesTotals($select_period, $month, $year, $part_number, $quarter);
-                }
+        if (! empty($year)) {
+            $query->whereYear('sale_orders.dispatched_at', '=', $year);
+        }
+
+        if ($period === 'period_monthly' && $month !== '_ALL') {
+            $query->whereMonth('sale_orders.dispatched_at', '=', $month);
+        }
+
+        if ($period === 'period_quarterly' && $quarter !== '_ALL') {
+            $quarterNumber = (int) ltrim((string) $quarter, 'Q');
+            if ($quarterNumber >= 1 && $quarterNumber <= 4) {
+                $query->whereRaw('QUARTER(sale_orders.dispatched_at) = ?', [$quarterNumber]);
             }
         }
 
-        return $res;
+        $rows = $query->groupBy('products.id', 'products.part_number', 'products.notes', DB::raw($periodSelect))
+            ->orderBy('products.part_number', 'ASC')
+            ->orderBy(DB::raw($periodSelect), 'ASC')
+            ->get();
+
+        $result = [];
+        foreach ($rows as $row) {
+            $periodKey = $period === 'period_quarterly' ? $row->{$periodAlias} : (int) $row->{$periodAlias};
+
+            $result[$periodKey][$row->id] = [
+                'id' => $row->id,
+                'part_number' => $row->part_number,
+                'description' => $row->notes,
+                'quantity_sold' => (float) $row->quantity_sold,
+                'amount_sold' => (float) $row->amount_sold,
+            ];
+        }
+
+        if ($period === 'period_yearly') {
+            for ($periodKey = 1; $periodKey <= 12; $periodKey++) {
+                $result[$periodKey] = $result[$periodKey] ?? [];
+            }
+            ksort($result);
+        } elseif ($period === 'period_quarterly' && $quarter === '_ALL') {
+            foreach (['Q1', 'Q2', 'Q3', 'Q4'] as $periodKey) {
+                $result[$periodKey] = $result[$periodKey] ?? [];
+            }
+        }
+
+        return $result;
     }
 
     /**
