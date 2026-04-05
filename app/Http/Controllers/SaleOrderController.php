@@ -18,6 +18,7 @@ use Illuminate\View\View;
 use NumberFormatter;
 use PDF;
 use Spatie\Activitylog\Models\Activity;
+use Yajra\DataTables\Facades\DataTables;
 
 class SaleOrderController extends Controller
 {
@@ -41,204 +42,151 @@ class SaleOrderController extends Controller
 
     public function getListForDatatables(Request $request): JsonResponse
     {
-        $draw = 1;
-        if ($request->has('draw')) {
-            $draw = $request->get('draw');
-        }
+        $source = $request->get('source');
+        $columns = $request->get('columns', []);
 
-        $start = 0;
-        if ($request->has('start')) {
-            $start = $request->get('start');
-        }
+        $query = SaleOrder::query()
+            ->join('dealers', 'dealers.id', '=', 'sale_orders.dealer_id')
+            ->join('warehouses', 'warehouses.id', '=', 'sale_orders.warehouse_id')
+            ->join('users', 'users.id', '=', 'sale_orders.user_id')
+            ->join('states', 'states.id', '=', 'dealers.state_id')
+            ->select(
+                'sale_orders.*',
+                'warehouses.name as warehouse',
+                'dealers.company as dealer',
+                'users.name as user_name',
+                'states.name as state'
+            );
 
-        $length = 10;
-        if ($request->has('length')) {
-            $length = $request->get('length');
-        }
-
-        $order_column = 'order_number';
-        $order_dir = 'ASC';
-        $order_arr = [];
-        if ($request->has('order')) {
-            $order_arr = $request->get('order');
-            $column_arr = $request->get('columns');
-            $column_index = $order_arr[0]['column'];
-
-            // the sale order datatable isn't the same in index than in warehouse>sale orders
-            if ($request->has('source') && $request->source == 'warehouses') {
-                switch ($column_index) {
-                    case 2:
-                        $order_column = 'dealers.company';
-                        break;
-                    case 7:
-                        $order_column = 'users.name';
-                        break;
-                    default:
-                        $order_column = $column_arr[$column_index]['data'];
-                }
-            } else {
-                switch ($column_index) {
-                    case 1:
-                        $order_column = 'sale_orders.warehouse_id';
-                        break;
-                    case 2:
-                        $order_column = 'dealers.company';
-                        break;
-                    case 3:
-                        $order_column = 'states.name';
-                        break;
-                    case 9:
-                        $order_column = 'users.name';
-                        break;
-                    default:
-                        $order_column = $column_arr[$column_index]['data'];
-                }
-
-                $order_dir = $order_arr[0]['dir'];
-            }
-        }
-
-        $search = '';
-        if ($request->has('search')) {
-            $search_arr = $request->get('search');
-            $search = $search_arr['value'];
-        }
-
-        // Total records
-        $totalRecords = SaleOrder::count();
-
-        $query = SaleOrder::query();
-        $query->join('dealers', 'dealers.id', '=', 'dealer_id');
-        $query->join('warehouses', 'warehouses.id', '=', 'warehouse_id');
-        $query->join('users', 'users.id', '=', 'user_id');
-        $query->join('states', 'states.id', '=', 'dealers.state_id');
-
-        if ($request->has('filter_warehouse_id')) {
+        if ($request->filled('filter_warehouse_id')) {
             $query->where('sale_orders.warehouse_id', '=', $request->filter_warehouse_id);
         }
 
-        if ($request->has('source') && $request->source == 'warehouses') {
-            if (! empty($column_arr[0]['search']['value'])) {
-                $query->where('sale_orders.order_number', 'like', '%'.$column_arr[0]['search']['value'].'%');
+        $applyDateRangeFilter = function ($query) use ($request): void {
+            if (! $request->filled('filter_column') || ! $request->filled('filter_from') || ! $request->filled('filter_to')) {
+                return;
             }
-            if (! empty($column_arr[1]['search']['value'])) {
-                $query->where('dealers.company', 'like', '%'.$column_arr[1]['search']['value'].'%');
-            }
-            if (! empty($column_arr[2]['search']['value'])) {
-                $query->where('sale_orders.status', 'like', $column_arr[2]['search']['value']);
-            }
-            if (! empty($column_arr[4]['search']['value'])) {
-                $query->where('sale_orders.blocked_at', 'like', convertDateToMysql($column_arr[3]['search']['value']));
-            }
-            if (! empty($column_arr[5]['search']['value'])) {
-                $query->where('users.name', 'like', $column_arr[4]['search']['value'].'%');
-            }
-        } else {
-            if (! empty($column_arr[0]['search']['value'])) {
-                $query->where('sale_orders.order_number', 'like', '%'.$column_arr[0]['search']['value'].'%');
-            }
-            if (! empty($column_arr[1]['search']['value'])) {
-                $query->where('warehouses.name', 'like', '%'.$column_arr[1]['search']['value'].'%');
-            }
-            if (! empty($column_arr[2]['search']['value'])) {
-                $query->where('dealers.company', 'like', '%'.$column_arr[2]['search']['value'].'%');
-            }
-            if (! empty($column_arr[3]['search']['value'])) {
-                $query->where('states.name', 'like', '%'.$column_arr[3]['search']['value'].'%');
-            }
-            if (! empty($column_arr[4]['search']['value'])) {
-                $query->where('sale_orders.booked_at', 'like', convertDateToMysql($column_arr[4]['search']['value']));
-            }
-            if (! empty($column_arr[5]['search']['value'])) {
-                $query->where('sale_orders.due_at', 'like', convertDateToMysql($column_arr[5]['search']['value']));
-            }
-            if (! empty($column_arr[6]['search']['value'])) {
-                $query->where('sale_orders.amount', 'like', $column_arr[6]['search']['value'].'%');
-            }
-            if (! empty($column_arr[7]['search']['value']) && $column_arr[7]['search']['value'] != 'all') {
-                $query->where('sale_orders.status', 'like', $column_arr[7]['search']['value']);
-            }
-            if (! empty($column_arr[8]['search']['value'])) {
-                $query->where('users.name', 'like', $column_arr[8]['search']['value'].'%');
-            }
-        }
 
-        if ($request->has('search')) {
-            $search = $request->get('search')['value'];
-            $query->where(function ($q) use ($search) {
-                $q->where('sale_orders.order_number', 'like', '%'.$search.'%')
-                    ->orWhere('sale_orders.amount', 'like', $search.'%')
-                    ->orWhere('dealers.company', 'like', '%'.$search.'%')
-                    ->orWhere('users.name', 'like', '%'.$search.'%')
-                    ->orWhere('states.name', 'like', '%'.$search.'%');
-            });
-        }
+            $filterFrom = Carbon::createFromFormat('Y-m-d', $request->get('filter_from'))->toDateString();
+            $filterTo = Carbon::createFromFormat('Y-m-d', $request->get('filter_to'))->toDateString();
 
-        if ($request->has('filter_column')) {
-            $filter_column = $request->get('filter_column');
-            $filter_from = $request->get('filter_from');
-            $filter_to = $request->get('filter_to');
+            $column = match ($request->get('filter_column')) {
+                'booked' => 'sale_orders.booked_at',
+                'expected' => 'sale_orders.due_at',
+                default => 'sale_orders.created_at',
+            };
 
-            if ((! is_null($filter_from)) && (! is_null($filter_to))) {
-                $filter_from = Carbon::createFromFormat('Y-m-d', $filter_from)->toDateString();
-                $filter_to = Carbon::createFromFormat('Y-m-d', $filter_to)->toDateString();
+            $query->whereDate($column, '>=', $filterFrom)
+                ->whereDate($column, '<=', $filterTo);
+        };
 
-                if ($filter_column == 'booked') {
-                    $query->whereBetween('sale_orders.booked_at', [$filter_from, $filter_to]);
-                } elseif ($filter_column == 'expected') {
-                    $query->whereBetween('sale_orders.due_at', [$filter_from, $filter_to]);
-                } else {
-                    $query->whereBetween('sale_orders.created_at', [$filter_from, $filter_to]);
+        $applyColumnFilters = function ($query) use ($columns, $source): void {
+            $columnSearch = function (int $index) use ($columns): string {
+                return trim(data_get($columns, $index.'.search.value', ''));
+            };
+
+            if ($source === 'warehouses') {
+                if ($value = $columnSearch(0)) {
+                    $query->where('sale_orders.order_number', 'like', '%'.$value.'%');
                 }
-            }
-        }
+                if ($value = $columnSearch(1)) {
+                    $query->where('dealers.company', 'like', '%'.$value.'%');
+                }
+                if ($value = $columnSearch(2)) {
+                    $query->where('sale_orders.status', '=', $value);
+                }
+                if ($value = $columnSearch(3)) {
+                    $query->whereDate('sale_orders.booked_at', '=', Carbon::parse(convertDateToMysql($value))->toDateString());
+                }
+                if ($value = $columnSearch(4)) {
+                    $query->where('users.name', 'like', $value.'%');
+                }
 
-        $totalRecordswithFilter = $query->count();
-
-        if ($length > 0) {
-            $query->skip($start)->take($length);
-        }
-
-        $query->orderBy($order_column, $order_dir);
-        //$sql = $query->toSql();dd($sql);
-        $orders = $query->get(['sale_orders.*', 'warehouses.name', 'dealers.company', 'users.name']);
-
-        $arr = [];
-        foreach ($orders as $order) {
-            $total_amount = '';
-            if (isset($order->amount)) {
-                $curOrder = SaleOrder::find($order->id);
-                $curOrder->calculateTotals();
-                $total_amount = $curOrder->total;
+                return;
             }
 
-            $arr[] = [
-                'id' => $order->id,
-                'order_number' => $order->order_number,
-                'order_number_slug' => $order->order_number_slug,
-                'warehouse' => $order->warehouse->name,
-                'dealer' => (isset($order->dealer) ? $order->dealer->company : ''),
-                'state' => (isset($order->dealer->state) ? $order->dealer->state->name : ''),
-                'booked_at' => $order->display_booked_at,
-                'due_at' => $order->display_due_at,
-                //(isset($order->amount)) ? trans('app.currency_symbol_inr')." ".$order->amount : "",
-                'amount' => $total_amount,
-                'status' => $order->display_status,
-                'created_at' => $order->created_at->toDateString(),
-                //'user' => (isset($order->user->display_name) ? $order->user->display_name : ''),
-                'user' => $order->name,
-            ];
-        }
+            if ($value = $columnSearch(0)) {
+                $query->where('sale_orders.order_number', 'like', '%'.$value.'%');
+            }
+            if ($value = $columnSearch(1)) {
+                $query->where('warehouses.name', 'like', '%'.$value.'%');
+            }
+            if ($value = $columnSearch(2)) {
+                $query->where('dealers.company', 'like', '%'.$value.'%');
+            }
+            if ($value = $columnSearch(3)) {
+                $query->where('states.name', 'like', '%'.$value.'%');
+            }
+            if ($value = $columnSearch(4)) {
+                $query->whereDate('sale_orders.booked_at', '=', Carbon::parse(convertDateToMysql($value))->toDateString());
+            }
+            if ($value = $columnSearch(5)) {
+                $query->whereDate('sale_orders.due_at', '=', Carbon::parse(convertDateToMysql($value))->toDateString());
+            }
+            if ($value = $columnSearch(6)) {
+                $query->where('sale_orders.amount', 'like', $value.'%');
+            }
+            if (($value = $columnSearch(7)) && $value !== 'all') {
+                $query->where('sale_orders.status', '=', $value);
+            }
+            if ($value = $columnSearch(8)) {
+                $query->where('users.name', 'like', $value.'%');
+            }
+        };
 
-        $response = [
-            'draw' => $draw,
-            'recordsTotal' => $totalRecords,
-            'recordsFiltered' => $totalRecordswithFilter,
-            'data' => $arr,
-            'error' => null,
-        ];
+        $fmt = new \NumberFormatter('en_IN', \NumberFormatter::CURRENCY);
+        $fmt->setAttribute(\NumberFormatter::MAX_FRACTION_DIGITS, 0);
 
-        return response()->json($response);
+        return DataTables::of($query)
+            ->filter(function ($query) use ($request, $applyColumnFilters, $applyDateRangeFilter): void {
+                $applyColumnFilters($query);
+                $applyDateRangeFilter($query);
+
+                $search = trim(data_get($request->get('search', []), 'value', ''));
+                if ($search === '') {
+                    return;
+                }
+
+                $query->where(function ($q) use ($search): void {
+                    $q->where('sale_orders.order_number', 'like', '%'.$search.'%')
+                        ->orWhere('sale_orders.amount', 'like', $search.'%')
+                        ->orWhere('dealers.company', 'like', '%'.$search.'%')
+                        ->orWhere('users.name', 'like', '%'.$search.'%')
+                        ->orWhere('states.name', 'like', '%'.$search.'%');
+                });
+            }, false)
+            ->filterColumn('warehouse', function ($query, $keyword): void {
+                $query->where('warehouses.name', 'like', '%'.$keyword.'%');
+            })
+            ->filterColumn('dealer', function ($query, $keyword): void {
+                $query->where('dealers.company', 'like', '%'.$keyword.'%');
+            })
+            ->filterColumn('state', function ($query, $keyword): void {
+                $query->where('states.name', 'like', '%'.$keyword.'%');
+            })
+            ->filterColumn('user', function ($query, $keyword): void {
+                $query->where('users.name', 'like', '%'.$keyword.'%');
+            })
+            ->orderColumn('warehouse', 'warehouses.name $1')
+            ->orderColumn('dealer', 'dealers.company $1')
+            ->orderColumn('state', 'states.name $1')
+            ->orderColumn('user', 'users.name $1')
+            ->orderColumn('amount', 'sale_orders.amount $1')
+            ->addColumn('warehouse', fn (SaleOrder $order): string => (string) $order->warehouse)
+            ->addColumn('dealer', fn (SaleOrder $order): string => (string) $order->dealer)
+            ->addColumn('state', fn (SaleOrder $order): string => (string) $order->state)
+            ->addColumn('user', fn (SaleOrder $order): string => (string) $order->user_name)
+            ->addColumn('booked_at', fn (SaleOrder $order): string => $order->display_booked_at)
+            ->addColumn('ordered_at', fn (SaleOrder $order): string => $order->display_booked_at)
+            ->addColumn('due_at', fn (SaleOrder $order): string => $order->display_due_at)
+            ->addColumn('status', fn (SaleOrder $order): string => $order->display_status)
+            ->editColumn('amount', function ($row) use ($fmt) {
+                return $fmt->formatCurrency($row->amount ?? 0, 'INR');
+            })            
+            //->addColumn('amount', fn (SaleOrder $order) => $order->amount ?? '')
+            ->editColumn('created_at', fn (SaleOrder $order): string => $order->created_at?->toDateString() ?? '')
+            ->rawColumns(['status'])
+            ->make(true);
     }
 
     /**

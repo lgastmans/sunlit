@@ -288,7 +288,8 @@
             },
             { 
                 'data': 'amount',
-                'orderable': true 
+                'orderable': true,
+                'className': 'text-end'
             },
             { 
                 'data': 'status',
